@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.text-title-xl {
+    @apply text-[#000] text-xl font-bold;
+}
+
+.text-title-2xl {
+    @apply text-[#000] text-2xl font-bold;
+}
+
+.text-light-gray {
+    @apply text-[#acacac] text-sm;
+}
+
+.bg-default-100 {
+    @apply  !bg-white
+}
+
+.button-default {
+    @apply bg-white border text-black
+}
+
+.box-card {
+    @apply bg-white rounded-xl my-3
+}
+
+.adm-tab-bar-item {
+    @apply  !text-[#f0700c]
+}
+
+.adm-tab-bar-item-active {
+    @apply  !text-[#f0700c]
+}
