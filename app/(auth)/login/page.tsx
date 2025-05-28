@@ -4,10 +4,12 @@ import { addToast, Button, Form, Input } from "@heroui/react";
 import React from "react";
 import { IoLockClosed, IoPerson } from "react-icons/io5";
 import NextLink from "next/link";
+import { useRouter } from "next/navigation";
 
 import { getlogin } from "@/services/api/auth";
 
 export default function LoginPage() {
+  const router = useRouter();
   const onSubmit = (e: any) => {
     e.preventDefault();
     let data: any = Object.fromEntries(new FormData(e.currentTarget));
@@ -20,6 +22,7 @@ export default function LoginPage() {
           timeout: 1000,
           color: "success",
         });
+        router.push("/");
       } else {
         addToast({
           title: e.msg,

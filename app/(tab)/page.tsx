@@ -109,9 +109,6 @@ export default function Home() {
         <div className="mt-5">
           <Image src="https://bbdbuy.com/assets/img/wap/index_bottom.png" />
         </div>
-        <div className="mt-5">
-          <Image src="https://bbdbuy.com/assets/img/wap/index_bottom.png" />
-        </div>
       </div>
     </section>
   );
