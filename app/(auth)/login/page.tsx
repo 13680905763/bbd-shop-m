@@ -1,49 +1,59 @@
 "use client";
 
-import { Button, Form, Input } from "@heroui/react";
+import { addToast, Button, Form, Input } from "@heroui/react";
 import React from "react";
 import { IoLockClosed, IoPerson } from "react-icons/io5";
 import NextLink from "next/link";
 
+import { getlogin } from "@/services/api/auth";
+
 export default function LoginPage() {
+  const onSubmit = (e: any) => {
+    e.preventDefault();
+    let data: any = Object.fromEntries(new FormData(e.currentTarget));
+
+    console.log("data", data);
+    getlogin({ ...data }).then((e: any) => {
+      if (e.success) {
+        addToast({
+          title: e.msg,
+          timeout: 1000,
+          color: "success",
+        });
+      } else {
+        addToast({
+          title: e.msg,
+          timeout: 1000,
+          color: "danger",
+        });
+      }
+    });
+  };
+
   return (
     <div>
-      <Form className="w-full ">
+      <Form className="w-full" onSubmit={onSubmit}>
         <Input
-          size="lg"
-          //   isRequired
-          //   errorMessage="Please enter a valid email"
+          isRequired
+          errorMessage="Please enter a valid email"
           name="email"
-          //   labelPlacement="outside"
           placeholder="Enter your email"
-          //   type="email"
           startContent={<IoPerson />}
+          type="email"
         />
         <Input
-          name="email"
+          name="password"
           placeholder="Password"
-          size="lg"
           startContent={<IoLockClosed />}
+          type="password"
         />
 
         <div className="my-2" />
-        <Button
-          className="w-full"
-          size="lg"
-          color="primary"
-          //   type="submit"
-        >
-          Submit
+        <Button className="w-full" color="primary" type="submit">
+          登录
         </Button>
         <NextLink className="w-full" href="/register">
-          <Button
-            className="w-full button-default"
-            size="lg"
-            color="primary"
-            //   type="submit"
-          >
-            注册
-          </Button>
+          <Button className="w-full button-default">注册</Button>
         </NextLink>
       </Form>
     </div>

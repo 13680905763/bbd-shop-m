@@ -1,10 +1,10 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
-import clsx from "clsx";
 
 import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
+import { ViewportFixer } from "@/components/viewport-fixer";
 
 export const metadata: Metadata = {
   title: {
@@ -32,12 +32,8 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <head />
-      <body
-        className={clsx(
-          "min-h-screen bg-background font-sans antialiased",
-          // fontSans.variable,
-        )}
-      >
+      <body className="bg-[#f5f5f5] ">
+        <ViewportFixer />
         <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
           {children}
         </Providers>

@@ -30,9 +30,9 @@ export default function AboutLayout({
   ];
 
   return (
-    <section className="bg-[url('/bg.png')] bg-no-repeat bg-cover bg-center flex flex-col justify-between h-[100vh]">
+    <section className="flex flex-col justify-between h-[calc(var(--vh)_*_100)] bg">
       {children}
-      <TabBar className="bg-white" safeArea={true}>
+      <TabBar className="bg-white">
         {tabs.map((item) => (
           <TabBar.Item
             key={item.key}

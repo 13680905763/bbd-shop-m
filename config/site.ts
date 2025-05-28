@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Next.js + HeroUI",
+  name: "bbdbuy",
   description: "Make beautiful websites regardless of your design experience.",
   navItems: [
     {
@@ -113,6 +113,70 @@ export const siteConfig = {
       to: "/pages/me/order/package",
     },
   ],
+  setting: {
+    index: [
+      {
+        title: "语言",
+        path: "/setting/language",
+      },
+      {
+        title: "货币",
+        path: "/setting/currency",
+      },
+      {
+        title: "修改密码",
+        path: "/setting/changepwd",
+      },
+    ],
+    language: [
+      {
+        title: "English",
+        id: "en",
+      },
+      {
+        title: "Français",
+        id: "fr",
+      },
+      {
+        title: "简体中文",
+        id: "zh",
+      },
+    ],
+    currency: [
+      {
+        title: "美元(0.15)",
+      },
+      {
+        title: "人民币(1.00)",
+      },
+      {
+        title: "欧元(0.14)",
+      },
+      {
+        title: "加币(0.22)",
+      },
+    ],
+    changepwd: [
+      {
+        name: "pwd1",
+        placeholder: "旧密码",
+        value: "",
+        type: true,
+      },
+      {
+        name: "pwd2",
+        placeholder: "新密码",
+        value: "",
+        type: true,
+      },
+      {
+        name: "pwd3",
+        placeholder: "确认密码",
+        value: "",
+        type: false,
+      },
+    ],
+  },
   dashboardTool: [
     {
       title: "通知",

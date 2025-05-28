@@ -2,37 +2,55 @@
 import { Avatar } from "@heroui/react";
 import React from "react";
 import { IoChevronForwardSharp, IoSettings } from "react-icons/io5";
+import NextLink from "next/link";
+import { useRouter } from "next/navigation";
 
 import { siteConfig } from "@/config/site";
+import { useUser } from "@/services/hooks/useUser";
 
 export default function Cart() {
+  const { user, isLoading, isError } = useUser();
+  const router = useRouter();
+
+  console.log("user", user);
+
+  if (isLoading) return <div>加载中...</div>;
+  if (isError) return <div>加载失败</div>;
+
   return (
     <div className="p-3">
       <div className="flex justify-between px-4">
-        <div className="flex items-center gap-2">
-          <Avatar
-            size="lg"
-            src="https://i.pravatar.cc/150?u=a04258114e29026302d"
-          />
-          <span className="text-lg font-bold"> Bryant </span>
-        </div>
+        <NextLink href="/profile">
+          <div className="flex items-center gap-2 text-black">
+            <Avatar className="w-[80px] h-[80px]" src={user.avatarUrl} />
+            <span className="text-lg font-bold"> {user.name} </span>
+          </div>
+        </NextLink>
         <div className="flex  items-center">
-          <IoSettings className="w-[25px] h-[25px]" />
+          <NextLink href="/setting">
+            <IoSettings className="w-[25px] h-[25px] text-black" />
+          </NextLink>
         </div>
       </div>
 
       <div className="flex py-4 px-2">
-        <div className="flex-1 flex flex-col justify-center items-center">
+        <NextLink
+          className="flex flex-col justify-center items-center flex-1 "
+          href="/wallet"
+        >
           <div className="text-title-xl">888</div>
           <div className="">余额</div>
-        </div>
-        <div className="flex-1 flex flex-col justify-center items-center">
+        </NextLink>
+        <NextLink
+          className="flex flex-col justify-center items-center flex-1 "
+          href="/wallet/score"
+        >
           <div className="text-title-xl">888</div>
           <div className="">积分</div>
-        </div>
+        </NextLink>
       </div>
 
-      <div className="box-card flex justify-between bg-[url('/coupon.png')] bg-no-repeat bg-cover py-2 pl-6 pr-2 text-white !mt-0">
+      <div className="box-card flex justify-between bg-[url('/images/coupon.png')] bg-no-repeat bg-cover py-2 pl-6 pr-2 text-white !mt-0">
         <div className=" items-center ">
           <div className="  text-sm font-bold my-1">我的优惠券</div>
           <div className="  text-xs ">0张优惠券可用</div>
@@ -51,7 +69,7 @@ export default function Cart() {
               className="text-center flex-1 flex justify-center items-center flex-col"
             >
               <div>
-                <Avatar radius="md" src={item.src} />
+                <Avatar radius="md" size="sm" src={item.src} />
               </div>
               <p className="mt-3">{item.title}</p>
             </div>
@@ -66,7 +84,9 @@ export default function Cart() {
             <div className="  text-xs ">已邀请：0 | 激活：0</div>
           </div>
           <div className="flex gap-2 items-center">
-            <IoChevronForwardSharp />
+            <button onClick={() => router.push("/promotion")}>
+              <IoChevronForwardSharp />
+            </button>
           </div>
         </div>
         <div className="flex py-4 px-2 box-card bg-white/50">
@@ -93,7 +113,7 @@ export default function Cart() {
                 className="text-center flex-1 flex justify-center items-center flex-col"
               >
                 <div>
-                  <Avatar radius="md" src={item.src} />
+                  <Avatar radius="md" size="sm" src={item.src} />
                 </div>
                 <p className="mt-3">{item.title}</p>
               </div>

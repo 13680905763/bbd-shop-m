@@ -2,6 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 在竖屏模式下，我们设置 `padding-top` 和 `padding-bottom` 为 `env(safe-area-inset-top)` 和 `env(safe-area-inset-bottom)` 的值，以达到内容不被地址栏、菜单栏或工具栏遮挡的效果。 */
+@media (orientation: portrait) {
+    body {
+        /* 当屏幕方向为竖屏时应用的样式 */
+        padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;
+    }
+}
+
+body {
+    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;
+    height: -webkit-fill-available;
+    height: calc(100% - env(safe-area-inset-top, 0px));
+}
+
+.bg {
+    @apply bg-[url('/images/bg.png')] bg-no-repeat bg-cover bg-center
+}
+
+a {
+    @apply  !text-black
+}
+
+.text-money-lg {
+    @apply text-[#f0700c] text-lg font-bold;
+}
+
+.text-money-xl {
+    @apply text-[#f0700c] text-xl font-bold;
+}
+
+.text-money-3xl {
+    @apply text-[#f0700c] text-3xl font-bold;
+}
+
 .text-title-xl {
     @apply text-[#000] text-xl font-bold;
 }
@@ -32,4 +66,8 @@
 
 .adm-tab-bar-item-active {
     @apply  !text-[#f0700c]
+}
+
+.group[data-focus="true"] .group-data-\[focus\=true\]\:border-default-foreground {
+    @apply  !border-[#f0700c]
 }
