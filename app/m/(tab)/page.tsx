@@ -6,14 +6,16 @@ import {
   IoSearch,
   IoChevronForwardSharp,
 } from "react-icons/io5";
-import { Input } from "@heroui/react";
+import { Button, Input } from "@heroui/react";
 import { Swiper, Image, Avatar } from "antd-mobile";
-import NextLink from "next/link";
+import { useRouter } from "next/navigation";
 
 import { siteConfig } from "@/config/site";
 import { Logo } from "@/components/icons";
 
 export default function Home() {
+  const router = useRouter();
+
   return (
     <section className="p-3 pb-0 flex-1 flex flex-col overflow-auto">
       <div>
@@ -28,19 +30,19 @@ export default function Home() {
           </div>
         </div>
         <div className="my-4">
-          <NextLink href="/goods/search">
-            <Input
-              aria-label="Search"
-              classNames={{
-                inputWrapper: "bg-default-100",
-                input: "text-sm",
-              }}
-              labelPlacement="outside"
-              placeholder="Search..."
-              startContent={<IoSearch />}
-              type="search"
-            />
-          </NextLink>
+          {/* <NextLink href="/m/goods/search"> */}
+          <Button
+            className="w-full bg-white justify-start"
+            startContent={
+              <div className="flex gap-2 items-center bg-default-100 text-sm">
+                <IoSearch />
+                Search...
+              </div>
+            }
+            onPress={() => router.push("/m/goods/search")}
+          />
+
+          {/* </NextLink> */}
         </div>
       </div>
       <div className="flex-1 overflow-auto">

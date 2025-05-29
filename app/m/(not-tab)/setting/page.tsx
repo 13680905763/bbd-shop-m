@@ -14,7 +14,7 @@ export default function Settingpage() {
     try {
       const res: any = await getlogout(); // 调用后端接口，带上 cookie
 
-      res.success && router.replace("/login");
+      res.success && router.replace("/m/login");
     } catch (error) {
       console.log(error);
     }
@@ -22,7 +22,7 @@ export default function Settingpage() {
 
   return (
     <div className="h-screen bg-[#f7f8f9]">
-      <NavBar className="bg-white" onBack={() => router.push("/dashboard")}>
+      <NavBar className="bg-white" onBack={() => router.push("/m/dashboard")}>
         设置
       </NavBar>
       <div className="p-2">

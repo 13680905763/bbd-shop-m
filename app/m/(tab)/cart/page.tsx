@@ -27,7 +27,7 @@ export default function Cart() {
   }>({});
 
   function getSelectedProductIds(
-    selected: Record<string, Record<string, boolean>>
+    selected: Record<string, Record<string, boolean>>,
   ): string[] {
     const selectedIds: string[] = [];
 
@@ -96,7 +96,7 @@ export default function Cart() {
   const isAllSelected = () =>
     cartData.every((shop: any) => {
       return shop.cartList.every(
-        (product: any) => selected[shop.shopId]?.[product.id]
+        (product: any) => selected[shop.shopId]?.[product.id],
       );
     });
   // 店铺全选
@@ -166,7 +166,7 @@ export default function Cart() {
               <div className="p-2">
                 <Checkbox
                   isSelected={shop.cartList.every(
-                    (p: any) => selected[shop.shopId]?.[p.id]
+                    (p: any) => selected[shop.shopId]?.[p.id],
                   )}
                   onChange={(checked) =>
                     toggleShop(shop, checked.target.checked)
@@ -186,7 +186,7 @@ export default function Cart() {
                         toggleItem(
                           shop.shopId,
                           product.id,
-                          checked.target.checked
+                          checked.target.checked,
                         )
                       }
                     />

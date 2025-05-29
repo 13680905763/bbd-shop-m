@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import { IoCart, IoStar } from "react-icons/io5";
 import {
+  addToast,
   Avatar,
   Button,
   Drawer,
@@ -14,6 +15,7 @@ import {
   Textarea,
   useDisclosure,
 } from "@heroui/react";
+import NextLink from "next/link";
 
 import { getGoodsInfo } from "@/services/api/goods";
 import ProgressBar from "@/components/progress-bar";
@@ -90,7 +92,7 @@ function generateDynamicSkuPathDict(productInfo: ProductInfo): SkuPathDict {
  */
 function getAllCombinations(
   propNames: string[],
-  propertyMap: Record<string, string>
+  propertyMap: Record<string, string>,
 ): string[] {
   const combinations: string[] = [];
   const n = propNames.length;
@@ -116,10 +118,14 @@ export default function GoodsPage() {
 
   const router = useRouter();
   const [goodsInfo, setGoodsInfo] = useState<any>();
+  const [isLoading, setisLoading] = useState<any>(false);
+
   const [pathMap, setPathMap] = useState<any>(null);
   const [isbuy, setIsbuy] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const add = () => {
+    setisLoading(true);
+
     const data = {
       source: params.source,
       sourceProductId: params.sourceproductId,
@@ -134,6 +140,12 @@ export default function GoodsPage() {
 
     addCart(data).then((res: any) => {
       console.log(res);
+      addToast({
+        title: res.msg,
+        timeout: 1000,
+        color: "success",
+      });
+      setisLoading(false);
     });
   };
   const showDrawer = (showtype: any) => {
@@ -292,16 +304,16 @@ export default function GoodsPage() {
       <div className="flex justify-between items-center p-2 gap-8   bg-white">
         <div className="flex gap-4">
           <div className="flex flex-col items-center justify-center">
-            <div>
-              <IoCart className="w-[24px] h-[24px]" />
-            </div>
-            <div className="text-xs">购物车</div>
+            <NextLink href="/m/cart">
+              <div>
+                <IoCart className="w-[30px] h-[30px]" />
+              </div>
+            </NextLink>
           </div>
           <div className="flex flex-col items-center justify-center">
             <div>
-              <IoStar className="w-[24px] h-[24px]" />
+              <IoStar className="w-[30px] h-[30px]" />
             </div>
-            <div className="text-xs">收藏</div>
           </div>
         </div>
         <div className="flex gap-2 flex-1">
@@ -383,12 +395,12 @@ export default function GoodsPage() {
                                   </Button>
                                 </div>
                               );
-                            }
+                            },
                           )}
                         </div>
                       </div>
                     );
-                  }
+                  },
                 )}
                 <div>
                   <div className="font-bold my-2 text-sm">数量</div>
@@ -414,6 +426,7 @@ export default function GoodsPage() {
                 ) : (
                   <Button
                     className="w-full bg-[linear-gradient(to_right,#ffd01e,#ff8917)] text-white"
+                    isLoading={isLoading}
                     onPress={() => add()}
                   >
                     加入购物车

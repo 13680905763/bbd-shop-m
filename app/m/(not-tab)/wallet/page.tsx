@@ -28,7 +28,7 @@ export default function Settingpage() {
             <Button
               className="rounded-full  bg-white w-full border-1 "
               variant="bordered"
-              onPress={() => router.push("/wallet/withdrawal")}
+              onPress={() => router.push("/m/wallet/withdrawal")}
             >
               提现
             </Button>

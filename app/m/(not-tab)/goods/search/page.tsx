@@ -48,7 +48,7 @@ export default function Searchpage() {
     //  source: "TAOBAO",
     //     sourceproductId: "788110260427",
     router.push(
-      `/goods/${source}/${sourceproductId}` // 目标路由
+      `/m/goods/${source}/${sourceproductId}` // 目标路由
     );
 
     // setIsLoading(true);

@@ -27,7 +27,7 @@ export default function RegisterPage() {
       getcallback({ ...fomeData, activationCode: e }).then((e: any) => {
         if (e.success) {
           console.log("注册成功");
-          router.push("/dashboard");
+          router.push("/m/dashboard");
         } else {
           addToast({
             title: e.msg,
@@ -100,7 +100,7 @@ export default function RegisterPage() {
           </Form>
           <div className="text-sm my-4">
             <span>Already have an account ? </span>
-            <NextLink href="/login">
+            <NextLink href="/m/login">
               <span className="text-[#f0700c]">Go login</span>
             </NextLink>
           </div>

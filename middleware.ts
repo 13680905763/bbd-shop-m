@@ -1,62 +1,71 @@
 // middleware.ts
 import { NextRequest, NextResponse } from "next/server";
 
-// 设置不需要登录的路径白名单
-const PUBLIC_PATHS = ["/", "/login", "/register", "/product", "/products"];
-const AUTH_PAGES = ["/login", "/register"]; // 仅登录注册页
+// 移动端公开访问页面
+const PUBLIC_PATHS = [
+  "/m",
+  "/m/login",
+  "/m/register",
+  "/m/products",
+  "/m/product",
+];
 
+// 判断是否公开路径
 function isPublicPath(pathname: string) {
+  // 先判断是不是严格等于 /m
+  if (pathname === "/m") return true;
+
+  // 然后判断是否在其他公开路径或其子路径
   return PUBLIC_PATHS.some(
-    (publicPath) =>
-      pathname === publicPath || pathname.startsWith(publicPath + "/")
+    (path) =>
+      path !== "/m" && (pathname === path || pathname.startsWith(path + "/")),
   );
 }
 
 export function middleware(request: NextRequest) {
+  console.log("middleware");
+
   const { pathname } = request.nextUrl;
   const token = request.cookies.get("authorization")?.value;
 
-  console.log("token", !!token);
+  console.log("pathname:", pathname);
 
-  // 如果是公开页面，直接放行
+  console.log("token:", token, pathname, !token, isPublicPath(pathname));
+
+  // 放行静态资源
+  if (
+    pathname.startsWith("/_next/") ||
+    pathname.startsWith("/static/") ||
+    pathname === "/favicon.ico" ||
+    pathname.startsWith("/images/")
+  ) {
+    return NextResponse.next();
+  }
+
+  // ✅ 如果是公开页面，放行（但已登录用户访问 login/register 则跳首页）
   if (isPublicPath(pathname)) {
-    if (token && ["/login", "/register"].includes(pathname)) {
-      console.log("已经登录还来登录页");
-
-      // 用户已登录，访问登录页等公开页，重定向回首页
-      return NextResponse.redirect(new URL("/dashboard", request.url));
+    if (token && (pathname === "/m/login" || pathname === "/m/register")) {
+      return NextResponse.redirect(new URL("/m/dashboard", request.url));
     }
 
     return NextResponse.next();
   }
-  if (
-    pathname.startsWith("/_next/") || // Next.js 内置静态资源
-    pathname.startsWith("/static/") || // 你的其他静态资源目录（如果有）
-    pathname === "/favicon.ico" || // favicon.ico 文件
-    pathname.startsWith("/images/") // 你放在 public/images 下的图片
-  ) {
-    console.log("静态资源放行");
 
-    return NextResponse.next();
-  }
-  // 如果没登录，跳转到登录页
+  // ❌ 非公开页面，未登录就跳转到登录页
   if (!token) {
-    const loginUrl = new URL("/login", request.url);
+    console.log("未登录");
 
-    console.log("loginUrl", loginUrl, pathname);
+    const loginUrl = new URL("/m/login", request.url);
 
     loginUrl.searchParams.set("redirect", pathname);
 
     return NextResponse.redirect(loginUrl);
   }
 
+  // ✅ 默认放行
   return NextResponse.next();
 }
 
-// ✅ 匹配所有页面
 export const config = {
-  matcher: [
-    // 匹配所有页面
-    "/((?!_next|api|static|favicon.ico|robots.txt).*)",
-  ],
+  matcher: ["/m", "/m/:path*"],
 };

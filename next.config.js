@@ -1,4 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = { transpilePackages: ['antd-mobile'], output: 'standalone', };
+const nextConfig = { transpilePackages: ['antd-mobile'], };
 
 module.exports = nextConfig;
