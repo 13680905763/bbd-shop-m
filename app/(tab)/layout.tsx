@@ -12,18 +12,18 @@ export default function AboutLayout({
 
   const tabs = [
     {
-      key: "/m",
+      key: "/",
       title: "首页",
       icon: <IoHome />,
     },
 
     {
-      key: "/m/cart",
+      key: "/cart",
       title: "购物车",
       icon: <IoCart />,
     },
     {
-      key: "/m/dashboard",
+      key: "/dashboard",
       title: "我的",
       icon: <IoPersonCircle />,
     },

@@ -39,7 +39,7 @@ export default function Home() {
                 Search...
               </div>
             }
-            onPress={() => router.push("/m/goods/search")}
+            onPress={() => router.push("/goods/search")}
           />
 
           {/* </NextLink> */}

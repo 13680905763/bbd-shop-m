@@ -22,7 +22,7 @@ export default function LoginPage() {
           timeout: 1000,
           color: "success",
         });
-        router.push("/m");
+        router.push("/");
       } else {
         addToast({
           title: e.msg,
@@ -55,7 +55,7 @@ export default function LoginPage() {
         <Button className="w-full" color="primary" type="submit">
           登录
         </Button>
-        <NextLink className="w-full" href="/m/register">
+        <NextLink className="w-full" href="/register">
           <Button className="w-full button-default">注册</Button>
         </NextLink>
       </Form>

@@ -92,7 +92,7 @@ function generateDynamicSkuPathDict(productInfo: ProductInfo): SkuPathDict {
  */
 function getAllCombinations(
   propNames: string[],
-  propertyMap: Record<string, string>,
+  propertyMap: Record<string, string>
 ): string[] {
   const combinations: string[] = [];
   const n = propNames.length;
@@ -304,7 +304,7 @@ export default function GoodsPage() {
       <div className="flex justify-between items-center p-2 gap-8   bg-white">
         <div className="flex gap-4">
           <div className="flex flex-col items-center justify-center">
-            <NextLink href="/m/cart">
+            <NextLink href="/cart">
               <div>
                 <IoCart className="w-[30px] h-[30px]" />
               </div>
@@ -395,12 +395,12 @@ export default function GoodsPage() {
                                   </Button>
                                 </div>
                               );
-                            },
+                            }
                           )}
                         </div>
                       </div>
                     );
-                  },
+                  }
                 )}
                 <div>
                   <div className="font-bold my-2 text-sm">数量</div>

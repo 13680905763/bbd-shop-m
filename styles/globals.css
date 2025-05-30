@@ -17,7 +17,7 @@ body {
 }
 
 .bg {
-    @apply bg-[url('/images/bg.png')] bg-no-repeat bg-cover bg-center
+    @apply bg-[url('/m/images/bg.png')] bg-no-repeat bg-cover bg-center
 }
 
 a {

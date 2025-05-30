@@ -20,14 +20,14 @@ export default function Cart() {
   return (
     <div className="p-3">
       <div className="flex justify-between px-4">
-        <NextLink href="/m/profile">
+        <NextLink href="/profile">
           <div className="flex items-center gap-2 text-black">
             <Avatar className="w-[80px] h-[80px]" src={user.avatarUrl} />
             <span className="text-lg font-bold"> {user.name} </span>
           </div>
         </NextLink>
         <div className="flex  items-center">
-          <NextLink href="/m/setting">
+          <NextLink href="/setting">
             <IoSettings className="w-[25px] h-[25px] text-black" />
           </NextLink>
         </div>
@@ -36,14 +36,14 @@ export default function Cart() {
       <div className="flex py-4 px-2">
         <NextLink
           className="flex flex-col justify-center items-center flex-1 "
-          href="/m/wallet"
+          href="/wallet"
         >
           <div className="text-title-xl">888</div>
           <div className="">余额</div>
         </NextLink>
         <NextLink
           className="flex flex-col justify-center items-center flex-1 "
-          href="/m/wallet/score"
+          href="/wallet/score"
         >
           <div className="text-title-xl">888</div>
           <div className="">积分</div>
@@ -84,7 +84,7 @@ export default function Cart() {
             <div className="  text-xs ">已邀请：0 | 激活：0</div>
           </div>
           <div className="flex gap-2 items-center">
-            <button onClick={() => router.push("/m/promotion")}>
+            <button onClick={() => router.push("/promotion")}>
               <IoChevronForwardSharp />
             </button>
           </div>
