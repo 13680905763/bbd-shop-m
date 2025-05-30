@@ -33,7 +33,7 @@ const config = {
 
       },
     },
-  })],
+  }), require('tailwind-scrollbar-hide')],
 }
 
 module.exports = config;

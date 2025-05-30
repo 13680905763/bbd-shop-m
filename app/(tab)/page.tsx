@@ -17,7 +17,7 @@ export default function Home() {
   const router = useRouter();
 
   return (
-    <section className="p-3 pb-0 flex-1 flex flex-col overflow-auto">
+    <section className="p-3 pb-0 flex-1 flex flex-col overflow-auto hide-scrollbar">
       <div>
         <div className="flex justify-between mt-2">
           <div>
@@ -45,7 +45,7 @@ export default function Home() {
           {/* </NextLink> */}
         </div>
       </div>
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto scrollbar-hide">
         <Swiper>
           <Swiper.Item>
             <Image

@@ -18,7 +18,7 @@ export default function Cart() {
   if (isError) return <div>加载失败</div>;
 
   return (
-    <div className="p-3">
+    <div className="p-3 flex-1 flex flex-col overflow-auto scrollbar-hide">
       <div className="flex justify-between px-4">
         <NextLink href="/profile">
           <div className="flex items-center gap-2 text-black">
@@ -50,7 +50,7 @@ export default function Cart() {
         </NextLink>
       </div>
 
-      <div className="box-card flex justify-between bg-[url('/images/coupon.png')] bg-no-repeat bg-cover py-2 pl-6 pr-2 text-white !mt-0">
+      <div className="box-card flex justify-between bg-[url('/m/images/coupon.png')] bg-no-repeat bg-cover py-2 pl-6 pr-2 text-white !mt-0">
         <div className=" items-center ">
           <div className="  text-sm font-bold my-1">我的优惠券</div>
           <div className="  text-xs ">0张优惠券可用</div>
