@@ -38,12 +38,7 @@ export default function DisclaimerDrawer() {
               </DrawerHeader>
               <DrawerBody>
                 <p>
-                  您购买的商品将被送往 CNFans
-                  仓库。到达仓库后，我们会为您检查并拍照。
-                  您可以在仓库中查看和管理商品。如果您对商品到货后不满意，您可以在
-                  5 天内申请退货。我们的代理商将代您与卖家协商处理售后问题。
-                  退/换货时每个不同的商品将收取 0.75
-                  美元左右的手续费和发货/退货运费，合计约 3 美元。
+                  BBDbuy上展示的所有代购商品均来自第三方代购平台，非BBDbuy直接销售。因此，BBDbuy对侵犯知识产权和侵犯商品著作权所引起的问题不承担任何责任和法律责任。使用BBDbuy代购服务即表示您默认接受上述风险。
                 </p>
               </DrawerBody>
               <DrawerFooter />

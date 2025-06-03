@@ -294,7 +294,7 @@ export default function GoodsPage() {
         <div className="box-card mx-2 p-2 !mt-0">
           <div className="font-bold text-base p-2">商品详情</div>
           <div>
-            {goodsInfo?.productDetail?.productDescImgList.map((item: any) => {
+            {goodsInfo?.productDetail?.productDescImgList?.map((item: any) => {
               return <Image key={item} fit="contain" src={item} />;
             })}
           </div>
