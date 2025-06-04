@@ -51,13 +51,13 @@ export default function Settingpage() {
         个人信息
       </NavBar>
       <div className="px-2">
-        <div className="box-card flex flex-col justify-center items-center p-2">
-          <Avatar className="w-[80px] h-[80px]" src={user.avatarUrl} />
+        <div className="box-card flex flex-col items-center justify-center p-2">
+          <Avatar className="h-[80px] w-[80px]" src={user.avatarUrl} />
           <div className="text-lg font-bold">{user.name}</div>
         </div>
         <div className="">
           <Form
-            className="w-full  flex flex-col gap-2"
+            className="flex w-full flex-col gap-2"
             // onReset={() => setAction("reset")}
             onSubmit={(e) => {
               e.preventDefault();
@@ -112,7 +112,7 @@ export default function Settingpage() {
                   startContent={
                     <Avatar
                       alt="Argentina"
-                      className="w-6 h-6"
+                      className="h-6 w-6"
                       src={country.src}
                     />
                   }
@@ -121,7 +121,7 @@ export default function Settingpage() {
                 </AutocompleteItem>
               )}
             </Autocomplete>
-            <Button className="w-full mt-2" color="primary" type="submit">
+            <Button className="mt-2 w-full" color="primary" type="submit">
               修改
             </Button>
           </Form>

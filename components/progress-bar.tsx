@@ -10,37 +10,37 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   tipText = "我们免费提供3-7张高清质检照片",
 }) => {
   return (
-    <div className="m-2 p-2 bg-white rounded-lg">
-      <div className="w-full h-[2.3125rem] flex items-center justify-between">
-        <div className="w-1/2 flex">
-          <div className="w-full h-[2.3125rem] bg-[#fff7ef] flex items-center justify-center font-normal text-sm text-[#f0700c]">
+    <div className="m-2 rounded-lg bg-white p-2">
+      <div className="flex h-[2.3125rem] w-full items-center justify-between">
+        <div className="flex w-1/2">
+          <div className="flex h-[2.3125rem] w-full items-center justify-center bg-[#fff7ef] text-sm font-normal text-[#f0700c]">
             从卖家到BBD
           </div>
-          <div className="w-0 h-0 right-[-1.15625rem] border-t-[1.15625rem] border-t-transparent border-b-[1.15625rem] border-b-transparent border-l-[1.15625rem] border-l-[#fff7ef]" />
+          <div className="right-[-1.15625rem] h-0 w-0 border-b-[1.15625rem] border-l-[1.15625rem] border-t-[1.15625rem] border-b-transparent border-l-[#fff7ef] border-t-transparent" />
         </div>
-        <div className="w-1/2 flex relative">
-          <div className="absolute left-0 border-l-white w-0 h-0 right-[-1.15625rem] border-t-[1.15625rem] border-t-transparent border-b-[1.15625rem] border-b-transparent border-l-[1.15625rem] border-l-[#ffefdb]" />
-          <div className="w-full h-[2.3125rem] bg-[#ffefdb] flex items-center justify-center font-normal text-sm text-[#f0700c]">
+        <div className="relative flex w-1/2">
+          <div className="absolute left-0 right-[-1.15625rem] h-0 w-0 border-b-[1.15625rem] border-l-[1.15625rem] border-t-[1.15625rem] border-b-transparent border-l-[#ffefdb] border-l-white border-t-transparent" />
+          <div className="flex h-[2.3125rem] w-full items-center justify-center bg-[#ffefdb] text-sm font-normal text-[#f0700c]">
             从BBD到您
           </div>
-          <div className="w-0 h-0 right-[-1.15625rem] border-t-[1.15625rem] border-t-transparent border-b-[1.15625rem] border-b-transparent border-l-[1.15625rem] border-l-[#ffefdb]" />
+          <div className="right-[-1.15625rem] h-0 w-0 border-b-[1.15625rem] border-l-[1.15625rem] border-t-[1.15625rem] border-b-transparent border-l-[#ffefdb] border-t-transparent" />
         </div>
       </div>
 
-      <div className="w-[13.6875rem] flex items-center justify-between relative mt-[0.625rem] mx-auto mb-[1.875rem] after:content-[''] after:absolute after:w-full after:border-b after:border-dashed after:border-[#f0700c]">
+      <div className="relative mx-auto mb-[1.875rem] mt-[0.625rem] flex w-[13.6875rem] items-center justify-between after:absolute after:w-full after:border-b after:border-dashed after:border-[#f0700c] after:content-['']">
         {steps.map((text, index) => (
           <div
             key={index}
-            className="relative w-2 h-2 rounded-full bg-[#f0700c]"
+            className="relative h-2 w-2 rounded-full bg-[#f0700c]"
           >
-            <span className="absolute left-1/2 bottom-[-1.25rem] transform -translate-x-1/2 text-center font-normal text-xs text-[#333] whitespace-nowrap">
+            <span className="absolute bottom-[-1.25rem] left-1/2 -translate-x-1/2 transform whitespace-nowrap text-center text-xs font-normal text-[#333]">
               {text}
             </span>
           </div>
         ))}
       </div>
 
-      <div className="min-h-[2.3125rem] bg-[#fef6df] rounded-[0.3125rem] flex items-center justify-center font-normal text-xs text-[#c27d37]">
+      <div className="flex min-h-[2.3125rem] items-center justify-center rounded-[0.3125rem] bg-[#fef6df] text-xs font-normal text-[#c27d37]">
         {tipText}
       </div>
     </div>

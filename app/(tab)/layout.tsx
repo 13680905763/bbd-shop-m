@@ -30,7 +30,7 @@ export default function AboutLayout({
   ];
 
   return (
-    <section className="flex flex-col justify-between h-[calc(var(--vh)_*_100)] bg">
+    <section className="bg flex h-[calc(var(--vh)_*_100)] flex-col justify-between">
       {children}
       <TabBar className="bg-white">
         {tabs.map((item) => (

@@ -17,24 +17,24 @@ export default function Home() {
   const router = useRouter();
 
   return (
-    <section className="p-3 pb-0 flex-1 flex flex-col overflow-auto hide-scrollbar">
+    <section className="hide-scrollbar flex flex-1 flex-col overflow-auto p-3 pb-0">
       <div>
-        <div className="flex justify-between mt-2">
+        <div className="mt-2 flex justify-between">
           <div>
             <Logo height={21} width={100} />
           </div>
-          <div className="flex  items-center">
-            <IoPeopleCircle className="w-[20px] h-[20px] text-[#ea8407]" />
-            <IoLanguageSharp className="w-[20px] h-[20px] text-[#ea8407]" />
-            <IoLogoUsd className="w-[20px] h-[20px] text-[#ea8407]" />
+          <div className="flex items-center">
+            <IoPeopleCircle className="h-[20px] w-[20px] text-[#ea8407]" />
+            <IoLanguageSharp className="h-[20px] w-[20px] text-[#ea8407]" />
+            <IoLogoUsd className="h-[20px] w-[20px] text-[#ea8407]" />
           </div>
         </div>
         <div className="my-4">
           {/* <NextLink href="/m/goods/search"> */}
           <Button
-            className="w-full bg-white justify-start"
+            className="w-full justify-start bg-white"
             startContent={
-              <div className="flex gap-2 items-center bg-default-100 text-sm">
+              <div className="flex items-center gap-2 bg-default-100 text-sm">
                 <IoSearch />
                 Search...
               </div>
@@ -62,12 +62,12 @@ export default function Home() {
             />
           </Swiper.Item>
         </Swiper>
-        <div className="flex py-3 box-card">
+        <div className="box-card flex py-3">
           {siteConfig.toolList.map((item, index) => {
             return (
               <div
                 key={item.title}
-                className="text-center flex-1 flex justify-center items-center flex-col"
+                className="flex flex-1 flex-col items-center justify-center text-center"
               >
                 <div>
                   <Avatar src={item.image} />
@@ -79,8 +79,8 @@ export default function Home() {
         </div>
 
         <div className="box-card py-2">
-          <div className="flex justify-between items-center py-2 px-4">
-            <div className="font-bold flex-1 text-sm">Shipping Estimate</div>
+          <div className="flex items-center justify-between px-4 py-2">
+            <div className="flex-1 text-sm font-bold">Shipping Estimate</div>
             <div className="flex-1">
               <Input
                 aria-label="Search"
@@ -96,12 +96,12 @@ export default function Home() {
               />
             </div>
           </div>
-          <div className="flex justify-between items-center py-2 px-4 pt-0">
-            <div className="flex items-center ">
-              <div className="w-[6px] h-[6px] rounded-full bg-orange-500 mr-[5px]" />
-              <span className="  text-sm ">DHL line fast</span>
+          <div className="flex items-center justify-between px-4 py-2 pt-0">
+            <div className="flex items-center">
+              <div className="mr-[5px] h-[6px] w-[6px] rounded-full bg-orange-500" />
+              <span className="text-sm">DHL line fast</span>
             </div>
-            <div className="flex gap-2 items-center">
+            <div className="flex items-center gap-2">
               <span className="text-[#f0700c]">71</span>
               <IoChevronForwardSharp />
             </div>

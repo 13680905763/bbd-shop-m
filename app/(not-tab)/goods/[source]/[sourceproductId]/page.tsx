@@ -16,6 +16,8 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import NextLink from "next/link";
+import { GrPowerReset } from "react-icons/gr";
+import { IoIosLink } from "react-icons/io";
 
 import { getGoodsInfo } from "@/services/api/goods";
 import ProgressBar from "@/components/progress-bar";
@@ -92,7 +94,7 @@ function generateDynamicSkuPathDict(productInfo: ProductInfo): SkuPathDict {
  */
 function getAllCombinations(
   propNames: string[],
-  propertyMap: Record<string, string>
+  propertyMap: Record<string, string>,
 ): string[] {
   const combinations: string[] = [];
   const n = propNames.length;
@@ -113,8 +115,8 @@ function getAllCombinations(
 }
 export default function GoodsPage() {
   const params = useParams();
-
-  console.log("params", params);
+  const [remark, setRemark] = useState<string>();
+  const [quantity, setQuantity] = useState<number>(1);
 
   const router = useRouter();
   const [goodsInfo, setGoodsInfo] = useState<any>();
@@ -130,10 +132,8 @@ export default function GoodsPage() {
       source: params.source,
       sourceProductId: params.sourceproductId,
       sourceSkuId: currentSku.skuID,
-      // specId: "f561c4f7cdb23de81fc2303ebf1e8f55",
-
-      quantity: 1,
-      remark: "demoData",
+      quantity,
+      remark,
     };
 
     console.log(data);
@@ -263,7 +263,7 @@ export default function GoodsPage() {
   }, []);
 
   return (
-    <div className="h-[100vh] flex flex-col justify-between">
+    <div className="flex h-[100vh] flex-col justify-between">
       <NavBar className="bg-white" onBack={() => router.back()}>
         商品详情
       </NavBar>
@@ -280,19 +280,37 @@ export default function GoodsPage() {
             </Swiper.Item>
           ))}
         </Swiper>
-        <div className="p-4 bg-white">
-          <div className="font-bold text-xl text-red-500">
+        <div className="bg-white p-4">
+          <div className="text-xl font-bold text-red-500">
             ￥ {goodsInfo?.productInfo.price}
           </div>
-          <div className="font-bold text-base">
-            {goodsInfo?.productInfo.title}
+          <div className="text-base font-bold">
+            <p>{goodsInfo?.productInfo.title}</p>
+            <div className="inline-block flex gap-2 text-sm text-[#f0700c]">
+              <a
+                className="flex items-center gap-1 !text-[#f0700c]"
+                href={goodsInfo?.productInfo?.productUrl}
+                rel="noreferrer"
+                target="_blank"
+              >
+                <IoIosLink />
+                原链接
+              </a>
+              <button
+                className="flex items-center gap-1"
+                onClick={() => window.location.reload()}
+              >
+                <GrPowerReset />
+                刷新
+              </button>
+            </div>
           </div>
         </div>
         <ProgressBar />
         <DisclaimerDrawer />
 
-        <div className="box-card mx-2 p-2 !mt-0">
-          <div className="font-bold text-base p-2">商品详情</div>
+        <div className="box-card mx-2 !mt-0 p-2">
+          <div className="p-2 text-base font-bold">商品详情</div>
           <div>
             {goodsInfo?.productDetail?.productDescImgList?.map((item: any) => {
               return <Image key={item} fit="contain" src={item} />;
@@ -301,22 +319,22 @@ export default function GoodsPage() {
         </div>
       </div>
 
-      <div className="flex justify-between items-center p-2 gap-8   bg-white">
+      <div className="flex items-center justify-between gap-8 bg-white p-2">
         <div className="flex gap-4">
           <div className="flex flex-col items-center justify-center">
             <NextLink href="/cart">
               <div>
-                <IoCart className="w-[30px] h-[30px]" />
+                <IoCart className="h-[30px] w-[30px]" />
               </div>
             </NextLink>
           </div>
           <div className="flex flex-col items-center justify-center">
             <div>
-              <IoStar className="w-[30px] h-[30px]" />
+              <IoStar className="h-[30px] w-[30px]" />
             </div>
           </div>
         </div>
-        <div className="flex gap-2 flex-1">
+        <div className="flex flex-1 gap-2">
           <Button
             className="flex-1 bg-[linear-gradient(to_right,#ffd01e,#ff8917)] text-white"
             onPress={() => showDrawer(false)}
@@ -364,10 +382,10 @@ export default function GoodsPage() {
                   (specs: any, index: number) => {
                     return (
                       <div key={specs.propName}>
-                        <div className="font-bold my-2 text-sm">
+                        <div className="my-2 text-sm font-bold">
                           {specs.propName}
                         </div>
-                        <div className="flex gap-2 flex-wrap">
+                        <div className="flex flex-wrap gap-2">
                           {specs.propValueList.map(
                             (spec: any, indey: number) => {
                               return (
@@ -376,7 +394,7 @@ export default function GoodsPage() {
                                   data-index={spec.selected}
                                 >
                                   <Button
-                                    className={`pl-2 bg-white ${spec.selected ? "border-[#f0700c] text-[#f0700c]" : "border-[#ccc]"} `}
+                                    className={`bg-white pl-2 ${spec.selected ? "border-[#f0700c] text-[#f0700c]" : "border-[#ccc]"} `}
                                     isDisabled={spec.disabled}
                                     radius="lg"
                                     size={spec.imageUrl ? "md" : "sm"}
@@ -395,32 +413,37 @@ export default function GoodsPage() {
                                   </Button>
                                 </div>
                               );
-                            }
+                            },
                           )}
                         </div>
                       </div>
                     );
-                  }
+                  },
                 )}
                 <div>
-                  <div className="font-bold my-2 text-sm">数量</div>
+                  <div className="my-2 text-sm font-bold">数量</div>
                   <div className="w-[40%]">
-                    <Stepper />
+                    <Stepper
+                      value={quantity}
+                      onChange={(value) => setQuantity(value)}
+                    />
                   </div>
                 </div>
                 <div className="mb-4">
-                  <div className="font-bold my-2 text-sm">备注</div>
+                  <div className="my-2 text-sm font-bold">备注</div>
                   <Textarea
                     classNames={{
                       inputWrapper: "bg-[#f5f5f5]",
                     }}
                     placeholder="Enter your description"
+                    value={remark}
+                    onChange={(e) => setRemark(e.target.value)}
                   />
                 </div>
               </DrawerBody>
               <DrawerFooter>
                 {isbuy ? (
-                  <Button className="w-full  " color="primary">
+                  <Button className="w-full" color="primary">
                     立即购买
                   </Button>
                 ) : (

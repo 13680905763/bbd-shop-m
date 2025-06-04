@@ -56,7 +56,7 @@ export default function LoginPage() {
           登录
         </Button>
         <NextLink className="w-full" href="/register">
-          <Button className="w-full button-default">注册</Button>
+          <Button className="button-default w-full">注册</Button>
         </NextLink>
       </Form>
     </div>

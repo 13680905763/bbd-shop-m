@@ -4,70 +4,87 @@
 
 /* 在竖屏模式下，我们设置 `padding-top` 和 `padding-bottom` 为 `env(safe-area-inset-top)` 和 `env(safe-area-inset-bottom)` 的值，以达到内容不被地址栏、菜单栏或工具栏遮挡的效果。 */
 @media (orientation: portrait) {
-    body {
-        /* 当屏幕方向为竖屏时应用的样式 */
-        padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;
-    }
+  body {
+    /* 当屏幕方向为竖屏时应用的样式 */
+    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+  }
 }
 
 body {
-    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;
-    height: -webkit-fill-available;
-    height: calc(100% - env(safe-area-inset-top, 0px));
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;
+  height: -webkit-fill-available;
+  height: calc(100% - env(safe-area-inset-top, 0px));
 }
 
 .bg {
-    @apply bg-[url('/m/images/bg.png')] bg-no-repeat bg-cover bg-center
+  /* stylelint-disable-next-line at-rule-no-deprecated */
+  @apply bg-[url('/m/images/bg.png')] bg-cover bg-center bg-no-repeat;
 }
 
 a {
-    @apply  !text-black
+  @apply !text-black;
 }
-
+.text-price-base {
+  @apply text-base font-bold text-[#f0700c] md:text-lg lg:text-xl;
+}
+.text-price-lg {
+  @apply text-lg font-bold text-[#f0700c] md:text-xl lg:text-2xl;
+}
 .text-money-lg {
-    @apply text-[#f0700c] text-lg font-bold;
+  @apply text-lg font-bold text-[#f0700c];
 }
 
 .text-money-xl {
-    @apply text-[#f0700c] text-xl font-bold;
+  @apply text-xl font-bold text-[#f0700c];
 }
 
 .text-money-3xl {
-    @apply text-[#f0700c] text-3xl font-bold;
+  @apply text-3xl font-bold text-[#f0700c];
+}
+/* 购物车 店铺名 商品名  */
+.text-title {
+  @apply text-sm font-bold md:text-base lg:text-lg;
 }
 
 .text-title-xl {
-    @apply text-[#000] text-xl font-bold;
+  @apply text-xl font-bold text-[#000];
 }
 
 .text-title-2xl {
-    @apply text-[#000] text-2xl font-bold;
+  @apply text-2xl font-bold text-[#000];
 }
+
+/* 购物车 sku 运费  */
 
 .text-light-gray {
-    @apply text-[#acacac] text-sm;
+  @apply text-xs text-[#999] md:text-sm lg:text-base;
 }
 
-.bg-default-100 {
-    @apply  !bg-white
+.text-light .bg-default-100 {
+  @apply !bg-white;
 }
 
 .button-default {
-    @apply bg-white border text-black
+  @apply border bg-white text-black;
 }
 
 .box-card {
-    @apply bg-white rounded-xl my-3
+  @apply my-3 rounded-xl bg-white;
+}
+/* 购物车卡片 */
+.rounded-box {
+  @apply rounded-lg bg-white;
 }
 
 .adm-tab-bar-item {
-    @apply  !text-[#f0700c]
+  @apply !text-[#f0700c];
 }
 
 .adm-tab-bar-item-active {
-    @apply  !text-[#f0700c]
+  @apply !text-[#f0700c];
 }
 
-.group[data-focus="true"] .group-data-\[focus\=true\]\:border-default-foreground {
-    @apply  !border-[#f0700c]
+.group[data-focus="true"]
+  .group-data-\[focus\=true\]\:border-default-foreground {
+  @apply !border-[#f0700c];
 }

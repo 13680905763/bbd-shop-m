@@ -12,7 +12,7 @@ function isPublicPath(pathname: string) {
   // 然后判断是否在其他公开路径或其子路径
   return PUBLIC_PATHS.some(
     (path) =>
-      path !== "/m" && (pathname === path || pathname.startsWith(path + "/"))
+      path !== "/m" && (pathname === path || pathname.startsWith(path + "/")),
   );
 }
 
@@ -50,7 +50,7 @@ export function middleware(request: NextRequest) {
       pathname,
       pathname.startsWith("/_next/"),
       !token,
-      isPublicPath(pathname)
+      isPublicPath(pathname),
     );
     if (token && (pathname === "/login" || pathname === "/register")) {
       return NextResponse.redirect(new URL("/m/dashboard", request.url));

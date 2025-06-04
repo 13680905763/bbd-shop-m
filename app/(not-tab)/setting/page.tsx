@@ -28,7 +28,7 @@ export default function Settingpage() {
       <div className="p-2">
         <Listbox
           aria-label="User Menu"
-          className="p-0 gap-0 divide-y divide-default-300/50 dark:divide-default-100/80 bg-content1  overflow-visible  rounded-medium"
+          className="gap-0 divide-y divide-default-300/50 overflow-visible rounded-medium bg-content1 p-0 dark:divide-default-100/80"
           itemClasses={{
             base: "px-3 first:rounded-t-medium  last:rounded-b-medium rounded-none gap-3 h-12 data-[hover=true]:bg-default-100/80",
           }}
@@ -45,7 +45,7 @@ export default function Settingpage() {
           ))}
         </Listbox>
 
-        <Button className="w-full mt-2" color="primary" onPress={logout}>
+        <Button className="mt-2 w-full" color="primary" onPress={logout}>
           退出
         </Button>
       </div>

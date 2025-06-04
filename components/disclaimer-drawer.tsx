@@ -15,16 +15,16 @@ export default function DisclaimerDrawer() {
 
   return (
     <>
-      <button className="w-full -mt-2" onClick={onOpen}>
-        <div className="box-card flex justify-between py-2 pl-6 pr-2 m-2 mt-0">
+      <button className="-mt-2 w-full" onClick={onOpen}>
+        <div className="box-card m-2 mt-0 flex justify-between py-2 pl-6 pr-2">
           <div className="items-center">
-            <div className="text-sm my-1 flex items-center gap-2">
-              <IoBagCheck className="w-[20px] h-[20px]" />
+            <div className="my-1 flex items-center gap-2 text-sm">
+              <IoBagCheck className="h-[20px] w-[20px]" />
               免责声明
             </div>
           </div>
-          <div className="flex gap-2 items-center">
-            <IoChevronForwardSharp className="w-[20px] h-[20px]" />
+          <div className="flex items-center gap-2">
+            <IoChevronForwardSharp className="h-[20px] w-[20px]" />
           </div>
         </div>
       </button>

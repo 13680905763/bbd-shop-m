@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <head />
-      <body className="bg-[#f5f5f5] ">
+      <body className="bg-[#f5f5f5]">
         <ViewportFixer />
         <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
           {children}

@@ -19,14 +19,14 @@ export default function Settingpage() {
         我的账户
       </NavBar>
       <div className="px-2">
-        <div className="text-center box-card p-2">
-          <div className="text-[24px] font-bold text-[#f3643a] my-[10px]">
+        <div className="box-card p-2 text-center">
+          <div className="my-[10px] text-[24px] font-bold text-[#f3643a]">
             CAD 0.00
           </div>
           <div className="text-sm text-[#999]">总余额</div>
-          <div className="flex px-[10px] py-[15px]  justify-center">
+          <div className="flex justify-center px-[10px] py-[15px]">
             <Button
-              className="rounded-full  bg-white w-full border-1 "
+              className="w-full rounded-full border-1 bg-white"
               variant="bordered"
               onPress={() => router.push("/wallet/withdrawal")}
             >
@@ -36,13 +36,13 @@ export default function Settingpage() {
         </div>
         <div>
           <div className="text-sm font-bold">选择充值金额</div>
-          <div className="grid grid-cols-3 grid-rows-2 gap-[5px] my-2 mx-auto">
+          <div className="mx-auto my-2 grid grid-cols-3 grid-rows-2 gap-[5px]">
             {priceList.map((item) => (
               <button
                 key={item}
-                className={`bg-white flex items-center justify-center py-3 rounded-[10px] cursor-pointer ${
+                className={`flex cursor-pointer items-center justify-center rounded-[10px] bg-white py-3 ${
                   currentPrice === item
-                    ? "border border-orange-500 text-orange-600 font-semibold"
+                    ? "border border-orange-500 font-semibold text-orange-600"
                     : ""
                 }`}
                 onClick={() => changePrice(item)}
@@ -53,12 +53,12 @@ export default function Settingpage() {
           </div>
         </div>
         <div>
-          <div className="text-sm font-bold ">其他金额</div>
+          <div className="text-sm font-bold">其他金额</div>
           <Input
             className="my-2"
             placeholder="请输入其他金额"
             size="lg"
-            startContent={<IoWallet className="w-6 h-6" />}
+            startContent={<IoWallet className="h-6 w-6" />}
             type="number"
           />
           <Button className="w-full" color="primary">

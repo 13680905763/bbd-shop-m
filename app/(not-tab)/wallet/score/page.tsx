@@ -14,9 +14,9 @@ export default function Settingpage() {
         积分
       </NavBar>
       <div className="p-2">
-        <div className="bg-[#ffeee1] flex p-6 rounded-lg">
-          <div className="flex-1 flex items-center gap-2  ">
-            <IoWallet className="w-5 h-5 text-[#f0700c]" />
+        <div className="flex rounded-lg bg-[#ffeee1] p-6">
+          <div className="flex flex-1 items-center gap-2">
+            <IoWallet className="h-5 w-5 text-[#f0700c]" />
             <div>积分</div>
             <div className="flex items-center gap-2">
               <span className="text-money-3xl">123</span>
@@ -38,7 +38,7 @@ export default function Settingpage() {
             variant="underlined"
           >
             <Tab key="photos" title="积分详情">
-              <div className="flex justify-between p-4 box-card !my-0 items-center">
+              <div className="box-card !my-0 flex items-center justify-between p-4">
                 <div>
                   <p>注册</p>
                   <p>2024-09-24 11:37:21</p>
@@ -48,7 +48,7 @@ export default function Settingpage() {
             </Tab>
 
             <Tab key="videos" title="积分兑换">
-              <div className="w-full p-5 rounded-lg bg-white flex justify-between items-center mb-4">
+              <div className="mb-4 flex w-full items-center justify-between rounded-lg bg-white p-5">
                 <div className="flex gap-6">
                   <div>
                     <Avatar

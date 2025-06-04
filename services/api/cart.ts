@@ -9,3 +9,6 @@ export const deleteCart = (data: any) => {
 export const addCart = (data: any) => {
   return axiosInstance.post("/customer/cart/add", data);
 };
+export const updateCart = (data: any) => {
+  return axiosInstance.post("/customer/cart/update", data);
+};

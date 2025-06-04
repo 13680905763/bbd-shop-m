@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@heroui/react";
 import { useState } from "react";
 
 type StepperProps = {
@@ -26,19 +25,16 @@ export default function Stepper({
   };
 
   return (
-    <div className="flex flex-1  border border-gray-200">
-      <Button
-        isIconOnly
-        className="px-2 text-lg disabled:opacity-30 bg-[#f5f7fa] border-r border-gray-200"
+    <div className="flex flex-1">
+      <button
+        className="h-6 w-6 bg-transparent text-base disabled:opacity-30"
         disabled={disabled || count <= min}
-        radius="none"
-        size="sm"
-        onPress={() => handleChange(count - 1)}
+        onClick={() => handleChange(count - 1)}
       >
         –
-      </Button>
+      </button>
       <input
-        className="w-12 text-center border-none outline-none bg-transparent flex-1"
+        className="w-10 flex-1 bg-[#f8f8f8] text-center outline-none"
         disabled={disabled}
         max={max}
         min={min}
@@ -46,16 +42,15 @@ export default function Stepper({
         value={count}
         onChange={(e) => handleChange(Number(e.target.value))}
       />
-      <Button
-        isIconOnly
-        className="px-2 text-lg disabled:opacity-30 bg-[#f5f7fa] border-r border-gray-200"
+      <button
+        // isIconOnly
+        className="h-6 w-6 bg-transparent text-base disabled:opacity-30"
         disabled={disabled || count >= max}
-        radius="none"
-        size="sm"
-        onPress={() => handleChange(count + 1)}
+        // radius="none"
+        onClick={() => handleChange(count + 1)}
       >
         +
-      </Button>
+      </button>
     </div>
   );
 }

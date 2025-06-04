@@ -66,7 +66,7 @@ export default function RegisterPage() {
     <div>
       {!isActive ? (
         <>
-          <Form className="w-full " onSubmit={signUp}>
+          <Form className="w-full" onSubmit={signUp}>
             <Input
               isRequired
               errorMessage="Please enter a valid email"
@@ -98,7 +98,7 @@ export default function RegisterPage() {
               注册
             </Button>
           </Form>
-          <div className="text-sm my-4">
+          <div className="my-4 text-sm">
             <span>Already have an account ? </span>
             <NextLink href="/login">
               <span className="text-[#f0700c]">Go login</span>
@@ -107,8 +107,8 @@ export default function RegisterPage() {
         </>
       ) : (
         <div>
-          <p className="text-title-xl ">验证你的电子邮箱</p>
-          <div className="text-sm my-4">
+          <p className="text-title-xl">验证你的电子邮箱</p>
+          <div className="my-4 text-sm">
             <span>我们已经发送验证码到</span>
             <span className="font-bold">{fomeData.email}</span>
             <span>。请在下面输入验证码进行验证</span>

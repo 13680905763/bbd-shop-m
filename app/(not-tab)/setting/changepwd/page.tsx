@@ -26,7 +26,7 @@ export default function Settingpage() {
           ))}
         </div>
         <div className="m-2">
-          <Button className="w-full " color="primary">
+          <Button className="w-full" color="primary">
             确定
           </Button>
         </div>
