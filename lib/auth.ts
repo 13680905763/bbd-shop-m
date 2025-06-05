@@ -5,7 +5,6 @@
 // https.globalAgent = new HttpsProxyAgent("http://127.0.0.1:7890");
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-
 // import GitHubProvider from "next-auth/providers/github";
 export const authOptions: NextAuthOptions = {
   providers: [

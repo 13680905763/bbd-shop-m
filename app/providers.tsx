@@ -26,7 +26,7 @@ export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
 
   return (
-    <SessionProvider>
+    <SessionProvider basePath="/m/api/auth">
       <HeroUIProvider navigate={router.push}>
         <ToastProvider placement="top-center" />
         <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
