@@ -263,7 +263,7 @@ export default function GoodsPage() {
   }, []);
 
   return (
-    <div className="flex h-[100vh] flex-col justify-between">
+    <div className="flex h-[calc(var(--vh)_*_100)] flex-col justify-between">
       <NavBar className="bg-white" onBack={() => router.back()}>
         商品详情
       </NavBar>
