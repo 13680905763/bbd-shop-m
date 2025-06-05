@@ -2,7 +2,14 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // 移动端公开访问页面
-const PUBLIC_PATHS = ["/", "/login", "/register", "/m/products", "/m/product"];
+const PUBLIC_PATHS = [
+  "/",
+  "/login",
+  "/api",
+  "/register",
+  "/m/products",
+  "/m/product",
+];
 
 // 判断是否公开路径
 function isPublicPath(pathname: string) {
@@ -20,27 +27,16 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get("authorization")?.value;
 
+  console.log("进入中间件");
+
   // console.log(
   //   "文件信息:",
   //   token,
   //   pathname,
   //   pathname.startsWith("/_next/"),
   //   !token,
-  //   isPublicPath(pathname)
+  //   isPublicPath(pathname),
   // );
-
-  // 放行静态资源
-  if (
-    pathname.startsWith("/_next/") ||
-    pathname.startsWith("/static/") ||
-    pathname === "/favicon.ico" ||
-    pathname.startsWith("/images/")
-  ) {
-    // console.log("静态资源放行");
-
-    return NextResponse.next();
-  }
-
   // ✅ 如果是公开页面，放行（但已登录用户访问 login/register 则跳首页）
   if (isPublicPath(pathname)) {
     console.log("公开页面放行");
@@ -58,7 +54,11 @@ export function middleware(request: NextRequest) {
 
     return NextResponse.next();
   }
+  if (pathname.startsWith("/api/")) {
+    console.log("api开头", pathname);
 
+    return NextResponse.redirect(new URL("/m", request.url));
+  }
   // ❌ 非公开页面，未登录就跳转到登录页
   if (!token) {
     console.log("未登录", pathname);
@@ -75,5 +75,7 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/m", "/m/:path*", "/:path*"],
+  matcher: [
+    "/((?!api/auth|_next|.*\\..*).*)", // 不拦截 API 路由、静态资源、favicon
+  ],
 };

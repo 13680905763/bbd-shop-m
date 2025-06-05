@@ -5,6 +5,11 @@ export const getlogin = (data: { email: string; password: string }) => {
     ...data,
   });
 };
+export const getgoogle = (accessToken: string) => {
+  return axiosInstance.post("/customer/google/login", {
+    accessToken,
+  });
+};
 
 export const getlogout = () => {
   return axiosInstance.get("/customer/logout");
