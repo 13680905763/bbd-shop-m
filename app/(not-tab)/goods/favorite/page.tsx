@@ -1,9 +1,11 @@
 "use client";
 import { addToast, Button, Checkbox, useDisclosure } from "@heroui/react";
 import React, { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 
-import ShopCard from "./shop-card";
+// import ShopCard from "./shop-card";
+
+import { NavBar } from "antd-mobile";
+import { useRouter } from "next/navigation";
 
 import { useCart } from "@/services/hooks/useCart";
 import { deleteCart } from "@/services/api/cart";
@@ -84,7 +86,6 @@ export default function Cart() {
         console.log("删除", { idList: selectedIdArr });
       } else {
         console.log("结算");
-        router.push("/order/submit-order");
       }
     } else {
       addToast({
@@ -149,8 +150,6 @@ export default function Cart() {
       ?.reduce((sum, item) => sum + item.totalPrice, 0); // 累加价格
   }, [selected]);
 
-  console.log("togglePrice", togglePrice);
-
   useEffect(() => {
     if (cartData) {
       const init: typeof selected = {};
@@ -172,6 +171,9 @@ export default function Cart() {
 
   return (
     <div className="flex h-[100%] flex-col justify-between overflow-hidden">
+      <NavBar className="bg-white" onBack={() => router.back()}>
+        商品详情
+      </NavBar>
       <div className="flex justify-between p-2">
         <div>
           <span className="text-lg font-bold">Cart</span>
@@ -184,7 +186,7 @@ export default function Cart() {
         </div>
       </div>
       <div className="flex-1 overflow-auto px-3">
-        {cartData.map((shop: any) => (
+        {/* {cartData.map((shop: any) => (
           <ShopCard
             key={shop.shopId}
             isEdit={isEdit}
@@ -196,7 +198,7 @@ export default function Cart() {
             }
             onToggleShop={(checked) => toggleShop(shop, checked)}
           />
-        ))}
+        ))} */}
       </div>
       <div className="flex items-center justify-between border-b border-[#f5f5f5] bg-white px-3 py-2">
         <div>

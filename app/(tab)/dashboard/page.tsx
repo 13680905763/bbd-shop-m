@@ -108,15 +108,16 @@ export default function Cart() {
         <div className="mt-4 grid grid-cols-3 gap-4">
           {siteConfig.dashboardTool.map((item, index) => {
             return (
-              <div
+              <button
                 key={item.title}
                 className="flex flex-1 flex-col items-center justify-center text-center"
+                onClick={() => router.push(item.to)}
               >
                 <div>
                   <Avatar radius="md" size="sm" src={item.src} />
                 </div>
-                <p className="mt-3">{item.title}</p>
-              </div>
+                <p className="mt-3">{item.title}1</p>
+              </button>
             );
           })}
         </div>
