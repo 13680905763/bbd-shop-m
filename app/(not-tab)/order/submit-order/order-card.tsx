@@ -1,4 +1,4 @@
-import { Shop } from "./page";
+import { Product, Shop } from "./page";
 import ProductItem from "./product-item";
 
 type ShopCardProps = {
