@@ -1,5 +1,6 @@
-import { addToast, Checkbox, Image, useDisclosure } from "@heroui/react";
+import { addToast, Checkbox, Divider, useDisclosure } from "@heroui/react";
 import { useRouter } from "next/navigation";
+import { FaTrashAlt, FaEdit } from "react-icons/fa";
 
 import { Product } from "./page";
 
@@ -79,36 +80,32 @@ export default function ProductItem({ product }: ProductItemProps) {
   };
 
   return (
-    <div className="rounded-box my-3 mb-3 flex items-center gap-2 px-2 py-3">
-      <Checkbox
-        className="m-0 p-0"
-        classNames={{
-          wrapper: "p-0 m-0",
-        }}
-        // isSelected={isSelected}
-        size="sm"
-        // onChange={(e) => onToggle(e.target.checked)}
-      />
-      <button
-        onClick={() =>
-          router.push(`/goods/${product.source}/${product?.sourceProductId}`)
-        }
-      >
-        <Image
-          alt="商品图"
-          className="rounded-md object-cover"
+    <div className="rounded-box my-3 mb-3 flex flex-col gap-2 p-4">
+      <div className="">
+        <span className="">张三 13600000000</span>
+      </div>
+      <div className="line-clamp-2">
+        浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室
+      </div>
+      <Divider className="my-2" />
+      <div className="flex justify-between">
+        <Checkbox
+          className="m-0 p-0"
           classNames={{
-            wrapper: "self-start",
+            wrapper: "p-0 m-0",
           }}
-          height={93}
-          src={product.skuPicUrl}
-          width={93}
-        />
-      </button>
-      <div className="flex h-[93px] flex-1 flex-col justify-between">
-        <div className="text-title line-clamp-2">{product.productTitle}</div>
-        <div className="">
-          <span className="text-price-base">¥{product.price}</span>
+          // isSelected={isSelected}
+          // onChange={(e) => onToggle(e.target.checked)}
+        >
+          设为默认收货地址
+        </Checkbox>
+        <div className="flex gap-2">
+          <button className="h-6 w-6" onClick={onOpen}>
+            <FaTrashAlt className="h-4 w-4" />
+          </button>
+          <button className="h-6 w-6" onClick={onOpen}>
+            <FaEdit className="h-4 w-4" />
+          </button>
         </div>
       </div>
     </div>

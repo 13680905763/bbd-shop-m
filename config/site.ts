@@ -126,7 +126,7 @@ export const siteConfig = {
     {
       title: "通知",
       src: "https://bbdbuy.com/wap/static/img/xiaoxi.png",
-      to: "/goods/favorite",
+      to: "/profile/message",
     },
     {
       title: "我的收藏",
@@ -136,12 +136,12 @@ export const siteConfig = {
     {
       title: "地址",
       src: "https://bbdbuy.com/wap/static/img/weizhi.png",
-      to: "/pages/me/address/index",
+      to: "/profile/address",
     },
     {
       title: "历史记录",
       src: "https://bbdbuy.com/wap/static/img/zuji.png",
-      to: "/pages/goods/goodsHistory",
+      to: "/goods/history",
     },
   ],
 };

@@ -17,7 +17,7 @@ export default function PayOrder() {
   if (isError) return <div>加载失败</div>;
 
   return (
-    <div className="h-screen bg-[#f7f8f9]">
+    <div className="h-[calc(var(--vh)_*_100)] overflow-x-hidden bg-[#f7f8f9]">
       <NavBar className="bg-white" onBack={() => router.back()}>
         确定订单
       </NavBar>
@@ -52,7 +52,6 @@ export default function PayOrder() {
                             "data-[selected=true]:border-primary",
                           ),
                           labelWrapper: "w-full",
-                          label: "w-full ",
                         }}
                         value={payment.id}
                       >
@@ -101,12 +100,11 @@ export default function PayOrder() {
             ))}
           </RadioGroup>
         </div>
-        <div className="sticky bottom-0 z-10 flex items-center justify-end gap-4 border-t-[1px] bg-white p-4">
-          <p className="text-price-xl">PLN 714.84</p>
-          <Button color="primary" size="lg">
-            下单结算
-          </Button>
-        </div>
+      </div>
+      <div className="sticky bottom-0 z-10 flex items-center justify-end gap-4 border-t-[1px] bg-white p-4">
+        <Button className="w-full" color="primary" size="lg">
+          下单结算
+        </Button>
       </div>
     </div>
   );

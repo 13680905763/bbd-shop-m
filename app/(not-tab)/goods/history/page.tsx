@@ -96,7 +96,7 @@ const a = [
   },
 ];
 
-export default function Cart() {
+export default function HistoryPage() {
   const router = useRouter();
   const [isEdit, setIsEdit] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -115,7 +115,7 @@ export default function Cart() {
         }
         onBack={() => router.back()}
       >
-        我的收藏
+        历史记录
       </NavBar>
 
       <div className="flex-1 overflow-auto px-3">

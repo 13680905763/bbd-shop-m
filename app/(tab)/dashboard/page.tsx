@@ -116,7 +116,7 @@ export default function Cart() {
                 <div>
                   <Avatar radius="md" size="sm" src={item.src} />
                 </div>
-                <p className="mt-3">{item.title}1</p>
+                <p className="mt-3">{item.title}</p>
               </button>
             );
           })}

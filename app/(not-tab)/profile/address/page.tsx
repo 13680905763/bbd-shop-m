@@ -1,5 +1,5 @@
 "use client";
-import { Button, Checkbox, useDisclosure } from "@heroui/react";
+import { useDisclosure } from "@heroui/react";
 import React, { useState } from "react";
 
 // import ShopCard from "./shop-card";
@@ -108,14 +108,10 @@ export default function Cart() {
     <div className="flex h-[calc(var(--vh)_*_100)] flex-col justify-between overflow-hidden">
       <NavBar
         className="bg-white"
-        right={
-          <button onClick={() => setIsEdit(!isEdit)}>
-            {isEdit ? "取消" : "管理"}
-          </button>
-        }
+        right={<button onClick={() => setIsEdit(!isEdit)}>添加</button>}
         onBack={() => router.back()}
       >
-        我的收藏
+        地址
       </NavBar>
 
       <div className="flex-1 overflow-auto px-3">
@@ -123,24 +119,6 @@ export default function Cart() {
           <ProductItem key={product.id} product={product} />
         ))}
       </div>
-      {isEdit ? (
-        <div className="flex items-center justify-between border-b border-[#f5f5f5] bg-white px-3 py-2">
-          <div>
-            <Checkbox>全选</Checkbox>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button color="primary">删除</Button>
-          </div>
-        </div>
-      ) : null}
-
-      {/* 
-      <ConfirmModal
-        content="确定要删除当前商品吗？"
-        isOpen={isOpen}
-        title="删除购物车"
-        onOpenChange={onOpenChange}
-      /> */}
     </div>
   );
 }
