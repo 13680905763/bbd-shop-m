@@ -1,5 +1,4 @@
 import {
-  addToast,
   Button,
   Image,
   Input,
@@ -18,7 +17,6 @@ import { useRouter } from "next/navigation";
 import { Product } from "./page";
 
 import Stepper from "@/components/stepper";
-import { deleteCart, updateCart } from "@/services/api/cart";
 import ConfirmModal from "@/components/confirm-modal";
 type ProductItemProps = {
   product: Product;
@@ -70,67 +68,6 @@ export default function ProductItem({ product }: ProductItemProps) {
     onOpen: onOpenRemark,
     onOpenChange: onOpenChangeRemark,
   } = useDisclosure();
-  const handleDelete = (onClose: any) => {
-    deleteCart({ idList: [product.id] }).then((e: any) => {
-      if (e.success) {
-        addToast({
-          title: e.msg,
-          timeout: 1000,
-        });
-        onClose();
-      } else {
-        addToast({
-          title: e.msg,
-          timeout: 1000,
-        });
-      }
-    });
-  };
-  const handleRemark = (remark: string, onClose: () => void) => {
-    console.log("remark", remark);
-    updateCart([
-      {
-        id: product.id,
-        quantity: product.quantity,
-        remark,
-      },
-    ]).then((e: any) => {
-      if (e.success) {
-        addToast({
-          title: e.msg,
-          timeout: 1000,
-        });
-        onClose();
-      } else {
-        addToast({
-          title: e.msg,
-          timeout: 1000,
-        });
-      }
-    });
-  };
-
-  const handleQuantity = (quantity: number) => {
-    updateCart([
-      {
-        id: product.id,
-        quantity,
-        remark: product.remark,
-      },
-    ]).then((e: any) => {
-      if (e.success) {
-        addToast({
-          title: e.msg,
-          timeout: 1000,
-        });
-      } else {
-        addToast({
-          title: e.msg,
-          timeout: 1000,
-        });
-      }
-    });
-  };
 
   return (
     <>
@@ -166,7 +103,7 @@ export default function ProductItem({ product }: ProductItemProps) {
               <Stepper
                 disabled={true}
                 value={product.quantity}
-                onChange={handleQuantity}
+                // onChange={handleQuantity}
               />
             </div>
           </div>
@@ -189,11 +126,11 @@ export default function ProductItem({ product }: ProductItemProps) {
         content="确定要删除当前商品吗？"
         isOpen={isOpen}
         title="删除购物车"
-        onConfirm={handleDelete}
+        onConfirm={() => {}}
         onOpenChange={onOpenChange}
       />
       <RemarkModal
-        handleRemark={handleRemark}
+        // handleRemark={handleRemark}
         isOpen={isOpenRemark}
         value={product.remark}
         onOpenChange={onOpenChangeRemark}

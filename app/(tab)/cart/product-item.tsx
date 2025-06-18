@@ -19,8 +19,8 @@ import { useRouter } from "next/navigation";
 import { Product } from "./page";
 
 import Stepper from "@/components/stepper";
-import { deleteCart, updateCart } from "@/services/api/cart";
 import ConfirmModal from "@/components/confirm-modal";
+import { deleteCart, updateCart } from "@/services/cart";
 type ProductItemProps = {
   product: Product;
   isSelected: boolean;

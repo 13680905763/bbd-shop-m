@@ -6,7 +6,7 @@ import { IoLockClosed, IoPerson } from "react-icons/io5";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 
-import { getlogin } from "@/services/api/auth";
+import { loginCustomer } from "@/services/auth";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -15,7 +15,7 @@ export default function LoginPage() {
     let data: any = Object.fromEntries(new FormData(e.currentTarget));
 
     console.log("data", data);
-    getlogin({ ...data }).then((e: any) => {
+    loginCustomer({ ...data }).then((e: any) => {
       if (e.success) {
         addToast({
           title: e.msg,

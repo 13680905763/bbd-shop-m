@@ -4,14 +4,14 @@ import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-import { usePay } from "@/services/hooks/usePay";
+import { usePayMethod } from "@/hook/wallet/usePayMethod";
 
 export default function PayOrder() {
   const router = useRouter();
 
-  const { payList, isLoading, isError } = usePay();
+  const { data, isLoading, isError } = usePayMethod();
 
-  console.log("payList", payList);
+  console.log("data", data);
 
   if (isLoading) return <div>加载中...</div>;
   if (isError) return <div>加载失败</div>;
@@ -36,7 +36,7 @@ export default function PayOrder() {
             }}
             defaultValue={"1"}
           >
-            {payList.map((item: any) => (
+            {data.map((item: any) => (
               <div key={item.methodName}>
                 <p className="text-title">{item.methodName}</p>
                 {item.paymentList.map((payment: any) => {

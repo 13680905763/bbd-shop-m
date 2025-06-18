@@ -1,5 +1,4 @@
 "use client";
-import { useDisclosure } from "@heroui/react";
 import React, { useState } from "react";
 
 // import ShopCard from "./shop-card";
@@ -7,118 +6,143 @@ import React, { useState } from "react";
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 
-import ProductItem from "./product-item";
+import AddressItem from "./address-item";
 
-export type Product = {
-  id: string;
-  productTitle: string;
-  sku: {
-    propName_valueName: string;
-  };
-  skuPicUrl: string;
-  remark?: string;
-  totalPrice: number;
-  price: number;
-  postFee: number;
-  quantity: number;
-  source: string;
-  sourceProductId: string;
+import { useAddressList } from "@/hook/addresses/useAddressList";
+import ConfirmModal from "@/components/confirm-modal";
+import FormModal from "@/components/modal/form-modal";
+import { addAddress, deleteAddress, updateAddress } from "@/services/address";
+type ModalType = "add" | "edit" | "delete" | null;
+const initAddress = {
+  recipient: "",
+  phone: "",
+  countryId: "",
+  stateId: "",
+  city: "",
+  addressType: "",
+  postcode: "",
+  defaultAddress: 0,
 };
-
-export type Shop = {
-  shopId: string;
-  shopName: string;
-  cartList: Product[];
-};
-const a = [
+const fieldsaddress: FieldConfig[] = [
   {
-    createTime: "2025-06-04 18:39:55",
-    customerId: "1",
-    id: "48",
-    picUrl:
-      "https://img.alicdn.com/bao/uploaded/i3/2376087644/O1CN01PGccxl26L0XTI5AvF_!!2376087644.jpg",
-    postFee: 0,
-    price: 5000,
-    productId: "9",
-    productSkuId: "31",
-    productTitle:
-      "海外订单尾货~剪标撤回外贸潮流痞帅短袖T恤男女同款百搭宽松上衣",
-    productUrl: "https://item.taobao.com/item.htm?id=855863456744",
-    quantity: 1,
-    remark: "demoData",
-    shopId: "116636910",
-    shopName: "VSFRR SKY IDCCO",
-    sku: {
-      propId_valueId: "1627207:380850593",
-      propName_valueName: "颜色分类:白色XXL",
-    },
-    skuPicUrl:
-      "https://img.alicdn.com/bao/uploaded/i2/2376087644/O1CN01vMge8x26L0XSEtPMe_!!2376087644.jpg",
-    source: "TAOBAO",
-    sourceMpId: "4096257174111208",
-    sourceMpSkuId: "23990356503528",
-    sourceProductId: "855863456744",
-    sourceSkuId: "5828221219298",
-    status: 1,
-    totalPrice: 5000,
-    updateTime: "2025-06-04 18:39:55",
+    type: "input",
+    name: "recipient",
+    label: "收件人",
+    placeholder: "请输入收件人姓名",
   },
   {
-    createTime: "2025-06-04 19:20:05",
-    customerId: "1",
-    id: "51",
-    picUrl:
-      "https://img.alicdn.com/bao/uploaded/i3/2376087644/O1CN01PGccxl26L0XTI5AvF_!!2376087644.jpg",
-    postFee: 0,
-    price: 5000,
-    productId: "9",
-    productSkuId: "34",
-    productTitle:
-      "海外订单尾货~剪标撤回外贸潮流痞帅短袖T恤男女同款百搭宽松上衣",
-    productUrl: "https://item.taobao.com/item.htm?id=855863456744",
-    quantity: 1,
-    shopId: "116636910",
-    shopName: "VSFRR SKY IDCCO",
-    sku: {
-      propId_valueId: "1627207:35962878",
-      propName_valueName: "颜色分类:白色L",
-    },
-    skuPicUrl:
-      "https://img.alicdn.com/bao/uploaded/i2/2376087644/O1CN01vMge8x26L0XSEtPMe_!!2376087644.jpg",
-    source: "TAOBAO",
-    sourceMpId: "4096257174111208",
-    sourceMpSkuId: "23990356501480",
-    sourceProductId: "855863456744",
-    sourceSkuId: "5828221219296",
-    status: 1,
-    totalPrice: 5000,
-    updateTime: "2025-06-04 19:20:05",
+    type: "input",
+    name: "phone",
+    label: "联系方式",
+    placeholder: "请输入联系方式",
+  },
+  {
+    type: "area",
+    name: "area",
+    label: "area",
+    placeholder: "area",
+  },
+
+  {
+    type: "input",
+    name: "address",
+    label: "详细地址",
+    placeholder: "请输入您详细地址",
+  },
+  {
+    type: "input",
+    name: "postcode",
+    label: "邮编",
+    placeholder: "请输入邮编",
+  },
+
+  {
+    type: "checkbox",
+    name: "defaultAddress",
+    label: "设为默认地址",
   },
 ];
 
 export default function Cart() {
+  const { data, isLoading, mutate } = useAddressList();
+  const [modalType, setModalType] = useState<ModalType>(null);
+  const [currentData, setCurrentData] = useState<any>(initAddress);
+
   const router = useRouter();
-  const [isEdit, setIsEdit] = useState(false);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [selected, setSelected] = useState<{
-    [shopId: string]: { [productId: string]: boolean };
-  }>({});
+  const handleAdd = () => {
+    setCurrentData(initAddress);
+    setModalType("add");
+  };
+
+  const handleEdit = (row: any) => {
+    setCurrentData(row);
+    setModalType("edit");
+  };
+
+  const handleDelete = (row: any) => {
+    setCurrentData(row);
+    setModalType("delete");
+  };
+  // 地址保存时处理
+  const handleSave = async () => {
+    console.log("当前行数据:", currentData);
+    if (modalType === "add") {
+      console.log("currentData", { ...currentData, addressType: 1 });
+
+      await addAddress({ ...currentData, addressType: 1 }); // 新增接口
+    } else if (modalType === "edit") {
+      await updateAddress(currentData); // 编辑接口
+    } else if (modalType === "delete") {
+      await deleteAddress(currentData.id);
+    }
+    mutate();
+    setModalType(null);
+  };
+
+  if (isLoading) return <div>加载中...</div>;
 
   return (
     <div className="flex h-[calc(var(--vh)_*_100)] flex-col justify-between overflow-hidden">
       <NavBar
         className="bg-white"
-        right={<button onClick={() => setIsEdit(!isEdit)}>添加</button>}
+        right={<button onClick={handleAdd}>添加</button>}
         onBack={() => router.back()}
       >
         地址
       </NavBar>
 
       <div className="flex-1 overflow-auto px-3">
-        {a.map((product: Product) => (
-          <ProductItem key={product.id} product={product} />
+        {data?.map((addressDetail: any) => (
+          <AddressItem
+            key={addressDetail.id}
+            addressDetail={addressDetail}
+            handleDelete={handleDelete}
+            handleEdit={handleEdit}
+          />
         ))}
       </div>
+      <FormModal
+        fields={fieldsaddress}
+        formData={currentData}
+        isOpen={modalType === "add" || modalType === "edit"}
+        title={modalType === "add" ? "添加地址" : "编辑地址"}
+        onChange={setCurrentData}
+        onOpenChange={(open) => {
+          if (!open) setModalType(null);
+        }}
+        onSave={handleSave}
+      />
+      <ConfirmModal
+        content={`确定要删除该地址吗？`}
+        isOpen={modalType === "delete"}
+        onConfirm={(close) => {
+          handleSave();
+          close();
+        }}
+        onOpenChange={(open) => {
+          if (!open) setModalType(null);
+        }}
+      />
     </div>
   );
 }

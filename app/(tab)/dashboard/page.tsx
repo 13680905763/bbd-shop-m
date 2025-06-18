@@ -6,24 +6,24 @@ import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 
 import { siteConfig } from "@/config/site";
-import { useUser } from "@/services/hooks/useUser";
+import { useUser } from "@/hook/user/useUser";
 
 export default function Cart() {
-  const { user, isLoading, isError } = useUser();
+  const { data: user, isLoading } = useUser();
   const router = useRouter();
 
   console.log("user", user);
 
   if (isLoading) return <div>加载中...</div>;
-  if (isError) return <div>加载失败</div>;
+  // if (isError) return <div>加载失败</div>;
 
   return (
     <div className="flex flex-1 flex-col overflow-auto p-3 scrollbar-hide">
       <div className="flex justify-between px-4">
         <NextLink href="/profile">
           <div className="flex items-center gap-2 text-black">
-            <Avatar className="h-[80px] w-[80px]" src={user.avatarUrl} />
-            <span className="text-lg font-bold"> {user.name} </span>
+            <Avatar className="h-[80px] w-[80px]" src={user?.avatarUrl} />
+            <span className="text-lg font-bold"> {user?.name} </span>
           </div>
         </NextLink>
         <div className="flex items-center">

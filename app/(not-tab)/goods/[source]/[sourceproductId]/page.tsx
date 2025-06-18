@@ -19,11 +19,11 @@ import NextLink from "next/link";
 import { GrPowerReset } from "react-icons/gr";
 import { IoIosLink } from "react-icons/io";
 
-import { getGoodsInfo } from "@/services/api/goods";
 import ProgressBar from "@/components/progress-bar";
 import DisclaimerDrawer from "@/components/disclaimer-drawer";
 import Stepper from "@/components/stepper";
-import { addCart } from "@/services/api/cart";
+import { addCart } from "@/services/cart";
+import { getGoodsInfo } from "@/services/goods";
 interface Sku {
   skuID: string;
   stock: number;

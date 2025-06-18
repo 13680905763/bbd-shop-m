@@ -1,82 +1,14 @@
-import { addToast, Checkbox, Image, useDisclosure } from "@heroui/react";
+import { Checkbox, Image } from "@heroui/react";
 import { useRouter } from "next/navigation";
 
 import { Product } from "./page";
 
-import { deleteCart, updateCart } from "@/services/api/cart";
 type ProductItemProps = {
   product: Product;
 };
 
 export default function ProductItem({ product }: ProductItemProps) {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const router = useRouter();
-  const {
-    isOpen: isOpenRemark,
-    onOpen: onOpenRemark,
-    onOpenChange: onOpenChangeRemark,
-  } = useDisclosure();
-  const handleDelete = (onClose: any) => {
-    deleteCart({ idList: [product.id] }).then((e: any) => {
-      if (e.success) {
-        addToast({
-          title: e.msg,
-          timeout: 1000,
-        });
-        onClose();
-      } else {
-        addToast({
-          title: e.msg,
-          timeout: 1000,
-        });
-      }
-    });
-  };
-  const handleRemark = (remark: string, onClose: () => void) => {
-    console.log("remark", remark);
-    updateCart([
-      {
-        id: product.id,
-        quantity: product.quantity,
-        remark,
-      },
-    ]).then((e: any) => {
-      if (e.success) {
-        addToast({
-          title: e.msg,
-          timeout: 1000,
-        });
-        onClose();
-      } else {
-        addToast({
-          title: e.msg,
-          timeout: 1000,
-        });
-      }
-    });
-  };
-
-  const handleQuantity = (quantity: number) => {
-    updateCart([
-      {
-        id: product.id,
-        quantity,
-        remark: product.remark,
-      },
-    ]).then((e: any) => {
-      if (e.success) {
-        addToast({
-          title: e.msg,
-          timeout: 1000,
-        });
-      } else {
-        addToast({
-          title: e.msg,
-          timeout: 1000,
-        });
-      }
-    });
-  };
 
   return (
     <div className="rounded-box my-3 mb-3 flex items-center gap-2 px-2 py-3">

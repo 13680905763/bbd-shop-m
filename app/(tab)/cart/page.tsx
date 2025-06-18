@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 
 import ShopCard from "./shop-card";
 
-import { useCart } from "@/services/hooks/useCart";
-import { deleteCart } from "@/services/api/cart";
 import ConfirmModal from "@/components/confirm-modal";
+import { useCart } from "@/hook/cart/useCart";
+import { deleteCart } from "@/services/cart";
 export type Product = {
   id: string;
   productTitle: string;
@@ -31,7 +31,7 @@ export type Shop = {
 };
 
 export default function Cart() {
-  const { cartData, isLoading, isError, mutate } = useCart();
+  const { data, isLoading, isError, mutate } = useCart();
   const router = useRouter();
   const [isEdit, setIsEdit] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -108,7 +108,7 @@ export default function Cart() {
   };
   // 是否所有商品都选中
   const isAllSelected = () =>
-    cartData.every((shop: any) => {
+    data?.every((shop: any) => {
       return shop.cartList.every(
         (product: any) => selected[shop.shopId]?.[product.id],
       );
@@ -132,9 +132,9 @@ export default function Cart() {
   const toggleAll = (checked: boolean) => {
     const newSelected: typeof selected = {};
 
-    cartData.forEach((shop: any) => {
+    data?.forEach((shop) => {
       newSelected[shop.shopId] = {};
-      shop.cartList.forEach((product: any) => {
+      shop.cartList.forEach((product) => {
         newSelected[shop.shopId][product.id] = checked;
       });
     });
@@ -143,21 +143,19 @@ export default function Cart() {
   const togglePrice = useMemo(() => {
     const selectedIdArr = getSelectedProductIds(selected);
 
-    return cartData
+    return data
       ?.flatMap((shop) => shop.cartList) // 拍平所有商品
       ?.filter((item) => selectedIdArr.includes(item.id)) // 过滤选中项
       ?.reduce((sum, item) => sum + item.totalPrice, 0); // 累加价格
   }, [selected]);
 
-  console.log("togglePrice", togglePrice);
-
   useEffect(() => {
-    if (cartData) {
+    if (data) {
       const init: typeof selected = {};
 
-      cartData.forEach((shop: any) => {
+      data.forEach((shop) => {
         init[shop.shopId] = {};
-        shop.cartList.forEach((product: any) => {
+        shop.cartList.forEach((product) => {
           init[shop.shopId][product.id] = false; // 初始不选中
         });
       });
@@ -165,7 +163,7 @@ export default function Cart() {
 
       setSelected(init);
     }
-  }, [cartData]);
+  }, [data]);
 
   if (isLoading) return <div>加载中...</div>;
   if (isError) return <div>出错了</div>;
@@ -184,7 +182,7 @@ export default function Cart() {
         </div>
       </div>
       <div className="flex-1 overflow-auto px-3">
-        {cartData.map((shop: any) => (
+        {data?.map((shop) => (
           <ShopCard
             key={shop.shopId}
             isEdit={isEdit}

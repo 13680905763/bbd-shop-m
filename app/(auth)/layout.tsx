@@ -6,7 +6,7 @@ import { addToast, Divider } from "@heroui/react";
 import { GoogleLogin } from "@react-oauth/google";
 
 import { Logo } from "@/components/icons";
-import { getgoogle } from "@/services/api/auth";
+import { loginWithGoogle } from "@/services/auth";
 
 export default function AuthLayout({
   children,
@@ -37,7 +37,7 @@ export default function AuthLayout({
         onSuccess={(credentialResponse) => {
           const credential = credentialResponse.credential;
 
-          getgoogle(credential as string).then((e: any) => {
+          loginWithGoogle(credential as string).then((e: any) => {
             console.log("谷歌登录成功", e);
             if (e.success) {
               addToast({

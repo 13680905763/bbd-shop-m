@@ -13,7 +13,7 @@ import React, { useState } from "react";
 import { IoLockClosed, IoPeopleSharp, IoPerson } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 
-import { getcallback, getsignUp } from "@/services/api/auth";
+import { activateEmail, signUpCustomer } from "@/services/auth";
 
 export default function RegisterPage() {
   const [isActive, setIsActive] = useState(false);
@@ -24,7 +24,7 @@ export default function RegisterPage() {
     // console.log(e.length);
     if (e.length === 6) {
       // 激活
-      getcallback({ ...fomeData, activationCode: e }).then((e: any) => {
+      activateEmail({ ...fomeData, activationCode: e }).then((e: any) => {
         if (e.success) {
           console.log("注册成功");
           router.push("/dashboard");
@@ -45,7 +45,7 @@ export default function RegisterPage() {
 
       setFomeData(data);
       console.log("data", data);
-      getsignUp({ ...data }).then((e: any) => {
+      signUpCustomer({ ...data }).then((e: any) => {
         if (e.success) {
           setIsActive(true);
         } else {

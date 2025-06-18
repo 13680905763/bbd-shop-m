@@ -6,13 +6,13 @@ import { useRouter } from "next/navigation";
 import { IoChevronForwardSharp } from "react-icons/io5";
 
 import { siteConfig } from "@/config/site";
-import { getlogout } from "@/services/api/auth";
+import { logoutCustomer } from "@/services/auth";
 
 export default function Settingpage() {
   const router = useRouter();
   const logout = async () => {
     try {
-      const res: any = await getlogout(); // 调用后端接口，带上 cookie
+      const res: any = await logoutCustomer(); // 调用后端接口，带上 cookie
 
       res.success && router.replace("/login");
     } catch (error) {
