@@ -24,6 +24,7 @@ import DisclaimerDrawer from "@/components/disclaimer-drawer";
 import Stepper from "@/components/stepper";
 import { addCart } from "@/services/cart";
 import { getGoodsInfo } from "@/services/goods";
+import { createOrderByProduct } from "@/services";
 interface Sku {
   skuID: string;
   stock: number;
@@ -125,6 +126,28 @@ export default function GoodsPage() {
   const [pathMap, setPathMap] = useState<any>(null);
   const [isbuy, setIsbuy] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const handleBuy = async () => {
+    console.log("currentSku", currentSku);
+    if (!currentSku) return;
+    setisLoading(true);
+
+    const res: any = await createOrderByProduct({
+      source: params.source,
+      sourceProductId: params.sourceProductId,
+      sourceSkuId: currentSku.skuID,
+      sourceMpId: goodsInfo?.productInfo?.sourceMpId,
+      sourceMpSkuId: currentSku.sourceMpSkuId,
+      specId: currentSku?.specId,
+      quantity,
+      remark,
+    });
+
+    setisLoading(false);
+
+    if (res.code === 200) {
+      router.push(`/order/pay-order/${res.data}`);
+    }
+  };
   const add = () => {
     setisLoading(true);
 
@@ -236,6 +259,8 @@ export default function GoodsPage() {
   console.log("currentSku", currentSku);
 
   useEffect(() => {
+    console.log("params", params);
+
     getGoodsInfo({ ...params }).then((res: any) => {
       if (res.success) {
         // 数据初始化
@@ -443,7 +468,11 @@ export default function GoodsPage() {
               </DrawerBody>
               <DrawerFooter>
                 {isbuy ? (
-                  <Button className="w-full" color="primary">
+                  <Button
+                    className="w-full"
+                    color="primary"
+                    onPress={handleBuy}
+                  >
                     立即购买
                   </Button>
                 ) : (

@@ -45,7 +45,7 @@ export default function LoginPage() {
           type="email"
         />
         <Input
-          name="password"
+          name="passWord"
           placeholder="Password"
           startContent={<IoLockClosed />}
           type="password"

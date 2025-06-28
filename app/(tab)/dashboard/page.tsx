@@ -62,17 +62,20 @@ export default function Cart() {
       </div>
 
       <div className="box-card flex py-3">
-        {siteConfig.orderList.map((item, index) => {
+        {siteConfig.orderList.map((item) => {
           return (
-            <div
+            <button
               key={item.title}
               className="flex flex-1 flex-col items-center justify-center text-center"
+              onClick={() => {
+                router.push(item.to);
+              }}
             >
               <div>
                 <Avatar radius="md" size="sm" src={item.src} />
               </div>
               <p className="mt-3">{item.title}</p>
-            </div>
+            </button>
           );
         })}
       </div>

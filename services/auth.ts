@@ -5,9 +5,9 @@ export const loginCustomer = (data: { email: string; password: string }) => {
     ...data,
   });
 };
-export const loginWithGoogle = (accessToken: string) => {
+export const loginWithGoogle = (idToken: string) => {
   return request.post("/customer/google/login", {
-    accessToken,
+    idToken,
   });
 };
 

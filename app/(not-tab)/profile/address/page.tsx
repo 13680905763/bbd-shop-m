@@ -12,6 +12,7 @@ import { useAddressList } from "@/hook/addresses/useAddressList";
 import ConfirmModal from "@/components/confirm-modal";
 import FormModal from "@/components/modal/form-modal";
 import { addAddress, deleteAddress, updateAddress } from "@/services/address";
+import { FieldConfig } from "@/components/form/formItem-renderer";
 type ModalType = "add" | "edit" | "delete" | null;
 const initAddress = {
   recipient: "",
@@ -89,7 +90,7 @@ export default function Cart() {
     if (modalType === "add") {
       console.log("currentData", { ...currentData, addressType: 1 });
 
-      await addAddress({ ...currentData, addressType: 1 }); // 新增接口
+      await addAddress({ ...currentData, addressType: 2 }); // 新增接口
     } else if (modalType === "edit") {
       await updateAddress(currentData); // 编辑接口
     } else if (modalType === "delete") {

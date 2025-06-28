@@ -67,7 +67,9 @@ a {
 .button-default {
   @apply border bg-white text-black;
 }
-
+.button-white {
+  @apply border border-[#ccc] bg-[#fff] text-[#000];
+}
 .box-card {
   @apply my-3 rounded-xl bg-white;
 }

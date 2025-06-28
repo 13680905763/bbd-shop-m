@@ -170,7 +170,7 @@ export default function ProductItem({
               wrapper: "self-start",
             }}
             height={93}
-            src={product.skuPicUrl}
+            src={product.skuPicUrl || product?.picUrl}
             width={93}
           />
         </button>
@@ -182,7 +182,7 @@ export default function ProductItem({
 
           <div className="mt-5 flex items-center justify-between gap-2">
             <div className="flex flex-1 flex-col">
-              <span className="text-price-base">¥{product.price}</span>
+              <span className="text-price-base">¥{product?.unitPrice}</span>
             </div>
 
             <div className="flex items-center gap-1">
