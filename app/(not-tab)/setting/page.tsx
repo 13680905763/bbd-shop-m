@@ -6,18 +6,16 @@ import { useRouter } from "next/navigation";
 import { IoChevronForwardSharp } from "react-icons/io5";
 
 import { siteConfig } from "@/config/site";
-import { logoutCustomer } from "@/services/auth";
+import { logoutCustomer } from "@/services";
 
 export default function Settingpage() {
   const router = useRouter();
-  const logout = async () => {
+  const handleLogoutCustomer = async () => {
     try {
-      const res: any = await logoutCustomer(); // 调用后端接口，带上 cookie
-
-      res.success && router.replace("/login");
-    } catch (error) {
-      console.log(error);
-    }
+      await logoutCustomer(); // 调用后端接口，带上 cookie
+      localStorage.removeItem("user-storage");
+      window.location.reload();
+    } catch (error) {}
   };
 
   return (
@@ -45,7 +43,11 @@ export default function Settingpage() {
           ))}
         </Listbox>
 
-        <Button className="mt-2 w-full" color="primary" onPress={logout}>
+        <Button
+          className="mt-2 w-full"
+          color="primary"
+          onPress={handleLogoutCustomer}
+        >
           退出
         </Button>
       </div>

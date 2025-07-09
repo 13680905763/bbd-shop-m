@@ -15,9 +15,10 @@ import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import { IoWallet } from "react-icons/io5";
 
-import { useAddressList, usePayMethod, useWalletInfo } from "@/hook";
+import { useBillingAddressList, usePaymentMethodList } from "@/hook";
 import { createPayOrder, getPayOrderStatus } from "@/services";
 import CommonModal from "@/components/modal/common-modal";
+import { useWalletStore } from "@/store";
 const CustomRadio = (props: RadioProps) => {
   const {
     Component,
@@ -58,33 +59,27 @@ export default function PayOrder() {
   const params = useParams<{ bizCode: string }>();
   const [isOpen, setIsOpen] = useState(false);
 
-  // const { data, isLoading, isError } = usePayMethod(params.bizCode);
-  const { data, isLoading, isError } = usePayMethod(params.bizCode);
+  const { data, isLoading, isError } = usePaymentMethodList(params.bizCode);
   const [paymentId, setPaymentId] = useState("");
-  const { data: WalletInfo } = useWalletInfo();
-  const { data: billingAddressData } = useAddressList(2);
+  const wallet = useWalletStore((state) => state.wallet);
 
-  // console.log("data", data);
+  const { data: billingAddressData } = useBillingAddressList();
+
+  console.log("data", data);
 
   const hanldeCreatePayOrder = async () => {
     console.log("handleCreatePayOrder", paymentId);
-    const res: any = await createPayOrder({
-      bizCode: params.bizCode,
-      paymentId,
-      addressId: billingAddressData![0]?.id,
-    });
 
-    console.log("res", res.data);
-    if (res.code === 200) {
-      window.open(res.data, "_blank");
-      setIsOpen(true);
-    } else {
-      addToast({
-        title: res?.msg,
-        timeout: 1000,
-        color: "danger",
+    try {
+      const url = await createPayOrder({
+        bizCode: params.bizCode,
+        paymentId,
+        addressId: billingAddressData![0]?.id,
       });
-    }
+
+      window.open(url, "_blank");
+      setIsOpen(true);
+    } catch (error) {}
   };
   const currentPayMethod = useMemo(() => {
     return (
@@ -132,7 +127,7 @@ export default function PayOrder() {
                 setPaymentId(value);
               }}
             >
-              {data.map((item: any) => {
+              {data?.map((item) => {
                 if (item.methodName !== "BALANCE") return null;
 
                 return (
@@ -141,8 +136,8 @@ export default function PayOrder() {
                     className="rounded-2xl bg-[#ffeee1] p-4"
                   >
                     <p className="text-title">{item.methodName}</p>
-                    {item.paymentList.map((payment: any) => {
-                      if (payment.id == 1)
+                    {item.paymentList.map((payment) => {
+                      if (payment.id === "1")
                         return (
                           <CustomRadio key={payment.id} value={payment.id}>
                             <div>
@@ -151,7 +146,7 @@ export default function PayOrder() {
                                   <IoWallet className="h-14 w-14 text-[#f0700c]" />
                                   <div>余额 </div>
                                   <div className="">
-                                    $ {WalletInfo?.availabalBalance}
+                                    $ {wallet?.availabalBalance}
                                   </div>
                                 </div>
                                 <Button
@@ -172,13 +167,13 @@ export default function PayOrder() {
                   </div>
                 );
               })}
-              {data.map((item: any) => {
+              {data?.map((item) => {
                 if (item.methodName === "BALANCE") return null;
 
                 return (
                   <div key={item.methodName}>
                     <p className="text-title">{item.methodName}</p>
-                    {item.paymentList.map((payment: any) => {
+                    {item.paymentList.map((payment) => {
                       return (
                         <Radio
                           key={payment.id}
@@ -218,70 +213,7 @@ export default function PayOrder() {
               base: "w-full",
             }}
             defaultValue={"1"}
-          >
-            {/* {data.map((item: any) => (
-              <div key={item.methodName}>
-                <p className="text-title">{item.methodName}</p>
-                {item.paymentList.map((payment: any) => {
-                  if (payment.id == 1)
-                    return (
-                      <Radio
-                        key={payment.id}
-                        classNames={{
-                          base: cn(
-                            "inline-flex min-w-[100%] w-full bg-content1 m-0",
-                            "hover:bg-content2 items-center justify-start",
-                            "cursor-pointer rounded-lg gap-2 p-3 border-1",
-                            "data-[selected=true]:border-primary",
-                          ),
-                          labelWrapper: "w-full",
-                        }}
-                        value={payment.id}
-                      >
-                        <div>
-                          <div className="flex justify-between px-1 py-2 text-sm">
-                            <div className="flex items-center gap-4">
-                              <div>余额</div>
-                              <div className="">$ 999</div>
-                            </div>
-                            <Button color="primary">充值</Button>
-                          </div>
-                        </div>
-                      </Radio>
-                    );
-
-                  return (
-                    <Radio
-                      key={payment.id}
-                      classNames={{
-                        base: cn(
-                          "inline-flex min-w-[100%] w-full bg-content1 m-0  mb-2 ",
-                          "hover:bg-content2 items-center justify-start",
-                          "cursor-pointer rounded-lg gap-2 p-3 border-1",
-                          "data-[selected=true]:border-primary",
-                        ),
-                        labelWrapper: "w-full",
-                        label: "w-full ",
-                      }}
-                      value={payment.id}
-                    >
-                      <div className="flex w-full items-center gap-3">
-                        <Image
-                          className="object-contain"
-                          height={60}
-                          src={payment.logoUrl}
-                          width={60}
-                        />
-                        <span className="text-sm font-semibold">
-                          {payment.payName}
-                        </span>
-                      </div>
-                    </Radio>
-                  );
-                })}
-              </div>
-            ))} */}
-          </RadioGroup>
+          />
         </div>
       </div>
       <div className="sticky bottom-0 z-10 flex items-center justify-end gap-4 border-t-[1px] bg-white p-4">
@@ -301,10 +233,9 @@ export default function PayOrder() {
         size="xl"
         title="遇到问题？"
         onConfirm={async (onClose) => {
-          const res = await getPayOrderStatus(params?.bizCode);
+          const status = await getPayOrderStatus(params?.bizCode);
 
-          console.log(123, res);
-          if (res?.data === "203") {
+          if (status === 203) {
             onClose();
           } else {
             addToast({

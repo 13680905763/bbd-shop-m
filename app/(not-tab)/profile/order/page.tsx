@@ -1,40 +1,31 @@
 "use client";
-import { NavBar } from "antd-mobile";
-import React, { useEffect, useState } from "react";
+import { InfiniteScroll, NavBar } from "antd-mobile";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Input, Tab, Tabs } from "@heroui/react";
 
 import OrderItem from "./order-item";
 
-import { useUser } from "@/hook/user/useUser";
 import { SearchIcon } from "@/components/icons";
-import { getOrderList } from "@/services";
+import { useOrderList } from "@/hook";
+const tabKeyToStatusCode: Record<string, string> = {
+  all: "",
+  waitPay: "201",
+  paid: "203",
+};
 
 export default function Settingpage() {
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const { data, isLoading, isError } = useUser();
-  const [orderList, setOrderList] = useState<any>([]);
+  // 传入订单状态，例如 "ALL"、"WAIT_PAY"
+  const [activeTab, setActiveTab] = useState("all");
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, error } =
+    useOrderList(tabKeyToStatusCode[activeTab]);
 
   const router = useRouter();
 
-  const [formData, setFormData] = useState({});
   const onPayOrderRedirect = (bizCode: string) => {
     router.push(`/order/pay-order/${bizCode}`);
   };
-
-  useEffect(() => {
-    getOrderList({ current: page, size: pageSize }).then((res) => {
-      console.log("res", res);
-
-      setOrderList(res.data.records);
-    });
-  }, [page, pageSize]);
-  useEffect(() => {
-    setFormData(data);
-  }, [data]);
-  if (isLoading) return <div>加载中...</div>;
-  if (isError) return <div>加载失败</div>;
+  const orders = data?.pages?.flatMap((page: any) => page.records) ?? [];
 
   return (
     <div className="h-screen bg-[#f7f8f9]">
@@ -77,24 +68,50 @@ export default function Settingpage() {
           tab: " px-0 h-12 flex-1",
           cursor: "h-0",
           tabContent: "group-data-[selected=true]:text-[#f0700c] font-bold",
+          panel: "bg-[#f7f8f9] px-2",
         }}
         variant="underlined"
+        onSelectionChange={(key) => setActiveTab(String(key))}
       >
         <Tab key="photos" title="全部">
-          {orderList?.map((order: any) => (
+          {orders?.map((order: any) => (
             <OrderItem
               key={order.id}
               order={order}
               onPayOrderRedirect={onPayOrderRedirect}
             />
           ))}
+          <InfiniteScroll
+            hasMore={!!hasNextPage}
+            loadMore={(isRetry) => fetchNextPage().then(() => undefined)}
+          />
         </Tab>
 
-        <Tab key="videos" title="待付款">
-          123
+        <Tab key="waitPay" title="待付款">
+          {orders.map((order: any) => (
+            <OrderItem
+              key={order.id}
+              order={order}
+              onPayOrderRedirect={onPayOrderRedirect}
+            />
+          ))}
+          <InfiniteScroll
+            hasMore={!!hasNextPage}
+            loadMore={() => fetchNextPage().then(() => undefined)}
+          />
         </Tab>
-        <Tab key="o" title="已付款">
-          123
+        <Tab key="paid" title="已付款">
+          {orders.map((order: any) => (
+            <OrderItem
+              key={order.id}
+              order={order}
+              onPayOrderRedirect={onPayOrderRedirect}
+            />
+          ))}
+          <InfiniteScroll
+            hasMore={!!hasNextPage}
+            loadMore={() => fetchNextPage().then(() => undefined)}
+          />
         </Tab>
       </Tabs>
     </div>

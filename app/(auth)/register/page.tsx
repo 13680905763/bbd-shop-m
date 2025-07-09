@@ -1,129 +1,116 @@
 "use client";
 
-import {
-  addToast,
-  Button,
-  Checkbox,
-  Form,
-  Input,
-  InputOtp,
-} from "@heroui/react";
-import NextLink from "next/link";
+import { addToast, InputOtp } from "@heroui/react";
 import React, { useState } from "react";
 import { IoLockClosed, IoPeopleSharp, IoPerson } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 
-import { activateEmail, signUpCustomer } from "@/services/auth";
+import { activateEmail, signUpCustomer } from "@/services";
+import CommonForm from "@/components/form/common-form";
+import { FieldConfig } from "@/components/form/formItem-renderer";
+import { SignUpFormData } from "@/types";
+import { handleAuthSuccess } from "@/lib/auth-handler";
+const registerFormFields: FieldConfig[] = [
+  {
+    type: "input",
+    name: "email",
+    placeholder: "Enter your email",
+    startContent: <IoPerson />,
+  },
+  {
+    type: "input",
+    name: "password",
+    placeholder: "password",
+    startContent: <IoLockClosed />,
+  },
+  {
+    type: "input",
+    name: "inviteCode",
+    placeholder: "请输入邀请码，没有邀请码请留空",
+    startContent: <IoPeopleSharp />,
+  },
+  {
+    type: "checkbox",
+    name: "agreeToTerms",
+    label: "I have read and agree to the website terms and conditions",
+    size: "sm",
+  },
+];
 
 export default function RegisterPage() {
-  const [isActive, setIsActive] = useState(false);
-  const [isCheck, setIsCheck] = useState(false);
-  const [fomeData, setFomeData] = useState<any>();
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [formData, setFormData] = useState<SignUpFormData>({
+    email: "177748@qq.com",
+    password: "123",
+    inviteCode: "",
+    agreeToTerms: false,
+  });
   const router = useRouter();
-  const callback = (e: any) => {
-    // console.log(e.length);
+
+  const handleSubmit = async (formData: SignUpFormData) => {
+    const { agreeToTerms, ...data } = formData;
+
+    if (!agreeToTerms) {
+      addToast({ title: "Please check the Unified Agreement", timeout: 1000 });
+
+      return;
+    }
+    try {
+      await signUpCustomer(data);
+      setIsEmailVerified(true);
+    } catch (e) {}
+  };
+  const handleInviteCode = async (e: any) => {
     if (e.length === 6) {
       // 激活
-      activateEmail({ ...fomeData, activationCode: e }).then((e: any) => {
-        if (e.success) {
-          console.log("注册成功");
-          router.push("/dashboard");
-        } else {
-          addToast({
-            title: e.msg,
-          });
-        }
-      });
-    }
-  };
-  const signUp = (e: any) => {
-    e.preventDefault();
-    if (isCheck) {
-      let data: any = Object.fromEntries(new FormData(e.currentTarget));
+      try {
+        const res = await activateEmail({
+          email: formData.email,
+          activationCode: e,
+        });
 
-      console.log(666);
-
-      setFomeData(data);
-      console.log("data", data);
-      signUpCustomer({ ...data }).then((e: any) => {
-        if (e.success) {
-          setIsActive(true);
-        } else {
-          addToast({
-            title: e.msg,
-            timeout: 1000,
-          });
-        }
-      });
-    } else {
-      addToast({
-        title: "请勾选统一协议",
-      });
+        await handleAuthSuccess("/dashboard", res, router);
+      } catch (err) {
+        // 错误处理可选在这里写
+      }
     }
   };
 
   return (
     <div>
-      {!isActive ? (
+      {!isEmailVerified ? (
         <>
-          <Form className="w-full" onSubmit={signUp}>
-            <Input
-              isRequired
-              errorMessage="Please enter a valid email"
-              name="email"
-              placeholder="Enter your email"
-              startContent={<IoPerson />}
-              type="email"
-            />
-            <Input
-              name="password"
-              placeholder="Password"
-              startContent={<IoLockClosed />}
-            />
-            <Input
-              name="yaoqing"
-              placeholder="请输入邀请码，没有邀请码请留空"
-              startContent={<IoPeopleSharp />}
-            />
-
-            <Checkbox
-              checked={isCheck}
-              className="my-1 w-full"
-              size="sm"
-              onChange={() => setIsCheck(!isCheck)}
-            >
-              I have read and agree to the website terms and conditions
-            </Checkbox>
-            <Button className="w-full" color="primary" type="submit">
-              注册
-            </Button>
-          </Form>
+          <CommonForm
+            confirmText="注册"
+            fields={registerFormFields}
+            formData={formData}
+            onChange={setFormData}
+            onSubmit={handleSubmit}
+          />
           <div className="my-4 text-sm">
             <span>Already have an account ? </span>
-            <NextLink href="/login">
-              <span className="text-[#f0700c]">Go login</span>
-            </NextLink>
+            <button
+              className="text-[#f0700c]"
+              onClick={() => router.push("/login")}
+            >
+              Go login
+            </button>
           </div>
         </>
       ) : (
         <div>
-          <p className="text-title-xl">验证你的电子邮箱</p>
+          <p className="text-title-xl">验证你的电子邮箱（请勿离开此页面）</p>
           <div className="my-4 text-sm">
             <span>我们已经发送验证码到</span>
-            <span className="font-bold">{fomeData.email}</span>
+            <span className="font-bold">{formData.email}</span>
             <span>。请在下面输入验证码进行验证</span>
           </div>
           <InputOtp
             className="m-auto"
             length={6}
             size="lg"
-            onValueChange={callback}
+            onValueChange={handleInviteCode}
           />
-          {/* <div className="text-sm">
-            <span>没有收到您的电子邮件？</span>
-            <span className="font-bold">重新发送验证码</span>
-            <span>。请在下面输入验证码进行验证</span>
-          </div> */}
         </div>
       )}
     </div>

@@ -24,6 +24,7 @@
     "@react-aria/ssr": "3.9.8",
     "@react-aria/visually-hidden": "3.8.22",
     "@react-oauth/google": "^0.12.2",
+    "@tanstack/react-query": "^5.81.5",
     "antd-mobile": "^5.39.0",
     "axios": "^1.9.0",
     "clsx": "2.1.1",
@@ -36,7 +37,8 @@
     "react-dom": "18.3.1",
     "react-icons": "^5.5.0",
     "swr": "^2.3.3",
-    "tailwind-scrollbar-hide": "^2.0.0"
+    "tailwind-scrollbar-hide": "^2.0.0",
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
     "@eslint/compat": "1.2.8",

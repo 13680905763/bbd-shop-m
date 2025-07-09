@@ -1,12 +1,14 @@
 "use client";
+
 import { Avatar } from "@heroui/react";
 import { NavBar } from "antd-mobile";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { useUser } from "@/hook/user/useUser";
 import CommonForm from "@/components/form/common-form";
 import { FieldConfig } from "@/components/form/formItem-renderer";
+import { useUserStore } from "@/store";
+import { UserInfo } from "@/types";
 
 const profileFields: FieldConfig[] = [
   {
@@ -25,47 +27,21 @@ const profileFields: FieldConfig[] = [
     name: "email",
     label: "电子邮件",
   },
-  // {
-  //   type: "select",
-  //   name: "country",
-  //   label: "国家",
-  //   placeholder: "选择国家",
-  //   options: [
-  //     {
-  //       label: "Argentina",
-  //       value: "Argentina",
-  //       icon: "https://flagcdn.com/ar.svg",
-  //     },
-  //     {
-  //       label: "Venezuela",
-  //       value: "Venezuela",
-  //       icon: "https://flagcdn.com/ve.svg",
-  //     },
-  //     {
-  //       label: "Brazil",
-  //       value: "Brazil",
-  //       icon: "https://flagcdn.com/ve.svg",
-  //     },
-  //     {
-  //       label: "Switzerland",
-  //       value: "Switzerland",
-  //       icon: "https://flagcdn.com/ch.svg",
-  //     },
-  //   ],
-  // },
 ];
 
 export default function Settingpage() {
-  const { data, isLoading, isError } = useUser();
   const router = useRouter();
+  const user = useUserStore((state) => state.user);
 
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState<UserInfo | {}>(() =>
+    user ? { ...user } : {},
+  );
 
   useEffect(() => {
-    setFormData(data);
-  }, [data]);
-  if (isLoading) return <div>加载中...</div>;
-  if (isError) return <div>加载失败</div>;
+    if (user) {
+      setFormData({ ...user }); // 浅拷贝避免直接修改 Zustand 状态
+    }
+  }, [user]);
 
   return (
     <div className="h-screen bg-[#f7f8f9]">
@@ -74,10 +50,10 @@ export default function Settingpage() {
       </NavBar>
       <div className="px-2">
         <div className="box-card flex flex-col items-center justify-center p-2">
-          <Avatar className="h-[80px] w-[80px]" src={data.avatarUrl} />
-          <div className="text-lg font-bold">{data.name}</div>
+          <Avatar className="h-[80px] w-[80px]" src={user?.avatarUrl} />
+          <div className="text-lg font-bold">{user?.name}</div>
         </div>
-        <div className="h-full bg-white p-2">
+        <div className="h-full p-2">
           <CommonForm
             fields={profileFields}
             formData={formData}

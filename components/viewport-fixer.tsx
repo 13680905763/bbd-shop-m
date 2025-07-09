@@ -4,8 +4,6 @@ import { useEffect } from "react";
 
 export function ViewportFixer() {
   useEffect(() => {
-    console.log(666);
-
     const setVh = () => {
       const vh = window.innerHeight * 0.01;
 

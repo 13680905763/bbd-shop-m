@@ -1,35 +1,66 @@
 "use client";
-import {
-  Autocomplete,
-  AutocompleteItem,
-  Avatar,
-  Button,
-  Form,
-  Input,
-} from "@heroui/react";
+
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
-import React from "react";
-const countrys = [
+import React, { useState } from "react";
+
+import CommonForm from "@/components/form/common-form";
+import { FieldConfig } from "@/components/form/formItem-renderer";
+import { useWalletStore } from "@/store";
+const registerFormFields: FieldConfig[] = [
   {
-    label: "中国银行",
-    key: "Argentina",
-    // src: "https://flagcdn.com/ar.svg",
+    name: "pwd1",
+    placeholder: "收款人",
+    type: "input",
   },
   {
-    label: "建设银行",
-    key: "Venezuela",
-    // src: "https://flagcdn.com/ve.svg",
+    name: "pwd2",
+    placeholder: "国家",
+    type: "select",
+    options: [
+      {
+        label: "中国银行",
+        value: "Argentina",
+        // src: "https://flagcdn.com/ar.svg",
+      },
+      {
+        label: "建设银行",
+        value: "Venezuela",
+        // src: "https://flagcdn.com/ve.svg",
+      },
+      {
+        label: "paypal",
+        value: "Brazil",
+        // src: "https://flagcdn.com/ve.svg",
+      },
+    ],
+  },
+
+  {
+    name: "pwd3",
+    placeholder: "银行卡",
+    type: "input",
   },
   {
-    label: "paypal",
-    key: "Brazil",
-    // src: "https://flagcdn.com/ve.svg",
+    name: "pwd4",
+    placeholder: "提现金额",
+    type: "input",
   },
 ];
 
+interface LoginFormData {
+  pwd1: string;
+  pwd2: string;
+  pwd3: string;
+}
 export default function Settingpage() {
   const router = useRouter();
+  const wallet = useWalletStore((state) => state.wallet);
+  const [formData, setFormData] = useState<LoginFormData>({
+    pwd1: "",
+    pwd2: "",
+    pwd3: "",
+  });
 
   return (
     <div className="h-screen bg-[#f7f8f9]">
@@ -39,13 +70,21 @@ export default function Settingpage() {
       <div className="px-2">
         <div className="box-card p-2 text-center">
           <div className="my-[10px] text-[24px] font-bold text-[#f3643a]">
-            CAD 0.00
+            {wallet?.availabalBalance}
           </div>
           <div className="text-sm text-[#999]">总余额</div>
         </div>
         <div className="box-card p-4">提现服务费率：1%</div>
         <div>
-          <Form
+          <CommonForm
+            confirmText="提现"
+            fields={registerFormFields}
+            formData={formData}
+            onChange={setFormData}
+            onSubmit={() => {}}
+          />
+
+          {/* <Form
             className="flex w-full flex-col gap-2 rounded-lg bg-white p-4"
             // onReset={() => setAction("reset")}
             onSubmit={(e) => {
@@ -109,7 +148,7 @@ export default function Settingpage() {
             <Button className="mt-2 w-full" color="primary" type="submit">
               提现
             </Button>
-          </Form>
+          </Form> */}
         </div>
       </div>
     </div>

@@ -18,13 +18,15 @@ import {
 import NextLink from "next/link";
 import { GrPowerReset } from "react-icons/gr";
 import { IoIosLink } from "react-icons/io";
+import { useQueryClient } from "@tanstack/react-query";
 
 import ProgressBar from "@/components/progress-bar";
 import DisclaimerDrawer from "@/components/disclaimer-drawer";
 import Stepper from "@/components/stepper";
 import { addCart } from "@/services/cart";
 import { getGoodsInfo } from "@/services/goods";
-import { createOrderByProduct } from "@/services";
+import { createOrderPreviewKeyByProduct } from "@/services";
+import { source } from "@/types";
 interface Sku {
   skuID: string;
   stock: number;
@@ -116,22 +118,61 @@ function getAllCombinations(
 }
 export default function GoodsPage() {
   const params = useParams();
+  const router = useRouter();
   const [remark, setRemark] = useState<string>();
   const [quantity, setQuantity] = useState<number>(1);
 
-  const router = useRouter();
   const [goodsInfo, setGoodsInfo] = useState<any>();
-  const [isLoading, setisLoading] = useState<any>(false);
+  const [isLoading, setisLoading] = useState<boolean>(false);
 
   const [pathMap, setPathMap] = useState<any>(null);
-  const [isbuy, setIsbuy] = useState(false);
+  const [drawerType, setDrawerType] = useState<"buyNow" | "addCart">("buyNow");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const handleBuy = async () => {
-    console.log("currentSku", currentSku);
-    if (!currentSku) return;
+  const queryClient = useQueryClient();
+  const handleBuyNow = async () => {
+    if (isLoading) return;
+    // console.log("currentSku", currentSku);
+    if (!currentSku) {
+      addToast({
+        title: "请选择商品规格",
+        color: "danger",
+      });
+
+      return;
+    }
     setisLoading(true);
 
-    const res: any = await createOrderByProduct({
+    try {
+      const key = await createOrderPreviewKeyByProduct({
+        source: params.source as source,
+        sourceProductId: params.sourceProductId as string,
+        sourceSkuId: currentSku.skuID,
+        sourceMpId: goodsInfo?.productInfo?.sourceMpId,
+        sourceMpSkuId: currentSku.sourceMpSkuId,
+        specId: currentSku?.specId,
+        quantity,
+        remark,
+      });
+
+      router.push("/order/submit-order?type=product&key=" + key);
+    } catch (err: any) {
+    } finally {
+      setisLoading(false);
+    }
+  };
+  const add = async () => {
+    if (isLoading) return;
+    if (!currentSku) {
+      addToast({
+        title: "请选择商品规格",
+        color: "danger",
+      });
+
+      return;
+    }
+    setisLoading(true);
+
+    const data = {
       source: params.source,
       sourceProductId: params.sourceProductId,
       sourceSkuId: currentSku.skuID,
@@ -140,41 +181,23 @@ export default function GoodsPage() {
       specId: currentSku?.specId,
       quantity,
       remark,
-    });
-
-    setisLoading(false);
-
-    if (res.code === 200) {
-      router.push(`/order/pay-order/${res.data}`);
-    }
-  };
-  const add = () => {
-    setisLoading(true);
-
-    const data = {
-      source: params.source,
-      sourceProductId: params.sourceproductId,
-      sourceSkuId: currentSku.skuID,
-      quantity,
-      remark,
     };
 
-    console.log(data);
+    try {
+      const tip = await addCart(data);
 
-    addCart(data).then((res: any) => {
-      console.log(res);
       addToast({
-        title: res.msg,
+        title: tip,
         timeout: 1000,
         color: "success",
       });
+      queryClient.invalidateQueries({ queryKey: ["cartList"] }); // 手动刷新
+    } catch (e) {
+    } finally {
       setisLoading(false);
-    });
+    }
   };
-  const showDrawer = (showtype: any) => {
-    setIsbuy(showtype);
-    onOpen();
-  };
+
   // 切换选择状态
   const changeSelectedStatus = (index: any, indey: any) => {
     const cloned: any = structuredClone(goodsInfo);
@@ -259,31 +282,29 @@ export default function GoodsPage() {
   console.log("currentSku", currentSku);
 
   useEffect(() => {
-    console.log("params", params);
+    console.log("params123", params);
 
-    getGoodsInfo({ ...params }).then((res: any) => {
-      if (res.success) {
-        // 数据初始化
-        const cloned = structuredClone(res.data);
-        let pathMap = generateDynamicSkuPathDict(cloned.productInfo);
+    getGoodsInfo({ ...params }).then((data: any) => {
+      // 数据初始化
+      const cloned = structuredClone(data);
+      let pathMap = generateDynamicSkuPathDict(cloned.productInfo);
 
-        setPathMap(pathMap);
-        cloned.productInfo.skuPropList.forEach((spec: any) => {
-          spec.propValueList.forEach((value: any) => {
-            value.selected = false;
-            console.log("value.valueName", value.valueName, pathMap);
+      setPathMap(pathMap);
+      cloned.productInfo.skuPropList.forEach((spec: any) => {
+        spec.propValueList.forEach((value: any) => {
+          value.selected = false;
+          console.log("value.valueName", value.valueName, pathMap);
 
-            if (pathMap[value.valueName]) {
-              value.disabled = false;
-            } else {
-              value.disabled = true;
-            }
-          });
+          if (pathMap[value.valueName]) {
+            value.disabled = false;
+          } else {
+            value.disabled = true;
+          }
         });
-        console.log("cloned", cloned);
+      });
+      console.log("cloned", cloned);
 
-        setGoodsInfo(cloned);
-      }
+      setGoodsInfo(cloned);
     });
   }, []);
 
@@ -362,14 +383,20 @@ export default function GoodsPage() {
         <div className="flex flex-1 gap-2">
           <Button
             className="flex-1 bg-[linear-gradient(to_right,#ffd01e,#ff8917)] text-white"
-            onPress={() => showDrawer(false)}
+            onPress={() => {
+              setDrawerType("addCart");
+              onOpen();
+            }}
           >
             加入购物车
           </Button>
           <Button
             className="flex-1"
             color="primary"
-            onPress={() => showDrawer(true)}
+            onPress={() => {
+              setDrawerType("buyNow");
+              onOpen();
+            }}
           >
             立即购买
           </Button>
@@ -467,11 +494,12 @@ export default function GoodsPage() {
                 </div>
               </DrawerBody>
               <DrawerFooter>
-                {isbuy ? (
+                {drawerType === "buyNow" ? (
                   <Button
                     className="w-full"
                     color="primary"
-                    onPress={handleBuy}
+                    isLoading={isLoading}
+                    onPress={handleBuyNow}
                   >
                     立即购买
                   </Button>

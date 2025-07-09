@@ -1,11 +1,11 @@
-import { useQuery } from "../api/useQuery";
+import { useQuery } from "@tanstack/react-query";
 
-export interface Address {
-  id: string;
-  name: string;
-  phone: string;
-  region: string;
-  detail: string;
-}
-export const useAddressList = (addressType: number) =>
-  useQuery<any[]>(`/customer/address/list?addressType=${addressType}`);
+import { getAddressList } from "@/services";
+
+export const useAddressList = () => {
+  return useQuery({
+    queryKey: ["addressList"],
+    queryFn: () => getAddressList(1),
+    staleTime: 5 * 60 * 1000, // 缓存 5 分钟
+  });
+};

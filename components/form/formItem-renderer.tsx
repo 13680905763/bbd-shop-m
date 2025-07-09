@@ -18,32 +18,43 @@ export interface FieldOption {
 export interface FieldConfig {
   type: "input" | "select" | "checkbox" | "date" | "area";
   name: string;
-  label: string;
+  label?: string;
   placeholder?: string;
   options?: FieldOption[];
+  size?: "sm" | "md" | "lg"; // ✅ 新增 size 支持
+  startContent?: React.ReactNode;
+  isRequired?: boolean;
 }
 
-interface DynamicFormProps {
+interface DynamicFormProps<T extends Record<string, any>> {
   fields: FieldConfig[];
-  formData: Record<string, any>;
-  onChange: (data: Record<string, any>) => void;
+  formData: T;
+  onChange: (data: T) => void;
 }
 
-export default function FormItemRenderer({
+export default function FormItemRenderer<T extends Record<string, any>>({
   fields,
-  formData = {},
+  formData,
   onChange,
-}: DynamicFormProps) {
+}: DynamicFormProps<T>) {
   const handleChange = (key: string, value: any) => {
     onChange({ ...formData, [key]: value });
   };
 
-  console.log("formData", formData);
+  // console.log("formData", formData);
 
   return (
     <>
       {fields.map((field) => {
-        const { type, name, label, placeholder, options = [] } = field;
+        const {
+          type,
+          name,
+          label,
+          placeholder,
+          options = [],
+          size = "md",
+          startContent = "",
+        } = field; // 默认 md
         const value = formData[name] ?? "";
 
         switch (type) {
@@ -51,8 +62,14 @@ export default function FormItemRenderer({
             return (
               <Input
                 key={name}
+                classNames={{
+                  input: "text-base",
+                  inputWrapper: "bg-white",
+                }}
                 label={label}
                 placeholder={placeholder}
+                size={size}
+                startContent={startContent}
                 value={value}
                 variant="bordered"
                 onValueChange={(val) => handleChange(name, val)}
@@ -62,9 +79,14 @@ export default function FormItemRenderer({
             return (
               <Autocomplete
                 key={name}
+                aria-label="select"
+                classNames={{
+                  base: "bg-white",
+                }}
                 label={label}
                 placeholder={placeholder}
                 selectedKey={value}
+                size={size}
                 variant="bordered"
                 onSelectionChange={(val) => handleChange(name, val as string)}
               >
@@ -90,7 +112,9 @@ export default function FormItemRenderer({
             return (
               <Checkbox
                 key={name}
+                className="m-0"
                 isSelected={!!value}
+                size={size}
                 onValueChange={(val) => handleChange(name, val)}
               >
                 {label}
@@ -102,8 +126,8 @@ export default function FormItemRenderer({
                 key={name}
                 classNames={{ inputWrapper: "focus-within:!border-[#f0700c]" }}
                 label={label}
+                size={size}
                 variant="bordered"
-                // 你可以根据需要实现日期回填与格式转换
               />
             );
           case "area":
@@ -115,9 +139,7 @@ export default function FormItemRenderer({
                   stateId: formData.stateId ?? "",
                   city: formData.city ?? "",
                 }}
-                onChange={
-                  (val) => onChange({ ...formData, ...val }) // 统一更新 3 个字段
-                }
+                onChange={(val) => onChange({ ...formData, ...val })}
               />
             );
           default:

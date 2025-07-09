@@ -131,17 +131,22 @@ export const siteConfig = {
     {
       title: "我的收藏",
       src: "https://bbdbuy.com/wap/static/img/xihuan.png",
-      to: "/goods/favorite",
+      to: "/profile/favorite",
     },
     {
-      title: "地址",
+      title: "收货地址",
       src: "https://bbdbuy.com/wap/static/img/weizhi.png",
       to: "/profile/address",
     },
     {
+      title: "账单地址",
+      src: "https://bbdbuy.com/wap/static/img/weizhi.png",
+      to: "/profile/billing-address",
+    },
+    {
       title: "历史记录",
       src: "https://bbdbuy.com/wap/static/img/zuji.png",
-      to: "/goods/history",
+      to: "/profile/history",
     },
   ],
 };

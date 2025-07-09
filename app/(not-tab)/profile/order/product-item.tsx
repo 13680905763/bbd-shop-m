@@ -1,8 +1,10 @@
-import { Button, Image } from "@heroui/react";
+import { Image } from "@heroui/react";
 import { useRouter } from "next/navigation";
 
-export default function ProductItem({ product }: any) {
+export default function ProductItem({ product, customerPayStatus }: any) {
   const router = useRouter();
+
+  console.log("product", product);
 
   return (
     <>
@@ -24,18 +26,18 @@ export default function ProductItem({ product }: any) {
           />
         </button>
         <div className="flex-1">
-          <div className="text-title line-clamp-2">{product.productTitle}</div>
+          <div className="text-title line-clamp-1">{product.productTitle}</div>
           <div className="text-light-gray line-clamp-2">
             {product.sku.propName_valueName}
           </div>
-          <div>订单状态：待支付</div>
+          <div>订单状态：{customerPayStatus}</div>
         </div>
         <div className="">
-          <p>123</p>
-          <p>x12</p>
+          <p>{product.price}</p>
+          <p>x{product.quantity}</p>
         </div>
       </div>
-      <div className="flex items-center justify-between border-b-1 p-2">
+      {/* <div className="flex items-center justify-between border-b-1 p-2">
         <div>精细拍照</div>
         <Button className="button-white" radius="none" size="sm">
           +add
@@ -46,7 +48,7 @@ export default function ProductItem({ product }: any) {
         <Button className="button-white" radius="none" size="sm">
           +add
         </Button>
-      </div>
+      </div> */}
     </>
   );
 }

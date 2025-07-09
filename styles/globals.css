@@ -88,5 +88,5 @@ a {
 
 .group[data-focus="true"]
   .group-data-\[focus\=true\]\:border-default-foreground {
-  @apply !border-[#f0700c];
+  border-color: #f0700c !important;
 }

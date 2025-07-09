@@ -1,19 +1,34 @@
 "use client";
 import { IoChevronBack } from "react-icons/io5";
 import React from "react";
-import { useRouter } from "next/navigation";
-import { addToast, Divider } from "@heroui/react";
-import { GoogleLogin } from "@react-oauth/google";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Divider } from "@heroui/react";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 
 import { Logo } from "@/components/icons";
-import { loginWithGoogle } from "@/services/auth";
-
+import { loginWithGoogle } from "@/services";
+import { handleAuthSuccess } from "@/lib/auth-handler";
 export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/"; // 默认为首页
+  const handleLoginWithGoogle = async (
+    credentialResponse: CredentialResponse,
+  ) => {
+    const credential = credentialResponse.credential;
+
+    try {
+      const res = await loginWithGoogle(credential as string);
+
+      await handleAuthSuccess(redirect, res, router);
+    } catch (err) {
+      // 同样的错误处理
+    }
+  };
 
   return (
     <div className="bg h-[100dvh] p-2">
@@ -29,38 +44,7 @@ export default function AuthLayout({
         {children}
       </div>
       <Divider className="my-8" />
-
-      <GoogleLogin
-        onError={() => {
-          console.error("Google 登录失败");
-        }}
-        onSuccess={(credentialResponse) => {
-          const credential = credentialResponse.credential;
-
-          loginWithGoogle(credential as string).then((e: any) => {
-            console.log("谷歌登录成功", e);
-            if (e.success) {
-              addToast({
-                title: e.msg,
-                timeout: 1000,
-                color: "success",
-              });
-              router.push("/");
-            } else {
-              addToast({
-                title: e.msg,
-                timeout: 1000,
-                color: "danger",
-              });
-            }
-          });
-          // const payload: any = jwtDecode(credential!);
-
-          console.log("Google 用户信息:", credential);
-
-          // fetch('/api/auth/google', { method: 'POST', body: JSON.stringify(payload) })
-        }}
-      />
+      <GoogleLogin onSuccess={handleLoginWithGoogle} />
     </div>
   );
 }

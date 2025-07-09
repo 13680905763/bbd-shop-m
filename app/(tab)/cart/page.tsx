@@ -1,40 +1,43 @@
 "use client";
-import { addToast, Button, Checkbox, useDisclosure } from "@heroui/react";
+import {
+  addToast,
+  Button,
+  Checkbox,
+  Textarea,
+  useDisclosure,
+} from "@heroui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 import ShopCard from "./shop-card";
 
 import ConfirmModal from "@/components/confirm-modal";
-import { useCart } from "@/hook/cart/useCart";
-import { deleteCart } from "@/services/cart";
-export type Product = {
-  id: string;
-  productTitle: string;
-  sku: {
-    propName_valueName: string;
-  };
-  skuPicUrl: string;
-  remark?: string;
-  totalPrice: number;
-  price: number;
-  postFee: number;
-  quantity: number;
-  source: string;
-  sourceProductId: string;
-};
-
-export type Shop = {
-  shopId: string;
-  shopName: string;
-  cartList: Product[];
-};
+import { deleteCart, updateCart } from "@/services/cart";
+import { createOrderPreviewKeyByCart } from "@/services";
+import { useCartList } from "@/hook";
+import CommonModal from "@/components/modal/common-modal";
 
 export default function Cart() {
-  const { data, isLoading, isError, mutate } = useCart();
+  const { data, isLoading, isError } = useCartList();
+
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [isEdit, setIsEdit] = useState(false);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const {
+    isOpen: isOpenRemark,
+    onOpen: onOpenRemark,
+    onOpenChange: onOpenChangeRemark,
+  } = useDisclosure();
+
+  // 当前要删除的商品 id（单个为 string，批量为 string[]，默认 null）
+  const [pendingDeleteIds, setPendingDeleteIds] = useState<string[] | null>(
+    null,
+  );
+  const [pendingRemarkProductId, setPendingRemarkProductId] = useState<
+    string | null
+  >(null);
+  const [remarkText, setRemarkText] = useState("");
   const [selected, setSelected] = useState<{
     [shopId: string]: { [productId: string]: boolean };
   }>({});
@@ -56,44 +59,80 @@ export default function Cart() {
 
     return selectedIds;
   }
-  const handleDeleteCart = (onClose: any) => {
-    const selectedIdArr = getSelectedProductIds(selected);
+  const handleDeleteCart = async (idList: string[], onClose: () => void) => {
+    try {
+      const tip = await deleteCart({ idList });
 
-    deleteCart({ idList: selectedIdArr }).then((e: any) => {
-      if (e.success) {
-        addToast({
-          title: e.msg,
-          timeout: 1000,
-        });
-        onClose();
-        mutate();
-      } else {
-        addToast({
-          title: e.msg,
-          timeout: 1000,
-        });
-      }
-    });
+      addToast({ title: tip, timeout: 1000, color: "success" });
+      onClose();
+      queryClient.invalidateQueries({ queryKey: ["cartList"] }); // 手动刷新
+    } catch (e) {}
   };
-  const handleCart = () => {
+  const handleProductDelete = (productId: string) => {
+    setPendingDeleteIds([productId]);
+  };
+  const handleProductQuantity = async (productId: string, quantity: number) => {
+    try {
+      const tip = await updateCart([
+        {
+          id: productId,
+          quantity,
+        },
+      ]);
+
+      addToast({ title: tip, timeout: 1000, color: "success" });
+    } catch (e) {
+    } finally {
+      queryClient.invalidateQueries({ queryKey: ["cartList"] }); // 手动刷新
+    }
+  };
+  const handleProductRemark = (productId: string, remark: string) => {
+    setPendingRemarkProductId(productId);
+    setRemarkText(remark);
+    onOpenRemark();
+  };
+  const submitRemark = async () => {
+    if (!pendingRemarkProductId) return;
+    try {
+      const res = await updateCart([
+        {
+          id: pendingRemarkProductId,
+          remark: remarkText,
+        },
+      ]);
+
+      addToast({ title: res, timeout: 1000, color: "success" });
+      queryClient.invalidateQueries({ queryKey: ["cartList"] }); // 刷新
+    } catch (e) {
+    } finally {
+      onOpenChangeRemark();
+      setPendingRemarkProductId(null);
+      setRemarkText("");
+    }
+  };
+  //结算/删除购物车
+  const submitCart = async () => {
     const selectedIdArr = getSelectedProductIds(selected);
 
     if (selectedIdArr.length > 0) {
       if (isEdit) {
-        onOpen();
-        console.log("删除", { idList: selectedIdArr });
+        setPendingDeleteIds(selectedIdArr);
       } else {
-        console.log("结算");
-        router.push("/order/submit-order");
+        const key: any = await createOrderPreviewKeyByCart({
+          idList: selectedIdArr,
+        });
+
+        router.push("/order/submit-order?type=cart&key=" + key);
       }
     } else {
       addToast({
         title: "请先选择商品",
         timeout: 1000,
-        // color: "success",
+        color: "danger",
       });
     }
   };
+
   // 商品勾选
   const toggleItem = (shopId: string, productId: string, checked: boolean) => {
     console.log(shopId, productId, checked);
@@ -134,7 +173,7 @@ export default function Cart() {
 
     data?.forEach((shop) => {
       newSelected[shop.shopId] = {};
-      shop.cartList.forEach((product) => {
+      shop.cartList.forEach((product: any) => {
         newSelected[shop.shopId][product.id] = checked;
       });
     });
@@ -146,7 +185,7 @@ export default function Cart() {
     return data
       ?.flatMap((shop) => shop.cartList) // 拍平所有商品
       ?.filter((item) => selectedIdArr.includes(item.id)) // 过滤选中项
-      ?.reduce((sum, item) => sum + item.totalPrice, 0); // 累加价格
+      ?.reduce((sum, item) => sum + item?.unitPrice * item.quantity, 0); // 累加价格
   }, [selected]);
 
   useEffect(() => {
@@ -185,8 +224,10 @@ export default function Cart() {
         {data?.map((shop) => (
           <ShopCard
             key={shop.shopId}
+            handleProductDelete={handleProductDelete}
+            handleProductQuantity={handleProductQuantity}
+            handleProductRemark={handleProductRemark}
             isEdit={isEdit}
-            mutate={mutate}
             selectedMap={selected[shop.shopId] || {}}
             shop={shop}
             onToggleItem={(productId, checked) =>
@@ -207,7 +248,7 @@ export default function Cart() {
         </div>
         <div className="flex items-center gap-2">
           <p className="text-price-lg">￥{togglePrice}</p>
-          <Button color="primary" onPress={handleCart}>
+          <Button color="primary" onPress={submitCart}>
             {isEdit ? "删除" : "结算"}
           </Button>
         </div>
@@ -215,11 +256,27 @@ export default function Cart() {
 
       <ConfirmModal
         content="确定要删除当前商品吗？"
-        isOpen={isOpen}
+        isOpen={!!pendingDeleteIds}
         title="删除购物车"
-        onConfirm={handleDeleteCart}
-        onOpenChange={onOpenChange}
+        onConfirm={(onClose) => {
+          if (pendingDeleteIds) {
+            handleDeleteCart(pendingDeleteIds, onClose);
+          }
+        }}
+        onOpenChange={() => setPendingDeleteIds(null)}
       />
+      <CommonModal
+        isOpen={isOpenRemark}
+        title="备注"
+        onConfirm={submitRemark}
+        onOpenChange={onOpenChangeRemark}
+      >
+        <Textarea
+          placeholder="请输入备注"
+          value={remarkText}
+          onChange={(e) => setRemarkText(e.target.value)}
+        />
+      </CommonModal>
     </div>
   );
 }

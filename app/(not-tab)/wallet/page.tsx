@@ -7,12 +7,13 @@ import React, { useState } from "react";
 import { IoWallet } from "react-icons/io5";
 
 import { createOrderByRecharge } from "@/services";
+import { useWalletStore } from "@/store";
 
 export default function Settingpage() {
   const [currentPrice, setCurrentPrice] = useState<number>(0);
   const priceList = [50, 100, 200, 500, 1000, 5000];
   const router = useRouter();
-
+  const wallet = useWalletStore((state) => state.wallet);
   const changePrice = (price: number) => {
     setCurrentPrice(price);
   };
@@ -24,17 +25,12 @@ export default function Settingpage() {
 
       return;
     }
-    const res: any = await createOrderByRecharge({
+    const bizCode: any = await createOrderByRecharge({
       currencyAmount: currentPrice,
       currencyCode: "CNY",
     });
 
-    console.log("res", res);
-
-    if (res.code === 200) {
-      router.push(`/order/pay-order/${res.data}`);
-    }
-    // 你可以替换为实际充值接口调用
+    router.push("/order/pay-order/" + bizCode);
   };
 
   return (
@@ -55,7 +51,7 @@ export default function Settingpage() {
         {/* 余额展示区域 */}
         <div className="box-card p-2 text-center">
           <div className="my-[10px] text-[24px] font-bold text-[#f3643a]">
-            CAD 0.00
+            {wallet?.availabalBalance}
           </div>
           <div className="text-sm text-[#999]">总余额</div>
           <div className="flex justify-center px-[10px] py-[15px]">
@@ -103,7 +99,7 @@ export default function Settingpage() {
             onValueChange={(value) => setCurrentPrice(value)}
           />
           <Button className="w-full" color="primary" onPress={handleRecharge}>
-            充值1
+            充值
           </Button>
         </div>
       </div>

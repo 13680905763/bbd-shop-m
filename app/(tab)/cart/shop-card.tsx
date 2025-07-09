@@ -1,18 +1,18 @@
 import { Checkbox } from "@heroui/react";
-import { AiFillTaobaoSquare } from "react-icons/ai";
 
-import { Product, Shop } from "./page";
 import ProductItem from "./product-item";
 
-import { Icon1688 } from "@/components/icons";
+import SourceIcon from "@/components/common/source-icon";
 
 type ShopCardProps = {
-  shop: Shop;
+  shop: any;
   selectedMap: { [productId: string]: boolean };
   onToggleItem: (productId: string, checked: boolean) => void;
   onToggleShop: (checked: boolean) => void;
-  mutate: any;
   isEdit: boolean;
+  handleProductDelete: (productId: string) => void;
+  handleProductQuantity: (productId: string, quantity: number) => void;
+  handleProductRemark: (productId: string, remark: string) => void;
 };
 
 export default function ShopCard({
@@ -20,10 +20,12 @@ export default function ShopCard({
   selectedMap,
   onToggleItem,
   onToggleShop,
-  mutate,
   isEdit,
+  handleProductDelete,
+  handleProductQuantity,
+  handleProductRemark,
 }: ShopCardProps) {
-  const isAllSelected = shop.cartList.every((p) => selectedMap[p.id]);
+  const isAllSelected = shop.cartList.every((p: any) => selectedMap[p.id]);
 
   return (
     <div className="rounded-box mb-3 px-2 py-3">
@@ -37,20 +39,19 @@ export default function ShopCard({
           size="sm"
           onChange={(e) => onToggleShop(e.target.checked)}
         />
-        {shop.cartList[0]?.source === "TAOBAO" ? (
-          <AiFillTaobaoSquare className="h-[22px] w-[22px] text-[#ff5000]" />
-        ) : shop.cartList[0]?.source === "1688" ? (
-          <Icon1688 className="text-orange-500" size={22} />
-        ) : null}
+        <SourceIcon source={shop.cartList[0]?.source} />
+
         <div className="text-title">{shop?.shopName}</div>
       </div>
 
-      {shop.cartList.map((product: Product) => (
+      {shop.cartList.map((product: any) => (
         <ProductItem
           key={product.id}
+          handleProductDelete={handleProductDelete}
+          handleProductQuantity={handleProductQuantity}
+          handleProductRemark={handleProductRemark}
           isEdit={isEdit}
           isSelected={selectedMap[product.id]}
-          mutate={mutate}
           product={product}
           onToggle={(checked) => onToggleItem(product.id, checked)}
         />

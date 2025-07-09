@@ -6,16 +6,12 @@ import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 
 import { siteConfig } from "@/config/site";
-import { useUser } from "@/hook/user/useUser";
+import { useUserStore, useWalletStore } from "@/store";
 
-export default function Cart() {
-  const { data: user, isLoading } = useUser();
+export default function DashBoard() {
   const router = useRouter();
-
-  console.log("user", user);
-
-  if (isLoading) return <div>加载中...</div>;
-  // if (isError) return <div>加载失败</div>;
+  const user = useUserStore((state) => state.user);
+  const wallet = useWalletStore((state) => state.wallet);
 
   return (
     <div className="flex flex-1 flex-col overflow-auto p-3 scrollbar-hide">
@@ -38,14 +34,14 @@ export default function Cart() {
           className="flex flex-1 flex-col items-center justify-center"
           href="/wallet"
         >
-          <div className="text-title-xl">888</div>
+          <div className="text-title-xl">{wallet?.availabalBalance}</div>
           <div className="">余额</div>
         </NextLink>
         <NextLink
           className="flex flex-1 flex-col items-center justify-center"
           href="/wallet/score"
         >
-          <div className="text-title-xl">888</div>
+          <div className="text-title-xl">0</div>
           <div className="">积分</div>
         </NextLink>
       </div>

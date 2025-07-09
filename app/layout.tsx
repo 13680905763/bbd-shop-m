@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 
 import { Providers } from "./providers";
 
@@ -24,7 +25,7 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -35,7 +36,7 @@ export default function RootLayout({
       <body className="bg-[#f5f5f5]">
         <ViewportFixer />
         <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
-          {children}
+          <Suspense fallback={<div>加载中...</div>}>{children}</Suspense>
         </Providers>
       </body>
     </html>

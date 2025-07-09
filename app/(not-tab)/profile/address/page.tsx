@@ -5,6 +5,8 @@ import React, { useState } from "react";
 
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
+import { addToast } from "@heroui/react";
+import { useQueryClient } from "@tanstack/react-query";
 
 import AddressItem from "./address-item";
 
@@ -65,10 +67,10 @@ const fieldsaddress: FieldConfig[] = [
 ];
 
 export default function Cart() {
-  const { data, isLoading, mutate } = useAddressList();
+  const { data, isLoading } = useAddressList();
   const [modalType, setModalType] = useState<ModalType>(null);
   const [currentData, setCurrentData] = useState<any>(initAddress);
-
+  const queryClient = useQueryClient();
   const router = useRouter();
   const handleAdd = () => {
     setCurrentData(initAddress);
@@ -87,17 +89,39 @@ export default function Cart() {
   // 地址保存时处理
   const handleSave = async () => {
     console.log("当前行数据:", currentData);
-    if (modalType === "add") {
-      console.log("currentData", { ...currentData, addressType: 1 });
+    const { createTime, updateTime, customerId, ...filteredData } = currentData;
 
-      await addAddress({ ...currentData, addressType: 2 }); // 新增接口
-    } else if (modalType === "edit") {
-      await updateAddress(currentData); // 编辑接口
-    } else if (modalType === "delete") {
-      await deleteAddress(currentData.id);
+    try {
+      if (modalType === "add") {
+        const tip = await addAddress({ ...currentData, addressType: 1 }); // 新增接口
+
+        addToast({
+          title: tip,
+          timeout: 1000,
+          color: "success",
+        });
+      } else if (modalType === "edit") {
+        const tip = await updateAddress(filteredData); // 编辑接口
+
+        addToast({
+          title: tip,
+          timeout: 1000,
+          color: "success",
+        });
+      } else if (modalType === "delete") {
+        const tip = await deleteAddress(currentData.id);
+
+        addToast({
+          title: tip,
+          timeout: 1000,
+          color: "success",
+        });
+      }
+      setModalType(null);
+    } catch (e) {
+    } finally {
+      queryClient.invalidateQueries({ queryKey: ["addressList"] }); // 手动刷新
     }
-    mutate();
-    setModalType(null);
   };
 
   if (isLoading) return <div>加载中...</div>;

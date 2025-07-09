@@ -1,64 +1,64 @@
 "use client";
 
-import { addToast, Button, Form, Input } from "@heroui/react";
-import React from "react";
+import { Button } from "@heroui/react";
+import React, { useState } from "react";
 import { IoLockClosed, IoPerson } from "react-icons/io5";
-import NextLink from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
-import { loginCustomer } from "@/services/auth";
+import { LoginFormData } from "@/types";
+import { loginCustomer } from "@/services";
+import CommonForm from "@/components/form/common-form";
+import { FieldConfig } from "@/components/form/formItem-renderer";
+import { handleAuthSuccess } from "@/lib/auth-handler";
+const loginFormFields: FieldConfig[] = [
+  {
+    type: "input",
+    name: "email",
+    placeholder: "Enter your email",
+    startContent: <IoPerson />,
+  },
+  {
+    type: "input",
+    name: "password",
+    placeholder: "password",
+    startContent: <IoLockClosed />,
+  },
+];
 
 export default function LoginPage() {
   const router = useRouter();
-  const onSubmit = (e: any) => {
-    e.preventDefault();
-    let data: any = Object.fromEntries(new FormData(e.currentTarget));
+  const searchParams = useSearchParams();
+  const [formData, setFormData] = useState<LoginFormData>({
+    email: "",
+    password: "",
+  });
+  const redirect = searchParams.get("redirect") || "/"; // 默认为首页
+  const handleSubmit = async (data: LoginFormData) => {
+    try {
+      const res = await loginCustomer(data);
 
-    console.log("data", data);
-    loginCustomer({ ...data }).then((e: any) => {
-      if (e.success) {
-        addToast({
-          title: e.msg,
-          timeout: 1000,
-          color: "success",
-        });
-        router.push("/");
-      } else {
-        addToast({
-          title: e.msg,
-          timeout: 1000,
-          color: "danger",
-        });
-      }
-    });
+      await handleAuthSuccess(redirect, res, router);
+    } catch (err) {
+      // 错误处理可选在这里写
+    }
   };
 
   return (
     <div>
-      <Form className="w-full" onSubmit={onSubmit}>
-        <Input
-          isRequired
-          errorMessage="Please enter a valid email"
-          name="email"
-          placeholder="Enter your email"
-          startContent={<IoPerson />}
-          type="email"
-        />
-        <Input
-          name="passWord"
-          placeholder="Password"
-          startContent={<IoLockClosed />}
-          type="password"
-        />
-
-        <div className="my-2" />
-        <Button className="w-full" color="primary" type="submit">
-          登录
+      <CommonForm
+        confirmText="登录"
+        fields={loginFormFields}
+        formData={formData}
+        onChange={setFormData}
+        onSubmit={handleSubmit}
+      >
+        <Button
+          className="button-default"
+          onPress={() => router.push("/register")}
+        >
+          注册
         </Button>
-        <NextLink className="w-full" href="/register">
-          <Button className="button-default w-full">注册</Button>
-        </NextLink>
-      </Form>
+      </CommonForm>
     </div>
   );
 }

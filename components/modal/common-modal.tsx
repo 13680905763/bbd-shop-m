@@ -51,7 +51,7 @@ export default function CommonModal({
   return (
     <Modal
       isOpen={isOpen}
-      placement="top-center"
+      placement="center"
       size={size}
       onOpenChange={onOpenChange}
     >
