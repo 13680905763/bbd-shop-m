@@ -8,6 +8,7 @@ import {
   ModalFooter,
   Button,
 } from "@heroui/react";
+import { useState } from "react";
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -16,7 +17,7 @@ interface ConfirmModalProps {
   content?: string;
   confirmText?: string;
   cancelText?: string;
-  onConfirm: (onClose: () => void) => void;
+  onConfirm: (onClose: () => void) => void | Promise<void>;
 }
 
 const ConfirmModal = ({
@@ -28,6 +29,17 @@ const ConfirmModal = ({
   cancelText = "取消",
   onConfirm,
 }: ConfirmModalProps) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleConfirm = async (onClose: () => void) => {
+    setLoading(true);
+    try {
+      await onConfirm(onClose);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
       <ModalContent>
@@ -40,6 +52,7 @@ const ConfirmModal = ({
             <ModalFooter className="flex gap-2">
               <Button
                 className="button-default flex-1"
+                disabled={loading}
                 variant="light"
                 onPress={onClose}
               >
@@ -48,7 +61,8 @@ const ConfirmModal = ({
               <Button
                 className="flex-1"
                 color="primary"
-                onPress={() => onConfirm(onClose)}
+                isLoading={loading}
+                onPress={() => handleConfirm(onClose)}
               >
                 {confirmText}
               </Button>

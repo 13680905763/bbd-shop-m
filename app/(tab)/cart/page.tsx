@@ -118,8 +118,12 @@ export default function Cart() {
       if (isEdit) {
         setPendingDeleteIds(selectedIdArr);
       } else {
+        const previewList = selectedIdArr.map((cartId: string) => ({
+          cartId,
+          serviceList: [],
+        }));
         const key: any = await createOrderPreviewKeyByCart({
-          idList: selectedIdArr,
+          previewList,
         });
 
         router.push("/order/submit-order?type=cart&key=" + key);

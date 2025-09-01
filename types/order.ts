@@ -29,8 +29,18 @@ export interface createOrderPreviewKeyByProductParams {
   quantity: number;
   remark?: string;
 }
-export interface createOrderPreviewKeyByCartParams {
-  idList: string[];
+export interface ServiceItem {
+  serviceId: number;
+  remark: string;
+}
+
+export interface PreviewItem {
+  cartId: string;
+  serviceList: ServiceItem[];
+}
+
+export interface CreateOrderPreviewKeyByCartParams {
+  previewList: PreviewItem[];
 }
 export type CurrencyCode = "CNY" | "USD";
 export interface createOrderByRechargeParams {
@@ -64,7 +74,7 @@ export interface OrderPreviewOrderItem {
 }
 // 请求体结构
 export interface OrderPreviewByCart {
-  param: createOrderPreviewKeyByCartParams;
+  param: CreateOrderPreviewKeyByCartParams;
   orderList: OrderPreviewOrderItem[];
 }
 // 请求体结构
@@ -77,4 +87,9 @@ export interface createPayOrderParams {
   bizCode: string;
   paymentId: string | number;
   addressId: number | string;
+}
+export interface ServicesState {
+  services: any;
+  setServices: (services: any | null) => void;
+  clearServices: () => void;
 }

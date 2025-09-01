@@ -11,3 +11,7 @@ export const getWalletDetailList = (
   size: number,
 ): Promise<any> =>
   request.get(`/customer/wallet/detail/page?current=${current}&size=${size}`);
+
+export const payNotice = (param: any): Promise<any> => {
+  return request.get("/onlypay/callback/redirect?" + param);
+};

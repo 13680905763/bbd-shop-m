@@ -8,6 +8,7 @@ export * from "./order";
 export * from "./user";
 export * from "./wallet";
 export * from "./pay";
+export * from "./address";
 
 export interface ApiResponse<T> {
   code: number;

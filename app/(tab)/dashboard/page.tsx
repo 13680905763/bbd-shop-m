@@ -13,6 +13,11 @@ export default function DashBoard() {
   const user = useUserStore((state) => state.user);
   const wallet = useWalletStore((state) => state.wallet);
 
+  // useEffect(() => {
+  //   // 获取一次用户信息
+  //   getUserInfo();
+  // }, []);
+
   return (
     <div className="flex flex-1 flex-col overflow-auto p-3 scrollbar-hide">
       <div className="flex justify-between px-4">
@@ -113,7 +118,12 @@ export default function DashBoard() {
                 onClick={() => router.push(item.to)}
               >
                 <div>
-                  <Avatar radius="md" size="sm" src={item.src} />
+                  <Avatar
+                    className="bg-white"
+                    radius="md"
+                    size="sm"
+                    src={item.src}
+                  />
                 </div>
                 <p className="mt-3">{item.title}</p>
               </button>

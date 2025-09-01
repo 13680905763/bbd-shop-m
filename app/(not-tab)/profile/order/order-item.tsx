@@ -1,46 +1,87 @@
-import { Button, Divider } from "@heroui/react";
+import { Button, Checkbox } from "@heroui/react";
 
 import ProductItem from "./product-item";
 
-export default function OrderItem({ order, onPayOrderRedirect }: any) {
+export default function OrderItem({
+  order,
+  onPayOrderRedirect,
+  onCancelOrder,
+  activeTab,
+  onChange,
+  selected,
+  onRequestRefund,
+}: any) {
   return (
-    <div className="rounded-box mb-3 p-3">
-      <div className="flex items-center justify-between pb-3">
-        <div># {order?.orderCode}</div>
-        <div className="text-light-gray"> {order?.createTime}</div>
+    <div className="mb-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+      {/* 顶部：订单号 + 下单时间 */}
+      <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+        {activeTab === "waitPay" ? (
+          <Checkbox isSelected={selected} onChange={onChange} />
+        ) : null}
+        <div className="text-sm font-medium text-gray-800">
+          订单号：<span className="font-semibold">{order?.orderCode}</span>
+        </div>
+        <div className="text-xs text-gray-500">{order?.createTime}</div>
       </div>
-      <Divider />
-      {order?.products.map((product: any, index: number) => (
-        <ProductItem
-          key={product.id}
-          customerPayStatus={order?.customerPayStatus}
-          isLastProduct={index === order?.products.length - 1}
-          product={product}
-        />
-      ))}
-      <Divider />
-      <div className="text-right">
-        <p className="my-2">
-          <span className="text-light-gray">
-            <span>
-              {order?.customerPayStatus === "待付款" ? "应付" : "已付"}
-            </span>
-            金额：
+
+      {/* 商品列表 */}
+      <div className="divide-y divide-gray-100">
+        {order?.products.map((product: any, index: number) => (
+          <ProductItem
+            key={product.id}
+            customerPayStatus={order?.customerPayStatus}
+            isLastProduct={index === order?.products.length - 1}
+            product={product}
+            status={order.status}
+          />
+        ))}
+      </div>
+
+      {/* 金额 + 按钮 */}
+      <div className="mt-3 text-right">
+        <p className="my-2 text-sm text-gray-700">
+          <span className="mr-1">金额：</span>
+          <span className="text-lg font-bold text-[#f0700c]">
+            ￥{order?.totalFee}
           </span>
-          {order?.totalFee}
         </p>
-        {order?.customerPayStatus === "待付款" ? (
+
+        {order?.status === "待付款" && (
+          <div className="space-x-2">
+            <Button
+              color="primary"
+              radius="sm"
+              size="sm"
+              onPress={() => {
+                onPayOrderRedirect(order?.orderCode);
+              }}
+            >
+              支付
+            </Button>
+            <Button
+              radius="sm"
+              size="sm"
+              variant="flat"
+              onPress={() => {
+                onCancelOrder(order?.id);
+              }}
+            >
+              取消
+            </Button>
+          </div>
+        )}
+        {order?.status === "待采购" && (
           <Button
             color="primary"
-            radius="none"
+            radius="sm"
             size="sm"
             onPress={() => {
-              onPayOrderRedirect(order?.orderCode);
+              onRequestRefund(order?.id);
             }}
           >
-            支付
+            申请退款
           </Button>
-        ) : null}
+        )}
       </div>
     </div>
   );

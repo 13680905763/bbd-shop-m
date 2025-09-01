@@ -12,6 +12,7 @@ import {
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
+  Skeleton,
   Textarea,
   useDisclosure,
 } from "@heroui/react";
@@ -27,6 +28,7 @@ import { addCart } from "@/services/cart";
 import { getGoodsInfo } from "@/services/goods";
 import { createOrderPreviewKeyByProduct } from "@/services";
 import { source } from "@/types";
+import CommonModal from "@/components/modal/common-modal";
 interface Sku {
   skuID: string;
   stock: number;
@@ -124,13 +126,16 @@ export default function GoodsPage() {
 
   const [goodsInfo, setGoodsInfo] = useState<any>();
   const [isLoading, setisLoading] = useState<boolean>(false);
+  const [issub, setissub] = useState<any>(false);
 
   const [pathMap, setPathMap] = useState<any>(null);
   const [drawerType, setDrawerType] = useState<"buyNow" | "addCart">("buyNow");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [isOpen1, setIsOpen1] = useState(false);
+
   const queryClient = useQueryClient();
   const handleBuyNow = async () => {
-    if (isLoading) return;
+    if (issub) return;
     // console.log("currentSku", currentSku);
     if (!currentSku) {
       addToast({
@@ -140,7 +145,7 @@ export default function GoodsPage() {
 
       return;
     }
-    setisLoading(true);
+    setissub(true);
 
     try {
       const key = await createOrderPreviewKeyByProduct({
@@ -157,20 +162,21 @@ export default function GoodsPage() {
       router.push("/order/submit-order?type=product&key=" + key);
     } catch (err: any) {
     } finally {
-      setisLoading(false);
+      setissub(false);
     }
   };
   const add = async () => {
-    if (isLoading) return;
+    if (issub) return;
     if (!currentSku) {
       addToast({
         title: "请选择商品规格",
         color: "danger",
+        timeout: 1000,
       });
 
       return;
     }
-    setisLoading(true);
+    setissub(true);
 
     const data = {
       source: params.source,
@@ -194,15 +200,13 @@ export default function GoodsPage() {
       queryClient.invalidateQueries({ queryKey: ["cartList"] }); // 手动刷新
     } catch (e) {
     } finally {
-      setisLoading(false);
+      setissub(false);
     }
   };
 
   // 切换选择状态
   const changeSelectedStatus = (index: any, indey: any) => {
     const cloned: any = structuredClone(goodsInfo);
-
-    console.log("cloned", cloned, pathMap);
 
     cloned?.productInfo.skuPropList.forEach((spec: any, idx: number) => {
       if (idx === index) {
@@ -238,8 +242,6 @@ export default function GoodsPage() {
   const undateDisabledStatus = (cloned: any) => {
     // const cloned: any = structuredClone(goodsInfo);
 
-    console.log("goodsInfo666", goodsInfo);
-
     cloned?.productInfo.skuPropList.forEach((spec: any, index: number) => {
       const selectedValues = getSelectedValues(cloned.productInfo.skuPropList);
 
@@ -256,7 +258,6 @@ export default function GoodsPage() {
         }
       });
     });
-    console.log("cloned", cloned);
 
     setGoodsInfo(cloned);
   };
@@ -264,11 +265,7 @@ export default function GoodsPage() {
     if (!goodsInfo) return;
     const selectedValues = getSelectedValues(goodsInfo.productInfo.skuPropList);
 
-    console.log("sku", selectedValues);
-
     const currentSku = goodsInfo.productInfo.skuList.find((item: any) => {
-      console.log("item", item);
-
       return (
         selectedValues.filter((i: any) => item?.propName_valueName.includes(i))
           ?.length == selectedValues.length
@@ -279,33 +276,33 @@ export default function GoodsPage() {
     // else return goodsInfo.productInfo.skuList[0];
   }, [goodsInfo]); // 依赖 cart，当 cart 变化时才重新计算
 
-  console.log("currentSku", currentSku);
-
   useEffect(() => {
-    console.log("params123", params);
+    setisLoading(true);
+    getGoodsInfo({ ...params })
+      .then((data: any) => {
+        // 数据初始化
+        const cloned = structuredClone(data);
+        let pathMap = generateDynamicSkuPathDict(cloned.productInfo);
 
-    getGoodsInfo({ ...params }).then((data: any) => {
-      // 数据初始化
-      const cloned = structuredClone(data);
-      let pathMap = generateDynamicSkuPathDict(cloned.productInfo);
-
-      setPathMap(pathMap);
-      cloned.productInfo.skuPropList.forEach((spec: any) => {
-        spec.propValueList.forEach((value: any) => {
-          value.selected = false;
-          console.log("value.valueName", value.valueName, pathMap);
-
-          if (pathMap[value.valueName]) {
-            value.disabled = false;
-          } else {
-            value.disabled = true;
-          }
+        setPathMap(pathMap);
+        cloned.productInfo.skuPropList.forEach((spec: any) => {
+          spec.propValueList.forEach((value: any) => {
+            value.selected = false;
+            if (pathMap[value.valueName]) {
+              value.disabled = false;
+            } else {
+              value.disabled = true;
+            }
+          });
         });
+        setGoodsInfo(cloned);
+      })
+      .catch((err) => {
+        setIsOpen1(true);
+      })
+      .finally(() => {
+        setisLoading(false);
       });
-      console.log("cloned", cloned);
-
-      setGoodsInfo(cloned);
-    });
   }, []);
 
   return (
@@ -313,95 +310,131 @@ export default function GoodsPage() {
       <NavBar className="bg-white" onBack={() => router.back()}>
         商品详情
       </NavBar>
-      <div className="flex-1 overflow-auto">
-        <Swiper autoplay>
-          {goodsInfo?.productInfo.imgList.map((item: any) => (
-            <Swiper.Item key={item}>
-              <Image
-                className="rounded-lg"
-                fit="contain"
-                height={375}
-                src={item}
-              />
-            </Swiper.Item>
-          ))}
-        </Swiper>
-        <div className="bg-white p-4">
-          <div className="text-xl font-bold text-red-500">
-            ￥ {goodsInfo?.productInfo.price}
-          </div>
-          <div className="text-base font-bold">
-            <p>{goodsInfo?.productInfo.title}</p>
-            <div className="inline-block flex gap-2 text-sm text-[#f0700c]">
-              <a
-                className="flex items-center gap-1 !text-[#f0700c]"
-                href={goodsInfo?.productInfo?.productUrl}
-                rel="noreferrer"
-                target="_blank"
-              >
-                <IoIosLink />
-                原链接
-              </a>
-              <button
-                className="flex items-center gap-1"
-                onClick={() => window.location.reload()}
-              >
-                <GrPowerReset />
-                刷新
-              </button>
-            </div>
-          </div>
-        </div>
-        <ProgressBar />
-        <DisclaimerDrawer />
 
-        <div className="box-card mx-2 !mt-0 p-2">
-          <div className="p-2 text-base font-bold">商品详情</div>
-          <div>
-            {goodsInfo?.productDetail?.productDescImgList?.map((item: any) => {
-              return <Image key={item} fit="contain" src={item} />;
-            })}
-          </div>
-        </div>
-      </div>
+      {isLoading ? (
+        <div className="flex flex-1 flex-col gap-4 p-4">
+          {/* 商品主图占位 */}
+          <Skeleton className="w-full rounded-lg">
+            <div className="h-[250px] w-full rounded-lg bg-default-300" />
+          </Skeleton>
 
-      <div className="flex items-center justify-between gap-8 bg-white p-2">
-        <div className="flex gap-4">
-          <div className="flex flex-col items-center justify-center">
-            <NextLink href="/cart">
-              <div>
-                <IoCart className="h-[30px] w-[30px]" />
+          {/* 商品标题占位 */}
+          <Skeleton className="w-full">
+            <div className="h-6 w-3/4 rounded-lg bg-default-300" />
+          </Skeleton>
+
+          {/* 商品价格占位 */}
+          <Skeleton className="w-full">
+            <div className="h-6 w-1/4 rounded-lg bg-default-300" />
+          </Skeleton>
+
+          {/* 商品描述占位，多行 */}
+          <Skeleton className="w-full space-y-2">
+            <div className="h-3 w-full rounded-lg bg-default-300" />
+            <div className="h-3 w-5/6 rounded-lg bg-default-300" />
+            <div className="h-3 w-4/6 rounded-lg bg-default-300" />
+          </Skeleton>
+
+          {/* 购买按钮占位 */}
+          <Skeleton className="w-full">
+            <div className="h-12 w-full rounded-lg bg-default-300" />
+          </Skeleton>
+        </div>
+      ) : (
+        <>
+          <div className="flex-1 overflow-auto">
+            <Swiper autoplay>
+              {goodsInfo?.productInfo.imgList.map((item: any) => (
+                <Swiper.Item key={item}>
+                  <Image
+                    className="rounded-lg"
+                    fit="contain"
+                    height={375}
+                    src={item}
+                  />
+                </Swiper.Item>
+              ))}
+            </Swiper>
+            <div className="bg-white p-4">
+              <div className="text-xl font-bold text-red-500">
+                ￥ {goodsInfo?.productInfo.price}
               </div>
-            </NextLink>
-          </div>
-          <div className="flex flex-col items-center justify-center">
-            <div>
-              <IoStar className="h-[30px] w-[30px]" />
+              <div className="text-base font-bold">
+                <p>{goodsInfo?.productInfo.title}</p>
+                <div className="inline-block flex gap-2 text-sm text-[#f0700c]">
+                  <a
+                    className="flex items-center gap-1 !text-[#f0700c]"
+                    href={goodsInfo?.productInfo?.productUrl}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    <IoIosLink />
+                    原链接
+                  </a>
+                  <button
+                    className="flex items-center gap-1"
+                    onClick={() => window.location.reload()}
+                  >
+                    <GrPowerReset />
+                    刷新
+                  </button>
+                </div>
+              </div>
+            </div>
+            <ProgressBar />
+            <DisclaimerDrawer />
+
+            <div className="box-card mx-2 !mt-0 p-2">
+              <div className="p-2 text-base font-bold">商品详情</div>
+              <div>
+                {goodsInfo?.productDetail?.productDescImgList?.map(
+                  (item: any) => {
+                    return <Image key={item} fit="contain" src={item} />;
+                  },
+                )}
+              </div>
             </div>
           </div>
-        </div>
-        <div className="flex flex-1 gap-2">
-          <Button
-            className="flex-1 bg-[linear-gradient(to_right,#ffd01e,#ff8917)] text-white"
-            onPress={() => {
-              setDrawerType("addCart");
-              onOpen();
-            }}
-          >
-            加入购物车
-          </Button>
-          <Button
-            className="flex-1"
-            color="primary"
-            onPress={() => {
-              setDrawerType("buyNow");
-              onOpen();
-            }}
-          >
-            立即购买
-          </Button>
-        </div>
-      </div>
+
+          <div className="flex items-center justify-between gap-8 bg-white p-2">
+            <div className="flex gap-4">
+              <div className="flex flex-col items-center justify-center">
+                <NextLink href="/cart">
+                  <div>
+                    <IoCart className="h-[30px] w-[30px]" />
+                  </div>
+                </NextLink>
+              </div>
+              <div className="flex flex-col items-center justify-center">
+                <div>
+                  <IoStar className="h-[30px] w-[30px]" />
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-1 gap-2">
+              <Button
+                className="flex-1 bg-[linear-gradient(to_right,#ffd01e,#ff8917)] text-white"
+                onPress={() => {
+                  setDrawerType("addCart");
+                  onOpen();
+                }}
+              >
+                加入购物车
+              </Button>
+              <Button
+                className="flex-1"
+                color="primary"
+                onPress={() => {
+                  setDrawerType("buyNow");
+                  onOpen();
+                }}
+              >
+                立即购买
+              </Button>
+            </div>
+          </div>
+        </>
+      )}
 
       <Drawer
         isOpen={isOpen}
@@ -427,6 +460,9 @@ export default function GoodsPage() {
                     ￥ {currentSku?.price ?? goodsInfo?.productInfo.price}
                   </div>
                   <div className="text-sm">库存 : {currentSku?.stock}</div>
+                  <div className="text-sm">
+                    运费 : {goodsInfo?.productInfo?.postFee}
+                  </div>
                 </div>
               </DrawerHeader>
               <DrawerBody>
@@ -498,7 +534,7 @@ export default function GoodsPage() {
                   <Button
                     className="w-full"
                     color="primary"
-                    isLoading={isLoading}
+                    isLoading={issub}
                     onPress={handleBuyNow}
                   >
                     立即购买
@@ -506,7 +542,7 @@ export default function GoodsPage() {
                 ) : (
                   <Button
                     className="w-full bg-[linear-gradient(to_right,#ffd01e,#ff8917)] text-white"
-                    isLoading={isLoading}
+                    isLoading={issub}
                     onPress={() => add()}
                   >
                     加入购物车
@@ -517,6 +553,33 @@ export default function GoodsPage() {
           )}
         </DrawerContent>
       </Drawer>
+
+      <CommonModal
+        // cancelText="该商品涉及版权问题"
+        confirmText="继续购买其他"
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        isOpen={isOpen1}
+        showCancel={false}
+        size="xl"
+        title="风险提示"
+        onConfirm={async (onClose) => {
+          await onClose();
+          router.push("/");
+        }}
+        onOpenChange={setIsOpen1}
+      >
+        <div>
+          <div className="my-4 rounded-lg bg-[#ffeee1] p-2 text-sm">
+            您提交的产品可能存在一定的寄送风险。为了您的资金安全，我们暂时无法为您提供在线订购服务。如需了解更多信息，请联系在线客服！
+          </div>
+          {/* <div className="mt-5 mb-2">如果您支付成功，请点击支付完成。</div>
+          <div className="mb-5">
+            如果您在付款时遇到问题，请重试或给我们一个{" "}
+            <span className="text-blue-600">反馈</span>
+          </div> */}
+        </div>
+      </CommonModal>
     </div>
   );
 }

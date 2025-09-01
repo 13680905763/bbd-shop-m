@@ -2,27 +2,34 @@ import { addToast } from "@heroui/react";
 
 import { queryClient } from "./react-query";
 
-import { getUserInfo } from "@/services";
-import { useUserStore } from "@/store";
+import { getAddressList, getServicesList, getUserInfo } from "@/services";
+import { useBillingAddressStore, useUserStore } from "@/store";
 import { useWalletStore } from "@/store";
 import { getWalletInfo } from "@/services/wallet";
+import { useServicesStore } from "@/store/services";
 
 export async function handleAuthSuccess(
   redirect: string,
   resMessage?: string,
   router?: ReturnType<typeof import("next/navigation").useRouter>,
 ) {
-  const userInfo = await getUserInfo();
-  const walletInfo = await getWalletInfo();
-  const billingAddress = await getWalletInfo();
+  const [user, wallet, billing, services] = await Promise.all([
+    getUserInfo(),
+    getWalletInfo(),
+    getAddressList(2).then((res) => res[0] || {}),
+    getServicesList(),
+  ]);
 
-  useUserStore.getState().setUser(userInfo);
-  useWalletStore.getState().setWallet(walletInfo);
-  queryClient.setQueryData(["userInfo"], userInfo);
-  queryClient.setQueryData(["walletInfo"], walletInfo);
-  queryClient.setQueryData(["billingAddress"], billingAddress);
+  useUserStore.getState().setUser(user);
+  useWalletStore.getState().setWallet(wallet);
+  useBillingAddressStore.getState().setBillingAddress(billing);
+  useServicesStore.getState().setServices(services);
+  queryClient.setQueryData(["userInfo"], user);
+  queryClient.setQueryData(["walletInfo"], wallet);
+  queryClient.setQueryData(["billingAddress"], billing);
+  queryClient.setQueryData(["services"], services);
 
-  window.location.reload();
+  // window.location.reload();
   if (resMessage) {
     addToast({ title: resMessage, timeout: 1000, color: "success" });
   }

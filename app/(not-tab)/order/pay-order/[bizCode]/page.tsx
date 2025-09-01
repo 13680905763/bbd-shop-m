@@ -15,10 +15,11 @@ import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import { IoWallet } from "react-icons/io5";
 
+import BillingAddress from "./billing-address";
+
 import { useBillingAddressList, usePaymentMethodList } from "@/hook";
-import { createPayOrder, getPayOrderStatus } from "@/services";
-import CommonModal from "@/components/modal/common-modal";
-import { useWalletStore } from "@/store";
+import { createPayOrder } from "@/services";
+import { useBillingAddressStore, useWalletStore } from "@/store";
 const CustomRadio = (props: RadioProps) => {
   const {
     Component,
@@ -57,7 +58,7 @@ const CustomRadio = (props: RadioProps) => {
 export default function PayOrder() {
   const router = useRouter();
   const params = useParams<{ bizCode: string }>();
-  const [isOpen, setIsOpen] = useState(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   const { data, isLoading, isError } = usePaymentMethodList(params.bizCode);
   const [paymentId, setPaymentId] = useState("");
@@ -65,21 +66,47 @@ export default function PayOrder() {
 
   const { data: billingAddressData } = useBillingAddressList();
 
-  console.log("data", data);
-
+  const billingAddress = useBillingAddressStore(
+    (state) => state.billingAddress,
+  );
   const hanldeCreatePayOrder = async () => {
-    console.log("handleCreatePayOrder", paymentId);
+    if (submitting) return;
+    setSubmitting(true);
+
+    if (paymentId !== "1" && !billingAddress?.id) {
+      addToast({
+        title: "Please add billing address",
+        timeout: 1000,
+        color: "danger",
+      });
+      setSubmitting(false);
+
+      return;
+    }
 
     try {
-      const url = await createPayOrder({
+      const res = await createPayOrder({
         bizCode: params.bizCode,
         paymentId,
-        addressId: billingAddressData![0]?.id,
+        addressId: billingAddress?.id as string,
       });
 
-      window.open(url, "_blank");
-      setIsOpen(true);
-    } catch (error) {}
+      setSubmitting(false);
+
+      if (typeof res === "string") {
+        // 判断是否是 URL
+        if (res.startsWith("http")) {
+          // 跳转第三方支付页面
+          window.location.href = res;
+          // setIsOpen1(true);
+          // 或者直接重定向
+          // window.location.href = res.data;
+        }
+      }
+    } catch (err) {
+      setSubmitting(false);
+      console.log(err);
+    }
   };
   const currentPayMethod = useMemo(() => {
     return (
@@ -91,8 +118,6 @@ export default function PayOrder() {
 
   useEffect(() => {
     if (data) {
-      console.log(6666, data[0]?.paymentList[0]?.id);
-
       setPaymentId(data[0]?.paymentList[0]?.id);
     }
   }, [data]);
@@ -106,17 +131,29 @@ export default function PayOrder() {
         确定订单
       </NavBar>
       <div className="px-2">
-        <div className="box-card p-2 text-center">
-          <div className="text-sm text-[#999]">总计</div>
-          <div className="my-[10px] text-[24px] font-bold text-[#f3643a]">
+        <div className="box-card space-y-2 p-3 text-center">
+          {/* 标题 */}
+          <div className="text-sm tracking-wide text-gray-500">总计</div>
+
+          {/* 金额突出 */}
+          <div className="text-3xl font-extrabold leading-tight text-[#f0700c]">
             {currentPayMethod?.payAmount}
           </div>
-          <p className="">
+
+          {/* 手续费信息 */}
+          <p className="text-sm text-gray-600">
             手续费：
-            {currentPayMethod?.handlingFee}
+            <span className="font-medium">{currentPayMethod?.handlingFee}</span>
           </p>
         </div>
+
         <div className="flex w-full flex-col gap-1">
+          {paymentId !== "1" ? (
+            <div className="bg-white p-4">
+              <p className="text-title mb-2">账单地址</p>
+              <BillingAddress billingAddress={billingAddress} />
+            </div>
+          ) : null}
           <div className="flex w-full flex-col gap-1">
             <RadioGroup
               classNames={{
@@ -220,44 +257,13 @@ export default function PayOrder() {
         <Button
           className="w-full"
           color="primary"
+          isLoading={submitting}
           size="lg"
           onPress={hanldeCreatePayOrder}
         >
           下单结算
         </Button>
       </div>
-      <CommonModal
-        cancelText="支付失败反馈"
-        confirmText="已付"
-        isOpen={isOpen}
-        size="xl"
-        title="遇到问题？"
-        onConfirm={async (onClose) => {
-          const status = await getPayOrderStatus(params?.bizCode);
-
-          if (status === 203) {
-            onClose();
-          } else {
-            addToast({
-              title: "未完成支付",
-              timeout: 1000,
-              color: "danger",
-            });
-          }
-        }}
-        onOpenChange={setIsOpen}
-      >
-        <div>
-          <div className="my-4 rounded-lg bg-[#ffeee1] p-2 text-sm">
-            温馨提示：请在新页面完成支付，支付完成前请勿关闭此窗口。
-          </div>
-          <div className="mb-2 mt-5">如果您支付成功，请点击支付完成。</div>
-          <div className="mb-5">
-            如果您在付款时遇到问题，请重试或给我们一个{" "}
-            <span className="text-blue-600">反馈</span>
-          </div>
-        </div>
-      </CommonModal>
     </div>
   );
 }

@@ -14,7 +14,7 @@ interface SourceIconProps {
 
 const SourceIcon: React.FC<SourceIconProps> = ({
   source,
-  size = 18,
+  size = 22,
   className = "",
 }) => {
   if (!source) return null;
@@ -22,7 +22,16 @@ const SourceIcon: React.FC<SourceIconProps> = ({
   switch (source.toUpperCase()) {
     case "TAOBAO":
       return (
-        <div className="relative h-[18px] w-[18px]">
+        <div className="relative h-[22px] w-[22px]">
+          <FaCircle className="h-full w-full bg-[#ff5000] text-[#ff5000]" />
+          <span className="absolute inset-0 flex items-center justify-center font-bold text-white">
+            淘
+          </span>
+        </div>
+      );
+    case "TMALL":
+      return (
+        <div className="relative h-[22px] w-[22px]">
           <FaCircle className="h-full w-full bg-[#ff5000] text-[#ff5000]" />
           <span className="absolute inset-0 flex items-center justify-center font-bold text-white">
             淘
@@ -35,6 +44,15 @@ const SourceIcon: React.FC<SourceIconProps> = ({
           className={`text-white ${className} bg-[#ff5000]`}
           size={size}
         />
+      );
+    case "WEIDIAN":
+      return (
+        <div className="relative h-[22px] w-[22px]">
+          <FaCircle className="h-full w-full bg-[#cf011a] text-[#cf011a]" />
+          <span className="absolute inset-0 flex items-center justify-center font-bold text-white">
+            店
+          </span>
+        </div>
       );
     default:
       return null;

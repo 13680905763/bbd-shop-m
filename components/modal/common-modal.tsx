@@ -32,6 +32,9 @@ interface CommonModalProps {
     | "4xl"
     | "5xl"
     | "full";
+  isDismissable?: boolean;
+  isKeyboardDismissDisabled?: boolean;
+  isLoading?: boolean; // 新增
 }
 
 export default function CommonModal({
@@ -41,15 +44,20 @@ export default function CommonModal({
   children,
   footer,
   showCancel = true,
-  onCancel,
   showFooter = true,
+  onCancel,
   onConfirm,
   confirmText = "确认",
   cancelText = "取消",
   size = "md",
+  isDismissable = true,
+  isKeyboardDismissDisabled = false,
+  isLoading = false, // 默认 false
 }: CommonModalProps) {
   return (
     <Modal
+      isDismissable={isDismissable}
+      isKeyboardDismissDisabled={isKeyboardDismissDisabled}
       isOpen={isOpen}
       placement="center"
       size={size}
@@ -68,7 +76,6 @@ export default function CommonModal({
                   <>
                     {showCancel && (
                       <Button
-                        className="button-default"
                         variant="flat"
                         onPress={() => {
                           onCancel?.();
@@ -80,9 +87,8 @@ export default function CommonModal({
                     )}
                     <Button
                       color="primary"
-                      onPress={() => {
-                        onConfirm?.(onClose);
-                      }}
+                      isLoading={isLoading}
+                      onPress={() => onConfirm?.(onClose)}
                     >
                       {confirmText}
                     </Button>

@@ -33,8 +33,9 @@ export default function Home() {
           {/* <NextLink href="/m/goods/search"> */}
           <Button
             className="w-full justify-start bg-white"
+            size="sm"
             startContent={
-              <div className="flex items-center gap-2 bg-default-100 text-sm">
+              <div className="flex items-center gap-2 bg-white text-sm">
                 <IoSearch />
                 Search...
               </div>
@@ -49,18 +50,19 @@ export default function Home() {
         <Swiper>
           <Swiper.Item>
             <Image
+              // height={10}
               className="rounded-lg"
               fit="contain"
-              src="https://bbdbuy.com/uploads/20250120/d823737b3074d4992c2a8f4519b2c2d3.png"
+              src="/m/images/home/Swiper.png"
             />
           </Swiper.Item>
-          <Swiper.Item>
+          {/* <Swiper.Item>
             <Image
               className="rounded-lg"
               fit="contain"
               src="https://bbdbuy.com/uploads/20250120/e4c3fd1baf90e4fae162a1126048f5e0.png"
             />
-          </Swiper.Item>
+          </Swiper.Item> */}
         </Swiper>
         <div className="box-card flex py-3">
           {siteConfig.toolList.map((item, index) => {
@@ -107,9 +109,21 @@ export default function Home() {
             </div>
           </div>
         </div>
-
-        <div className="mt-5">
-          <Image src="https://bbdbuy.com/assets/img/wap/index_bottom.png" />
+        <Image
+          className="mt-5 h-auto w-full rounded-lg object-cover"
+          src={"/m/images/home/footer.jpg"}
+        />
+        <div className="my-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
+          {siteConfig.toolTab.map((item) => {
+            return (
+              <Image
+                key={item.title}
+                className="h-auto w-full rounded-lg object-cover"
+                height={100}
+                src={item.image}
+              />
+            );
+          })}
         </div>
       </div>
     </section>

@@ -1,70 +1,10 @@
-import {
-  Button,
-  Image,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  Textarea,
-  useDisclosure,
-} from "@heroui/react";
-import { useState } from "react";
+import { Button, Image } from "@heroui/react";
 import { useRouter } from "next/navigation";
 
-import { Product } from "./page";
-
 import Stepper from "@/components/stepper";
-type ProductItemProps = {
-  product: Product;
-};
-const RemarkModal = ({ isOpen, onOpenChange, handleRemark, value }: any) => {
-  const [remark, setRemark] = useState(value);
 
-  return (
-    <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
-      <ModalContent>
-        {(onClose) => (
-          <>
-            <ModalHeader className="flex flex-col gap-1">备注</ModalHeader>
-            <ModalBody>
-              <Textarea
-                placeholder="请输入备注"
-                value={remark}
-                onChange={(e) => setRemark(e.target.value)}
-              />
-            </ModalBody>
-            <ModalFooter className="flex gap-2">
-              <Button
-                className="button-default flex-1"
-                variant="light"
-                onPress={onClose}
-              >
-                取消
-              </Button>
-              <Button
-                className="flex-1"
-                color="primary"
-                onPress={() => handleRemark(remark, onClose)}
-              >
-                确定
-              </Button>
-            </ModalFooter>
-          </>
-        )}
-      </ModalContent>
-    </Modal>
-  );
-};
-
-export default function ProductItem({ product }: ProductItemProps) {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+export default function ProductItem({ product, openServiceModal }: any) {
   const router = useRouter();
-  const {
-    isOpen: isOpenRemark,
-    onOpen: onOpenRemark,
-    onOpenChange: onOpenChangeRemark,
-  } = useDisclosure();
 
   return (
     <>
@@ -112,6 +52,36 @@ export default function ProductItem({ product }: ProductItemProps) {
             </div>
           </div>
           <div className="text-light-gray">运费:{product.postFee}</div>
+        </div>
+      </div>
+      <div className="rounded-lg bg-[#f8f8f8] p-2">
+        {/* 标题行 */}
+        <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-sm font-medium text-gray-800">增值服务</span>
+            {product?.orderServiceList?.length > 0 ? (
+              product?.orderServiceList.map((item: any) => (
+                <span
+                  key={item.serviceCode}
+                  className="rounded-md border border-gray-200 bg-white px-2 py-0.5 text-xs text-gray-700"
+                >
+                  {item.serviceName}
+                </span>
+              ))
+            ) : (
+              <span className="text-xs text-gray-400">暂无服务</span>
+            )}
+          </div>
+
+          <Button
+            className="button-white"
+            size="sm"
+            onPress={() => {
+              openServiceModal(product?.cartId || 1);
+            }}
+          >
+            添加
+          </Button>
         </div>
       </div>
     </>

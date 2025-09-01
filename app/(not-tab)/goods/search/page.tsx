@@ -1,56 +1,38 @@
 "use client";
-import { Button, Divider, Form, Input } from "@heroui/react";
+import { addToast, Button, Divider, Form, Input } from "@heroui/react";
 import React from "react";
 import { IoChevronBack } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 
+import { getGoodsId } from "@/services";
 import { SearchIcon } from "@/components/icons";
 
 export default function Searchpage() {
   const router = useRouter();
 
-  /**
-   * 从 1688 商品链接中提取 offerId
-   * @param url 商品详情页链接
-   * @returns 提取到的 offerId 或 null
-   */
-  function extractOfferId(parsedUrl: any): string | null {
-    try {
-      const pathname = parsedUrl.pathname;
-
-      // 匹配 /offer/865930740519.html 中的 ID
-      const match = pathname.match(/\/offer\/(\d+)\.html/);
-
-      return match ? match[1] : null;
-    } catch (err) {
-      console.error("无效的 URL:", err);
-
-      return null;
-    }
-  }
   const onSubmit = async (e: any) => {
     e.preventDefault();
     const data: any = Object.fromEntries(new FormData(e.currentTarget));
-    const url = new URL(data.url);
 
-    console.log(url);
-    const source =
-      data.url.includes("item.taobao.com") ||
-      data.url.includes("detail.tmall.com")
-        ? "TAOBAO"
-        : data.url.includes("detail.1688.com/")
-          ? "1688"
-          : "weidian";
-    const sourceproductId = url.searchParams.get("id") || extractOfferId(url);
+    let url: URL;
 
-    console.log(source, sourceproductId);
+    try {
+      url = new URL(data.url);
+    } catch (err) {
+      // 可选：展示错误提示
+      addToast({
+        title: "请输入有效的 URL",
+        timeout: 1000,
+        color: "danger",
+      });
 
-    //  source: "TAOBAO",
-    //     sourceproductId: "788110260427",
+      return; // 终止后续逻辑
+    }
+    const res: any = await getGoodsId({ url });
+
     router.push(
-      `/goods/${source}/${sourceproductId}`, // 目标路由
+      `/goods/${res.source}/${res.sourceProductId}`, // 目标路由
     );
-
     // setIsLoading(true);
 
     // const data = Object.fromEntries(new FormData(e.currentTarget));
