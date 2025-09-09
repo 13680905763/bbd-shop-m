@@ -64,16 +64,14 @@ export default function ProductItem({ product, warehouse }: any) {
       </div>
 
       {/* 增值服务 */}
-      <div className="mt-3 flex flex-col gap-4 bg-[#fafafa] p-2">
-        {product?.orderServiceList.map((service: any) => (
-          <div key={service.serviceId} className="mb-2 flex gap-2">
-            <div className="mb-2 text-sm text-[#acacac]">
-              {service.serviceName}
-            </div>
-            <MediaPreviewGroup fileList={service.fileList as MediaItem[]} />
+      {product?.orderServiceList.map((service: any) => (
+        <div key={service.serviceId} className="mb-4 flex gap-2">
+          <div className="mb-2 text-sm text-[#acacac]">
+            {service.serviceName}
           </div>
-        ))}
-      </div>
+          <MediaPreviewGroup fileList={service.fileList as MediaItem[]} />
+        </div>
+      ))}
     </>
   );
 }

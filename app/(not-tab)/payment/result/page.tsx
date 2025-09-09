@@ -113,7 +113,7 @@ export default function PaymentResultPage() {
               className="w-full"
               color="primary"
               size="lg"
-              onPress={() => router.push(`profile/order`)}
+              onPress={() => router.push(`/profile/order`)}
             >
               查看订单
             </Button>

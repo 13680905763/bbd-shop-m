@@ -1,11 +1,10 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-import { getWarehouseList } from "@/services";
+import { getPackageList } from "@/services";
 
-export function useWarehouseList(statusCode: string) {
+export function usePackageList(statusCode: string) {
   return useInfiniteQuery({
-    queryKey: ["warehouseList", statusCode],
-
+    queryKey: ["packageList", statusCode],
     queryFn: ({ pageParam = 1 }) => {
       const params: any = {
         current: pageParam,
@@ -13,7 +12,7 @@ export function useWarehouseList(statusCode: string) {
         statusCode,
       };
 
-      return getWarehouseList(params);
+      return getPackageList(params);
     },
     getNextPageParam: (lastPage: any) => {
       const loaded = lastPage.current * lastPage.size;

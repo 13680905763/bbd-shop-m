@@ -4,21 +4,22 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Checkbox, Tab, Tabs } from "@heroui/react";
 
-import WarehouseItem from "./warehouse-item";
+import PackageItem from "./package-item";
 
-import ConfirmModal from "@/components/confirm-modal";
-import { useWarehouseList } from "@/hook";
-import { createWarehousePreviewKeyByCart } from "@/services";
+import { usePackageList } from "@/hook";
+import { batchPayPackage } from "@/services";
 const tabKeyToStatusCode: Record<string, string> = {
   all: "",
-  submit: "302",
+  pay: "203",
+  shipping: "205",
+  receivde: "206",
 };
 
 export default function Settingpage() {
   // 传入订单状态，例如 "ALL"、"WAIT_PAY"
   const [activeTab, setActiveTab] = useState("all");
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, error } =
-    useWarehouseList(tabKeyToStatusCode[activeTab]);
+    usePackageList(tabKeyToStatusCode[activeTab]);
   const [pendingCancelOrderId, setPendingCancelOrderId] = useState<
     string | null
   >(null);
@@ -31,19 +32,20 @@ export default function Settingpage() {
   //   router.push(`/order/pay-order/${bizCode}`);
   // };
   const allIds = useMemo<string[]>(() => {
-    return warehouse.map((w: any) => w.packageCode) || [];
+    return warehouse.map((w: any) => w.packingPackageCode) || [];
   }, [data]);
   // 是否全选
   const allSelected = useMemo(() => {
     return (
-      allIds.length > 0 && allIds.every((packageCode) => selected[packageCode])
+      allIds.length > 0 &&
+      allIds.every((packingPackageCode) => selected[packingPackageCode])
     );
   }, [allIds, selected]);
 
   // 切换全选
   const toggleAll = (checked: boolean) => {
     const newSelected = Object.fromEntries(
-      allIds.map((packageCode) => [packageCode, checked]),
+      allIds.map((packingPackageCode) => [packingPackageCode, checked]),
     );
 
     setSelected(newSelected);
@@ -74,13 +76,12 @@ export default function Settingpage() {
     try {
       setIsSubmitting(true); // ✅ 开始loading
 
-      const key = await createWarehousePreviewKeyByCart({
+      console.log("selectedIds", selectedIds);
+      const bizCode = await batchPayPackage({
         packageSet: selectedIds,
       });
 
-      console.log("key", key);
-
-      router.push("/warehouse/submit-warehouse?key=" + key);
+      router.push(`/order/pay-order/${bizCode}`);
     } catch (error) {
       console.error("批量支付失败:", error);
     } finally {
@@ -107,7 +108,7 @@ export default function Settingpage() {
   return (
     <div className="flex h-screen flex-col bg-[#f7f8f9]">
       <NavBar className="flex-[0_0_45px] bg-white" onBack={() => router.back()}>
-        Warehouse
+        Package
       </NavBar>
 
       <Tabs
@@ -124,11 +125,11 @@ export default function Settingpage() {
         onSelectionChange={(key) => setActiveTab(String(key))}
       >
         <Tab key="all" title="全部">
-          {warehouse?.map((warehouse: any) => (
-            <WarehouseItem
-              key={warehouse.packageCode}
+          {warehouse?.map((pack: any) => (
+            <PackageItem
+              key={pack.packingPackageCode}
               activeTab={activeTab}
-              warehouse={warehouse}
+              pack={pack}
             />
           ))}
           <InfiniteScroll
@@ -137,19 +138,19 @@ export default function Settingpage() {
           />
         </Tab>
 
-        <Tab key="submit" title="可提交运单">
+        <Tab key="pay" title="待付款">
           <>
             <div className="flex flex-col gap-3">
-              {warehouse.map((warehouse: any) => (
-                <WarehouseItem
-                  key={warehouse.packageCode}
+              {warehouse?.map((pack: any) => (
+                <PackageItem
+                  key={pack.packingPackageCode}
                   activeTab={activeTab}
-                  selected={!!selected[warehouse.packageCode]}
-                  warehouse={warehouse}
+                  pack={pack}
+                  selected={!!selected[pack.packingPackageCode]}
                   onChange={(e: any) => {
                     setSelected((prev) => ({
                       ...prev,
-                      [warehouse.packageCode]: e.target.checked,
+                      [pack.packingPackageCode]: e.target.checked,
                     }));
                   }}
                 />
@@ -161,9 +162,43 @@ export default function Settingpage() {
             />
           </>
         </Tab>
+        <Tab key="shipping" title="运输中">
+          <>
+            <div className="flex flex-col gap-3">
+              {warehouse?.map((pack: any) => (
+                <PackageItem
+                  key={pack.packingPackageCode}
+                  activeTab={activeTab}
+                  pack={pack}
+                />
+              ))}
+            </div>
+            <InfiniteScroll
+              hasMore={!!hasNextPage}
+              loadMore={() => fetchNextPage().then(() => undefined)}
+            />
+          </>
+        </Tab>
+        <Tab key="receivde" title="已收货">
+          <>
+            <div className="flex flex-col gap-3">
+              {warehouse?.map((pack: any) => (
+                <PackageItem
+                  key={pack.packingPackageCode}
+                  activeTab={activeTab}
+                  pack={pack}
+                />
+              ))}
+            </div>
+            <InfiniteScroll
+              hasMore={!!hasNextPage}
+              loadMore={() => fetchNextPage().then(() => undefined)}
+            />
+          </>
+        </Tab>
       </Tabs>
 
-      {activeTab == "submit" && (
+      {activeTab == "pay" && (
         <div className="card-cart sticky bottom-0 z-10 bg-white p-4">
           <div className="flex items-center justify-between gap-4">
             {/* 全选 */}
@@ -184,15 +219,16 @@ export default function Settingpage() {
                 className="w-[150px]"
                 color="primary"
                 isDisabled={selectedIds.length === 0}
+                isLoading={isSubmitting}
                 onPress={handleWarehouseSubmit}
               >
-                提交包裹
+                支付
               </Button>
             </div>
           </div>
         </div>
       )}
-      <ConfirmModal
+      {/* <ConfirmModal
         content="确定要取消当前订单吗？"
         isOpen={!!pendingCancelOrderId}
         title="取消订单"
@@ -203,7 +239,7 @@ export default function Settingpage() {
           onClose();
         }}
         onOpenChange={() => setPendingCancelOrderId(null)}
-      />
+      /> */}
     </div>
   );
 }

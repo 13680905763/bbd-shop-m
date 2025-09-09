@@ -253,6 +253,7 @@ export default function Settingpage() {
                 className="w-[150px]"
                 color="primary"
                 isDisabled={selectedIds.length === 0}
+                isLoading={isSubmitting}
                 onPress={handleOrderSubmit}
               >
                 批量支付
