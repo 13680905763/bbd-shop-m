@@ -3,11 +3,13 @@ import { InfiniteScroll, NavBar } from "antd-mobile";
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Checkbox, Tab, Tabs } from "@heroui/react";
+import { useTranslations } from "next-intl";
 
 import PackageItem from "./package-item";
 
 import { usePackageList } from "@/hook";
 import { batchPayPackage } from "@/services";
+
 const tabKeyToStatusCode: Record<string, string> = {
   all: "",
   pay: "203",
@@ -16,25 +18,20 @@ const tabKeyToStatusCode: Record<string, string> = {
 };
 
 export default function Settingpage() {
-  // 传入订单状态，例如 "ALL"、"WAIT_PAY"
+  const t = useTranslations("Profile.PackagePage");
   const [activeTab, setActiveTab] = useState("all");
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, error } =
-    usePackageList(tabKeyToStatusCode[activeTab]);
-  const [pendingCancelOrderId, setPendingCancelOrderId] = useState<
-    string | null
-  >(null);
+  const { data, fetchNextPage, hasNextPage } = usePackageList(
+    tabKeyToStatusCode[activeTab],
+  );
   const [selected, setSelected] = useState<Record<string, boolean>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false); // ✅ 批量支付 loading
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const warehouse = data?.pages?.flatMap((page: any) => page.records) ?? [];
 
-  // const onPayOrderRedirect = (bizCode: string) => {
-  //   router.push(`/order/pay-order/${bizCode}`);
-  // };
   const allIds = useMemo<string[]>(() => {
     return warehouse.map((w: any) => w.packingPackageCode) || [];
   }, [data]);
-  // 是否全选
+
   const allSelected = useMemo(() => {
     return (
       allIds.length > 0 &&
@@ -42,7 +39,6 @@ export default function Settingpage() {
     );
   }, [allIds, selected]);
 
-  // 切换全选
   const toggleAll = (checked: boolean) => {
     const newSelected = Object.fromEntries(
       allIds.map((packingPackageCode) => [packingPackageCode, checked]),
@@ -50,33 +46,17 @@ export default function Settingpage() {
 
     setSelected(newSelected);
   };
-  // 选中的 orderCode
+
   const selectedIds = useMemo<string[]>(() => {
     return Object.entries(selected)
       .filter(([_, value]) => value)
       .map(([key]) => key);
   }, [selected]);
-  // const onCancelOrder = async (orderId: string): Promise<void> => {
-  //   try {
-  //     // 如果只是想延迟 2 秒再发请求，可以这样写
-  //     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-  //     // 调用取消接口
-  //     await putOrderCancel({ id: orderId });
-
-  //     // 刷新列表数据
-  //     queryClient.invalidateQueries({ queryKey: ["orderList"] });
-  //   } catch (err) {
-  //     console.error("取消订单失败:", err);
-  //   }
-  // };
-  // 提交
   const handleWarehouseSubmit = async () => {
     if (selectedIds.length === 0) return;
     try {
-      setIsSubmitting(true); // ✅ 开始loading
-
-      console.log("selectedIds", selectedIds);
+      setIsSubmitting(true);
       const bizCode = await batchPayPackage({
         packageSet: selectedIds,
       });
@@ -85,11 +65,10 @@ export default function Settingpage() {
     } catch (error) {
       console.error("批量支付失败:", error);
     } finally {
-      setIsSubmitting(false); // ✅ 恢复
+      setIsSubmitting(false);
     }
   };
 
-  // 初始化选中状态
   useEffect(() => {
     if (data?.pages) {
       const initialSelected: Record<string, boolean> = data.pages.reduce(
@@ -108,7 +87,7 @@ export default function Settingpage() {
   return (
     <div className="flex h-screen flex-col bg-[#f7f8f9]">
       <NavBar className="flex-[0_0_45px] bg-white" onBack={() => router.back()}>
-        Package
+        {t("navbar")}
       </NavBar>
 
       <Tabs
@@ -124,12 +103,13 @@ export default function Settingpage() {
         variant="underlined"
         onSelectionChange={(key) => setActiveTab(String(key))}
       >
-        <Tab key="all" title="全部">
+        <Tab key="all" title={t("all")}>
           {warehouse?.map((pack: any) => (
             <PackageItem
               key={pack.packingPackageCode}
               activeTab={activeTab}
               pack={pack}
+              texts={t.raw("texts")}
             />
           ))}
           <InfiniteScroll
@@ -138,7 +118,7 @@ export default function Settingpage() {
           />
         </Tab>
 
-        <Tab key="pay" title="待付款">
+        <Tab key="pay" title={t("pay")}>
           <>
             <div className="flex flex-col gap-3">
               {warehouse?.map((pack: any) => (
@@ -147,6 +127,7 @@ export default function Settingpage() {
                   activeTab={activeTab}
                   pack={pack}
                   selected={!!selected[pack.packingPackageCode]}
+                  texts={t.raw("texts")}
                   onChange={(e: any) => {
                     setSelected((prev) => ({
                       ...prev,
@@ -162,58 +143,56 @@ export default function Settingpage() {
             />
           </>
         </Tab>
-        <Tab key="shipping" title="运输中">
-          <>
-            <div className="flex flex-col gap-3">
-              {warehouse?.map((pack: any) => (
-                <PackageItem
-                  key={pack.packingPackageCode}
-                  activeTab={activeTab}
-                  pack={pack}
-                />
-              ))}
-            </div>
-            <InfiniteScroll
-              hasMore={!!hasNextPage}
-              loadMore={() => fetchNextPage().then(() => undefined)}
-            />
-          </>
+
+        <Tab key="shipping" title={t("shipping")}>
+          <div className="flex flex-col gap-3">
+            {warehouse?.map((pack: any) => (
+              <PackageItem
+                key={pack.packingPackageCode}
+                activeTab={activeTab}
+                pack={pack}
+                texts={t.raw("texts")}
+              />
+            ))}
+          </div>
+          <InfiniteScroll
+            hasMore={!!hasNextPage}
+            loadMore={() => fetchNextPage().then(() => undefined)}
+          />
         </Tab>
-        <Tab key="receivde" title="已收货">
-          <>
-            <div className="flex flex-col gap-3">
-              {warehouse?.map((pack: any) => (
-                <PackageItem
-                  key={pack.packingPackageCode}
-                  activeTab={activeTab}
-                  pack={pack}
-                />
-              ))}
-            </div>
-            <InfiniteScroll
-              hasMore={!!hasNextPage}
-              loadMore={() => fetchNextPage().then(() => undefined)}
-            />
-          </>
+
+        <Tab key="receivde" title={t("received")}>
+          <div className="flex flex-col gap-3">
+            {warehouse?.map((pack: any) => (
+              <PackageItem
+                key={pack.packingPackageCode}
+                activeTab={activeTab}
+                pack={pack}
+                texts={t.raw("texts")}
+              />
+            ))}
+          </div>
+          <InfiniteScroll
+            hasMore={!!hasNextPage}
+            loadMore={() => fetchNextPage().then(() => undefined)}
+          />
         </Tab>
       </Tabs>
 
       {activeTab == "pay" && (
         <div className="card-cart sticky bottom-0 z-10 bg-white p-4">
           <div className="flex items-center justify-between gap-4">
-            {/* 全选 */}
             <div className="flex gap-4">
               <div className="flex gap-2">
                 <Checkbox
                   isSelected={allSelected}
                   onChange={(e) => toggleAll(e.target.checked)}
                 >
-                  全选
+                  {t("selectAll")}
                 </Checkbox>
               </div>
             </div>
 
-            {/* 批量支付按钮 */}
             <div className="flex items-center gap-2">
               <Button
                 className="w-[150px]"
@@ -222,24 +201,12 @@ export default function Settingpage() {
                 isLoading={isSubmitting}
                 onPress={handleWarehouseSubmit}
               >
-                支付
+                {t("submitPay")}
               </Button>
             </div>
           </div>
         </div>
       )}
-      {/* <ConfirmModal
-        content="确定要取消当前订单吗？"
-        isOpen={!!pendingCancelOrderId}
-        title="取消订单"
-        onConfirm={async (onClose): Promise<void> => {
-          if (!pendingCancelOrderId) return;
-          // await onCancelOrder(pendingCancelOrderId);
-          setPendingCancelOrderId(null);
-          onClose();
-        }}
-        onOpenChange={() => setPendingCancelOrderId(null)}
-      /> */}
     </div>
   );
 }

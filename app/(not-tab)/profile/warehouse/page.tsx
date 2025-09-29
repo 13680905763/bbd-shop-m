@@ -3,6 +3,7 @@ import { InfiniteScroll, NavBar } from "antd-mobile";
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Checkbox, Tab, Tabs } from "@heroui/react";
+import { useTranslations } from "next-intl";
 
 import WarehouseItem from "./warehouse-item";
 
@@ -15,6 +16,8 @@ const tabKeyToStatusCode: Record<string, string> = {
 };
 
 export default function Settingpage() {
+  const t = useTranslations("Profile.WarehousePage"); // ✅ 命名空间
+
   // 传入订单状态，例如 "ALL"、"WAIT_PAY"
   const [activeTab, setActiveTab] = useState("all");
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, error } =
@@ -54,20 +57,7 @@ export default function Settingpage() {
       .filter(([_, value]) => value)
       .map(([key]) => key);
   }, [selected]);
-  // const onCancelOrder = async (orderId: string): Promise<void> => {
-  //   try {
-  //     // 如果只是想延迟 2 秒再发请求，可以这样写
-  //     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-  //     // 调用取消接口
-  //     await putOrderCancel({ id: orderId });
-
-  //     // 刷新列表数据
-  //     queryClient.invalidateQueries({ queryKey: ["orderList"] });
-  //   } catch (err) {
-  //     console.error("取消订单失败:", err);
-  //   }
-  // };
   // 提交
   const handleWarehouseSubmit = async () => {
     if (selectedIds.length === 0) return;
@@ -107,7 +97,7 @@ export default function Settingpage() {
   return (
     <div className="flex h-screen flex-col bg-[#f7f8f9]">
       <NavBar className="flex-[0_0_45px] bg-white" onBack={() => router.back()}>
-        Warehouse
+        {t("navbar")}
       </NavBar>
 
       <Tabs
@@ -123,7 +113,7 @@ export default function Settingpage() {
         variant="underlined"
         onSelectionChange={(key) => setActiveTab(String(key))}
       >
-        <Tab key="all" title="全部">
+        <Tab key="all" title={t("all")}>
           {warehouse?.map((warehouse: any) => (
             <WarehouseItem
               key={warehouse.packageCode}
@@ -137,7 +127,7 @@ export default function Settingpage() {
           />
         </Tab>
 
-        <Tab key="submit" title="可提交运单">
+        <Tab key="submit" title={t("submit")}>
           <>
             <div className="flex flex-col gap-3">
               {warehouse.map((warehouse: any) => (
@@ -173,7 +163,7 @@ export default function Settingpage() {
                   isSelected={allSelected}
                   onChange={(e) => toggleAll(e.target.checked)}
                 >
-                  全选
+                  {t("selectAll")}
                 </Checkbox>
               </div>
             </div>
@@ -184,18 +174,19 @@ export default function Settingpage() {
                 className="w-[150px]"
                 color="primary"
                 isDisabled={selectedIds.length === 0}
+                isLoading={isSubmitting}
                 onPress={handleWarehouseSubmit}
               >
-                提交包裹
+                {t("submitPackages")}
               </Button>
             </div>
           </div>
         </div>
       )}
       <ConfirmModal
-        content="确定要取消当前订单吗？"
+        content={t("confirmCancelContent")}
         isOpen={!!pendingCancelOrderId}
-        title="取消订单"
+        title={t("confirmCancelTitle")}
         onConfirm={async (onClose): Promise<void> => {
           if (!pendingCancelOrderId) return;
           // await onCancelOrder(pendingCancelOrderId);

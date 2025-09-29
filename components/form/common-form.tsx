@@ -1,5 +1,6 @@
 import { Button, Form } from "@heroui/react";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import FormItemRenderer, { FieldConfig } from "./formItem-renderer";
 
@@ -7,9 +8,10 @@ interface CommonFormProps<T extends Record<string, any> = Record<string, any>> {
   fields: FieldConfig[];
   formData: T;
   onChange: (data: T) => void;
-  onSubmit?: (data: T) => void;
+  onSubmit?: (data: T) => Promise<void> | void; // ✅ 支持异步
   confirmText?: string;
-  children?: ReactNode; // ✅ 新增 children
+  children?: ReactNode;
+  loading?: boolean; // ✅ 外部可控
 }
 
 export default function CommonForm<T extends Record<string, any>>({
@@ -17,12 +19,23 @@ export default function CommonForm<T extends Record<string, any>>({
   formData,
   onChange,
   onSubmit,
-  confirmText = "保存",
+  confirmText,
   children,
 }: CommonFormProps<T>) {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const t = useTranslations("Components.Form");
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit?.(formData); // ✅ 直接用状态
+    if (!onSubmit) return;
+
+    try {
+      setIsLoading(true);
+      await onSubmit(formData);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -34,8 +47,12 @@ export default function CommonForm<T extends Record<string, any>>({
       />
 
       <div className="my-2 flex w-full flex-col gap-2">
-        <Button color="primary" type="submit">
-          {confirmText}
+        <Button
+          color="primary"
+          isLoading={isLoading} // ✅ 内部 loading
+          type="submit"
+        >
+          {confirmText || t.raw("confirm")}
         </Button>
         {children}
       </div>

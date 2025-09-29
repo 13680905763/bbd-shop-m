@@ -11,6 +11,8 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { QueryClientProvider } from "@tanstack/react-query";
 
 import { queryClient } from "@/lib/react-query";
+import { useInitLocaleCurrency } from "@/hook/useInitLocaleCurrency";
+import FullscreenLoader from "@/components/common/fullscreen-loader";
 export interface ProvidersProps {
   children: React.ReactNode;
   themeProps?: ThemeProviderProps;
@@ -26,6 +28,13 @@ declare module "@react-types/shared" {
 
 export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
+
+  const isReady = useInitLocaleCurrency();
+
+  if (!isReady) {
+    // 这里可以返回一个 Loading 动画 或者空节点
+    return <FullscreenLoader />;
+  }
 
   return (
     <GoogleOAuthProvider clientId="545953191162-n0elu4ilreo1hdlptkgublu7bjegpp0u.apps.googleusercontent.com">

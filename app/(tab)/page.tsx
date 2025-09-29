@@ -6,15 +6,68 @@ import {
   IoSearch,
   IoChevronForwardSharp,
 } from "react-icons/io5";
-import { Button, Input } from "@heroui/react";
+import { addToast, Button, Input, Spinner } from "@heroui/react"; // 加了 Spinner
 import { Swiper, Image, Avatar } from "antd-mobile";
 import { useRouter } from "next/navigation";
+import { FaRegImage } from "react-icons/fa";
+import { useRef, useState } from "react"; // 加了 useState
 
 import { siteConfig } from "@/config/site";
 import { Logo } from "@/components/icons";
+import { getGoodsImageId } from "@/services";
+import FullscreenLoader from "@/components/common/fullscreen-loader";
 
 export default function Home() {
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [uploading, setUploading] = useState(false); // 上传中状态
+
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    try {
+      setUploading(true); // 开始上传
+      const res: any = await getGoodsImageId(file);
+
+      if (res && res.length > 0) {
+        const taobaoImageId = res.find(
+          (item: any) => item.source === "TAOBAO",
+        )?.imageId;
+        const alibabaImageId = res.find(
+          (item: any) => item.source === "1688",
+        )?.imageId;
+
+        if (taobaoImageId && alibabaImageId) {
+          router.push(
+            `/goods/list?TAOBAO=${taobaoImageId}&1688=${alibabaImageId}`,
+          );
+        }
+      }
+    } catch (error) {
+      console.error("上传图片失败", error);
+      addToast({
+        title: "上传失败，请重试",
+        timeout: 1000,
+        color: "danger",
+      });
+    } finally {
+      setUploading(false); // 上传结束
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const triggerUpload = (e: any) => {
+    e.stopPropagation(); // 阻止冒泡
+    fileInputRef.current?.click();
+  };
+
+  {
+    uploading && <FullscreenLoader />;
+  }
 
   return (
     <section className="hide-scrollbar flex flex-1 flex-col overflow-auto p-3 pb-0">
@@ -30,39 +83,41 @@ export default function Home() {
           </div>
         </div>
         <div className="my-4">
-          {/* <NextLink href="/m/goods/search"> */}
           <Button
-            className="w-full justify-start bg-white"
-            size="sm"
+            className="w-full justify-between bg-white"
+            endContent={
+              uploading ? (
+                <Spinner color="primary" size="sm" /> // 上传中圈圈
+              ) : (
+                <FaRegImage className="text-xl" onClick={triggerUpload} />
+              )
+            }
             startContent={
-              <div className="flex items-center gap-2 bg-white text-sm">
-                <IoSearch />
+              <div className="flex items-center gap-2 bg-white text-base">
+                <IoSearch className="text-xl" />
                 Search...
               </div>
             }
             onPress={() => router.push("/goods/search")}
           />
-
-          {/* </NextLink> */}
+          <input
+            ref={fileInputRef}
+            hidden
+            accept="image/*"
+            type="file"
+            onChange={handleImageUpload}
+          />
         </div>
       </div>
       <div className="flex-1 overflow-auto scrollbar-hide">
         <Swiper>
           <Swiper.Item>
             <Image
-              // height={10}
               className="rounded-lg"
               fit="contain"
               src="/m/images/home/Swiper.png"
             />
           </Swiper.Item>
-          {/* <Swiper.Item>
-            <Image
-              className="rounded-lg"
-              fit="contain"
-              src="https://bbdbuy.com/uploads/20250120/e4c3fd1baf90e4fae162a1126048f5e0.png"
-            />
-          </Swiper.Item> */}
         </Swiper>
         <div className="box-card flex py-3">
           {siteConfig.toolList.map((item, index) => {

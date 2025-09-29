@@ -21,6 +21,7 @@ import {
 import { queryClient } from "@/lib/react-query";
 import FormModal from "@/components/modal/form-modal";
 import { FieldConfig } from "@/components/form/formItem-renderer";
+import FullscreenLoader from "@/components/common/fullscreen-loader";
 const fieldsaddress: FieldConfig[] = [
   {
     type: "input",
@@ -198,7 +199,9 @@ export default function SubmitOrder() {
     gettWarehouseServicesList().then((res) => setServices(res || []));
     gettWarehouseRoutesList().then((res) => setRoutesData(res || []));
   }, []);
-  if (isLoading) return <div>加载中...</div>;
+  {
+    isLoading && <FullscreenLoader />;
+  }
   if (isError) return <div>出错了</div>;
 
   return (

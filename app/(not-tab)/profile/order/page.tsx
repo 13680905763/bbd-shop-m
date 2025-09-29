@@ -3,6 +3,7 @@ import { InfiniteScroll, NavBar } from "antd-mobile";
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Checkbox, Tab, Tabs } from "@heroui/react";
+import { useTranslations } from "next-intl";
 
 import OrderItem from "./order-item";
 
@@ -17,6 +18,8 @@ const tabKeyToStatusCode: Record<string, string> = {
 };
 
 export default function Settingpage() {
+  const t = useTranslations("Profile.OrderPage"); // ✅ 命名空间
+
   // 传入订单状态，例如 "ALL"、"WAIT_PAY"
   const [activeTab, setActiveTab] = useState("all");
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, error } =
@@ -114,8 +117,6 @@ export default function Settingpage() {
     }
   }, [data]);
 
-  console.log("pageonRequestRefund", onRequestRefund);
-
   return (
     <div className="flex h-screen flex-col bg-[#f7f8f9]">
       <NavBar className="flex-[0_0_45px] bg-white" onBack={() => router.back()}>
@@ -161,13 +162,14 @@ export default function Settingpage() {
         variant="underlined"
         onSelectionChange={(key) => setActiveTab(String(key))}
       >
-        <Tab key="all" title="全部">
+        <Tab key="all" title={t("tabs.all")}>
           {orders?.map((order: any) => (
             <OrderItem
               key={order.id}
               activeTab={activeTab}
               order={order}
               selected={!!selected[order.orderCode]}
+              texts={t.raw("texts")}
               onCancelOrder={() => setPendingCancelOrderId(order.id)}
               onChange={(e: any) => {
                 setSelected((prev) => ({
@@ -185,7 +187,7 @@ export default function Settingpage() {
           />
         </Tab>
 
-        <Tab key="waitPay" title="待付款">
+        <Tab key="waitPay" title={t("tabs.waitPay")}>
           <>
             {/* 订单列表 */}
             <div className="flex flex-col gap-3">
@@ -195,6 +197,7 @@ export default function Settingpage() {
                   activeTab={activeTab}
                   order={order}
                   selected={!!selected[order.orderCode]}
+                  texts={t.raw("texts")}
                   onCancelOrder={() => setPendingCancelOrderId(order.id)}
                   onChange={(e: any) => {
                     setSelected((prev) => ({
@@ -216,11 +219,12 @@ export default function Settingpage() {
           </>
         </Tab>
 
-        <Tab key="paid" title="已付款">
+        <Tab key="paid" title={t("tabs.paid")}>
           {orders.map((order: any) => (
             <OrderItem
               key={order.id}
               order={order}
+              texts={t.raw("texts")}
               onPayOrderRedirect={onPayOrderRedirect}
               onRequestRefund={() => setPendingRequestRefundId(order.id)}
             />
@@ -242,7 +246,7 @@ export default function Settingpage() {
                   isSelected={allSelected}
                   onChange={(e) => toggleAll(e.target.checked)}
                 >
-                  全选
+                  {t("selectAll")}
                 </Checkbox>
               </div>
             </div>
@@ -256,16 +260,16 @@ export default function Settingpage() {
                 isLoading={isSubmitting}
                 onPress={handleOrderSubmit}
               >
-                批量支付
+                {t("batchPay")}
               </Button>
             </div>
           </div>
         </div>
       )}
       <ConfirmModal
-        content="确定要取消当前订单吗？"
+        content={t("cancelOrderConfirm")}
         isOpen={!!pendingCancelOrderId}
-        title="取消订单"
+        title={t("cancelOrder")}
         onConfirm={async (onClose): Promise<void> => {
           if (!pendingCancelOrderId) return;
           await onCancelOrder(pendingCancelOrderId);
@@ -275,9 +279,9 @@ export default function Settingpage() {
         onOpenChange={() => setPendingCancelOrderId(null)}
       />
       <ConfirmModal
-        content="确定申请退款当前订单吗？"
+        content={t("requestRefundConfirm")}
         isOpen={!!pendingRequestRefundId}
-        title="申请退款"
+        title={t("requestRefund")}
         onConfirm={async (onClose): Promise<void> => {
           if (!pendingRequestRefundId) return;
           await onRequestRefund(pendingRequestRefundId);

@@ -14,12 +14,14 @@ import { NavBar } from "antd-mobile";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import { IoWallet } from "react-icons/io5";
+import { useTranslations } from "next-intl";
 
 import BillingAddress from "./billing-address";
 
 import { useBillingAddressList, usePaymentMethodList } from "@/hook";
 import { createPayOrder } from "@/services";
 import { useBillingAddressStore, useWalletStore } from "@/store";
+import FullscreenLoader from "@/components/common/fullscreen-loader";
 const CustomRadio = (props: RadioProps) => {
   const {
     Component,
@@ -56,6 +58,8 @@ const CustomRadio = (props: RadioProps) => {
 };
 
 export default function PayOrder() {
+  const t = useTranslations("PayOrder"); // ✅ 命名空间
+
   const router = useRouter();
   const params = useParams<{ bizCode: string }>();
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -122,27 +126,26 @@ export default function PayOrder() {
     }
   }, [data]);
 
-  if (isLoading) return <div>加载中...</div>;
+  {
+    isLoading && <FullscreenLoader />;
+  }
   if (isError) return <div>加载失败</div>;
 
   return (
     <div className="h-[calc(var(--vh)_*_100)] overflow-x-hidden bg-[#f7f8f9]">
       <NavBar className="bg-white" onBack={() => router.back()}>
-        确定订单
+        {t("title")}
       </NavBar>
       <div className="px-2">
         <div className="box-card space-y-2 p-3 text-center">
-          {/* 标题 */}
-          <div className="text-sm tracking-wide text-gray-500">总计</div>
-
-          {/* 金额突出 */}
+          <div className="text-sm tracking-wide text-gray-500">
+            {t("total")}
+          </div>
           <div className="text-3xl font-extrabold leading-tight text-[#f0700c]">
             {currentPayMethod?.payAmount}
           </div>
-
-          {/* 手续费信息 */}
           <p className="text-sm text-gray-600">
-            手续费：
+            {t("handlingFee")}
             <span className="font-medium">{currentPayMethod?.handlingFee}</span>
           </p>
         </div>
@@ -150,7 +153,7 @@ export default function PayOrder() {
         <div className="flex w-full flex-col gap-1">
           {paymentId !== "1" ? (
             <div className="bg-white p-4">
-              <p className="text-title mb-2">账单地址</p>
+              <p className="text-title mb-2">{t("billingAddress")}</p>
               <BillingAddress billingAddress={billingAddress} />
             </div>
           ) : null}
@@ -261,7 +264,7 @@ export default function PayOrder() {
           size="lg"
           onPress={hanldeCreatePayOrder}
         >
-          下单结算
+          {t("placeOrder")}
         </Button>
       </div>
     </div>

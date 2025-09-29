@@ -2,6 +2,7 @@ import axios, { AxiosResponse, AxiosRequestConfig, AxiosError } from "axios";
 import { addToast } from "@heroui/react";
 
 import { ApiResponse } from "@/types";
+import { useGlobalStore } from "@/store";
 
 export const request = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "/api",
@@ -15,8 +16,12 @@ export const request = axios.create({
 // 请求拦截器：注入 token、语言等
 request.interceptors.request.use(
   (config) => {
-    config.headers["X-Language"] = "en";
-    config.headers["X-Currency"] = "USD";
+    const { locale, currency } = useGlobalStore.getState();
+
+    config.headers["X-Language"] = locale;
+    config.headers["X-Currency"] = currency;
+    // config.headers["X-Language"] = "en";
+    // config.headers["X-Currency"] = "USD";
     config.headers["X-Timezone"] = "Asia/Shanghai";
 
     return config;

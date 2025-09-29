@@ -1,11 +1,14 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import { Suspense } from "react";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 
 import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
 import { ViewportFixer } from "@/components/viewport-fixer";
+import FullscreenLoader from "@/components/common/fullscreen-loader";
 
 export const metadata: Metadata = {
   title: {
@@ -30,14 +33,21 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
+  console.log("messages", messages);
+
   return (
-    <html suppressHydrationWarning lang="en">
+    <html suppressHydrationWarning lang={locale}>
       <head />
       <body className="bg-[#f5f5f5]">
         <ViewportFixer />
-        <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
-          <Suspense fallback={<div>加载中...</div>}>{children}</Suspense>
-        </Providers>
+        <NextIntlClientProvider messages={messages}>
+          <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
+            <Suspense fallback={<FullscreenLoader />}>{children}</Suspense>
+          </Providers>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

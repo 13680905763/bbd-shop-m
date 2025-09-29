@@ -79,48 +79,6 @@ export const siteConfig = {
     },
   ],
   setting: {
-    index: [
-      {
-        title: "语言",
-        path: "/setting/language",
-      },
-      {
-        title: "货币",
-        path: "/setting/currency",
-      },
-      {
-        title: "修改密码",
-        path: "/setting/changepwd",
-      },
-    ],
-    language: [
-      {
-        title: "English",
-        id: "en",
-      },
-      {
-        title: "Français",
-        id: "fr",
-      },
-      {
-        title: "简体中文",
-        id: "zh",
-      },
-    ],
-    currency: [
-      {
-        title: "美元(0.15)",
-      },
-      {
-        title: "人民币(1.00)",
-      },
-      {
-        title: "欧元(0.14)",
-      },
-      {
-        title: "加币(0.22)",
-      },
-    ],
     changepwd: [
       {
         name: "pwd1",

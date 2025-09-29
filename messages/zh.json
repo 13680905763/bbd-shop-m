@@ -1,0 +1,249 @@
+{
+    "Dashboard": {
+        "balance": "余额",
+        "points": "积分",
+        "coupon": {
+            "title": "我的优惠券",
+            "available": "0张可用优惠券",
+            "viewAll": "查看全部"
+        },
+        "menu": [
+            {
+                "title": "购买订单",
+                "src": "/m/images/dashboard/order.png",
+                "to": "/profile/order"
+            },
+            {
+                "title": "我的仓库",
+                "src": "/m/images/dashboard/warehouse.png",
+                "to": "/profile/warehouse"
+            },
+            {
+                "title": "我的包裹",
+                "src": "/m/images/dashboard/package.png",
+                "to": "/profile/package"
+            }
+        ],
+        "invite": {
+            "title": "联盟邀请",
+            "status": "已邀请: 0 | 已激活: 0",
+            "stats": [
+                {
+                    "title": "总奖励",
+                    "value": "$888",
+                    "to": "/pages/member/account/index"
+                },
+                {
+                    "title": "联盟余额",
+                    "value": "88",
+                    "to": "/pages/member/score/index"
+                },
+                {
+                    "title": "已提现金额",
+                    "value": "88",
+                    "to": "/pages/member/score/index"
+                }
+            ]
+        },
+        "services": {
+            "title": "更多服务",
+            "items": [
+                {
+                    "title": "消息通知",
+                    "src": "/m/images/dashboard/message.png",
+                    "to": "/profile/message"
+                },
+                {
+                    "title": "我的收藏",
+                    "src": "/m/images/dashboard/favorite.png",
+                    "to": "/profile/favorite"
+                },
+                {
+                    "title": "收货地址",
+                    "src": "/m/images/dashboard/address.png",
+                    "to": "/profile/address"
+                },
+                {
+                    "title": "账单地址",
+                    "src": "/m/images/dashboard/address.png",
+                    "to": "/profile/billing-address"
+                },
+                {
+                    "title": "浏览历史",
+                    "src": "/m/images/dashboard/history.png",
+                    "to": "/profile/history"
+                }
+            ]
+        }
+    },
+    "Cart": {
+        "title": "购物车",
+        "manage": "管理",
+        "cancel": "取消",
+        "selectAll": "全选",
+        "delete": "删除",
+        "checkout": "结算",
+        "loading": "加载中...",
+        "error": "出错了",
+        "toast": {
+            "noSelect": "请先选择商品"
+        },
+        "confirm": {
+            "deleteTitle": "从购物车删除",
+            "deleteContent": "确定要删除选中的商品吗？"
+        },
+        "remark": {
+            "title": "备注",
+            "placeholder": "输入备注"
+        }
+    },
+    "Components": {
+        "Form": {
+            "confirm": "确认",
+            "cancel": "取消"
+        }
+    },
+    "Profile": {
+        "Page": {
+            "title": "个人信息",
+            "fields": [
+                {
+                    "key": "name",
+                    "type": "input",
+                    "name": "name",
+                    "label": "用户名"
+                },
+                {
+                    "key": "familyName",
+                    "type": "input",
+                    "name": "familyName",
+                    "label": "姓氏"
+                },
+                {
+                    "key": "givenName",
+                    "type": "input",
+                    "name": "givenName",
+                    "label": "名字"
+                },
+                {
+                    "key": "mobile",
+                    "type": "input",
+                    "name": "mobile",
+                    "label": "手机号码"
+                }
+            ]
+        },
+        "OrderPage": {
+            "texts": {
+                "pay": "支付",
+                "cancel": "取消",
+                "requestRefund": "申请退款"
+            },
+            "title": "购买订单",
+            "tabs": {
+                "all": "全部",
+                "waitPay": "待支付",
+                "paid": "已支付"
+            },
+            "selectAll": "全选",
+            "batchPay": "批量支付",
+            "cancelOrder": "取消订单",
+            "cancelOrderConfirm": "确定要取消此订单吗？",
+            "requestRefund": "申请退款",
+            "requestRefundConfirm": "确定要为此订单申请退款吗？"
+        },
+        "WarehousePage": {
+            "navbar": "仓库",
+            "all": "全部",
+            "submit": "可提交",
+            "selectAll": "全选",
+            "submitPackages": "提交包裹",
+            "confirmCancelTitle": "取消订单",
+            "confirmCancelContent": "确定要取消此订单吗？"
+        },
+        "PackagePage": {
+            "navbar": "包裹",
+            "all": "全部",
+            "pay": "待支付",
+            "shipping": "运输中",
+            "received": "已收货",
+            "selectAll": "全选",
+            "submitPay": "支付",
+            "texts": {
+                "productImage": "商品图片",
+                "weight": "重量",
+                "size": "尺寸",
+                "shipping": "运输方式",
+                "serviceFee": "服务费",
+                "totalFee": "总费用",
+                "none": "无"
+            }
+        }
+    },
+    "Setting": {
+        "Page": {
+            "title": "设置",
+            "logout": "退出登录",
+            "menu": [
+                {
+                    "title": "语言",
+                    "path": "/setting/language"
+                },
+                {
+                    "title": "货币",
+                    "path": "/setting/currency"
+                },
+                {
+                    "title": "修改密码",
+                    "path": "/setting/changepwd"
+                }
+            ]
+        },
+        "CurrencyPage": {
+            "title": "货币",
+            "save": "保存"
+        },
+        "LanguagePage": {
+            "title": "语言",
+            "save": "保存"
+        }
+    },
+    "Wallet": {
+        "Page": {
+            "title": "我的账户",
+            "record": "记录",
+            "totalBalance": "总余额",
+            "withdraw": "提现",
+            "selectAmount": "选择金额",
+            "otherAmount": "其他金额",
+            "enterOtherAmount": "输入其他金额",
+            "recharge": "充值",
+            "enterValidAmount": "请输入有效金额"
+        }
+    },
+    "PayOrder": {
+        "title": "确认订单",
+        "total": "总计",
+        "handlingFee": "手续费",
+        "billingAddress": "账单地址",
+        "placeOrder": "提交订单",
+        "balance": "余额",
+        "recharge": "充值",
+        "pleaseAddBillingAddress": "请添加账单地址"
+    },
+    "Goods": {
+        "productDetails": "商品详情",
+        "originalLink": "原链接",
+        "refresh": "刷新",
+        "quantity": "数量",
+        "enterDescription": "请输入备注",
+        "buyNow": "立即购买",
+        "addToCart": "加入购物车",
+        "riskNotice": "风险提示",
+        "continueShopping": "继续购买其他",
+        "riskMessage": "您提交的产品可能存在一定的寄送风险。为了您的资金安全，我们暂时无法为您提供在线订购服务。如需了解更多信息，请联系在线客服！",
+        "productDescription": "商品详情",
+        "stock": "库存",
+        "shippingFee": "运费"
+    }
+}

@@ -2,6 +2,8 @@ import { Button, Checkbox } from "@heroui/react";
 
 import ProductItem from "./product-item";
 
+import SourceIcon from "@/components/common/source-icon";
+
 export default function OrderItem({
   order,
   onPayOrderRedirect,
@@ -10,18 +12,21 @@ export default function OrderItem({
   onChange,
   selected,
   onRequestRefund,
+  texts,
 }: any) {
   return (
     <div className="mb-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
       {/* 顶部：订单号 + 下单时间 */}
-      <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+      <div className="flex items-center justify-between border-gray-100 pb-2">
         {activeTab === "waitPay" ? (
           <Checkbox isSelected={selected} onChange={onChange} />
         ) : null}
-        <div className="text-sm font-medium text-gray-800">
-          订单号：<span className="font-semibold">{order?.orderCode}</span>
+
+        <div className="flex gap-2 text-sm font-medium text-gray-800">
+          <SourceIcon source={order.source} />
+          <span className="font-semibold">{order?.orderCode}</span>
         </div>
-        <div className="text-xs text-gray-500">{order?.createTime}</div>
+        <div className="flex-1 text-xs text-gray-500">{order?.createTime}</div>
       </div>
 
       {/* 商品列表 */}
@@ -40,13 +45,13 @@ export default function OrderItem({
       {/* 金额 + 按钮 */}
       <div className="mt-3 text-right">
         <p className="my-2 text-sm text-gray-700">
-          <span className="mr-1">金额：</span>
+          {/* <span className="mr-1">金额：</span> */}
           <span className="text-lg font-bold text-[#f0700c]">
             ￥{order?.totalFee}
           </span>
         </p>
 
-        {order?.status === "待付款" && (
+        {order?.statusCode === 101 && (
           <div className="space-x-2">
             <Button
               color="primary"
@@ -56,7 +61,7 @@ export default function OrderItem({
                 onPayOrderRedirect(order?.orderCode);
               }}
             >
-              支付
+              {texts.pay}
             </Button>
             <Button
               radius="sm"
@@ -66,11 +71,11 @@ export default function OrderItem({
                 onCancelOrder(order?.id);
               }}
             >
-              取消
+              {texts.cancel}
             </Button>
           </div>
         )}
-        {order?.status === "待采购" && (
+        {order?.statusCode === 102 && (
           <Button
             color="primary"
             radius="sm"
@@ -79,7 +84,7 @@ export default function OrderItem({
               onRequestRefund(order?.id);
             }}
           >
-            申请退款
+            {texts.requestRefund}
           </Button>
         )}
       </div>

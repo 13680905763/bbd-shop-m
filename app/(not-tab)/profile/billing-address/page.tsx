@@ -15,6 +15,7 @@ import FormModal from "@/components/modal/form-modal";
 import { addAddress, deleteAddress, updateAddress } from "@/services/address";
 import { FieldConfig } from "@/components/form/formItem-renderer";
 import { useBillingAddressList } from "@/hook";
+import FullscreenLoader from "@/components/common/fullscreen-loader";
 type ModalType = "add" | "edit" | "delete" | null;
 const initAddress = {
   recipient: "",
@@ -124,7 +125,9 @@ export default function Cart() {
     }
   };
 
-  if (isLoading) return <div>加载中...</div>;
+  {
+    isLoading && <FullscreenLoader />;
+  }
 
   return (
     <div className="flex h-[calc(var(--vh)_*_100)] flex-col justify-between overflow-hidden">

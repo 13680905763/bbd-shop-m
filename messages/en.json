@@ -1,0 +1,249 @@
+{
+    "Dashboard": {
+        "balance": "Balance",
+        "points": "Points",
+        "coupon": {
+            "title": "My Coupons",
+            "available": "0 coupons available",
+            "viewAll": "View All"
+        },
+        "menu": [
+            {
+                "title": "Purchase Orders",
+                "src": "/m/images/dashboard/order.png",
+                "to": "/profile/order"
+            },
+            {
+                "title": "My Warehouse",
+                "src": "/m/images/dashboard/warehouse.png",
+                "to": "/profile/warehouse"
+            },
+            {
+                "title": "My Packages",
+                "src": "/m/images/dashboard/package.png",
+                "to": "/profile/package"
+            }
+        ],
+        "invite": {
+            "title": "Affiliate Invitation",
+            "status": "Invited: 0 | Activated: 0",
+            "stats": [
+                {
+                    "title": "Total Rewards",
+                    "value": "$888",
+                    "to": "/pages/member/account/index"
+                },
+                {
+                    "title": "Affiliate Balance",
+                    "value": "88",
+                    "to": "/pages/member/score/index"
+                },
+                {
+                    "title": "Withdrawn Amount",
+                    "value": "88",
+                    "to": "/pages/member/score/index"
+                }
+            ]
+        },
+        "services": {
+            "title": "More Services",
+            "items": [
+                {
+                    "title": "Notifications",
+                    "src": "/m/images/dashboard/message.png",
+                    "to": "/profile/message"
+                },
+                {
+                    "title": "My Favorites",
+                    "src": "/m/images/dashboard/favorite.png",
+                    "to": "/profile/favorite"
+                },
+                {
+                    "title": "Shipping Address",
+                    "src": "/m/images/dashboard/address.png",
+                    "to": "/profile/address"
+                },
+                {
+                    "title": "Billing Address",
+                    "src": "/m/images/dashboard/address.png",
+                    "to": "/profile/billing-address"
+                },
+                {
+                    "title": "History",
+                    "src": "/m/images/dashboard/history.png",
+                    "to": "/profile/history"
+                }
+            ]
+        }
+    },
+    "Cart": {
+        "title": "Cart",
+        "manage": "Manage",
+        "cancel": "Cancel",
+        "selectAll": "Select All",
+        "delete": "Delete",
+        "checkout": "Checkout",
+        "loading": "Loading...",
+        "error": "Something went wrong",
+        "toast": {
+            "noSelect": "Please select a product first"
+        },
+        "confirm": {
+            "deleteTitle": "Delete from Cart",
+            "deleteContent": "Are you sure you want to delete the selected items?"
+        },
+        "remark": {
+            "title": "Remark",
+            "placeholder": "Enter remark"
+        }
+    },
+    "Components": {
+        "Form": {
+            "confirm": "Confirm",
+            "cancel": "Cancel"
+        }
+    },
+    "Profile": {
+        "Page": {
+            "title": "Profile Information",
+            "fields": [
+                {
+                    "key": "name",
+                    "type": "input",
+                    "name": "name",
+                    "label": "Username"
+                },
+                {
+                    "key": "familyName",
+                    "type": "input",
+                    "name": "familyName",
+                    "label": "Family Name"
+                },
+                {
+                    "key": "givenName",
+                    "type": "input",
+                    "name": "givenName",
+                    "label": "Given Name"
+                },
+                {
+                    "key": "mobile",
+                    "type": "input",
+                    "name": "mobile",
+                    "label": "Mobile Number"
+                }
+            ]
+        },
+        "OrderPage": {
+            "texts": {
+                "pay": "Pay",
+                "cancel": "Cancel",
+                "requestRefund": "Request Refund"
+            },
+            "title": "Purchase Orders",
+            "tabs": {
+                "all": "All",
+                "waitPay": "Pending Payment",
+                "paid": "Paid"
+            },
+            "selectAll": "Select All",
+            "batchPay": "Batch Pay",
+            "cancelOrder": "Cancel Order",
+            "cancelOrderConfirm": "Are you sure you want to cancel this order?",
+            "requestRefund": "Request Refund",
+            "requestRefundConfirm": "Are you sure you want to request a refund for this order?"
+        },
+        "WarehousePage": {
+            "navbar": "Warehouse",
+            "all": "All",
+            "submit": "Submittable",
+            "selectAll": "Select All",
+            "submitPackages": "Submit Packages",
+            "confirmCancelTitle": "Cancel Order",
+            "confirmCancelContent": "Are you sure you want to cancel this order?"
+        },
+        "PackagePage": {
+            "navbar": "Package",
+            "all": "All",
+            "pay": "Pending Payment",
+            "shipping": "Shipping",
+            "received": "Received",
+            "selectAll": "Select All",
+            "submitPay": "Pay",
+            "texts": {
+                "productImage": "Product Image",
+                "weight": "Weight",
+                "size": "Size",
+                "shipping": "Shipping Method",
+                "serviceFee": "Service Fee",
+                "totalFee": "Total Fee",
+                "none": "None"
+            }
+        }
+    },
+    "Setting": {
+        "Page": {
+            "title": "Settings",
+            "logout": "Logout",
+            "menu": [
+                {
+                    "title": "Language",
+                    "path": "/setting/language"
+                },
+                {
+                    "title": "Currency",
+                    "path": "/setting/currency"
+                },
+                {
+                    "title": "Change Password",
+                    "path": "/setting/changepwd"
+                }
+            ]
+        },
+        "CurrencyPage": {
+            "title": "Language",
+            "save": "Save"
+        },
+        "LanguagePage": {
+            "title": "Language",
+            "save": "Save"
+        }
+    },
+    "Wallet": {
+        "Page": {
+            "title": "My Account",
+            "record": "Record",
+            "totalBalance": "Total Balance",
+            "withdraw": "Withdraw",
+            "selectAmount": "Select Amount",
+            "otherAmount": "Other Amount",
+            "enterOtherAmount": "Enter other amount",
+            "recharge": "Recharge",
+            "enterValidAmount": "Please enter a valid amount"
+        }
+    },
+    "PayOrder": {
+        "title": "Confirm Order",
+        "total": "Total",
+        "handlingFee": "Handling Fee",
+        "billingAddress": "Billing Address",
+        "placeOrder": "Place Order",
+        "balance": "Balance",
+        "recharge": "Recharge",
+        "pleaseAddBillingAddress": "Please add billing address"
+    },
+    "Goods": {
+        "productDetails": "Product Details",
+        "originalLink": "Original Link",
+        "refresh": "Refresh",
+        "quantity": "Quantity",
+        "enterDescription": "Enter your description",
+        "buyNow": "Buy Now",
+        "addToCart": "Add to Cart",
+        "riskNotice": "Risk Notice",
+        "continueShopping": "Continue Shopping",
+        "riskMessage": "The product you submitted may involve certain shipping risks. For your fund safety, online purchase is temporarily unavailable. Please contact online support for more information.",
+        "productDescription": "Product Description",
+        "stock": "Stock",
+        "shippingFee": "Shipping Fee"
+    }
+}

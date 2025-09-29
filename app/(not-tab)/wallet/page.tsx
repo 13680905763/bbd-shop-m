@@ -1,27 +1,34 @@
 "use client";
 
-import { Button, NumberInput } from "@heroui/react";
+import { addToast, Button, NumberInput } from "@heroui/react";
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { IoWallet } from "react-icons/io5";
+import { useTranslations } from "next-intl";
 
 import { createOrderByRecharge } from "@/services";
 import { useWalletStore } from "@/store";
 
-export default function Settingpage() {
+export default function WalletRechargePage() {
+  const t = useTranslations("Wallet.Page"); // ✅ 命名空间
+
   const [currentPrice, setCurrentPrice] = useState<number>(0);
   const priceList = [50, 100, 200, 500, 1000, 5000];
   const router = useRouter();
   const wallet = useWalletStore((state) => state.wallet);
+
   const changePrice = (price: number) => {
     setCurrentPrice(price);
   };
 
   const handleRecharge = async () => {
-    console.log("充值金额：", currentPrice);
     if (!currentPrice || currentPrice <= 0) {
-      alert("请输入有效的充值金额");
+      addToast({
+        title: t("enterValidAmount"),
+        timeout: 1000,
+        color: "danger",
+      });
 
       return;
     }
@@ -39,12 +46,12 @@ export default function Settingpage() {
         className="bg-white"
         right={
           <button onClick={() => router.push("/wallet/balance-record")}>
-            记录
+            {t("record")}
           </button>
         }
         onBack={() => router.back()}
       >
-        我的账户
+        {t("title")}
       </NavBar>
 
       <div className="px-2">
@@ -53,21 +60,21 @@ export default function Settingpage() {
           <div className="my-[10px] text-[24px] font-bold text-[#f3643a]">
             {wallet?.availabalBalance}
           </div>
-          <div className="text-sm text-[#999]">总余额</div>
+          <div className="text-sm text-[#999]">{t("totalBalance")}</div>
           <div className="flex justify-center px-[10px] py-[15px]">
             <Button
               className="w-full rounded-full border-1 bg-white"
               variant="bordered"
               onPress={() => router.push("/wallet/withdrawal")}
             >
-              提现
+              {t("withdraw")}
             </Button>
           </div>
         </div>
 
         {/* 快捷金额选择区域 */}
         <div>
-          <div className="text-sm font-bold">选择充值金额</div>
+          <div className="text-sm font-bold">{t("selectAmount")}</div>
           <div className="mx-auto my-2 grid grid-cols-3 grid-rows-2 gap-[5px]">
             {priceList.map((item) => (
               <button
@@ -87,11 +94,11 @@ export default function Settingpage() {
 
         {/* 自定义金额输入区域 */}
         <div>
-          <div className="text-sm font-bold">其他金额</div>
+          <div className="text-sm font-bold">{t("otherAmount")}</div>
           <NumberInput
             className="my-2"
             classNames={{ inputWrapper: "bg-white" }}
-            placeholder="请输入其他金额"
+            placeholder={t("enterOtherAmount")}
             size="lg"
             startContent={<IoWallet className="h-6 w-6" />}
             type="number"
@@ -99,7 +106,7 @@ export default function Settingpage() {
             onValueChange={(value) => setCurrentPrice(value)}
           />
           <Button className="w-full" color="primary" onPress={handleRecharge}>
-            充值
+            {t("recharge")}
           </Button>
         </div>
       </div>

@@ -34,7 +34,7 @@ export default function ProductItem({ product, status }: any) {
             {product.sku?.propName_valueName}
           </div>
           <div className="mt-1 font-semibold text-[#f0700c]">
-            订单状态：<span className="text-[#f0700c]">{status}</span>
+            <span className="text-[#f0700c]">{status}</span>
           </div>
         </div>
 
@@ -51,7 +51,7 @@ export default function ProductItem({ product, status }: any) {
       {product?.orderServiceList?.length > 0 && (
         <div className="mt-2 rounded-lg bg-[#fafafa] px-3 py-2">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-sm font-medium text-gray-700">增值服务</span>
+            {/* <span className="text-sm font-medium text-gray-700">增值服务</span> */}
             {product.orderServiceList.map((service: any) => (
               <span
                 key={service.serviceId}

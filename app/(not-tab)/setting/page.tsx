@@ -4,15 +4,17 @@ import { NavBar } from "antd-mobile";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { IoChevronForwardSharp } from "react-icons/io5";
+import { useTranslations } from "next-intl";
 
-import { siteConfig } from "@/config/site";
 import { logoutCustomer } from "@/services";
 
 export default function Settingpage() {
   const router = useRouter();
+  const t = useTranslations("Setting.Page");
+
   const handleLogoutCustomer = async () => {
     try {
-      await logoutCustomer(); // 调用后端接口，带上 cookie
+      await logoutCustomer();
       localStorage.removeItem("user-storage");
       window.location.reload();
     } catch (error) {}
@@ -21,7 +23,7 @@ export default function Settingpage() {
   return (
     <div className="h-screen bg-[#f7f8f9]">
       <NavBar className="bg-white" onBack={() => router.push("/dashboard")}>
-        设置
+        {t("title")}
       </NavBar>
       <div className="p-2">
         <Listbox
@@ -32,7 +34,7 @@ export default function Settingpage() {
           }}
           onAction={(key) => router.push(key as string)}
         >
-          {siteConfig.setting.index.map((item) => (
+          {t.raw("menu")?.map((item: any) => (
             <ListboxItem
               key={item.path}
               className="text-black"
@@ -48,7 +50,7 @@ export default function Settingpage() {
           color="primary"
           onPress={handleLogoutCustomer}
         >
-          退出
+          {t("logout")}
         </Button>
       </div>
     </div>

@@ -17,6 +17,7 @@ import { useOrderPreview } from "@/hook";
 import { createOrderPreviewKeyByProductParams } from "@/types";
 import { useServicesStore } from "@/store";
 import CommonModal from "@/components/modal/common-modal";
+import FullscreenLoader from "@/components/common/fullscreen-loader";
 
 export type Product = {
   id: string;
@@ -221,7 +222,9 @@ export default function SubmitOrder() {
     if (data) setOrderData(data);
   }, [data]);
 
-  if (isLoading) return <div>加载中...</div>;
+  {
+    isLoading && <FullscreenLoader />;
+  }
   if (isError) return <div>出错了</div>;
 
   return (

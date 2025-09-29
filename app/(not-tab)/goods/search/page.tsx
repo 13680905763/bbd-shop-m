@@ -1,14 +1,60 @@
 "use client";
-import { addToast, Button, Divider, Form, Input } from "@heroui/react";
-import React from "react";
+import { addToast, Button, Divider, Form, Input, Spinner } from "@heroui/react";
+import React, { useRef, useState } from "react";
 import { IoChevronBack } from "react-icons/io5";
 import { useRouter } from "next/navigation";
+import { FaRegImage } from "react-icons/fa";
 
-import { getGoodsId } from "@/services";
+import { getGoodsId, getGoodsImageId } from "@/services";
 import { SearchIcon } from "@/components/icons";
 
 export default function Searchpage() {
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [uploading, setUploading] = useState(false); // 新增上传中状态
+
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    try {
+      setUploading(true); // 开始上传
+      const res: any = await getGoodsImageId(file);
+
+      if (res && res.length > 0) {
+        const taobaoImageId = res.find(
+          (item: any) => item.source === "TAOBAO",
+        )?.imageId;
+        const alibabaImageId = res.find(
+          (item: any) => item.source === "1688",
+        )?.imageId;
+
+        if (taobaoImageId && alibabaImageId) {
+          router.push(
+            `/goods/list?TAOBAO=${taobaoImageId}&1688=${alibabaImageId}`,
+          );
+        }
+      }
+    } catch (error) {
+      console.error("上传图片失败", error);
+      addToast({
+        title: "上传失败，请重试",
+        timeout: 1000,
+        color: "danger",
+      });
+    } finally {
+      setUploading(false); // 结束上传
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const triggerUpload = (e: any) => {
+    e.stopPropagation();
+    fileInputRef.current?.click();
+  };
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
@@ -19,27 +65,18 @@ export default function Searchpage() {
     try {
       url = new URL(data.url);
     } catch (err) {
-      // 可选：展示错误提示
       addToast({
         title: "请输入有效的 URL",
         timeout: 1000,
         color: "danger",
       });
 
-      return; // 终止后续逻辑
+      return;
     }
+
     const res: any = await getGoodsId({ url });
 
-    router.push(
-      `/goods/${res.source}/${res.sourceProductId}`, // 目标路由
-    );
-    // setIsLoading(true);
-
-    // const data = Object.fromEntries(new FormData(e.currentTarget));
-    // const result = await callServer(data);
-
-    // setErrors(result.errors);
-    // setIsLoading(false);
+    router.push(`/goods/${res.source}/${res.sourceProductId}`);
   };
 
   return (
@@ -52,19 +89,29 @@ export default function Searchpage() {
           <Input
             aria-label="Search"
             classNames={{
-              inputWrapper: "bg-default-100",
+              inputWrapper: "bg-white",
               input: "text-sm",
             }}
             endContent={
-              <Button
-                isIconOnly
-                color="primary"
-                size="sm"
-                type="submit"
-                variant="light"
-              >
-                搜索
-              </Button>
+              <div className="flex items-center gap-2">
+                {uploading ? (
+                  <Spinner color="primary" size="sm" />
+                ) : (
+                  <FaRegImage
+                    className="cursor-pointer text-xl"
+                    onClick={triggerUpload}
+                  />
+                )}
+                <Button
+                  isIconOnly
+                  color="primary"
+                  size="sm"
+                  type="submit"
+                  variant="light"
+                >
+                  搜索
+                </Button>
+              </div>
             }
             labelPlacement="outside"
             name="url"
@@ -74,8 +121,16 @@ export default function Searchpage() {
             }
             type="search"
           />
+          <input
+            ref={fileInputRef}
+            hidden
+            accept="image/*"
+            type="file"
+            onChange={handleImageUpload}
+          />
         </Form>
       </div>
+
       <div className="flex-1 bg-white p-4">
         <div className="font-bold">历史记录</div>
         <Divider className="my-2" />
@@ -84,7 +139,7 @@ export default function Searchpage() {
           <div className="bg-[#f8f8f8] p-2">jfaljgf;ljsa;gjs</div>
           <div className="bg-[#f8f8f8] p-2">agsahhdsfhfdh</div>
           <div className="line-clamp-1 overflow-hidden text-ellipsis text-nowrap bg-[#f8f8f8] p-2">
-            https://item.taobao.com/item.htm?id=775526482716&pisk=gv1sHpjcscm62vdxld4ePExLblOfHyPr1qTArZhZkCdtDmQJYjzM_-AfcHsDbdROG9cfrZfaSIzMsNADMurzas_GSIX3SsSc1XKpywnvDdee9fwhODEza77QBFAVJu548Y5v7UlvMdpxvwKHlx39WipK9ExK6Eh9kDUBxH39kFht9eLwyndx6fhK9ETrMmpx6BHpxEdvDidYRBKHkbHqPEw6jNagUu6znVE8nhGxM6T6pJ79vmJC9FTMVNCsMjUD5dtRWHZlKv2epZvfiqcXUNBlmUItXotcOwCOegEEQhBWlaWfV7hD-OI19K1Uo77e1E9JMpgxMwO9DL1ww7nB-9QNH1jsljLG__JXqpaxiKRdaLBRfq4lJCLAmLf4qfxOkaflUQNsqF6dPBsyxb-7d4MjRLcXR3zQRxD0fW1R9SuFpQp9-F9URyiOndLHR3zQRxDDBeY6zyaIXtf..&skuId=5475585179011&spm=a21bo.jianhua%2Fa.201876.d2.c2322a89VKbVlR&utparam=%7B%22abid%22%3A%220%22%2C%22x_object_type%22%3A%22p4p_item%22%2C%22pc_pvid%22%3A%2225d49bc7-c318-456c-b91d-24e5a96d601f%22%2C%22mix_group%22%3A%22%22%2C%22pc_scene%22%3A%2220001%22%2C%22aplus_abtest%22%3A%220c5212510237be030a21386b375f12cc%22%2C%22tpp_buckets%22%3A%2230986%23434216%23module%22%2C%22x_object_id%22%3A775526482716%2C%22ab_info%22%3A%2230986%23434216%23-1%23%22%7D&xxc=ad_ct
+            https://item.taobao.com/item.htm?id=775526482716&pisk=gv1sHpjcscm62vdxld4e...
           </div>
         </div>
       </div>

@@ -20,6 +20,7 @@ import NextLink from "next/link";
 import { GrPowerReset } from "react-icons/gr";
 import { IoIosLink } from "react-icons/io";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 import ProgressBar from "@/components/progress-bar";
 import DisclaimerDrawer from "@/components/disclaimer-drawer";
@@ -70,7 +71,7 @@ function generateDynamicSkuPathDict(productInfo: ProductInfo): SkuPathDict {
 
       // 确保属性名和值在映射表中存在
       if (skuPropMap[propName] && skuPropValueMap[propValue]) {
-        propertyMap[skuPropMap[propName]] = skuPropValueMap[propValue];
+        propertyMap["k" + propName] = propValue;
       }
     });
 
@@ -119,6 +120,8 @@ function getAllCombinations(
   return combinations;
 }
 export default function GoodsPage() {
+  const t = useTranslations("Goods");
+
   const params = useParams();
   const router = useRouter();
   const [remark, setRemark] = useState<string>();
@@ -140,6 +143,7 @@ export default function GoodsPage() {
     if (!currentSku) {
       addToast({
         title: "请选择商品规格",
+        timeout: 1000,
         color: "danger",
       });
 
@@ -233,7 +237,7 @@ export default function GoodsPage() {
     specs.forEach((spec: any) => {
       const selectedVal = spec.propValueList.find((item: any) => item.selected);
 
-      arr.push(selectedVal ? selectedVal.valueName : undefined);
+      arr.push(selectedVal ? selectedVal.valueID : undefined);
     });
 
     return arr;
@@ -246,11 +250,9 @@ export default function GoodsPage() {
       const selectedValues = getSelectedValues(cloned.productInfo.skuPropList);
 
       spec.propValueList.forEach((val: any) => {
-        selectedValues[index] = val.valueName;
-        console.log("selectedValues", selectedValues, val.valueName);
+        selectedValues[index] = val.valueID;
         const key = selectedValues.filter((value: any) => value).join("-");
 
-        console.log("key", key);
         if (pathMap[key]) {
           val.disabled = false;
         } else {
@@ -267,7 +269,7 @@ export default function GoodsPage() {
 
     const currentSku = goodsInfo.productInfo.skuList.find((item: any) => {
       return (
-        selectedValues.filter((i: any) => item?.propName_valueName.includes(i))
+        selectedValues.filter((i: any) => item?.propId_valueId.includes(i))
           ?.length == selectedValues.length
       );
     });
@@ -288,7 +290,7 @@ export default function GoodsPage() {
         cloned.productInfo.skuPropList.forEach((spec: any) => {
           spec.propValueList.forEach((value: any) => {
             value.selected = false;
-            if (pathMap[value.valueName]) {
+            if (pathMap[value.valueID]) {
               value.disabled = false;
             } else {
               value.disabled = true;
@@ -308,7 +310,7 @@ export default function GoodsPage() {
   return (
     <div className="flex h-[calc(var(--vh)_*_100)] flex-col justify-between">
       <NavBar className="bg-white" onBack={() => router.back()}>
-        商品详情
+        {t("productDetails")}
       </NavBar>
 
       {isLoading ? (
@@ -369,14 +371,14 @@ export default function GoodsPage() {
                     target="_blank"
                   >
                     <IoIosLink />
-                    原链接
+                    {t("originalLink")}
                   </a>
                   <button
                     className="flex items-center gap-1"
                     onClick={() => window.location.reload()}
                   >
                     <GrPowerReset />
-                    刷新
+                    {t("refresh")}
                   </button>
                 </div>
               </div>
@@ -419,7 +421,7 @@ export default function GoodsPage() {
                   onOpen();
                 }}
               >
-                加入购物车
+                {t("addToCart")}
               </Button>
               <Button
                 className="flex-1"
@@ -429,7 +431,7 @@ export default function GoodsPage() {
                   onOpen();
                 }}
               >
-                立即购买
+                {t("buyNow")}
               </Button>
             </div>
           </div>
@@ -445,14 +447,15 @@ export default function GoodsPage() {
         <DrawerContent>
           {() => (
             <>
-              <DrawerHeader className="flex items-center gap-2">
-                <div>
+              <DrawerHeader className="flex items-center justify-start gap-2">
+                <div className="h-[70px] w-[70px] flex-shrink-0">
                   <Image
                     fit="contain"
-                    height="70px"
+                    height={70}
                     src={
                       currentSku?.imgUrl ?? goodsInfo?.productInfo.imgList[0]
                     }
+                    width={70}
                   />
                 </div>
                 <div className="">
@@ -509,7 +512,7 @@ export default function GoodsPage() {
                   },
                 )}
                 <div>
-                  <div className="my-2 text-sm font-bold">数量</div>
+                  <div className="my-2 text-sm font-bold">{t("quantity")}</div>
                   <div className="w-[40%]">
                     <Stepper
                       value={quantity}
@@ -523,7 +526,7 @@ export default function GoodsPage() {
                     classNames={{
                       inputWrapper: "bg-[#f5f5f5]",
                     }}
-                    placeholder="Enter your description"
+                    placeholder={t("enterDescription")}
                     value={remark}
                     onChange={(e) => setRemark(e.target.value)}
                   />
@@ -537,7 +540,7 @@ export default function GoodsPage() {
                     isLoading={issub}
                     onPress={handleBuyNow}
                   >
-                    立即购买
+                    {t("buyNow")}
                   </Button>
                 ) : (
                   <Button
@@ -545,7 +548,7 @@ export default function GoodsPage() {
                     isLoading={issub}
                     onPress={() => add()}
                   >
-                    加入购物车
+                    {t("addToCart")}
                   </Button>
                 )}
               </DrawerFooter>
@@ -571,7 +574,7 @@ export default function GoodsPage() {
       >
         <div>
           <div className="my-4 rounded-lg bg-[#ffeee1] p-2 text-sm">
-            您提交的产品可能存在一定的寄送风险。为了您的资金安全，我们暂时无法为您提供在线订购服务。如需了解更多信息，请联系在线客服！
+            {t("riskMessage")}
           </div>
           {/* <div className="mt-5 mb-2">如果您支付成功，请点击支付完成。</div>
           <div className="mb-5">

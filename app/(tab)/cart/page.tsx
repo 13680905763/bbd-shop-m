@@ -9,6 +9,7 @@ import {
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 import ShopCard from "./shop-card";
 
@@ -19,6 +20,7 @@ import { useCartList } from "@/hook";
 import CommonModal from "@/components/modal/common-modal";
 
 export default function Cart() {
+  const t = useTranslations("Cart"); // ✅ 命名空间 cart
   const { data, isLoading, isError } = useCartList();
 
   const router = useRouter();
@@ -208,19 +210,18 @@ export default function Cart() {
     }
   }, [data]);
 
-  if (isLoading) return <div>加载中...</div>;
   if (isError) return <div>出错了</div>;
 
   return (
     <div className="flex h-[100%] flex-col justify-between overflow-hidden">
       <div className="flex justify-between p-2">
         <div>
-          <span className="text-lg font-bold">Cart</span>
+          <span className="text-lg font-bold">{t("title")}</span>
           (0)
         </div>
         <div className="flex items-center">
           <button onClick={() => setIsEdit(!isEdit)}>
-            {isEdit ? "取消" : "管理"}
+            {isEdit ? t("cancel") : t("manage")}
           </button>
         </div>
       </div>
@@ -247,21 +248,21 @@ export default function Cart() {
             isSelected={isAllSelected()}
             onChange={(e) => toggleAll(e.target.checked)}
           >
-            全选
+            {t("selectAll")}
           </Checkbox>
         </div>
         <div className="flex items-center gap-2">
           <p className="text-price-lg">￥{togglePrice}</p>
           <Button color="primary" onPress={submitCart}>
-            {isEdit ? "删除" : "结算"}
+            {isEdit ? t("delete") : t("checkout")}
           </Button>
         </div>
       </div>
 
       <ConfirmModal
-        content="确定要删除当前商品吗？"
+        content={t("confirm.deleteContent")}
         isOpen={!!pendingDeleteIds}
-        title="删除购物车"
+        title={t("confirm.deleteTitle")}
         onConfirm={(onClose) => {
           if (pendingDeleteIds) {
             handleDeleteCart(pendingDeleteIds, onClose);
@@ -271,12 +272,12 @@ export default function Cart() {
       />
       <CommonModal
         isOpen={isOpenRemark}
-        title="备注"
+        title={t("remark.title")}
         onConfirm={submitRemark}
         onOpenChange={onOpenChangeRemark}
       >
         <Textarea
-          placeholder="请输入备注"
+          placeholder={t("remark.placeholder")}
           value={remarkText}
           onChange={(e) => setRemarkText(e.target.value)}
         />
