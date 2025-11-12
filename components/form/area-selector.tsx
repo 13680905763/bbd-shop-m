@@ -1,6 +1,7 @@
 "use client";
 
 import { Autocomplete, AutocompleteItem, Avatar } from "@heroui/react";
+import { useTranslations } from "next-intl";
 
 import {
   useCountries,
@@ -25,6 +26,7 @@ interface Props {
 }
 
 export default function AreaSelector({ value, onChange }: Props) {
+  const t = useTranslations("components.areaSelector");
   const { data: countries = [] } = useCountries();
   const { data: states = [] } = useProvinces(value.countryId);
   const { data: cities = [] } = useCities(value.stateId);
@@ -45,8 +47,9 @@ export default function AreaSelector({ value, onChange }: Props) {
   return (
     <div className="flex flex-col gap-4">
       <Autocomplete
-        label="国家"
-        placeholder="选择国家"
+        isRequired={true}
+        label={t("country.label")}
+        placeholder={t("country.placeholder")}
         selectedKey={String(value.countryId) || null}
         variant="bordered"
         onSelectionChange={(code) =>
@@ -61,35 +64,39 @@ export default function AreaSelector({ value, onChange }: Props) {
       </Autocomplete>
 
       <Autocomplete
-        label="省份"
-        placeholder="选择省份"
+        isRequired={true}
+        label={t("state.label")}
+        placeholder={t("state.placeholder")}
         selectedKey={String(value.stateId) || null}
         variant="bordered"
-        onSelectionChange={(code) =>
-          onChange({
+        onSelectionChange={(code) => {
+          return onChange({
             ...value,
             stateId: String(code),
-            city: "",
-          })
-        }
+            city: states?.find((item: any) => item.id == code)?.name || "",
+          });
+        }}
       >
         {states.map(renderItem)}
       </Autocomplete>
 
-      <Autocomplete
-        label="城市"
-        placeholder="选择城市"
-        selectedKey={String(value.city) || null}
-        variant="bordered"
-        onSelectionChange={(code) =>
-          onChange({
-            ...value,
-            city: String(code),
-          })
-        }
-      >
-        {cities.map(renderItem)}
-      </Autocomplete>
+      {cities.length > 0 ? (
+        <Autocomplete
+          isRequired={true}
+          label={t("city.label")}
+          placeholder={t("city.placeholder")}
+          selectedKey={String(value.city) || null}
+          variant="bordered"
+          onSelectionChange={(code) =>
+            onChange({
+              ...value,
+              city: String(code),
+            })
+          }
+        >
+          {cities.map(renderItem)}
+        </Autocomplete>
+      ) : null}
     </div>
   );
 }

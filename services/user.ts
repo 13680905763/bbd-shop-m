@@ -72,8 +72,8 @@ export const updateUserInfo = (data: any): Promise<UserInfo> => {
   );
 };
 /** 获取用户信息 */
-export const getMessageList = (query: string = ""): Promise<any> => {
-  return request.get(`/system-notice/list${query}`);
+export const getMessageList = (params: string = ""): Promise<any> => {
+  return request.get(`/system-notice/list`, { params });
 };
 /** 已读用户信息 */
 export const readMessage = (id: string): Promise<any> => {
@@ -104,4 +104,8 @@ export const uploadAvatar = async (file: File) => {
     console.error("请求失败:", error);
     throw error + "上用户头像";
   }
+};
+/** 获取积分列表 */
+export const getPointsList = (current: number, size: number): Promise<any> => {
+  return request.get(`/customer-points-detail?current=${current}&size=${size}`);
 };

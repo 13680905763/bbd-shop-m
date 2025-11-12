@@ -5,8 +5,8 @@ import React, { useState } from "react";
 
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
-import { addToast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 import AddressItem from "./address-item";
 
@@ -18,61 +18,83 @@ import { useBillingAddressList } from "@/hook";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
 type ModalType = "add" | "edit" | "delete" | null;
 const initAddress = {
-  recipient: "",
+  familyName: "",
+  givenName: "",
   phone: "",
   countryId: "",
   stateId: "",
   city: "",
   addressType: "",
   postcode: "",
-  defaultAddress: 0,
+  doorNo: "",
 };
-const fieldsaddress: FieldConfig[] = [
-  {
-    type: "input",
-    name: "recipient",
-    label: "收件人",
-    placeholder: "请输入收件人姓名",
-  },
-  {
-    type: "input",
-    name: "phone",
-    label: "联系方式",
-    placeholder: "请输入联系方式",
-  },
-  {
-    type: "area",
-    name: "area",
-    label: "area",
-    placeholder: "area",
-  },
 
-  {
-    type: "input",
-    name: "address",
-    label: "详细地址",
-    placeholder: "请输入您详细地址",
-  },
-  {
-    type: "input",
-    name: "postcode",
-    label: "邮编",
-    placeholder: "请输入邮编",
-  },
+export default function BillingAddress() {
+  const t = useTranslations("profile.billingAddress"); // 绑定 JSON 路径
 
-  {
-    type: "checkbox",
-    name: "defaultAddress",
-    label: "设为默认地址",
-  },
-];
-
-export default function Cart() {
   const { data, isLoading } = useBillingAddressList();
   const [modalType, setModalType] = useState<ModalType>(null);
   const [currentData, setCurrentData] = useState<any>(initAddress);
   const queryClient = useQueryClient();
   const router = useRouter();
+
+  const fieldsAddress: FieldConfig[] = [
+    {
+      type: "input",
+      name: "familyName",
+      label: t("formModal.fields.familyName.label"),
+      placeholder: t("formModal.fields.familyName.placeholder"),
+      required: true,
+      key: "familyName",
+    },
+    {
+      type: "input",
+      name: "givenName",
+      label: t("formModal.fields.givenName.label"),
+      placeholder: t("formModal.fields.givenName.placeholder"),
+      required: true,
+      key: "givenName",
+    },
+    {
+      type: "input",
+      name: "phone",
+      label: t("formModal.fields.phone.label"),
+      placeholder: t("formModal.fields.phone.placeholder"),
+      required: true,
+      key: "phone",
+    },
+    {
+      type: "area",
+      name: "area",
+      label: t("formModal.fields.area.label"),
+      placeholder: t("formModal.fields.area.placeholder"),
+      key: "area",
+    },
+    {
+      type: "input",
+      name: "address",
+      label: t("formModal.fields.address.label"),
+      placeholder: t("formModal.fields.address.placeholder"),
+      required: true,
+      key: "address",
+    },
+    {
+      type: "input",
+      name: "doorNo",
+      label: t("formModal.fields.doorNo.label"),
+      placeholder: t("formModal.fields.doorNo.placeholder"),
+      required: true,
+      key: "doorNo",
+    },
+    {
+      type: "input",
+      name: "postcode",
+      label: t("formModal.fields.postcode.label"),
+      placeholder: t("formModal.fields.postcode.placeholder"),
+      required: true,
+      key: "postcode",
+    },
+  ];
   const handleAdd = () => {
     setCurrentData(initAddress);
     setModalType("add");
@@ -89,39 +111,27 @@ export default function Cart() {
   };
   // 地址保存时处理
   const handleSave = async () => {
-    console.log("当前行数据:", currentData);
     const { createTime, updateTime, customerId, ...filteredData } = currentData;
 
     try {
       if (modalType === "add") {
-        const tip = await addAddress({ ...currentData, addressType: 1 }); // 新增接口
-
-        addToast({
-          title: tip,
-          timeout: 1000,
-          color: "success",
-        });
+        await addAddress({
+          ...currentData,
+          addressType: 2,
+          defaultAddress: 1,
+        }); // 新增接口
       } else if (modalType === "edit") {
-        const tip = await updateAddress(filteredData); // 编辑接口
-
-        addToast({
-          title: tip,
-          timeout: 1000,
-          color: "success",
-        });
+        await updateAddress({
+          ...filteredData,
+          city: filteredData?.city || filteredData?.state,
+        }); // 编辑接口
       } else if (modalType === "delete") {
-        const tip = await deleteAddress(currentData.id);
-
-        addToast({
-          title: tip,
-          timeout: 1000,
-          color: "success",
-        });
+        await deleteAddress({ id: currentData.id });
       }
       setModalType(null);
-    } catch (e) {
+    } catch {
     } finally {
-      queryClient.invalidateQueries({ queryKey: ["billingAddressList"] }); // 手动刷新
+      queryClient.invalidateQueries({ queryKey: ["billingAddress"] }); // 手动刷新
     }
   };
 
@@ -134,11 +144,13 @@ export default function Cart() {
       <NavBar
         className="bg-white"
         right={
-          data.length === 0 ? <button onClick={handleAdd}>添加</button> : null
+          data?.length === 0 ? (
+            <button onClick={handleAdd}>{t("addButton")}</button>
+          ) : null
         }
         onBack={() => router.back()}
       >
-        账单地址
+        {t("title")}
       </NavBar>
 
       <div className="flex-1 overflow-auto px-3">
@@ -152,10 +164,14 @@ export default function Cart() {
         ))}
       </div>
       <FormModal
-        fields={fieldsaddress}
+        fields={fieldsAddress}
         formData={currentData}
         isOpen={modalType === "add" || modalType === "edit"}
-        title={modalType === "add" ? "添加地址" : "编辑地址"}
+        title={
+          modalType === "add"
+            ? t("formModal.addTitle")
+            : t("formModal.editTitle")
+        }
         onChange={setCurrentData}
         onOpenChange={(open) => {
           if (!open) setModalType(null);
@@ -163,11 +179,12 @@ export default function Cart() {
         onSave={handleSave}
       />
       <ConfirmModal
-        content={`确定要删除该地址吗？`}
+        cancelText={t("confirmDelete.cancelText")}
+        confirmText={t("confirmDelete.confirmText")}
+        content={t("confirmDelete.content")}
         isOpen={modalType === "delete"}
-        onConfirm={(close) => {
-          handleSave();
-          close();
+        onConfirm={async () => {
+          await handleSave();
         }}
         onOpenChange={(open) => {
           if (!open) setModalType(null);

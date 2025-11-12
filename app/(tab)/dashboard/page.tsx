@@ -1,21 +1,49 @@
 "use client";
 import { Avatar } from "@heroui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoChevronForwardSharp, IoSettings } from "react-icons/io5";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-import { useUserStore, useWalletStore } from "@/store";
+import { getUserInfo } from "@/services";
+import { getWalletInfo } from "@/services/wallet";
+import FullscreenLoader from "@/components/common/fullscreen-loader";
+import { useGlobalStore } from "@/store";
 
 export default function DashBoard() {
+  const t = useTranslations("dashboard");
   const router = useRouter();
-  const user = useUserStore((state) => state.user);
-  const wallet = useWalletStore((state) => state.wallet);
-  const t = useTranslations("Dashboard");
+  const { currency } = useGlobalStore();
+
+  // ✅ 页面加载状态
+  const [user, setUser] = useState<any>(null);
+  const [wallet, setWallet] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [userRes, walletRes]: any = await Promise.all([
+          getUserInfo(),
+          getWalletInfo(),
+        ]);
+
+        setUser(userRes);
+        setWallet(walletRes);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className="flex flex-1 flex-col overflow-auto p-3 scrollbar-hide">
+      {loading && <FullscreenLoader />}
       <div className="flex justify-between px-4">
         <NextLink href="/profile">
           <div className="flex items-center gap-2 text-black">
@@ -35,14 +63,17 @@ export default function DashBoard() {
           className="flex flex-1 flex-col items-center justify-center"
           href="/wallet"
         >
-          <div className="text-title-xl">{wallet?.availabalBalance}</div>
+          <div className="text-title-xl">
+            {currency.symbol}
+            {wallet?.availabalBalance}
+          </div>
           <div>{t("balance")}</div>
         </NextLink>
         <NextLink
           className="flex flex-1 flex-col items-center justify-center"
-          href="/wallet/score"
+          href="/wallet/points"
         >
-          <div className="text-title-xl">0</div>
+          <div className="text-title-xl"> {user?.myPoints}</div>
           <div>{t("points")}</div>
         </NextLink>
       </div>
@@ -124,3 +155,5 @@ export default function DashBoard() {
     </div>
   );
 }
+//
+//

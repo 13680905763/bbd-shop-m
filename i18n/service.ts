@@ -2,15 +2,9 @@
 
 import { cookies, headers } from "next/headers";
 
-import {
-  languages,
-  defaultLocale,
-  currencies,
-  defaultCurrency,
-} from "./config";
+import { languages, defaultLocale } from "./config";
 
 const COOKIE_LOCALE = "NEXT_LOCALE";
-const COOKIE_CURRENCY = "NEXT_CURRENCY";
 
 // =====================
 // 语言方法
@@ -38,28 +32,6 @@ export async function setUserLocale(locale: string) {
   cookieStore.set({
     name: COOKIE_LOCALE,
     value: locale,
-    path: "/",
-  });
-}
-
-// =====================
-// 货币方法
-// =====================
-export async function getUserCurrency() {
-  const cookieStore = await cookies();
-  const currency = cookieStore.get(COOKIE_CURRENCY)?.value || "";
-
-  return currencies.some((c) => c.value === currency)
-    ? currency
-    : defaultCurrency;
-}
-
-export async function setUserCurrency(currency: string) {
-  const cookieStore = await cookies();
-
-  cookieStore.set({
-    name: COOKIE_CURRENCY,
-    value: currency,
     path: "/",
   });
 }

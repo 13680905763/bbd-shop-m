@@ -69,7 +69,7 @@ export default function BillingAddress({ billingAddress }: any) {
   console.log("billingAddress", billingAddress);
 
   const [modalType, setModalType] = useState<ModalType>(null);
-  const [currentRowData, setCurrentRowData] = useState<any>(initAddress);
+  const [currentData, setCurrentData] = useState<any>(initAddress);
 
   const handleAdd = () => {
     setCurrentRowData(initAddress);
@@ -82,12 +82,15 @@ export default function BillingAddress({ billingAddress }: any) {
 
   // 地址保存时处理
   const handleSave = async () => {
-    const { createTime, updateTime, customerId, ...filteredData } =
-      currentRowData;
+    const { createTime, updateTime, customerId, ...filteredData } = currentData;
 
     try {
       if (modalType === "add") {
-        await addAddress({ ...currentRowData, addressType: 2 }); // 新增接口
+        await addAddress({
+          ...currentData,
+          addressType: 2,
+          defaultAddress: 1,
+        }); // 新增接口
       } else if (modalType === "edit") {
         await updateAddress({
           ...filteredData,
@@ -105,14 +108,14 @@ export default function BillingAddress({ billingAddress }: any) {
   };
 
   useEffect(() => {
-    setCurrentRowData(billingAddress);
-    console.log("currentRowData", currentRowData);
+    setCurrentData(billingAddress);
+    console.log("currentRowData", currentData);
   }, [billingAddress]);
 
   return (
     <>
       {Object.keys(billingAddress as AddressItem).length ? (
-        <div className="relative p-4 border-2 border-dashed border-[#5e5e5e] rounded-xl">
+        <div className="relative rounded-xl border-2 border-dashed border-[#5e5e5e] p-4">
           <div className="flex justify-between">
             <div className="flex gap-8">
               <div className="text-title">{billingAddress?.recipient}</div>
@@ -127,19 +130,19 @@ export default function BillingAddress({ billingAddress }: any) {
 
           {/* 编辑按钮放在右下角 */}
           <button
-            className="absolute bottom-2 right-4 flex items-center gap-1 text-sm text-[#f0700c]  transition"
+            className="absolute bottom-2 right-4 flex items-center gap-1 text-sm text-[#f0700c] transition"
             onClick={handleEdit}
           >
-            <AiOutlineEdit className="w-4 h-4" />
+            <AiOutlineEdit className="h-4 w-4" />
             <span>编辑</span>
           </button>
         </div>
       ) : (
         <button
-          className="p-6 border-2 border-dashed border-[#5e5e5e] w-full"
+          className="w-full border-2 border-dashed border-[#5e5e5e] p-6"
           onClick={handleAdd}
         >
-          <p className="flex items-center gap-2 justify-center">
+          <p className="flex items-center justify-center gap-2">
             <span>+</span>
             <span>添加账单地址</span>
           </p>
@@ -148,10 +151,10 @@ export default function BillingAddress({ billingAddress }: any) {
 
       <FormModal
         fields={fieldsaddress}
-        formData={currentRowData}
+        formData={currentData}
         isOpen={modalType === "add" || modalType === "edit"}
         title={modalType === "add" ? "添加地址" : "编辑地址"}
-        onChange={setCurrentRowData}
+        onChange={setCurrentData}
         onOpenChange={(open) => {
           if (!open) setModalType(null);
         }}

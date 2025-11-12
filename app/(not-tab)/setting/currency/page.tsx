@@ -6,8 +6,6 @@ import { Radio, RadioGroup, cn, Button } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-import { currencies } from "@/i18n/config";
-import { setUserCurrency } from "@/i18n/service";
 import { useGlobalStore } from "@/store";
 
 const CustomRadio = (props: any) => {
@@ -33,9 +31,9 @@ const CustomRadio = (props: any) => {
 export default function CurrencySettingPage() {
   const t = useTranslations("Setting.CurrencyPage"); // ✅ 使用 next-intl
   const router = useRouter();
-  const { currency, setCurrency } = useGlobalStore();
+  const { currency, setCurrency, currencies } = useGlobalStore();
 
-  const [tempCurrency, setTempCurrency] = useState<string>(currency);
+  const [tempCurrency, setTempCurrency] = useState<any>({ ...currency });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
@@ -43,9 +41,8 @@ export default function CurrencySettingPage() {
     try {
       console.log("保存选择货币:", tempCurrency);
       setCurrency(tempCurrency);
-      localStorage.setItem("currency", tempCurrency);
-      await setUserCurrency(tempCurrency);
-      router.push("/");
+      localStorage.setItem("currency", JSON.stringify(tempCurrency));
+      window.location.href = "/m";
     } finally {
       setLoading(false);
     }
@@ -59,8 +56,13 @@ export default function CurrencySettingPage() {
       <div className="flex flex-col gap-4 p-2">
         <RadioGroup
           className="w-full"
-          value={tempCurrency}
-          onValueChange={(val) => setTempCurrency(val as string)}
+          size="sm"
+          value={tempCurrency?.value ?? ""}
+          onValueChange={(val) => {
+            const selected = currencies.find((c) => c.value === val);
+
+            setTempCurrency(selected);
+          }}
         >
           {currencies.map((item) => (
             <CustomRadio key={item.value} value={item.value}>

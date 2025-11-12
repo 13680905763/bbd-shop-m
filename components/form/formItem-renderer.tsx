@@ -16,14 +16,15 @@ export interface FieldOption {
 }
 
 export interface FieldConfig {
+  key: string; // 用于 React 元素 key
   type: "input" | "select" | "checkbox" | "date" | "area";
-  name: string;
+  name: string; // 用于 formData
   label?: string;
   placeholder?: string;
+  size?: "sm" | "md" | "lg";
+  required?: boolean;
   options?: FieldOption[];
-  size?: "sm" | "md" | "lg"; // ✅ 新增 size 支持
   startContent?: React.ReactNode;
-  isRequired?: boolean;
 }
 
 interface DynamicFormProps<T extends Record<string, any>> {
@@ -47,6 +48,7 @@ export default function FormItemRenderer<T extends Record<string, any>>({
     <>
       {fields.map((field) => {
         const {
+          key,
           type,
           name,
           label,
@@ -54,6 +56,7 @@ export default function FormItemRenderer<T extends Record<string, any>>({
           options = [],
           size = "md",
           startContent = "",
+          required = false,
         } = field; // 默认 md
         const value = formData[name] ?? "";
 
@@ -61,11 +64,12 @@ export default function FormItemRenderer<T extends Record<string, any>>({
           case "input":
             return (
               <Input
-                key={name}
+                key={key}
                 classNames={{
                   input: "text-base",
                   inputWrapper: "bg-white",
                 }}
+                isRequired={required}
                 label={label}
                 placeholder={placeholder}
                 size={size}

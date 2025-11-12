@@ -8,7 +8,6 @@ import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
 import { ViewportFixer } from "@/components/viewport-fixer";
-import FullscreenLoader from "@/components/common/fullscreen-loader";
 
 export const metadata: Metadata = {
   title: {
@@ -36,8 +35,6 @@ export default async function RootLayout({
   const locale = await getLocale();
   const messages = await getMessages();
 
-  console.log("messages", messages);
-
   return (
     <html suppressHydrationWarning lang={locale}>
       <head />
@@ -45,7 +42,8 @@ export default async function RootLayout({
         <ViewportFixer />
         <NextIntlClientProvider messages={messages}>
           <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
-            <Suspense fallback={<FullscreenLoader />}>{children}</Suspense>
+            {/* <Suspense fallback={<FullscreenLoader />}>{children}</Suspense> */}
+            <Suspense>{children}</Suspense>
           </Providers>
         </NextIntlClientProvider>
       </body>

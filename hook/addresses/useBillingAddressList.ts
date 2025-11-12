@@ -4,7 +4,7 @@ import { getAddressList } from "@/services";
 
 export const useBillingAddressList = () => {
   return useQuery({
-    queryKey: ["billingAddressList"],
+    queryKey: ["billingAddress"],
     queryFn: () => getAddressList(2),
     staleTime: 5 * 60 * 1000, // 缓存 5 分钟
   });

@@ -246,7 +246,7 @@ export default function SubmitOrder() {
         {/* 服务多选 */}
         <div>
           <div className="mb-2 text-base font-semibold">Packaging Method</div>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-col flex-wrap gap-2">
             {services?.map((svc) => (
               <ServiceCard
                 key={svc.id}

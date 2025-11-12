@@ -1,5 +1,56 @@
 {
-    "Dashboard": {
+    "components": {
+        "form": {
+            "confirm": "Confirm",
+            "cancel": "Cancel",
+            "missingFieldsTitle": "Please fill in: {fields}"
+        },
+        "areaSelector": {
+            "country": {
+                "label": "Country",
+                "placeholder": "Select a country"
+            },
+            "state": {
+                "label": "State / Province",
+                "placeholder": "Select a state"
+            },
+            "city": {
+                "label": "City",
+                "placeholder": "Select a city"
+            }
+        },
+        "confirmModal": {
+            "title": "Action Confirmation",
+            "content": "Are you sure you want to perform this action?",
+            "confirmText": "Confirm",
+            "cancelText": "Cancel"
+        }
+    },
+    "login": {
+        "title": "Sign In",
+        "emailLabel": "Email",
+        "emailPlaceholder": "Enter your email",
+        "passwordPlaceholder": "Enter your password",
+        "loginButton": "Login",
+        "registerButton": "Register",
+        "loginSuccess": "Login successful",
+        "loginFailed": "Login failed, please check your email or password"
+    },
+    "register": {
+        "title": "Sign Up",
+        "emailPlaceholder": "Enter your email",
+        "passwordPlaceholder": "Enter your password",
+        "inviteCodePlaceholder": "Enter your invitation code (leave blank if none)",
+        "agreeToTerms": "I have read and agree to the website terms and conditions",
+        "registerButton": "Register",
+        "loginHint": "Already have an account?",
+        "goLogin": "Go login",
+        "mustAgree": "Please check the unified agreement first",
+        "verifyTitle": "Verify your email (please stay on this page)",
+        "verifyInstruction1": "We have sent a verification code to",
+        "verifyInstruction2": ". Please enter the code below to verify"
+    },
+    "dashboard": {
         "balance": "Balance",
         "points": "Points",
         "coupon": {
@@ -36,12 +87,12 @@
                 {
                     "title": "Affiliate Balance",
                     "value": "88",
-                    "to": "/pages/member/score/index"
+                    "to": "/pages/member/points/index"
                 },
                 {
                     "title": "Withdrawn Amount",
                     "value": "88",
-                    "to": "/pages/member/score/index"
+                    "to": "/pages/member/points/index"
                 }
             ]
         },
@@ -97,41 +148,15 @@
             "placeholder": "Enter remark"
         }
     },
-    "Components": {
-        "Form": {
-            "confirm": "Confirm",
-            "cancel": "Cancel"
-        }
-    },
-    "Profile": {
-        "Page": {
+    "profile": {
+        "profilePage": {
             "title": "Profile Information",
-            "fields": [
-                {
-                    "key": "name",
-                    "type": "input",
-                    "name": "name",
-                    "label": "Username"
-                },
-                {
-                    "key": "familyName",
-                    "type": "input",
-                    "name": "familyName",
-                    "label": "Family Name"
-                },
-                {
-                    "key": "givenName",
-                    "type": "input",
-                    "name": "givenName",
-                    "label": "Given Name"
-                },
-                {
-                    "key": "mobile",
-                    "type": "input",
-                    "name": "mobile",
-                    "label": "Mobile Number"
-                }
-            ]
+            "nameLabel": "Username",
+            "mobileLabel": "Mobile Number",
+            "saveButton": "Save",
+            "edit": "Edit",
+            "uploading": "Uploading avatar...",
+            "loadError": "Failed to load, please try again"
         },
         "OrderPage": {
             "texts": {
@@ -178,6 +203,127 @@
                 "totalFee": "Total Fee",
                 "none": "None"
             }
+        },
+        "address": {
+            "title": "Address",
+            "addButton": "Add",
+            "formModal": {
+                "addTitle": "Add Address",
+                "editTitle": "Edit Address",
+                "fields": {
+                    "recipient": {
+                        "label": "Recipient",
+                        "placeholder": "Enter recipient name"
+                    },
+                    "phone": {
+                        "label": "Phone",
+                        "placeholder": "Enter phone number"
+                    },
+                    "area": {
+                        "label": "Area",
+                        "placeholder": "Select area"
+                    },
+                    "address": {
+                        "label": "Address",
+                        "placeholder": "Enter full address"
+                    },
+                    "doorNo": {
+                        "label": "Door No.",
+                        "placeholder": "Enter door number"
+                    },
+                    "postcode": {
+                        "label": "Postcode",
+                        "placeholder": "Enter postcode"
+                    },
+                    "defaultAddress": {
+                        "label": "Set as default address"
+                    }
+                }
+            },
+            "confirmDelete": {
+                "content": "Are you sure you want to delete this address?",
+                "confirmText": "Confirm",
+                "cancelText": "Cancel"
+            },
+            "defaultAddress": "default Address"
+        },
+        "billingAddress": {
+            "title": "Billing Address",
+            "addButton": "Add",
+            "formModal": {
+                "addTitle": "Add Address",
+                "editTitle": "Edit Address",
+                "fields": {
+                    "familyName": {
+                        "label": "Last Name",
+                        "placeholder": "Enter last name"
+                    },
+                    "givenName": {
+                        "label": "First Name",
+                        "placeholder": "Enter first name"
+                    },
+                    "phone": {
+                        "label": "Phone",
+                        "placeholder": "Enter phone number"
+                    },
+                    "area": {
+                        "label": "Area",
+                        "placeholder": "Select area"
+                    },
+                    "address": {
+                        "label": "Detailed Address",
+                        "placeholder": "Enter full address"
+                    },
+                    "doorNo": {
+                        "label": "Door No.",
+                        "placeholder": "Enter door number"
+                    },
+                    "postcode": {
+                        "label": "Postal Code",
+                        "placeholder": "Enter postal code"
+                    }
+                }
+            },
+            "confirmDelete": {
+                "content": "Are you sure you want to delete this address?",
+                "confirmText": "Confirm",
+                "cancelText": "Cancel"
+            }
+        },
+        "messagePage": {
+            "navBar": {
+                "title": "Messages",
+                "manage": "Manage",
+                "cancel": "Cancel"
+            },
+            "tabs": {
+                "all": "All",
+                "unread": "Unread",
+                "read": "Read"
+            },
+            "bottomBar": {
+                "selectAll": "Select All",
+                "delete": "Delete"
+            },
+            "modal": {
+                "view": {
+                    "close": "Close",
+                    "noContent": "No content",
+                    "markAsRead": "Mark as read"
+                },
+                "delete": {
+                    "close": "Close",
+                    "confirm": "Delete",
+                    "title": "Delete Messages",
+                    "content": "Are you sure you want to delete {count} selected messages?"
+                }
+            },
+            "item": {
+                "status": {
+                    "unread": "Unread",
+                    "read": "Read"
+                }
+            }
         }
     },
     "Setting": {
@@ -208,8 +354,8 @@
             "save": "Save"
         }
     },
-    "Wallet": {
-        "Page": {
+    "wallet": {
+        "walletPage": {
             "title": "My Account",
             "record": "Record",
             "totalBalance": "Total Balance",

@@ -1,64 +1,58 @@
 "use client";
 
-import { Button } from "@heroui/react";
 import React, { useState } from "react";
 import { IoLockClosed, IoPerson } from "react-icons/io5";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import { LoginFormData } from "@/types";
 import { loginCustomer } from "@/services";
 import CommonForm from "@/components/form/common-form";
 import { FieldConfig } from "@/components/form/formItem-renderer";
-import { handleAuthSuccess } from "@/lib/auth-handler";
-const loginFormFields: FieldConfig[] = [
-  {
-    type: "input",
-    name: "email",
-    placeholder: "Enter your email",
-    startContent: <IoPerson />,
-  },
-  {
-    type: "input",
-    name: "password",
-    placeholder: "password",
-    startContent: <IoLockClosed />,
-  },
-];
 
 export default function LoginPage() {
+  const t = useTranslations("login");
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
   });
-  const redirect = searchParams.get("redirect") || "/"; // 默认为首页
+  const loginFormFields: FieldConfig[] = [
+    {
+      type: "input",
+      name: "email",
+      key: "email",
+      placeholder: t("emailPlaceholder"),
+      startContent: <IoPerson />,
+    },
+    {
+      type: "input",
+      name: "password",
+      key: "password",
+      placeholder: t("passwordPlaceholder"),
+      startContent: <IoLockClosed />,
+    },
+  ];
   const handleSubmit = async (data: LoginFormData) => {
     try {
-      const res = await loginCustomer(data);
-
-      await handleAuthSuccess(redirect, res, router);
-    } catch (err) {
-      // 错误处理可选在这里写
+      await loginCustomer(data);
+      router.push("/");
+    } catch {
+      // 可以加 toast 提示
     }
   };
 
   return (
     <div>
       <CommonForm
-        confirmText="登录"
+        cancelText={t("registerButton")}
+        confirmText={t("loginButton")}
         fields={loginFormFields}
         formData={formData}
+        onCancel={() => router.push("/register")}
         onChange={setFormData}
         onSubmit={handleSubmit}
-      >
-        <Button
-          className="button-default"
-          onPress={() => router.push("/register")}
-        >
-          注册
-        </Button>
-      </CommonForm>
+      />
     </div>
   );
 }

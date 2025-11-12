@@ -1,5 +1,56 @@
 {
-    "Dashboard": {
+    "components": {
+        "form": {
+            "confirm": "确认",
+            "cancel": "取消",
+            "missingFieldsTitle": "请填写：{fields}"
+        },
+        "areaSelector": {
+            "country": {
+                "label": "国家",
+                "placeholder": "选择国家"
+            },
+            "state": {
+                "label": "省份",
+                "placeholder": "选择省份"
+            },
+            "city": {
+                "label": "城市",
+                "placeholder": "选择城市"
+            }
+        },
+        "confirmModal": {
+            "title": "操作确认",
+            "content": "确定要执行这个操作吗？",
+            "confirmText": "确认",
+            "cancelText": "取消"
+        }
+    },
+    "login": {
+        "title": "用户登录",
+        "emailLabel": "邮箱",
+        "emailPlaceholder": "请输入邮箱地址",
+        "passwordPlaceholder": "请输入密码",
+        "loginButton": "登录",
+        "registerButton": "注册",
+        "loginSuccess": "登录成功",
+        "loginFailed": "登录失败，请检查账号或密码"
+    },
+    "register": {
+        "title": "用户注册",
+        "emailPlaceholder": "请输入邮箱地址",
+        "passwordPlaceholder": "请输入密码",
+        "inviteCodePlaceholder": "请输入邀请码（没有请留空）",
+        "agreeToTerms": "我已阅读并同意网站条款与条件",
+        "registerButton": "注册",
+        "loginHint": "已经有账号？",
+        "goLogin": "去登录",
+        "mustAgree": "请先勾选同意网站条款",
+        "verifyTitle": "验证你的电子邮箱（请勿离开此页面）",
+        "verifyInstruction1": "我们已经发送验证码到",
+        "verifyInstruction2": "。请在下面输入验证码进行验证"
+    },
+    "dashboard": {
         "balance": "余额",
         "points": "积分",
         "coupon": {
@@ -36,12 +87,12 @@
                 {
                     "title": "联盟余额",
                     "value": "88",
-                    "to": "/pages/member/score/index"
+                    "to": "/pages/member/points/index"
                 },
                 {
                     "title": "已提现金额",
                     "value": "88",
-                    "to": "/pages/member/score/index"
+                    "to": "/pages/member/points/index"
                 }
             ]
         },
@@ -97,41 +148,14 @@
             "placeholder": "输入备注"
         }
     },
-    "Components": {
-        "Form": {
-            "confirm": "确认",
-            "cancel": "取消"
-        }
-    },
-    "Profile": {
-        "Page": {
+    "profile": {
+        "profilePage": {
             "title": "个人信息",
-            "fields": [
-                {
-                    "key": "name",
-                    "type": "input",
-                    "name": "name",
-                    "label": "用户名"
-                },
-                {
-                    "key": "familyName",
-                    "type": "input",
-                    "name": "familyName",
-                    "label": "姓氏"
-                },
-                {
-                    "key": "givenName",
-                    "type": "input",
-                    "name": "givenName",
-                    "label": "名字"
-                },
-                {
-                    "key": "mobile",
-                    "type": "input",
-                    "name": "mobile",
-                    "label": "手机号码"
-                }
-            ]
+            "nameLabel": "用户名",
+            "mobileLabel": "手机号码",
+            "saveButton": "保存",
+            "edit": "编辑",
+            "uploading": "头像上传中..."
         },
         "OrderPage": {
             "texts": {
@@ -178,6 +202,127 @@
                 "totalFee": "总费用",
                 "none": "无"
             }
+        },
+        "address": {
+            "title": "地址",
+            "addButton": "添加",
+            "formModal": {
+                "addTitle": "添加地址",
+                "editTitle": "编辑地址",
+                "fields": {
+                    "recipient": {
+                        "label": "收件人",
+                        "placeholder": "输入收件人姓名"
+                    },
+                    "phone": {
+                        "label": "电话",
+                        "placeholder": "输入电话号码"
+                    },
+                    "area": {
+                        "label": "地区",
+                        "placeholder": "选择地区"
+                    },
+                    "address": {
+                        "label": "地址",
+                        "placeholder": "输入完整地址"
+                    },
+                    "doorNo": {
+                        "label": "门牌号",
+                        "placeholder": "输入门牌号"
+                    },
+                    "postcode": {
+                        "label": "邮编",
+                        "placeholder": "输入邮政编码"
+                    },
+                    "defaultAddress": {
+                        "label": "设为默认地址"
+                    }
+                }
+            },
+            "confirmDelete": {
+                "content": "确定要删除该地址吗？",
+                "confirmText": "确认",
+                "cancelText": "取消"
+            },
+            "defaultAddress": "默认地址"
+        },
+        "billingAddress": {
+            "title": "账单地址",
+            "addButton": "添加",
+            "formModal": {
+                "addTitle": "添加地址",
+                "editTitle": "编辑地址",
+                "fields": {
+                    "familyName": {
+                        "label": "姓",
+                        "placeholder": "请输入姓"
+                    },
+                    "givenName": {
+                        "label": "名",
+                        "placeholder": "请输入名"
+                    },
+                    "phone": {
+                        "label": "电话",
+                        "placeholder": "请输入电话号码"
+                    },
+                    "area": {
+                        "label": "地区",
+                        "placeholder": "请选择地区"
+                    },
+                    "address": {
+                        "label": "详细地址",
+                        "placeholder": "请输入完整地址"
+                    },
+                    "doorNo": {
+                        "label": "门牌号",
+                        "placeholder": "请输入门牌号"
+                    },
+                    "postcode": {
+                        "label": "邮编",
+                        "placeholder": "请输入邮政编码"
+                    }
+                }
+            },
+            "confirmDelete": {
+                "content": "确定要删除该地址吗？",
+                "confirmText": "确认",
+                "cancelText": "取消"
+            }
+        },
+        "messagePage": {
+            "navBar": {
+                "title": "消息",
+                "manage": "管理",
+                "cancel": "取消"
+            },
+            "tabs": {
+                "all": "全部",
+                "unread": "未读",
+                "read": "已读"
+            },
+            "bottomBar": {
+                "selectAll": "全选",
+                "delete": "删除"
+            },
+            "modal": {
+                "view": {
+                    "close": "关闭",
+                    "noContent": "暂无内容",
+                    "markAsRead": "标记为已读"
+                },
+                "delete": {
+                    "close": "关闭",
+                    "confirm": "删除",
+                    "title": "删除消息",
+                    "content": "确定删除选中的 {count} 条消息吗？"
+                }
+            },
+            "item": {
+                "status": {
+                    "unread": "未读",
+                    "read": "已读"
+                }
+            }
         }
     },
     "Setting": {
@@ -208,8 +353,8 @@
             "save": "保存"
         }
     },
-    "Wallet": {
-        "Page": {
+    "wallet": {
+        "walletPage": {
             "title": "我的账户",
             "record": "记录",
             "totalBalance": "总余额",

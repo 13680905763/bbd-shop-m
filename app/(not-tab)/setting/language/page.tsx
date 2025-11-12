@@ -33,18 +33,18 @@ const CustomRadio = (props: any) => {
 export default function Settingpage() {
   const t = useTranslations("Setting.LanguagePage"); // ✅ 命名空间建议叫 Setting
   const router = useRouter();
-  const { locale, setLocale } = useGlobalStore();
+  const { language, setLanguage } = useGlobalStore();
 
-  const [tempLocale, setTempLocale] = useState<string>(locale);
+  const [tempLanguage, setTempLanguage] = useState<string>(language);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      console.log("保存选择语言:", tempLocale);
-      setLocale(tempLocale);
-      localStorage.setItem("locale", tempLocale);
-      await setUserLocale(tempLocale);
+      console.log("保存选择语言:", tempLanguage);
+      setLanguage(tempLanguage);
+      localStorage.setItem("locale", tempLanguage);
+      await setUserLocale(tempLanguage);
       router.push("/");
       // window.location.reload();
     } catch {
@@ -61,8 +61,8 @@ export default function Settingpage() {
       <div className="flex flex-col gap-4 p-2">
         <RadioGroup
           className="w-full"
-          value={tempLocale}
-          onValueChange={(val) => setTempLocale(val as string)}
+          value={tempLanguage}
+          onValueChange={(val) => setTempLanguage(val as string)}
         >
           {languages.map((item) => (
             <CustomRadio key={item.value} value={item.value}>

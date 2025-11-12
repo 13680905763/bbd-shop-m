@@ -1,5 +1,5 @@
-import { Button, Form } from "@heroui/react";
-import React, { ReactNode, useState } from "react";
+import { addToast, Button, Form } from "@heroui/react";
+import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 
 import FormItemRenderer, { FieldConfig } from "./formItem-renderer";
@@ -9,9 +9,10 @@ interface CommonFormProps<T extends Record<string, any> = Record<string, any>> {
   formData: T;
   onChange: (data: T) => void;
   onSubmit?: (data: T) => Promise<void> | void; // ✅ 支持异步
+  onCancel?: () => Promise<void> | void; // ✅ 支持异步
   confirmText?: string;
-  children?: ReactNode;
-  loading?: boolean; // ✅ 外部可控
+  cancelText?: string;
+  showCancelButton?: boolean; // 默认 true
 }
 
 export default function CommonForm<T extends Record<string, any>>({
@@ -19,22 +20,47 @@ export default function CommonForm<T extends Record<string, any>>({
   formData,
   onChange,
   onSubmit,
+  onCancel,
   confirmText,
-  children,
+  cancelText,
+  showCancelButton = true, // 默认 true
 }: CommonFormProps<T>) {
-  const t = useTranslations("Components.Form");
+  const t = useTranslations("components.form");
+  const [loading, setLoading] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(false);
-
+  const handleCancel = async () => {
+    if (!onCancel) return;
+    try {
+      setLoading(true);
+      await onCancel();
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault(); // ✅ 提前阻止默认提交
+
+    const missingFields = fields
+      .filter((f) => f.required && !formData?.[f.name])
+      .map((f) => f.label || f.name);
+
+    if (missingFields.length > 0) {
+      addToast({
+        title: t("missingFieldsTitle", { fields: missingFields.join("、") }),
+
+        timeout: 1000,
+        color: "danger",
+      });
+
+      return;
+    }
     if (!onSubmit) return;
 
     try {
-      setIsLoading(true);
+      setLoading(true);
       await onSubmit(formData);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
@@ -49,12 +75,20 @@ export default function CommonForm<T extends Record<string, any>>({
       <div className="my-2 flex w-full flex-col gap-2">
         <Button
           color="primary"
-          isLoading={isLoading} // ✅ 内部 loading
+          isLoading={loading} // ✅ 内部 loading
           type="submit"
         >
-          {confirmText || t.raw("confirm")}
+          {confirmText || t("confirm")}
         </Button>
-        {children}
+        {showCancelButton && ( // ✅ 根据 props 判断是否渲染
+          <Button
+            className="button-default"
+            isDisabled={loading}
+            onPress={handleCancel}
+          >
+            {cancelText ?? t("cancel")}
+          </Button>
+        )}
       </div>
     </Form>
   );

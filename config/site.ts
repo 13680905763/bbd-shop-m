@@ -53,12 +53,12 @@ export const siteConfig = {
     {
       title: "联盟余额",
       value: "88",
-      to: "/pages/member/score/index",
+      to: "/pages/member/points/index",
     },
     {
       title: "已提现金额",
       value: "88",
-      to: "/pages/member/score/index",
+      to: "/pages/member/points/index",
     },
   ],
   orderList: [

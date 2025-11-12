@@ -6,16 +6,25 @@ import React from "react";
 import OrderCard from "./order-card";
 
 import { useWalletDetailList } from "@/hook";
+import FullscreenLoader from "@/components/common/fullscreen-loader";
 
 export default function BalanceRecord() {
   const router = useRouter();
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, error } =
-    useWalletDetailList();
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    error,
+    isLoading,
+  } = useWalletDetailList();
   const walletDetailList =
     data?.pages?.flatMap((page: any) => page?.records) ?? [];
 
   return (
     <div className="flex h-screen flex-col justify-between bg-[#f7f8f9]">
+      {isLoading && <FullscreenLoader />}
+
       <NavBar className="bg-white" onBack={() => router.back()}>
         余额记录
       </NavBar>

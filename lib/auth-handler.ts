@@ -1,5 +1,3 @@
-import { addToast } from "@heroui/react";
-
 import { queryClient } from "./react-query";
 
 import { getAddressList, getServicesList, getUserInfo } from "@/services";
@@ -8,11 +6,7 @@ import { useWalletStore } from "@/store";
 import { getWalletInfo } from "@/services/wallet";
 import { useServicesStore } from "@/store/services";
 
-export async function handleAuthSuccess(
-  redirect: string,
-  resMessage?: string,
-  router?: ReturnType<typeof import("next/navigation").useRouter>,
-) {
+export async function handleAuthSuccess() {
   const [user, wallet, billing, services] = await Promise.all([
     getUserInfo(),
     getWalletInfo(),
@@ -28,11 +22,4 @@ export async function handleAuthSuccess(
   queryClient.setQueryData(["walletInfo"], wallet);
   queryClient.setQueryData(["billingAddress"], billing);
   queryClient.setQueryData(["services"], services);
-
-  // window.location.reload();
-  if (resMessage) {
-    addToast({ title: resMessage, timeout: 1000, color: "success" });
-  }
-
-  router?.push(redirect);
 }

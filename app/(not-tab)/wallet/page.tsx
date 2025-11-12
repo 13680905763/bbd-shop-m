@@ -3,21 +3,40 @@
 import { addToast, Button, NumberInput } from "@heroui/react";
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoWallet } from "react-icons/io5";
 import { useTranslations } from "next-intl";
 
 import { createOrderByRecharge } from "@/services";
-import { useWalletStore } from "@/store";
+import { getWalletInfo } from "@/services/wallet";
+import FullscreenLoader from "@/components/common/fullscreen-loader";
+import { useGlobalStore } from "@/store";
 
 export default function WalletRechargePage() {
-  const t = useTranslations("Wallet.Page"); // ✅ 命名空间
+  const t = useTranslations("wallet.walletPage"); // ✅ 命名空间
+  const { currency } = useGlobalStore();
+
+  const [loading, setLoading] = useState(true);
 
   const [currentPrice, setCurrentPrice] = useState<number>(0);
+  const [wallet, setWallet] = useState<any>(null);
+
   const priceList = [50, 100, 200, 500, 1000, 5000];
   const router = useRouter();
-  const wallet = useWalletStore((state) => state.wallet);
+  // 获取钱包信息
+  const fetchWallet = async () => {
+    try {
+      const res = await getWalletInfo();
 
+      setWallet(res);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchWallet();
+  }, []);
   const changePrice = (price: number) => {
     setCurrentPrice(price);
   };
@@ -34,7 +53,7 @@ export default function WalletRechargePage() {
     }
     const bizCode: any = await createOrderByRecharge({
       currencyAmount: currentPrice,
-      currencyCode: "CNY",
+      currencyCode: currency.value,
     });
 
     router.push("/order/pay-order/" + bizCode);
@@ -42,6 +61,8 @@ export default function WalletRechargePage() {
 
   return (
     <div className="h-screen bg-[#f7f8f9]">
+      {loading && <FullscreenLoader />}
+
       <NavBar
         className="bg-white"
         right={
@@ -58,6 +79,7 @@ export default function WalletRechargePage() {
         {/* 余额展示区域 */}
         <div className="box-card p-2 text-center">
           <div className="my-[10px] text-[24px] font-bold text-[#f3643a]">
+            {currency.symbol}
             {wallet?.availabalBalance}
           </div>
           <div className="text-sm text-[#999]">{t("totalBalance")}</div>
@@ -65,7 +87,7 @@ export default function WalletRechargePage() {
             <Button
               className="w-full rounded-full border-1 bg-white"
               variant="bordered"
-              onPress={() => router.push("/wallet/withdrawal")}
+              // onPress={() => router.push("/wallet/withdrawal")}
             >
               {t("withdraw")}
             </Button>
@@ -86,7 +108,7 @@ export default function WalletRechargePage() {
                 }`}
                 onClick={() => changePrice(item)}
               >
-                ￥ {item}
+                {currency.symbol} {item}
               </button>
             ))}
           </div>

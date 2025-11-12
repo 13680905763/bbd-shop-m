@@ -16,12 +16,10 @@ export const request = axios.create({
 // 请求拦截器：注入 token、语言等
 request.interceptors.request.use(
   (config) => {
-    const { locale, currency } = useGlobalStore.getState();
+    const { language, currency } = useGlobalStore.getState();
 
-    config.headers["X-Language"] = locale;
-    config.headers["X-Currency"] = currency;
-    // config.headers["X-Language"] = "en";
-    // config.headers["X-Currency"] = "USD";
+    config.headers["X-Language"] = language;
+    config.headers["X-Currency"] = currency.value;
     config.headers["X-Timezone"] = "Asia/Shanghai";
 
     return config;

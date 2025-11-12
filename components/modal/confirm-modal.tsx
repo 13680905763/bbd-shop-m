@@ -8,6 +8,8 @@ import {
   ModalFooter,
   Button,
 } from "@heroui/react";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -16,41 +18,60 @@ interface ConfirmModalProps {
   content?: string;
   confirmText?: string;
   cancelText?: string;
-  onConfirm: (onClose: () => void) => void;
+  onConfirm: (onClose: () => void) => void | Promise<void>;
 }
 
 const ConfirmModal = ({
   isOpen,
   onOpenChange,
-  title = "操作确认",
-  content = "确定要执行这个操作吗？",
-  confirmText = "确认",
-  cancelText = "取消",
+  title,
+  content,
+  confirmText,
+  cancelText,
   onConfirm,
 }: ConfirmModalProps) => {
+  const t = useTranslations("components.confirmModal");
+  const [loading, setLoading] = useState(false);
+
+  const handleConfirm = async (onClose: () => void) => {
+    setLoading(true);
+    try {
+      await onConfirm(onClose);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
       <ModalContent>
         {(onClose) => (
           <>
-            <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
+            <ModalHeader className="flex flex-col gap-1">
+              {title || t("title")}
+            </ModalHeader>
+
             <ModalBody>
-              <p>{content}</p>
+              <p>{content || t("content")}</p>
             </ModalBody>
+
             <ModalFooter className="flex gap-2">
               <Button
                 className="button-default flex-1"
+                disabled={loading}
                 variant="light"
                 onPress={onClose}
               >
-                {cancelText}
+                {cancelText || t("cancelText")}
               </Button>
+
               <Button
                 className="flex-1"
                 color="primary"
-                onPress={() => onConfirm(onClose)}
+                isLoading={loading}
+                onPress={() => handleConfirm(onClose)}
               >
-                {confirmText}
+                {confirmText || t("confirmText")}
               </Button>
             </ModalFooter>
           </>

@@ -16,7 +16,7 @@ export const gettWarehouseServicesList = (): Promise<any> =>
   request.get("/services/query?serviceLevel=2");
 /** 获取运费模板 */
 export const gettWarehouseRoutesList = (): Promise<any> =>
-  request.get("/shipping-fee-template/all");
+  request.get("/shipping-line-template/all");
 
 export const createWaybill = (data: any): Promise<any> =>
   request.post("/waybill/submit", data);

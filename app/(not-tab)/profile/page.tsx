@@ -7,46 +7,60 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import CommonForm from "@/components/form/common-form";
-import { useUserStore } from "@/store";
 import { getUserInfo, updateUserInfo, uploadAvatar } from "@/services"; // ✅ uploadAvatar 是上传接口
+import { FieldConfig } from "@/components/form/formItem-renderer";
+import FullscreenLoader from "@/components/common/fullscreen-loader";
 
 export default function Settingpage() {
-  const t = useTranslations("Profile.Page");
-
+  const t = useTranslations("profile.profilePage");
   const router = useRouter();
-  const user = useUserStore((state) => state.user);
-  const [avatarLoading, setAvatarLoading] = useState(false);
 
-  const fileInputRef = useRef<HTMLInputElement>(null); // 文件输入引用
+  // --- 状态管理 ---
+  const [user, setUser] = useState<any>(null);
   const [formData, setFormData] = useState({
-    id: user?.id,
-    name: user?.name || "",
-    familyName: user?.familyName || "",
-    givenName: user?.givenName || "",
-    mobile: user?.mobile || "",
+    id: "",
+    name: "",
+    mobile: "",
   });
-
-  const handleSubmit = async (data: any) => {
+  const [loading, setLoading] = useState(true);
+  const [avatarLoading, setAvatarLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  // 获取用户信息
+  const fetchUser = async () => {
     try {
-      await updateUserInfo(data);
-    } finally {
-      const updatedUser = await getUserInfo();
+      const res = await getUserInfo();
 
-      useUserStore.getState().setUser(updatedUser);
+      setUser(res);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (user) {
-      setFormData({
-        id: user?.id,
-        name: user?.name || "",
-        familyName: user?.familyName || "",
-        givenName: user?.givenName || "",
-        mobile: user?.mobile || "",
-      });
-    }
-  }, [user]);
+    fetchUser();
+  }, []);
+  const fields: FieldConfig[] = [
+    {
+      type: "input",
+      name: "name",
+      key: "name",
+      size: "md",
+      label: t("nameLabel"),
+    },
+    {
+      type: "input",
+      name: "mobile",
+      key: "mobile",
+      size: "md",
+      label: t("mobileLabel"),
+    },
+  ];
+
+  const handleSubmit = async (data: any) => {
+    await updateUserInfo(data);
+    // 更新最新用户信息
+    await fetchUser();
+  };
 
   // 点击头像触发文件选择
   const handleAvatarClick = () => {
@@ -61,21 +75,27 @@ export default function Settingpage() {
 
     setAvatarLoading(true);
     try {
-      // 这里需要你实现 uploadAvatar 接口：把 file 上传到后端并返回新的头像地址
       await uploadAvatar(file);
-
-      // // 更新用户信息
-      // await updateUserInfo({ ...formData, avatarUrl: url });
-      const user = await getUserInfo();
-
-      useUserStore.getState().setUser(user);
+      await fetchUser();
     } finally {
       setAvatarLoading(false);
     }
   };
 
+  useEffect(() => {
+    setFormData({
+      id: user?.id,
+      name: user?.name || "",
+      mobile: user?.mobile || "",
+    });
+  }, [user]);
+
+  // if (loading) return <FullscreenLoader />;
+
   return (
     <div className="h-screen bg-[#f7f8f9]">
+      {loading && <FullscreenLoader />}
+
       <NavBar className="bg-white" onBack={() => router.back()}>
         {t("title")}
       </NavBar>
@@ -91,7 +111,7 @@ export default function Settingpage() {
               <Avatar className="h-16 w-16 text-large" src={user?.avatarUrl} />
             )}
             <span className="absolute bottom-0 left-0 rounded bg-black/50 px-1 text-xs text-white">
-              edit
+              {t("edit")}
             </span>
           </button>
           <input
@@ -105,8 +125,10 @@ export default function Settingpage() {
         </div>
         <div className="h-full p-2">
           <CommonForm
-            fields={t.raw("fields")}
+            confirmText={t("saveButton")}
+            fields={fields}
             formData={formData}
+            showCancelButton={false}
             onChange={setFormData}
             onSubmit={handleSubmit}
           />

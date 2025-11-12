@@ -270,11 +270,10 @@ export default function Settingpage() {
         content={t("cancelOrderConfirm")}
         isOpen={!!pendingCancelOrderId}
         title={t("cancelOrder")}
-        onConfirm={async (onClose): Promise<void> => {
+        onConfirm={async () => {
           if (!pendingCancelOrderId) return;
           await onCancelOrder(pendingCancelOrderId);
           setPendingCancelOrderId(null);
-          onClose();
         }}
         onOpenChange={() => setPendingCancelOrderId(null)}
       />
@@ -282,11 +281,10 @@ export default function Settingpage() {
         content={t("requestRefundConfirm")}
         isOpen={!!pendingRequestRefundId}
         title={t("requestRefund")}
-        onConfirm={async (onClose): Promise<void> => {
+        onConfirm={async () => {
           if (!pendingRequestRefundId) return;
           await onRequestRefund(pendingRequestRefundId);
           setPendingRequestRefundId(null);
-          onClose();
         }}
         onOpenChange={() => setPendingRequestRefundId(null)}
       />

@@ -14,3 +14,4 @@ export * from "./warehouse/useWarehouseList";
 export * from "./warehouse/useWarehousePreview";
 export * from "./package/usePackageList";
 export * from "./goods/useGoodsSearchList";
+export * from "./message/useMessageList";

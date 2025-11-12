@@ -37,12 +37,12 @@ export default function Settingpage() {
     {
       title: "可提现",
       value: "88",
-      to: "/pages/member/score/index",
+      to: "/pages/member/points/index",
     },
     {
       title: "已赚取",
       value: "88",
-      to: "/pages/member/score/index",
+      to: "/pages/member/points/index",
     },
   ];
   const defaultContent =
