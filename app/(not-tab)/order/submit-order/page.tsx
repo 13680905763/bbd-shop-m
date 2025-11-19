@@ -1,21 +1,29 @@
 "use client";
-import { NavBar } from "antd-mobile";
+import { ImageViewer, NavBar, Stepper } from "antd-mobile";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
-import { addToast, Button, Textarea, Image } from "@heroui/react";
+import {
+  addToast,
+  Button,
+  Textarea,
+  Image,
+  useDisclosure,
+} from "@heroui/react";
 import { FaCamera } from "react-icons/fa";
+import { useTranslations } from "next-intl";
 
 import OrderCard from "./order-card";
 
 import {
   createOrderByCart,
   createOrderByProduct,
+  getServicesList,
   updateOrderPreviewCart,
   updateOrderPreviewProduct,
 } from "@/services";
 import { useOrderPreview } from "@/hook";
 import { createOrderPreviewKeyByProductParams } from "@/types";
-import { useServicesStore } from "@/store";
+import { useGlobalStore, useServicesStore } from "@/store";
 import CommonModal from "@/components/modal/common-modal";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
 
@@ -42,6 +50,9 @@ export type Shop = {
 };
 
 export default function SubmitOrder() {
+  const t = useTranslations("submitOrder");
+  const { currency } = useGlobalStore();
+
   const searchParam = useSearchParams();
   const router = useRouter();
   const type = searchParam.get("type") as "cart" | "product";
@@ -70,6 +81,14 @@ export default function SubmitOrder() {
     setSubmitting(false);
   };
 
+  // 附加服务
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [visible, setVisible] = useState(false);
+  const [startIndex, setStartIndex] = useState(0);
+  const [servicesList, setServicesList] = useState([]);
+
+  console.log("startIndex", startIndex);
+
   // 本地状态：存储克隆的服务列表，用于单商品
   const [localServices, setLocalServices] = useState<any[]>([]);
 
@@ -85,21 +104,42 @@ export default function SubmitOrder() {
   // 新增状态
   const [isServiceSubmitting, setIsServiceSubmitting] = useState(false);
   // 打开商品服务列表弹窗
-  const openServiceModal = (cartId: string) => {
-    console.log("services", services);
-
+  const openServiceModal = (cartId: string, skuId: string) => {
     setCurrentCartId(cartId);
+    const handleSO = orderData?.orderList?.find((item: any) => {
+      return item?.products.find((iitem: any) => {
+        return iitem?.sku?.propId_valueId == skuId;
+      });
+    });
+    const hanldeSer =
+      handleSO.products
+        .find((item: any) => {
+          return item?.sku?.propId_valueId == skuId;
+        })
+        ?.orderServiceList?.map((item: any) => {
+          return {
+            id: item?.id,
+            quantity: item?.quantity || 1,
+            remark: item?.remark || "",
+          };
+        }) || [];
+
     // 克隆服务，初始化 isCheck、remark
     setLocalServices(
-      services.map((s: any) => ({
-        ...s,
-        isCheck: false,
-        remark: "",
-      })),
+      servicesList.map((s: any) => {
+        return {
+          ...s,
+          isCheck: hanldeSer.find((item: any) => item.id == s.id)
+            ? true
+            : false,
+          remark: "",
+          quantity:
+            hanldeSer.find((item: any) => item.id == s.id)?.quantity || 1,
+        };
+      }),
     );
-    setIsServiceListOpen(true);
+    onOpen();
   };
-
   // 打开某个服务详情
   const openServiceDetail = (serviceId: string) => {
     const service = localServices.find((s) => s.id === serviceId);
@@ -221,10 +261,19 @@ export default function SubmitOrder() {
   useEffect(() => {
     if (data) setOrderData(data);
   }, [data]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getServicesList();
 
-  {
-    isLoading && <FullscreenLoader />;
-  }
+        setServicesList(res);
+      } catch {}
+    };
+
+    fetchData();
+  }, []);
+  console.log("currentService.sample", currentService?.sample);
+
   if (isError) return <div>出错了</div>;
 
   return (
@@ -233,7 +282,7 @@ export default function SubmitOrder() {
       <NavBar className="bg-white" onBack={() => router.back()}>
         订单支付
       </NavBar>
-
+      {isLoading && <FullscreenLoader />}
       {/* 中间可滚动商品列表 */}
       <div className="flex-1 overflow-auto p-2">
         {orderData?.orderList?.map((order: any) => (
@@ -283,29 +332,23 @@ export default function SubmitOrder() {
 
       {/* 商品服务列表弹窗 */}
       <CommonModal
-        confirmText="提交"
-        isLoading={isServiceSubmitting}
-        isOpen={isServiceListOpen}
-        size="xl"
-        title="增值服务"
+        isOpen={isOpen}
+        title={t("valueAddedService")}
         onConfirm={handleServiceSubmit}
-        onOpenChange={setIsServiceListOpen}
+        onOpenChange={onOpenChange}
       >
         {localServices.map((service) => (
-          <div
-            key={service.id}
-            className="mb-4 items-center rounded-lg border p-4"
-          >
+          <div key={service.id} className="items-center rounded-lg border p-3">
             <div className="flex items-center justify-between">
               <div className="font-medium">{service.serviceName}</div>
               {service.id == 1 ? (
                 // 免费的 icon
                 <button
-                  className="flex items-center gap-1 text-sm text-green-500"
+                  className="flex h-8 w-16 items-center justify-center gap-1 text-sm text-green-500"
                   onClick={() => openServiceDetail(service.id)}
                 >
-                  <FaCamera className="mr-1" />
-                  免费
+                  <FaCamera />
+                  {t("free")}
                 </button>
               ) : (
                 <Button
@@ -313,7 +356,7 @@ export default function SubmitOrder() {
                   size="sm"
                   onPress={() => openServiceDetail(service.id)}
                 >
-                  添加
+                  {t("add")}
                 </Button>
               )}
             </div>
@@ -322,18 +365,21 @@ export default function SubmitOrder() {
               <div className="mt-2 flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 py-2">
                 <div className="flex flex-col">
                   <span className="text-sm font-medium text-gray-800">
-                    服务项
+                    {t("serviceItem")}
                   </span>
                   {service.remark && (
                     <span className="mt-0.5 truncate text-[11px] text-gray-400">
-                      备注：{service.remark}
+                      {t("remark")}: {service.remark}
                     </span>
                   )}
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[12px] text-gray-500">x1</span>
+                  <span className="text-[12px] text-gray-500">
+                    x{service.quantity}
+                  </span>
                   <span className="text-sm font-semibold text-red-500">
-                    ￥{service.price}
+                    {currency.symbol}
+                    {service.price}
                   </span>
                   <Button
                     className="h-6 px-2 text-[11px]"
@@ -342,7 +388,7 @@ export default function SubmitOrder() {
                     variant="light"
                     onPress={() => removeService(service.id)}
                   >
-                    删除
+                    {t("delete")}
                   </Button>
                 </div>
               </div>
@@ -354,13 +400,10 @@ export default function SubmitOrder() {
       {/* 服务详情弹窗 */}
       {currentService && (
         <CommonModal
-          key={currentService.id}
-          confirmText={currentService.id != 1 ? "保存" : "确认"}
+          isDismissable={false}
           isOpen={isServiceDetailOpen}
           showCancel={currentService.id != 1}
-          size="xl"
           title={currentService.serviceName}
-          onCancel={() => setIsServiceDetailOpen(false)}
           onConfirm={saveServiceDetail}
           onOpenChange={setIsServiceDetailOpen}
         >
@@ -368,23 +411,43 @@ export default function SubmitOrder() {
             {/* 服务介绍 */}
             <div className="space-y-4 rounded-lg bg-[#f8f8f8] p-4">
               <div className="space-y-2">
-                <h3 className="text-sm font-medium text-gray-900">服务介绍</h3>
+                <h3 className="text-sm font-medium text-gray-900">
+                  {t("serviceIntro")}
+                </h3>
                 <p className="text-sm leading-relaxed text-gray-600">
-                  {currentService.introduction || "暂无介绍"}
+                  {currentService.introduction || t("noIntro")}
                 </p>
               </div>
 
               {/* 示例（id != 1 时才展示） */}
-              {currentService.sample && (
+              {currentService?.sample.length > 0 && (
                 <div className="space-y-2">
-                  <h3 className="text-sm font-medium text-gray-900">示例</h3>
-                  <Image
-                    alt="服务示例"
-                    className="border border-gray-200"
-                    height={80}
-                    radius="md"
-                    src={currentService.sample}
-                    width={80}
+                  <h3 className="text-sm font-medium text-gray-900">
+                    {t("sample")}
+                  </h3>
+
+                  <div className="grid grid-cols-4 gap-2">
+                    {currentService?.sample.map((url: string, index: any) => (
+                      <Image
+                        key={url}
+                        className="h-full w-full object-cover"
+                        radius="none"
+                        src={url}
+                        onClick={() => {
+                          setStartIndex(index); // 点击哪张图片就从哪张开始预览
+                          setTimeout(() => {
+                            setVisible(true);
+                          }, 200);
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <ImageViewer.Multi
+                    key={startIndex} // ★ 让组件强制重新创建
+                    defaultIndex={startIndex} // 从点击的那张开始
+                    images={currentService?.sample}
+                    visible={visible}
+                    onClose={() => setVisible(false)}
                   />
                 </div>
               )}
@@ -392,11 +455,27 @@ export default function SubmitOrder() {
 
             {/* 服务费（id != 1 时才展示） */}
             {currentService.id != 1 && (
-              <div className="flex items-center justify-between border-t pt-3">
-                <span className="text-sm text-gray-700">服务费</span>
-                <span className="text-lg font-semibold text-rose-600">
-                  {currentService.price}
-                </span>
+              <div className="flex items-center justify-between pt-3">
+                <span className="text-sm text-gray-700">{t("serviceFee")}</span>
+                <div className="flex gap-2">
+                  <span className="text-lg font-semibold text-rose-600">
+                    {currency.symbol}
+                    {currentService.price}
+                  </span>
+                  {currentService?.stacked == 1 ? (
+                    <Stepper
+                      value={currentService?.quantity}
+                      onChange={(quantity) => {
+                        console.log("quantity", quantity);
+
+                        setCurrentService({
+                          ...currentService,
+                          quantity: quantity,
+                        });
+                      }}
+                    />
+                  ) : null}
+                </div>
               </div>
             )}
 
@@ -405,7 +484,7 @@ export default function SubmitOrder() {
               <Textarea
                 className="mt-2 w-full"
                 minRows={3}
-                placeholder="请输入备注（选填）"
+                placeholder={t("remarkPlaceholder")}
                 value={currentService.remark}
                 onChange={(e) =>
                   setCurrentService({

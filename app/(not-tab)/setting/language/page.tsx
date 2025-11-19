@@ -31,7 +31,7 @@ const CustomRadio = (props: any) => {
 };
 
 export default function Settingpage() {
-  const t = useTranslations("Setting.LanguagePage"); // ✅ 命名空间建议叫 Setting
+  const t = useTranslations("setting.languagePage"); // ✅ 命名空间建议叫 Setting
   const router = useRouter();
   const { language, setLanguage } = useGlobalStore();
 

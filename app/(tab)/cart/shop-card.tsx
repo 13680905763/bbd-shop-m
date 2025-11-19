@@ -2,19 +2,11 @@
 import { Checkbox, Image, Input } from "@heroui/react";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import Stepper from "@/components/stepper";
 import SourceIcon from "@/components/common/source-icon";
-
-type ProductItemProps = {
-  product: any;
-  isSelected: boolean;
-  onToggle: (checked: boolean) => void;
-  isEdit: boolean;
-  handleProductDelete: (productId: string) => void;
-  handleProductQuantity: (productId: string, quantity: number) => void;
-  handleProductRemark: (productId: string, remark: string) => void;
-};
+import { useGlobalStore } from "@/store";
 
 function ProductItem({
   product,
@@ -24,7 +16,9 @@ function ProductItem({
   handleProductDelete,
   handleProductQuantity,
   handleProductRemark,
-}: ProductItemProps) {
+}: any) {
+  const t = useTranslations("cart"); // ✅ 命名空间 cart
+  const { currency } = useGlobalStore();
   const router = useRouter();
 
   return (
@@ -47,19 +41,23 @@ function ProductItem({
             className="rounded-md object-cover"
             classNames={{ wrapper: "self-start" }}
             height={93}
+            referrerPolicy="no-referrer"
             src={product.skuPicUrl || product?.picUrl}
             width={93}
           />
         </button>
         <div className="flex-1">
           <div className="text-title line-clamp-1">{product.productTitle}</div>
-          <div className="text-light-gray line-clamp-1">
+          <div className="text-light-gray line-clamp-2">
             {product.sku.propName_valueName}
           </div>
 
           <div className="mt-5 flex items-center justify-between gap-2">
             <div className="flex flex-1 flex-col">
-              <span className="text-price-base">¥{product?.unitPrice}</span>
+              <span className="text-price-base">
+                {currency.symbol}
+                {product?.unitPrice}
+              </span>
             </div>
 
             <div className="flex items-center gap-1">
@@ -80,7 +78,6 @@ function ProductItem({
               )}
             </div>
           </div>
-          <div className="text-light-gray">运费:{product.postFee}</div>
         </div>
       </div>
       <Input
@@ -93,24 +90,13 @@ function ProductItem({
             <FaEdit className="h-6 w-6" />
           </button>
         }
-        placeholder="添加备注"
+        placeholder={t("remark.placeholder")}
         size="sm"
         value={product.remark}
       />
     </>
   );
 }
-
-type ShopCardProps = {
-  shop: any;
-  selectedMap: { [productId: string]: boolean };
-  onToggleItem: (productId: string, checked: boolean) => void;
-  onToggleShop: (checked: boolean) => void;
-  isEdit: boolean;
-  handleProductDelete: (productId: string) => void;
-  handleProductQuantity: (productId: string, quantity: number) => void;
-  handleProductRemark: (productId: string, remark: string) => void;
-};
 
 export default function ShopCard({
   shop,
@@ -121,7 +107,7 @@ export default function ShopCard({
   handleProductDelete,
   handleProductQuantity,
   handleProductRemark,
-}: ShopCardProps) {
+}: any) {
   const isAllSelected = shop.cartList.every((p: any) => selectedMap[p.id]);
 
   return (
@@ -147,7 +133,7 @@ export default function ShopCard({
           isEdit={isEdit}
           isSelected={selectedMap[product.id]}
           product={product}
-          onToggle={(checked) => onToggleItem(product.id, checked)}
+          onToggle={(checked: any) => onToggleItem(product.id, checked)}
         />
       ))}
     </div>

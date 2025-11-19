@@ -7,7 +7,6 @@ import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 
 import { Logo } from "@/components/icons";
 import { loginWithGoogle } from "@/services";
-import { handleAuthSuccess } from "@/lib/auth-handler";
 export default function AuthLayout({
   children,
 }: {
@@ -24,7 +23,7 @@ export default function AuthLayout({
     try {
       const res = await loginWithGoogle(credential as string);
 
-      await handleAuthSuccess(redirect, res, router);
+      router.push(redirect);
     } catch (err) {
       // 同样的错误处理
     }

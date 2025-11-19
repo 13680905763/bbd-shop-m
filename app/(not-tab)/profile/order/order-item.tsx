@@ -17,16 +17,20 @@ export default function OrderItem({
   return (
     <div className="mb-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
       {/* 顶部：订单号 + 下单时间 */}
-      <div className="flex items-center justify-between border-gray-100 pb-2">
+      <div className="flex items-center border-gray-100">
         {activeTab === "waitPay" ? (
           <Checkbox isSelected={selected} onChange={onChange} />
         ) : null}
 
         <div className="flex gap-2 text-sm font-medium text-gray-800">
           <SourceIcon source={order.source} />
-          <span className="font-semibold">{order?.orderCode}</span>
+          <div className="font-semibold">
+            {order?.orderCode}
+            <div className="flex-1 text-xs text-gray-500">
+              {order?.createTime}
+            </div>
+          </div>
         </div>
-        <div className="flex-1 text-xs text-gray-500">{order?.createTime}</div>
       </div>
 
       {/* 商品列表 */}
@@ -81,7 +85,7 @@ export default function OrderItem({
             radius="sm"
             size="sm"
             onPress={() => {
-              onRequestRefund(order?.id);
+              onRequestRefund();
             }}
           >
             {texts.requestRefund}

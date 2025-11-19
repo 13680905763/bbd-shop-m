@@ -1,8 +1,11 @@
 import { Image } from "@heroui/react";
 import { useRouter } from "next/navigation";
 
+import { useGlobalStore } from "@/store";
+
 export default function ProductItem({ product, status }: any) {
   const router = useRouter();
+  const { currency } = useGlobalStore();
 
   return (
     <>
@@ -20,6 +23,7 @@ export default function ProductItem({ product, status }: any) {
               wrapper: "self-start",
             }}
             height={96}
+            referrerPolicy="no-referrer"
             src={product.skuPicUrl || product?.picUrl}
             width={96}
           />
@@ -41,7 +45,8 @@ export default function ProductItem({ product, status }: any) {
         {/* 价格/数量 */}
         <div className="shrink-0 text-right">
           <p className="text-lg font-semibold text-[#f0700c]">
-            ￥{product.price}
+            {currency.symbol}
+            {product.price}
           </p>
           <p className="mt-1 text-sm text-gray-500">x{product.quantity}</p>
         </div>
@@ -57,7 +62,7 @@ export default function ProductItem({ product, status }: any) {
                 key={service.serviceId}
                 className="rounded-full border border-gray-200 bg-white px-2.5 py-0.5 text-sm text-gray-700 shadow-sm"
               >
-                {service.serviceName}
+                {service.serviceName}*{service.quantity}
               </span>
             ))}
           </div>

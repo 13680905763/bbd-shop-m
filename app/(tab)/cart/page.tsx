@@ -18,19 +18,19 @@ import { deleteCart, updateCart } from "@/services/cart";
 import { createOrderPreviewKeyByCart } from "@/services";
 import { useCartList } from "@/hook";
 import CommonModal from "@/components/modal/common-modal";
+import { useGlobalStore } from "@/store";
+import FullscreenLoader from "@/components/common/fullscreen-loader";
 
 export default function Cart() {
-  const t = useTranslations("Cart"); // ✅ 命名空间 cart
-  const { data, isLoading, isError } = useCartList();
+  const t = useTranslations("cart"); // ✅ 命名空间 cart
+  const { currency } = useGlobalStore();
+  const { data, isLoading, isError, isFetching } = useCartList();
 
   const router = useRouter();
   const queryClient = useQueryClient();
   const [isEdit, setIsEdit] = useState(false);
-  const {
-    isOpen: isOpenRemark,
-    onOpen: onOpenRemark,
-    onOpenChange: onOpenChangeRemark,
-  } = useDisclosure();
+  const [submiting, setSubmiting] = useState(false);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   // 当前要删除的商品 id（单个为 string，批量为 string[]，默认 null）
   const [pendingDeleteIds, setPendingDeleteIds] = useState<string[] | null>(
@@ -43,10 +43,7 @@ export default function Cart() {
   const [selected, setSelected] = useState<{
     [shopId: string]: { [productId: string]: boolean };
   }>({});
-
-  function getSelectedProductIds(
-    selected: Record<string, Record<string, boolean>>,
-  ): string[] {
+  const selectedIdArr = useMemo(() => {
     const selectedIds: string[] = [];
 
     for (const shopId in selected) {
@@ -58,15 +55,15 @@ export default function Cart() {
         }
       }
     }
+    console.log("selectedIds", selectedIds);
 
     return selectedIds;
-  }
-  const handleDeleteCart = async (idList: string[], onClose: () => void) => {
+  }, [selected]);
+  const handleDeleteCart = async (idList: string[]) => {
     try {
       const tip = await deleteCart({ idList });
 
       addToast({ title: tip, timeout: 1000, color: "success" });
-      onClose();
       queryClient.invalidateQueries({ queryKey: ["cartList"] }); // 手动刷新
     } catch (e) {}
   };
@@ -91,7 +88,7 @@ export default function Cart() {
   const handleProductRemark = (productId: string, remark: string) => {
     setPendingRemarkProductId(productId);
     setRemarkText(remark);
-    onOpenRemark();
+    onOpen();
   };
   const submitRemark = async () => {
     if (!pendingRemarkProductId) return;
@@ -107,19 +104,18 @@ export default function Cart() {
       queryClient.invalidateQueries({ queryKey: ["cartList"] }); // 刷新
     } catch (e) {
     } finally {
-      onOpenChangeRemark();
+      onOpenChange();
       setPendingRemarkProductId(null);
       setRemarkText("");
     }
   };
   //结算/删除购物车
   const submitCart = async () => {
-    const selectedIdArr = getSelectedProductIds(selected);
-
     if (selectedIdArr.length > 0) {
       if (isEdit) {
         setPendingDeleteIds(selectedIdArr);
       } else {
+        setSubmiting(true);
         const previewList = selectedIdArr.map((cartId: string) => ({
           cartId,
           serviceList: [],
@@ -127,6 +123,8 @@ export default function Cart() {
         const key: any = await createOrderPreviewKeyByCart({
           previewList,
         });
+
+        setSubmiting(false);
 
         router.push("/order/submit-order?type=cart&key=" + key);
       }
@@ -138,11 +136,8 @@ export default function Cart() {
       });
     }
   };
-
   // 商品勾选
   const toggleItem = (shopId: string, productId: string, checked: boolean) => {
-    console.log(shopId, productId, checked);
-
     setSelected((prev) => ({
       ...prev,
       [shopId]: {
@@ -172,7 +167,6 @@ export default function Cart() {
       return next;
     });
   };
-
   // 全选
   const toggleAll = (checked: boolean) => {
     const newSelected: typeof selected = {};
@@ -186,12 +180,18 @@ export default function Cart() {
     setSelected(newSelected);
   };
   const togglePrice = useMemo(() => {
-    const selectedIdArr = getSelectedProductIds(selected);
-
-    return data
+    const totalCents = data
       ?.flatMap((shop) => shop.cartList) // 拍平所有商品
       ?.filter((item) => selectedIdArr.includes(item.id)) // 过滤选中项
-      ?.reduce((sum, item) => sum + item?.unitPrice * item.quantity, 0); // 累加价格
+      ?.reduce((sum, item) => {
+        // 将 totalFee 转成分（乘100取整）
+        const fee = Math.round((item?.totalFee ?? 0) * 100);
+
+        return sum + fee;
+      }, 0);
+
+    // 最终除以100，保留两位小数
+    return totalCents !== undefined ? (totalCents / 100).toFixed(2) : "0.00";
   }, [selected]);
 
   useEffect(() => {
@@ -204,7 +204,6 @@ export default function Cart() {
           init[shop.shopId][product.id] = false; // 初始不选中
         });
       });
-      console.log("init", init);
 
       setSelected(init);
     }
@@ -214,10 +213,12 @@ export default function Cart() {
 
   return (
     <div className="flex h-[100%] flex-col justify-between overflow-hidden">
+      {(isLoading || isFetching) && <FullscreenLoader />}
       <div className="flex justify-between p-2">
         <div>
-          <span className="text-lg font-bold">{t("title")}</span>
-          (0)
+          <span className="text-lg font-bold">
+            {t("title")}（ {data?.flatMap((shop) => shop.cartList).length}）
+          </span>
         </div>
         <div className="flex items-center">
           <button onClick={() => setIsEdit(!isEdit)}>
@@ -235,25 +236,29 @@ export default function Cart() {
             isEdit={isEdit}
             selectedMap={selected[shop.shopId] || {}}
             shop={shop}
-            onToggleItem={(productId, checked) =>
+            onToggleItem={(productId: any, checked: any) =>
               toggleItem(shop.shopId, productId, checked)
             }
-            onToggleShop={(checked) => toggleShop(shop, checked)}
+            onToggleShop={(checked: any) => toggleShop(shop, checked)}
           />
         ))}
       </div>
       <div className="flex items-center justify-between border-b border-[#f5f5f5] bg-white px-3 py-2">
-        <div>
+        <div className="flex gap-2">
           <Checkbox
             isSelected={isAllSelected()}
             onChange={(e) => toggleAll(e.target.checked)}
           >
             {t("selectAll")}
           </Checkbox>
+          <span className="text-price-lg">{selectedIdArr.length}</span>
         </div>
         <div className="flex items-center gap-2">
-          <p className="text-price-lg">￥{togglePrice}</p>
-          <Button color="primary" onPress={submitCart}>
+          <p className="text-price-lg">
+            {currency.symbol}
+            {togglePrice}
+          </p>
+          <Button color="primary" isLoading={submiting} onPress={submitCart}>
             {isEdit ? t("delete") : t("checkout")}
           </Button>
         </div>
@@ -263,18 +268,18 @@ export default function Cart() {
         content={t("confirm.deleteContent")}
         isOpen={!!pendingDeleteIds}
         title={t("confirm.deleteTitle")}
-        onConfirm={(onClose) => {
+        onConfirm={() => {
           if (pendingDeleteIds) {
-            handleDeleteCart(pendingDeleteIds, onClose);
+            handleDeleteCart(pendingDeleteIds);
           }
         }}
         onOpenChange={() => setPendingDeleteIds(null)}
       />
       <CommonModal
-        isOpen={isOpenRemark}
+        isOpen={isOpen}
         title={t("remark.title")}
         onConfirm={submitRemark}
-        onOpenChange={onOpenChangeRemark}
+        onOpenChange={onOpenChange}
       >
         <Textarea
           placeholder={t("remark.placeholder")}

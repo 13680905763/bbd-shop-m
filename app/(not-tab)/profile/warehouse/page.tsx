@@ -187,11 +187,10 @@ export default function Settingpage() {
         content={t("confirmCancelContent")}
         isOpen={!!pendingCancelOrderId}
         title={t("confirmCancelTitle")}
-        onConfirm={async (onClose): Promise<void> => {
+        onConfirm={async () => {
           if (!pendingCancelOrderId) return;
           // await onCancelOrder(pendingCancelOrderId);
           setPendingCancelOrderId(null);
-          onClose();
         }}
         onOpenChange={() => setPendingCancelOrderId(null)}
       />

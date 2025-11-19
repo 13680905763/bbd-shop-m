@@ -111,3 +111,11 @@ export const OrderRefund = (data: any): Promise<any> => {
     { showToast: true },
   );
 };
+
+/** 订单取消 */
+export const createCustomizeOrder = (data: any): Promise<any> => {
+  return requestWithOption(
+    { url: "/drop-shipping-order", method: "POST", data },
+    { showToast: true },
+  );
+};

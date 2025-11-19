@@ -2,31 +2,31 @@
 import {
   Button,
   cn,
-  Radio,
   RadioGroup,
-  RadioProps,
-  useRadio,
-  VisuallyHidden,
-  Image,
   addToast,
+  Radio,
+  Image,
+  VisuallyHidden,
+  useRadio,
+  RadioProps,
 } from "@heroui/react";
 import { NavBar } from "antd-mobile";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
-import { IoWallet } from "react-icons/io5";
 import { useTranslations } from "next-intl";
+import { IoWallet } from "react-icons/io5";
 
 import BillingAddress from "./billing-address";
 
 import { useBillingAddressList, usePaymentMethodList } from "@/hook";
 import { createPayOrder } from "@/services";
-import { useBillingAddressStore, useWalletStore } from "@/store";
+import { useGlobalStore, useWalletStore } from "@/store";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
+// 自定义 Radio 组件
 const CustomRadio = (props: RadioProps) => {
   const {
     Component,
     children,
-    description,
     getBaseProps,
     getWrapperProps,
     getInputProps,
@@ -39,8 +39,8 @@ const CustomRadio = (props: RadioProps) => {
     <Component
       {...getBaseProps()}
       className={cn(
-        "group inline-flex w-full flex-row items-center bg-white tap-highlight-transparent hover:bg-content2 active:opacity-50",
-        "cursor-pointer gap-4 rounded-lg border-1 border-default p-4",
+        "group inline-flex w-full cursor-pointer flex-row items-center gap-4 rounded-lg border-1 border-default bg-white p-4 tap-highlight-transparent",
+        "hover:bg-content2 active:opacity-50",
         "data-[selected=true]:border-primary",
       )}
     >
@@ -57,27 +57,72 @@ const CustomRadio = (props: RadioProps) => {
   );
 };
 
+// 余额支付选项
+const BalancePayment = ({ payment, wallet, onRecharge, t }: any) => {
+  const { currency } = useGlobalStore();
+
+  return (
+    <CustomRadio value={payment.id}>
+      <div className="flex w-full items-center justify-between">
+        <div className="flex items-center gap-2">
+          <IoWallet className="h-12 w-12 text-[#f0700c]" />
+          <span className="text-sm text-gray-500">{t("balance")}</span>
+          <span className="text-xl font-bold text-[#333]">
+            {currency.symbol}
+            {wallet?.availabalBalance ?? "--"}
+          </span>
+        </div>
+        <Button color="primary" size="sm" onPress={onRecharge}>
+          {t("recharge")}
+        </Button>
+      </div>
+    </CustomRadio>
+  );
+};
+
+// 其他支付方式选项
+const OtherPayment = ({ payment }: any) => (
+  <Radio
+    classNames={{
+      base: cn(
+        "inline-flex min-w-[100%] w-full bg-content1 m-0 mb-2 hover:bg-content2 items-center justify-start",
+        "cursor-pointer rounded-lg gap-2 p-3 border-1",
+        "data-[selected=true]:border-primary",
+      ),
+      labelWrapper: "w-full",
+      label: "w-full",
+    }}
+    value={payment.id}
+  >
+    <div className="flex w-full items-center gap-3">
+      <Image
+        className="object-contain"
+        height={60}
+        src={payment.logoUrl}
+        width={60}
+      />
+      <span className="text-sm font-semibold">{payment.payName}</span>
+    </div>
+  </Radio>
+);
+
 export default function PayOrder() {
   const t = useTranslations("PayOrder"); // ✅ 命名空间
-
+  const { currency } = useGlobalStore();
   const router = useRouter();
   const params = useParams<{ bizCode: string }>();
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const { data: billingAddress } = useBillingAddressList();
 
   const { data, isLoading, isError } = usePaymentMethodList(params.bizCode);
   const [paymentId, setPaymentId] = useState("");
   const wallet = useWalletStore((state) => state.wallet);
 
-  const { data: billingAddressData } = useBillingAddressList();
-
-  const billingAddress = useBillingAddressStore(
-    (state) => state.billingAddress,
-  );
   const hanldeCreatePayOrder = async () => {
     if (submitting) return;
     setSubmitting(true);
 
-    if (paymentId !== "1" && !billingAddress?.id) {
+    if (paymentId !== "1" && !billingAddress[0]?.id) {
       addToast({
         title: "Please add billing address",
         timeout: 1000,
@@ -92,10 +137,8 @@ export default function PayOrder() {
       const res = await createPayOrder({
         bizCode: params.bizCode,
         paymentId,
-        addressId: billingAddress?.id as string,
+        addressId: billingAddress[0]?.id as string,
       });
-
-      setSubmitting(false);
 
       if (typeof res === "string") {
         // 判断是否是 URL
@@ -107,9 +150,9 @@ export default function PayOrder() {
           // window.location.href = res.data;
         }
       }
-    } catch (err) {
+    } catch {
+    } finally {
       setSubmitting(false);
-      console.log(err);
     }
   };
   const currentPayMethod = useMemo(() => {
@@ -119,16 +162,30 @@ export default function PayOrder() {
         .find((item: any) => item.id === paymentId) ?? {}
     );
   }, [paymentId]);
+  // 排序：余额支付放前面
+  const sortedData = useMemo(() => {
+    if (!data) return [];
+    const balance = data.filter((item: any) => item.methodName === "BALANCE");
+    const others = data.filter((item: any) => item.methodName !== "BALANCE");
 
+    return [...balance, ...others];
+  }, [data]);
+
+  useEffect(() => {
+    if (sortedData.length) {
+      const firstPayment = sortedData.flatMap(
+        (item: any) => item.paymentList,
+      )[0];
+
+      if (firstPayment) setPaymentId(firstPayment.id);
+    }
+  }, [sortedData]);
   useEffect(() => {
     if (data) {
       setPaymentId(data[0]?.paymentList[0]?.id);
     }
   }, [data]);
 
-  {
-    isLoading && <FullscreenLoader />;
-  }
   if (isError) return <div>加载失败</div>;
 
   return (
@@ -136,17 +193,21 @@ export default function PayOrder() {
       <NavBar className="bg-white" onBack={() => router.back()}>
         {t("title")}
       </NavBar>
+      {isLoading && <FullscreenLoader />}
       <div className="px-2">
         <div className="box-card space-y-2 p-3 text-center">
           <div className="text-sm tracking-wide text-gray-500">
             {t("total")}
           </div>
           <div className="text-3xl font-extrabold leading-tight text-[#f0700c]">
-            {currentPayMethod?.payAmount}
+            {currency.symbol} {currentPayMethod?.payAmount}
           </div>
           <p className="text-sm text-gray-600">
             {t("handlingFee")}
-            <span className="font-medium">{currentPayMethod?.handlingFee}</span>
+            <span className="font-medium">
+              {currency.symbol}
+              {currentPayMethod?.handlingFee}
+            </span>
           </p>
         </div>
 
@@ -159,101 +220,37 @@ export default function PayOrder() {
           ) : null}
           <div className="flex w-full flex-col gap-1">
             <RadioGroup
-              classNames={{
-                base: "w-full",
-              }}
+              classNames={{ base: "w-full" }}
               value={paymentId}
-              onValueChange={(value) => {
-                setPaymentId(value);
-              }}
+              onValueChange={setPaymentId}
             >
-              {data?.map((item) => {
-                if (item.methodName !== "BALANCE") return null;
-
-                return (
-                  <div
-                    key={item.methodName}
-                    className="rounded-2xl bg-[#ffeee1] p-4"
-                  >
-                    <p className="text-title">{item.methodName}</p>
-                    {item.paymentList.map((payment) => {
-                      if (payment.id === "1")
-                        return (
-                          <CustomRadio key={payment.id} value={payment.id}>
-                            <div>
-                              <div className="flex items-center justify-between px-1 py-2 text-sm">
-                                <div className="flex items-center gap-4">
-                                  <IoWallet className="h-14 w-14 text-[#f0700c]" />
-                                  <div>余额 </div>
-                                  <div className="">
-                                    $ {wallet?.availabalBalance}
-                                  </div>
-                                </div>
-                                <Button
-                                  color="primary"
-                                  // onPress={() => {
-                                  //   setIsOpen(true);
-                                  // }}
-                                >
-                                  充值
-                                </Button>
-                              </div>
-                            </div>
-                          </CustomRadio>
-                        );
-
-                      return null;
-                    })}
-                  </div>
-                );
-              })}
-              {data?.map((item) => {
-                if (item.methodName === "BALANCE") return null;
-
-                return (
-                  <div key={item.methodName}>
-                    <p className="text-title">{item.methodName}</p>
-                    {item.paymentList.map((payment) => {
-                      return (
-                        <Radio
-                          key={payment.id}
-                          classNames={{
-                            base: cn(
-                              "inline-flex min-w-[100%] w-full bg-content1 m-0  mb-2 ",
-                              "hover:bg-content2 items-center justify-start",
-                              "cursor-pointer rounded-lg gap-2 p-3 border-1",
-                              "data-[selected=true]:border-primary",
-                            ),
-                            labelWrapper: "w-full",
-                            label: "w-full ",
-                          }}
-                          value={payment.id}
-                        >
-                          <div className="flex w-full items-center gap-3">
-                            <Image
-                              className="object-contain"
-                              height={60}
-                              src={payment.logoUrl}
-                              width={60}
-                            />
-                            <span className="text-sm font-semibold">
-                              {payment.payName}
-                            </span>
-                          </div>
-                        </Radio>
-                      );
-                    })}
-                  </div>
-                );
-              })}
+              {sortedData.map((item: any) => (
+                <div
+                  key={item.methodName}
+                  className={
+                    item.methodName === "BALANCE"
+                      ? "mb-4 rounded-2xl bg-[#ffeee1] p-4"
+                      : "mb-4"
+                  }
+                >
+                  <p className="text-title">{item.methodName}</p>
+                  {item.paymentList.map((payment: any) =>
+                    item.methodName === "BALANCE" ? (
+                      <BalancePayment
+                        key={payment.id}
+                        payment={payment}
+                        t={t}
+                        wallet={wallet}
+                        onRecharge={() => router.push("/wallet")}
+                      />
+                    ) : (
+                      <OtherPayment key={payment.id} payment={payment} />
+                    ),
+                  )}
+                </div>
+              ))}
             </RadioGroup>
           </div>
-          <RadioGroup
-            classNames={{
-              base: "w-full",
-            }}
-            defaultValue={"1"}
-          />
         </div>
       </div>
       <div className="sticky bottom-0 z-10 flex items-center justify-end gap-4 border-t-[1px] bg-white p-4">

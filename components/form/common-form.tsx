@@ -8,7 +8,7 @@ interface CommonFormProps<T extends Record<string, any> = Record<string, any>> {
   fields: FieldConfig[];
   formData: T;
   onChange: (data: T) => void;
-  onSubmit?: (data: T) => Promise<void> | void; // ✅ 支持异步
+  onSubmit?: (data: any) => void | boolean | Promise<void | boolean>;
   onCancel?: () => Promise<void> | void; // ✅ 支持异步
   confirmText?: string;
   cancelText?: string;

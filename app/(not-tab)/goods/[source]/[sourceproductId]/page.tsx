@@ -30,6 +30,7 @@ import { getGoodsInfo } from "@/services/goods";
 import { createOrderPreviewKeyByProduct } from "@/services";
 import { source } from "@/types";
 import CommonModal from "@/components/modal/common-modal";
+import { useGlobalStore } from "@/store";
 interface Sku {
   skuID: string;
   stock: number;
@@ -121,6 +122,7 @@ function getAllCombinations(
 }
 export default function GoodsPage() {
   const t = useTranslations("Goods");
+  const { currency } = useGlobalStore();
 
   const params = useParams();
   const router = useRouter();
@@ -352,6 +354,7 @@ export default function GoodsPage() {
                     className="rounded-lg"
                     fit="contain"
                     height={375}
+                    referrerPolicy="no-referrer"
                     src={item}
                   />
                 </Swiper.Item>
@@ -359,7 +362,7 @@ export default function GoodsPage() {
             </Swiper>
             <div className="bg-white p-4">
               <div className="text-xl font-bold text-red-500">
-                ￥ {goodsInfo?.productInfo.price}
+                {currency.symbol} {goodsInfo?.productInfo.price}
               </div>
               <div className="text-base font-bold">
                 <p>{goodsInfo?.productInfo.title}</p>
@@ -460,7 +463,8 @@ export default function GoodsPage() {
                 </div>
                 <div className="">
                   <div>
-                    ￥ {currentSku?.price ?? goodsInfo?.productInfo.price}
+                    {currency.symbol}
+                    {currentSku?.price ?? goodsInfo?.productInfo.price}
                   </div>
                   <div className="text-sm">库存 : {currentSku?.stock}</div>
                   <div className="text-sm">
@@ -566,8 +570,7 @@ export default function GoodsPage() {
         showCancel={false}
         size="xl"
         title="风险提示"
-        onConfirm={async (onClose) => {
-          await onClose();
+        onConfirm={async () => {
           router.push("/");
         }}
         onOpenChange={setIsOpen1}

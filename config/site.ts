@@ -17,7 +17,7 @@ export const siteConfig = {
     {
       image: "/m/images/home/Forwarding.png",
       title: "Forwarding",
-      // to: "/pages/home/shipforme/index",
+      to: "/forwarding",
     },
     {
       image: "/m/images/home/FillBuy.png",

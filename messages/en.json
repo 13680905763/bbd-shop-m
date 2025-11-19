@@ -158,7 +158,7 @@
             "uploading": "Uploading avatar...",
             "loadError": "Failed to load, please try again"
         },
-        "OrderPage": {
+        "orderPage": {
             "texts": {
                 "pay": "Pay",
                 "cancel": "Cancel",
@@ -170,10 +170,11 @@
                 "waitPay": "Pending Payment",
                 "paid": "Paid"
             },
+            "noOrders": "No orders yet",
             "selectAll": "Select All",
             "batchPay": "Batch Pay",
-            "cancelOrder": "Cancel Order",
-            "cancelOrderConfirm": "Are you sure you want to cancel this order?",
+            "cancelTitle": "Cancel Order",
+            "cancelContent": "Are you sure you want to cancel this order?",
             "requestRefund": "Request Refund",
             "requestRefundConfirm": "Are you sure you want to request a refund for this order?"
         },
@@ -250,6 +251,8 @@
         "billingAddress": {
             "title": "Billing Address",
             "addButton": "Add",
+            "addButton1": "Add Billing Address",
+            "edit": "Edit",
             "formModal": {
                 "addTitle": "Add Address",
                 "editTitle": "Edit Address",
@@ -326,7 +329,7 @@
             }
         }
     },
-    "Setting": {
+    "setting": {
         "Page": {
             "title": "Settings",
             "logout": "Logout",
@@ -345,13 +348,25 @@
                 }
             ]
         },
-        "CurrencyPage": {
+        "currencyPage": {
             "title": "Language",
             "save": "Save"
         },
-        "LanguagePage": {
+        "languagePage": {
             "title": "Language",
             "save": "Save"
+        },
+        "changePassword": {
+            "navBar": {
+                "title": "Change Password"
+            },
+            "form": {
+                "oldPassword": "Old Password",
+                "newPassword": "New Password",
+                "confirmPassword": "Confirm Password",
+                "submit": "Change Password"
+            },
+            "tip": "The new passwords entered twice do not match"
         }
     },
     "wallet": {
@@ -391,5 +406,58 @@
         "productDescription": "Product Description",
         "stock": "Stock",
         "shippingFee": "Shipping Fee"
+    },
+    "estimationPage": {
+        "fillWeightOrSize": "Please enter weight or dimensions (L, W, H)!",
+        "title": "Shipping Fee Estimation",
+        "warehouse": "From Warehouse",
+        "weight": "Weight (g)",
+        "length": "Length (cm)",
+        "width": "Width (cm)",
+        "height": "Height (cm)",
+        "search": "Search Now",
+        "insurable": "Insurable",
+        "taxFree": "Tax-Free",
+        "price": "Price",
+        "time": "Delivery Time",
+        "pricingStandard": "Pricing Standard",
+        "firstWeightFee": "First Weight Fee",
+        "additionalWeightFee": "Additional Weight Fee",
+        "customsFee": "Customs Fee",
+        "shippingLimit": "Shipping Restrictions",
+        "routeFeature": "Route Features",
+        "category": "Cargo Category"
+    },
+    "forwardingPage": {
+        "title": "Forwarding Package",
+        "warehouseAddress": "Warehouse Address",
+        "warehouseFullAddress": "8A-801 Shenghao Technology Building, Licheng Industrial Park, Shuikou Street, Huizhou, Guangdong, China",
+        "forwardingPackage": "Forwarding Package",
+        "trackingNo": "Tracking Number:",
+        "trackingNoPlaceholder": "Enter your tracking number",
+        "errorTrackingNo": "Please enter a valid tracking number",
+        "packageName": "Package Name:",
+        "packageNamePlaceholder": "Enter your package name",
+        "errorPackageName": "Please enter a valid package name",
+        "extraServices": "Additional Services",
+        "serviceInspection": "Open-box inspection for prohibited items",
+        "serviceConfirmation": "BBDbuy forwarding does not provide item confirmation by default. Choose 'Item Confirmation' if needed.",
+        "serviceRemoveInvoice": "Remove invoice (may reduce tax probability)",
+        "serviceOriginalBox": "Original box storage",
+        "submit": "Submit",
+        "acceptAgreement": "I have read and accept the 'Forwarding Package Inspection Rules and Service Agreement'",
+        "serviceIntro": "Service Introduction",
+        "noIntro": "No Introduction",
+        "sample": "Sample",
+        "serviceFee": "Service Fee",
+        "remarkPlaceholder": "Enter remarks (optional)",
+        "remark": "Remark",
+        "valueAddedService": "Value-Added Service",
+        "free": "Free",
+        "add": "Add",
+        "serviceItem": "Service Item",
+        "delete": "Delete",
+        "save": "Save",
+        "confirm": "Confirm"
     }
 }

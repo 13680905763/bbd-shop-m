@@ -29,7 +29,7 @@ const CustomRadio = (props: any) => {
 };
 
 export default function CurrencySettingPage() {
-  const t = useTranslations("Setting.CurrencyPage"); // ✅ 使用 next-intl
+  const t = useTranslations("setting.currencyPage"); // ✅ 使用 next-intl
   const router = useRouter();
   const { currency, setCurrency, currencies } = useGlobalStore();
 

@@ -1,4 +1,4 @@
-import { request } from "./request";
+import { request, requestWithOption } from "./request";
 
 /** 仓库列表 */
 export const getWarehouseList = (data: any) =>
@@ -12,11 +12,25 @@ export const getWarehousePreview = (key: string): Promise<any> =>
   request.get("/waybill/preview/key?key=" + key);
 
 /** 获取增值服务列表 */
-export const gettWarehouseServicesList = (): Promise<any> =>
+export const getWarehouseServicesList = (): Promise<any> =>
   request.get("/services/query?serviceLevel=2");
 /** 获取运费模板 */
-export const gettWarehouseRoutesList = (): Promise<any> =>
+export const getWarehouseRoutesList = (): Promise<any> =>
   request.get("/shipping-line-template/all");
+/** 获取运费模板 根据货物类别跟国家*/
+export const getWarehouseRoutesListByCC = (data: any): Promise<any> => {
+  return requestWithOption(
+    { url: "/shipping-line-template/query", method: "POST", data },
+    { showToast: true, isSuccess: false },
+  );
+};
+/** 获取运费模板 */
+export const searchWarehouseRoutesList = (data: any): Promise<any> => {
+  return requestWithOption(
+    { url: "/shipping-line-template/estimate", method: "POST", data },
+    { showToast: true },
+  );
+};
 
 export const createWaybill = (data: any): Promise<any> =>
   request.post("/waybill/submit", data);

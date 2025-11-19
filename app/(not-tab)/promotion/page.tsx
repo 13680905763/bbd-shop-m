@@ -1,8 +1,10 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavBar, Image } from "antd-mobile";
 import { Accordion, AccordionItem, Button } from "@heroui/react";
 import { useRouter } from "next/navigation";
+
+import { getExperience, getPromotionConfig } from "@/services";
 const PrivilegeCard = ({ active = false }) => (
   <div className={`flex-1 ${active ? "bg-[#fff5f3]" : "bg-[#f8f8f8]"}`}>
     <div
@@ -23,6 +25,24 @@ const PrivilegeCard = ({ active = false }) => (
 
 export default function Settingpage() {
   const router = useRouter();
+  const [experience, setExperience] = useState<any>(null);
+
+  const [promotionConfig, setPromotionConfig] = useState([]);
+  const fetchExperience = async () => {
+    try {
+      const res = await getExperience();
+      const res1 = await getPromotionConfig();
+
+      setPromotionConfig(res1);
+      setExperience(res || null);
+    } catch {
+    } finally {
+    }
+  };
+
+  useEffect(() => {
+    fetchExperience();
+  }, []);
   const stepList = [
     { text: "分享您的联盟代码" },
     { text: "您邀请的朋友确认后，您将收到联盟佣金" },
@@ -54,7 +74,7 @@ export default function Settingpage() {
         联盟会员
       </NavBar>
       <div>
-        <Image src="/images/promotion.png" />
+        <Image src="/m/images/promotion.png" />
 
         <div className="p-2">
           <div className="relative mx-auto mb-[0.625rem] flex w-[16.25rem] items-center justify-between after:absolute after:z-[1] after:w-full after:border-b after:border-dashed after:border-[#c92910] after:content-['']">
@@ -79,7 +99,7 @@ export default function Settingpage() {
           </div>
           <div className="box-card flex flex-col items-center gap-2 p-2">
             <div className="w-full bg-[#f5f5f5] p-2">
-              https://cnfans.com/register/?ref=3582377
+              https://bbdbuy.com/register/?ref=3582377
             </div>
             <Button className="w-full" color="primary">
               一键复制
@@ -119,7 +139,7 @@ export default function Settingpage() {
 
           <div className="box-card p-2 px-4 pt-4">
             <div className="flex justify-between pb-0 text-base font-medium">
-              <div>我的特权</div>
+              <div>我的等级</div>
               <div className="flex items-center gap-1 text-sm text-[#999]">
                 {/* <IoIosHelpCircleOutline
                   onClick={handleHelpClick}
@@ -129,10 +149,31 @@ export default function Settingpage() {
               </div>
             </div>
 
-            <div className="mt-[0.9375rem] flex justify-around overflow-hidden rounded-md border border-[#eeeeee]">
-              <PrivilegeCard active />
-              <PrivilegeCard />
-              <PrivilegeCard />
+            <div className="flex overflow-hidden rounded-lg border border-[#eeeeee] bg-[#f7f8f9]">
+              {promotionConfig.map((item: any, index) => (
+                <div
+                  key={item.id}
+                  className={`flex flex-1 flex-col items-center justify-center border-l border-[#eeeeee] first:border-l-0 ${
+                    index === 0 ? "bg-[#ffeee1]" : "bg-white"
+                  }`}
+                >
+                  {/* 奖金比例标题 */}
+                  <div className="py-4 text-center text-lg font-semibold text-[#f0700c]">
+                    {item.rangeCode}
+                  </div>
+
+                  {/* 奖金详情 */}
+                  <div className="flex flex-col items-center gap-1 py-4">
+                    <div className="text-sm text-gray-500">奖金比例</div>
+                    <div className="text-base font-bold text-[#f0700c]">
+                      {(Number(item.configValue) * 100).toFixed(2)}%
+                    </div>
+                    <div className="text-xs text-gray-400">
+                      {item.rangeMin} ~ {item.rangeMax} 经验
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
           <div className="box-card p-2">

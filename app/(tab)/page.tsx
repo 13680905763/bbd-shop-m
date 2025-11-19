@@ -125,6 +125,8 @@ export default function Home() {
               <div
                 key={item.title}
                 className="flex flex-1 flex-col items-center justify-center text-center"
+                role="button"
+                onClick={() => router.push(item?.to || "")}
               >
                 <div>
                   <Avatar src={item.image} />
@@ -135,7 +137,11 @@ export default function Home() {
           })}
         </div>
 
-        <div className="box-card py-2">
+        <div
+          className="box-card py-2"
+          role="button"
+          onClick={() => router.push("/estimation")}
+        >
           <div className="flex items-center justify-between px-4 py-2">
             <div className="flex-1 text-sm font-bold">Shipping Estimate</div>
             <div className="flex-1">

@@ -105,7 +105,34 @@ export const uploadAvatar = async (file: File) => {
     throw error + "上用户头像";
   }
 };
+
+/** 获取用户经验 */
+export const getExperience = (): Promise<any> => {
+  return request.get(`/customer-experience/myExperience`);
+};
 /** 获取积分列表 */
-export const getPointsList = (current: number, size: number): Promise<any> => {
-  return request.get(`/customer-points-detail?current=${current}&size=${size}`);
+export const getPointsList = (): Promise<any> => {
+  return request.get(`/customer-points-detail`);
+};
+/** 获取经验列表 */
+export const getExperienceList = (): Promise<any> => {
+  return request.get(`/customer-experience-detail`);
+};
+/** 获取邀请列表 */
+export const getPromotionUserList = (): Promise<any> => {
+  return request.get(`/customer/inviteList`);
+};
+/** 获取奖金配置 */
+export const getPromotionConfig = (): Promise<any> => {
+  return request.get(`/promotion-config?configType=EXPERIENCE`);
+};
+/** 获取奖金配置 */
+export const getPromotionBonusList = (): Promise<any> => {
+  return request.get(`/customer-bonus-detail`);
+};
+export const updatePwd = (data: any): Promise<UserInfo> => {
+  return requestWithOption(
+    { url: "/customer/password", method: "POST", data },
+    { showToast: true },
+  );
 };

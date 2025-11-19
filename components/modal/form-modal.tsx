@@ -79,7 +79,7 @@ const FormModal = ({
       <ModalContent>
         <>
           <ModalHeader>{title}</ModalHeader>
-          <ModalBody>
+          <ModalBody className="max-h-[70vh] overflow-y-auto">
             <FormItemRenderer
               fields={fields}
               formData={formData}

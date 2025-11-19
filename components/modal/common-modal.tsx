@@ -7,18 +7,18 @@ import {
   ModalFooter,
   Button,
 } from "@heroui/react";
-import React from "react";
+import { useTranslations } from "next-intl";
+import React, { useState } from "react";
 
 interface CommonModalProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   title?: string;
   children?: React.ReactNode;
-  showFooter?: boolean;
   footer?: React.ReactNode;
   showCancel?: boolean;
   onCancel?: () => void;
-  onConfirm?: (onClose: () => void) => void;
+  onConfirm?: () => Promise<void> | void; // 不再传 onClose
   confirmText?: string;
   cancelText?: string;
   size?:
@@ -34,7 +34,6 @@ interface CommonModalProps {
     | "full";
   isDismissable?: boolean;
   isKeyboardDismissDisabled?: boolean;
-  isLoading?: boolean; // 新增
 }
 
 export default function CommonModal({
@@ -44,16 +43,35 @@ export default function CommonModal({
   children,
   footer,
   showCancel = true,
-  showFooter = true,
   onCancel,
   onConfirm,
-  confirmText = "确认",
-  cancelText = "取消",
+  confirmText,
+  cancelText,
   size = "md",
   isDismissable = true,
   isKeyboardDismissDisabled = false,
-  isLoading = false, // 默认 false
 }: CommonModalProps) {
+  const t = useTranslations("components.confirmModal"); // Common 是语言包的 namespace
+
+  const [loading, setLoading] = useState(false);
+
+  const handleConfirm = async () => {
+    if (!onConfirm) return;
+    try {
+      setLoading(true);
+      await onConfirm(); // 异步操作
+      onOpenChange(false); // 弹窗关闭
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCancel = () => {
+    if (loading) return; // loading 时禁止关闭
+    onCancel?.();
+    onOpenChange(false);
+  };
+
   return (
     <Modal
       isDismissable={isDismissable}
@@ -64,40 +82,34 @@ export default function CommonModal({
       onOpenChange={onOpenChange}
     >
       <ModalContent>
-        {(onClose) => (
-          <>
-            {title && <ModalHeader>{title}</ModalHeader>}
-            <ModalBody>{children}</ModalBody>
-            {showFooter && (
-              <ModalFooter>
-                {footer ? (
-                  footer
-                ) : (
-                  <>
-                    {showCancel && (
-                      <Button
-                        variant="flat"
-                        onPress={() => {
-                          onCancel?.();
-                          onClose();
-                        }}
-                      >
-                        {cancelText}
-                      </Button>
-                    )}
-                    <Button
-                      color="primary"
-                      isLoading={isLoading}
-                      onPress={() => onConfirm?.(onClose)}
-                    >
-                      {confirmText}
-                    </Button>
-                  </>
+        <>
+          {title && <ModalHeader>{title}</ModalHeader>}
+          <ModalBody>{children}</ModalBody>
+          <ModalFooter>
+            {footer ? (
+              footer
+            ) : (
+              <>
+                {showCancel && (
+                  <Button
+                    isDisabled={loading}
+                    variant="flat"
+                    onPress={handleCancel}
+                  >
+                    {cancelText ?? t("cancelText")}
+                  </Button>
                 )}
-              </ModalFooter>
+                <Button
+                  color="primary"
+                  isLoading={loading}
+                  onPress={handleConfirm}
+                >
+                  {confirmText ?? t("confirmText")}
+                </Button>
+              </>
             )}
-          </>
-        )}
+          </ModalFooter>
+        </>
       </ModalContent>
     </Modal>
   );
