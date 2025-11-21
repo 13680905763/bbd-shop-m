@@ -2,6 +2,9 @@
 
 # === 配置区 ===
 REMOTE_USER="root"
+# 线上
+# REMOTE_HOST="47.91.72.123"
+# 测试
 REMOTE_HOST="8.211.61.244"
 REMOTE_DIR="/usr/frontend/bbdbuy-mb"
 PROJECT_NAME="bbdbuy-mb"

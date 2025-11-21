@@ -23,31 +23,9 @@ import {
 } from "@/services";
 import { useOrderPreview } from "@/hook";
 import { createOrderPreviewKeyByProductParams } from "@/types";
-import { useGlobalStore, useServicesStore } from "@/store";
+import { useGlobalStore } from "@/store";
 import CommonModal from "@/components/modal/common-modal";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
-
-export type Product = {
-  id: string;
-  productTitle: string;
-  sku: {
-    propName_valueName: string;
-  };
-  skuPicUrl: string;
-  remark?: string;
-  totalPrice: number;
-  price: number;
-  postFee: number;
-  quantity: number;
-  source: string;
-  sourceProductId: string;
-};
-
-export type Shop = {
-  shopId: string;
-  shopName: string;
-  cartList: Product[];
-};
 
 export default function SubmitOrder() {
   const t = useTranslations("submitOrder");
@@ -61,7 +39,6 @@ export default function SubmitOrder() {
   const [orderData, setOrderData] = useState<any>(null);
 
   const [submitting, setSubmitting] = useState<boolean>(false);
-  const services = useServicesStore((state) => state.services);
 
   const handleCartSubmit = async () => {
     if (submitting) return;
@@ -70,13 +47,13 @@ export default function SubmitOrder() {
     if (type === "cart") {
       const bizCode = await createOrderByCart(orderData?.param);
 
-      router.push("/order/pay-order/" + bizCode);
+      router.push("/payment/" + bizCode);
     } else if (type === "product") {
       const bizCode = await createOrderByProduct(
         orderData?.param as createOrderPreviewKeyByProductParams,
       );
 
-      router.push("/order/pay-order/" + bizCode);
+      router.push("/payment/" + bizCode);
     }
     setSubmitting(false);
   };
@@ -87,13 +64,10 @@ export default function SubmitOrder() {
   const [startIndex, setStartIndex] = useState(0);
   const [servicesList, setServicesList] = useState([]);
 
-  console.log("startIndex", startIndex);
-
   // 本地状态：存储克隆的服务列表，用于单商品
   const [localServices, setLocalServices] = useState<any[]>([]);
 
   // 弹窗状态
-  const [isServiceListOpen, setIsServiceListOpen] = useState(false);
   const [isServiceDetailOpen, setIsServiceDetailOpen] = useState(false);
 
   // 当前操作的商品ID
@@ -161,7 +135,12 @@ export default function SubmitOrder() {
     setLocalServices((prev) =>
       prev.map((s) =>
         s.id === currentService.id
-          ? { ...s, remark: currentService.remark, isCheck: true }
+          ? {
+              ...s,
+              remark: currentService.remark,
+              isCheck: true,
+              quantity: currentService?.quantity,
+            }
           : s,
       ),
     );
@@ -185,7 +164,11 @@ export default function SubmitOrder() {
 
     const checkedServices = localServices
       .filter((s) => s.isCheck)
-      .map((s) => ({ serviceId: s.id, remark: s.remark }));
+      .map((s) => ({
+        serviceId: s.id,
+        remark: s.remark,
+        quantity: s.quantity,
+      }));
 
     console.log("checkedServices", checkedServices);
 
@@ -210,7 +193,6 @@ export default function SubmitOrder() {
       }
 
       setOrderData(res);
-      setIsServiceListOpen(false);
     } catch (err) {
       addToast({ title: "提交失败", color: "danger" });
     } finally {
@@ -272,7 +254,6 @@ export default function SubmitOrder() {
 
     fetchData();
   }, []);
-  console.log("currentService.sample", currentService?.sample);
 
   if (isError) return <div>出错了</div>;
 

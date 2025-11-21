@@ -60,17 +60,17 @@
         },
         "menu": [
             {
-                "title": "Purchase Orders",
+                "title": "Orders",
                 "src": "/m/images/dashboard/order.png",
                 "to": "/profile/order"
             },
             {
-                "title": "My Warehouse",
+                "title": "Warehouse",
                 "src": "/m/images/dashboard/warehouse.png",
                 "to": "/profile/warehouse"
             },
             {
-                "title": "My Packages",
+                "title": "Packages",
                 "src": "/m/images/dashboard/package.png",
                 "to": "/profile/package"
             }
@@ -80,17 +80,17 @@
             "status": "Invited: 0 | Activated: 0",
             "stats": [
                 {
-                    "title": "Total Rewards",
+                    "title": "Invited Users",
                     "value": "$888",
                     "to": "/pages/member/account/index"
                 },
                 {
-                    "title": "Affiliate Balance",
+                    "title": "Withdrawals",
                     "value": "88",
                     "to": "/pages/member/points/index"
                 },
                 {
-                    "title": "Withdrawn Amount",
+                    "title": "Earned",
                     "value": "88",
                     "to": "/pages/member/points/index"
                 }
@@ -100,17 +100,17 @@
             "title": "More Services",
             "items": [
                 {
-                    "title": "Notifications",
+                    "title": "Messages",
                     "src": "/m/images/dashboard/message.png",
                     "to": "/profile/message"
                 },
                 {
-                    "title": "My Favorites",
+                    "title": "Favorites",
                     "src": "/m/images/dashboard/favorite.png",
                     "to": "/profile/favorite"
                 },
                 {
-                    "title": "Shipping Address",
+                    "title": "Address",
                     "src": "/m/images/dashboard/address.png",
                     "to": "/profile/address"
                 },
@@ -127,7 +127,7 @@
             ]
         }
     },
-    "Cart": {
+    "cart": {
         "title": "Cart",
         "manage": "Manage",
         "cancel": "Cancel",
@@ -158,51 +158,107 @@
             "uploading": "Uploading avatar...",
             "loadError": "Failed to load, please try again"
         },
-        "orderPage": {
-            "texts": {
-                "pay": "Pay",
-                "cancel": "Cancel",
-                "requestRefund": "Request Refund"
-            },
-            "title": "Purchase Orders",
+        "order": {
+            "pay": "Pay",
+            "cancel": "Cancel",
+            "requestRefund": "Request Refund",
+            "title": "Orders",
             "tabs": {
                 "all": "All",
                 "waitPay": "Pending Payment",
                 "paid": "Paid"
             },
+            "withdrawRequest": "Withdraw Request",
+            "selectRefundItems": "Please select the item to be refunded",
+            "cancelTitle": "Cancel Order",
+            "cancelContent": "Are you sure you want to cancel this order?",
+            "withdrawTitle": "Withdraw",
+            "withdrawContent": "Are you sure you want to withdraw the current request?",
+            "refundTitle": "Request Refund",
+            "refundContent": "Are you sure you want to request a refund for this order?",
+            "remarkPlaceholder": "Enter remarks (optional)",
+            "refundable": "Refundable",
+            "unrefundable": "Non-refundable",
             "noOrders": "No orders yet",
             "selectAll": "Select All",
             "batchPay": "Batch Pay",
-            "cancelTitle": "Cancel Order",
-            "cancelContent": "Are you sure you want to cancel this order?",
-            "requestRefund": "Request Refund",
-            "requestRefundConfirm": "Are you sure you want to request a refund for this order?"
+            "requestRefundConfirm": "Are you sure you want to request a refund for this order?",
+            "noMoreRecords": "No more records"
         },
-        "WarehousePage": {
-            "navbar": "Warehouse",
+        "warehouse": {
+            "title": "Warehouse",
             "all": "All",
             "submit": "Submittable",
             "selectAll": "Select All",
             "submitPackages": "Submit Packages",
             "confirmCancelTitle": "Cancel Order",
-            "confirmCancelContent": "Are you sure you want to cancel this order?"
+            "confirmCancelContent": "Are you sure you want to cancel this order?",
+            "orderCode": "Order Number",
+            "createTime": "Created At",
+            "weight": "Weight",
+            "size": "Size",
+            "quantity": "Quantity",
+            "valueAddedServices": "Value-added Services",
+            "serviceItemName": "Service Item",
+            "noOrders": "No orders yet",
+            "noMoreRecords": "No more records"
         },
-        "PackagePage": {
-            "navbar": "Package",
+        "package": {
+            "title": "Package",
             "all": "All",
             "pay": "Pending Payment",
             "shipping": "Shipping",
             "received": "Received",
             "selectAll": "Select All",
             "submitPay": "Pay",
-            "texts": {
+            "noOrders": "No orders yet",
+            "noMoreRecords": "No more records",
+            "packageItem": {
+                "shippingCode": "Tracking Number:",
                 "productImage": "Product Image",
                 "weight": "Weight",
                 "size": "Size",
                 "shipping": "Shipping Method",
                 "serviceFee": "Service Fee",
                 "totalFee": "Total Fee",
-                "none": "None"
+                "none": "None",
+                "payButton": "Pay",
+                "cancelButton": "Cancel",
+                "payCancelFee": "Payment Cancellation Fee",
+                "requestRefund": "Request Cancellation",
+                "withdrawRequest": "Withdraw Request",
+                "changeBtn": "Change Route"
+            },
+            "refundModal": {
+                "title": "Cancel",
+                "cancelCard": {
+                    "title": "Confirm Cancellation",
+                    "subtitle": "Cancel this order",
+                    "submittingTitle": "Cancelling...",
+                    "submittingSubtitle": "Please wait",
+                    "serviceFee": "Service Fee",
+                    "packingFee": "Packing Fee",
+                    "totalFee": "Total Fee"
+                },
+                "changeRouteCard": {
+                    "title": "Change Route",
+                    "subtitle": "Re-select shipping route"
+                }
+            },
+            "withdrawModal": {
+                "content": "Are you sure to withdraw the cancellation request?"
+            },
+            "changeModal": {
+                "title": "Change Route"
+            },
+            "lineModal": {
+                "title": "Tracking Information",
+                "mainWaybillTitle": "Main Waybill Timeline",
+                "subWaybillTitle": "Sub Waybill:",
+                "waybillNumber": "Waybill Number:",
+                "currentStatus": "Current Status:",
+                "location": "Location:",
+                "mainTimeline": "Main Waybill Timeline:"
             }
         },
         "address": {
@@ -330,26 +386,15 @@
         }
     },
     "setting": {
-        "Page": {
+        "page": {
             "title": "Settings",
-            "logout": "Logout",
-            "menu": [
-                {
-                    "title": "Language",
-                    "path": "/setting/language"
-                },
-                {
-                    "title": "Currency",
-                    "path": "/setting/currency"
-                },
-                {
-                    "title": "Change Password",
-                    "path": "/setting/changepwd"
-                }
-            ]
+            "menuLanguage": "Language",
+            "menuCurrency": "Currency",
+            "menuChangePassword": "Change Password",
+            "logout": "Logout"
         },
         "currencyPage": {
-            "title": "Language",
+            "title": "Currency",
             "save": "Save"
         },
         "languagePage": {
@@ -366,7 +411,7 @@
                 "confirmPassword": "Confirm Password",
                 "submit": "Change Password"
             },
-            "tip": "The new passwords entered twice do not match"
+            "tip": "The new passwords entered do not match"
         }
     },
     "wallet": {
@@ -380,9 +425,22 @@
             "enterOtherAmount": "Enter other amount",
             "recharge": "Recharge",
             "enterValidAmount": "Please enter a valid amount"
+        },
+        "balanceRecord": {
+            "title": "Balance Record"
+        },
+        "points": {
+            "title": "Points",
+            "myPoints": "Points",
+            "pointsDetail": "Points Details",
+            "pointsExchange": "Points Exchange",
+            "bizType": "Type",
+            "createTime": "Time",
+            "amount": "Amount",
+            "noMoreRecords": "No more records"
         }
     },
-    "PayOrder": {
+    "payOrder": {
         "title": "Confirm Order",
         "total": "Total",
         "handlingFee": "Handling Fee",
@@ -391,6 +449,28 @@
         "balance": "Balance",
         "recharge": "Recharge",
         "pleaseAddBillingAddress": "Please add billing address"
+    },
+    "payment": {
+        "title": "Confirm Order",
+        "total": "Total",
+        "handlingFee": "Handling Fee",
+        "billingAddress": "Billing Address",
+        "submit": "Submit",
+        "balance": "Balance",
+        "recharge": "Recharge",
+        "pleaseAddBillingAddress": "Please add billing address",
+        "result": {
+            "loading": "Confirming payment result...",
+            "successTitle": "Payment Successful",
+            "successNotice": "We have received your payment, your order is being processed.",
+            "transactionId": "Transaction ID:",
+            "amount": "Amount Paid:",
+            "time": "Payment Time:",
+            "failTitle": "Payment Failed",
+            "failNotice": "Payment not completed. Please check your order or try again.",
+            "viewOrder": "View Order",
+            "backHome": "Back to Home"
+        }
     },
     "Goods": {
         "productDetails": "Product Details",
@@ -459,5 +539,185 @@
         "delete": "Delete",
         "save": "Save",
         "confirm": "Confirm"
+    },
+    "submitOrder": {
+        "confirmProductInfo": "Confirm Product Information",
+        "product": "Product",
+        "remark": "Remark",
+        "noRemark": "No Remark",
+        "price": "Price",
+        "quantity": "Quantity",
+        "subtotal": "Subtotal",
+        "declaration": "Prohibited Items Declaration",
+        "terms": "Terms of Service and User Management",
+        "returnPolicy": "Return and Exchange Service",
+        "disclaimer": "Disclaimer",
+        "agreement": "I have read and agree to BBDbuy's Disclaimer",
+        "notice": "Note: After completing payment, when the goods arrive and are stored in the warehouse, you need to submit the package for international shipping.",
+        "amountDue": "Amount Due:",
+        "submit": "Submit",
+        "valueAddedService": "Value-Added Service",
+        "free": "Free",
+        "add": "Add",
+        "serviceItem": "Service Item",
+        "delete": "Delete",
+        "save": "Save",
+        "confirm": "Confirm",
+        "serviceIntro": "Service Introduction",
+        "noIntro": "No Introduction",
+        "sample": "Sample",
+        "serviceFee": "Service Fee",
+        "remarkPlaceholder": "Enter remark (optional)",
+        "OrderItem": {
+            "valueAddedService": "Value-Added Service",
+            "noService": "No Service",
+            "remark": "Remark",
+            "shippingFee": "Shipping Fee",
+            "serviceFee": "Service Fee",
+            "productFee": "Product Fee",
+            "shopTotal": "Shop Total",
+            "add": "Add"
+        }
+    },
+    "submitWarehouse": {
+        "title": "Package Submit",
+        "shippingAddress": "Shipping Address",
+        "commodityList": "Commodity List",
+        "packagingMethod": "Packaging Method",
+        "deliveryRoute": "Delivery Route",
+        "textareaPlaceholder": "If you have any special requirements, please leave a note here",
+        "agreement": "I have read and agreed to the bbdbuy Package Shipping Agreement",
+        "submitPackage": "Submit Package",
+        "toast": {
+            "checkAgreement": "Please check the disclaimer",
+            "selectAddress": "Please select a shipping address",
+            "selectRoute": "Please select a delivery route",
+            "submitSuccess": "Submitted successfully"
+        },
+        "fields": [
+            {
+                "key": "recipient",
+                "type": "input",
+                "name": "recipient",
+                "label": "Recipient",
+                "placeholder": "Enter recipient name",
+                "required": true
+            },
+            {
+                "key": "phone",
+                "type": "input",
+                "name": "phone",
+                "label": "Phone",
+                "placeholder": "Enter phone number",
+                "required": true
+            },
+            {
+                "key": "area",
+                "type": "area",
+                "name": "area",
+                "label": "Area",
+                "placeholder": "Select area"
+            },
+            {
+                "key": "address",
+                "type": "input",
+                "name": "address",
+                "label": "Address",
+                "placeholder": "Enter full address",
+                "required": true
+            },
+            {
+                "key": "doorNo",
+                "type": "input",
+                "name": "doorNo",
+                "label": "Door No",
+                "placeholder": "Enter door number",
+                "required": true
+            },
+            {
+                "key": "postcode",
+                "type": "input",
+                "name": "postcode",
+                "label": "Postcode",
+                "placeholder": "Enter postcode",
+                "required": true
+            },
+            {
+                "key": "defaultAddress",
+                "type": "checkbox",
+                "name": "defaultAddress",
+                "label": "Set as default address"
+            }
+        ],
+        "texts": {
+            "title": {
+                "add": "Add Address",
+                "edit": "Edit Address",
+                "deleteConfirm": "Are you sure you want to delete this address?"
+            },
+            "buttons": {
+                "add": "+ Add Address",
+                "edit": "Edit",
+                "delete": "Delete"
+            },
+            "tableEmpty": "No address information available at the moment."
+        }
+    },
+    "promotion": {
+        "title": "Affiliate Member",
+        "promotionImageAlt": "Affiliate Promotion Image",
+        "steps": {
+            "step1": "Share your affiliate code",
+            "step2": "Once your friend confirms, you'll receive affiliate commission",
+            "step3": "Receive your affiliate commission"
+        },
+        "referralLink": {
+            "label": "Referral Link",
+            "copyButton": "Copy Link",
+            "desc": "Copy this link and use it to redirect users to our homepage with your affiliate ID."
+        },
+        "totalReward": {
+            "label": "Total Reward",
+            "amount": "CAD 0.00",
+            "recordButton": "Record",
+            "withdrawButton": "Withdraw"
+        },
+        "moneyList": {
+            "inviteUser": {
+                "title": "Invited Users",
+                "value": "$888"
+            },
+            "withdrawable": {
+                "title": "Withdrawable",
+                "value": "88"
+            },
+            "earned": {
+                "title": "Earned",
+                "value": "88"
+            }
+        },
+        "myLevel": {
+            "label": "My Level",
+            "points": "Points: 0"
+        },
+        "promotionConfig": {
+            "bonusLabel": "Bonus Ratio",
+            "experienceLabel": "Experience"
+        },
+        "faq": {
+            "title": "Benefits FAQ",
+            "item1": {
+                "question": "What is the Affiliate Membership Program?",
+                "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            },
+            "item2": {
+                "question": "How is my bonus calculated?",
+                "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            },
+            "item3": {
+                "question": "How to promote for free?",
+                "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            }
+        }
     }
 }

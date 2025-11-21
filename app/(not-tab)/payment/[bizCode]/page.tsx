@@ -107,7 +107,7 @@ const OtherPayment = ({ payment }: any) => (
 );
 
 export default function PayOrder() {
-  const t = useTranslations("payOrder");
+  const t = useTranslations("payment");
   const { currency } = useGlobalStore();
   const router = useRouter();
   const params = useParams<{ bizCode: string }>();
@@ -256,7 +256,7 @@ export default function PayOrder() {
           size="lg"
           onPress={hanldeCreatePayOrder}
         >
-          {t("placeOrder")}
+          {t("submit")}
         </Button>
       </div>
     </div>

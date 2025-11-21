@@ -1,5 +1,6 @@
 import { Checkbox, Image } from "@heroui/react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import MediaPreviewGroup, {
   MediaItem,
@@ -12,6 +13,7 @@ export default function OrderItem({
   selected,
 }: any) {
   const router = useRouter();
+  const t = useTranslations("profile.warehouse");
   const product = warehouse?.orderProduct;
 
   return (
@@ -21,13 +23,21 @@ export default function OrderItem({
         {activeTab === "submit" ? (
           <Checkbox isSelected={selected} onChange={onChange} />
         ) : null}
+
         <div className="text-sm font-medium text-gray-800">
-          <span className="font-semibold">{warehouse?.orderCode}</span>
+          {/* 订单号 */}
+          <span className="font-semibold">
+            {t("orderCode")}: {warehouse?.orderCode}
+          </span>
         </div>
-        <div className="text-xs text-gray-500">{warehouse?.createTime}</div>
+
+        <div className="text-xs text-gray-500">
+          {/* 创建时间 */}
+          {warehouse?.createTime}
+        </div>
       </div>
 
-      {/* 商品列表（原 ProductItem 内容） */}
+      {/* 商品区域 */}
       <div className="my-4 flex gap-3">
         {/* 商品图 */}
         <button
@@ -57,19 +67,19 @@ export default function OrderItem({
             {product.sku?.propName_valueName}
           </div>
 
-          {/* 重量 & 尺寸 */}
+          {/* 重量 尺寸 */}
           <div className="mt-2 space-y-1">
             <div className="text-sm font-semibold">
-              重量：<span className="ml-1">{warehouse?.weight} g</span>
+              {t("weight")}: <span className="ml-1">{warehouse?.weight} g</span>
             </div>
             <div className="text-sm text-gray-600">
-              尺寸：{warehouse.length} × {warehouse.width} × {warehouse.height}{" "}
-              cm
+              {t("size")}: {warehouse.length} × {warehouse.width} ×{" "}
+              {warehouse.height} cm
             </div>
           </div>
         </div>
 
-        {/* 价格/数量 */}
+        {/* 数量 */}
         <div className="shrink-0 text-right">
           <p className="text-lg font-semibold text-gray-500">
             x{product.quantity}
@@ -80,7 +90,7 @@ export default function OrderItem({
       {/* 增值服务 */}
       <div className="mt-3 flex flex-col gap-4 bg-[#fafafa] p-2">
         {product?.orderServiceList.map((service: any) => (
-          <div key={service.serviceId} className="mb-2 flex gap-2">
+          <div key={service.id} className="mb-2 flex gap-2">
             <div className="mb-2 text-sm text-[#acacac]">
               {service.serviceName}
             </div>
@@ -89,10 +99,10 @@ export default function OrderItem({
         ))}
       </div>
 
-      {/* 金额 + 按钮 */}
+      {/* 状态 */}
       <div className="mt-3 text-right">
         <p className="my-2 text-sm text-gray-700">
-          <span className="text-lg font-bold text-[#f0700c]">
+          <span className="text-base font-bold text-[#f0700c]">
             {warehouse?.status}
           </span>
         </p>

@@ -56,13 +56,13 @@ export default function WalletRechargePage() {
       currencyCode: currency.value,
     });
 
-    router.push("/order/pay-order/" + bizCode);
+    router.push("/payment/" + bizCode);
+    // router.push("/order/pay-order/" + bizCode);
   };
 
   return (
     <div className="h-screen bg-[#f7f8f9]">
       {loading && <FullscreenLoader />}
-
       <NavBar
         className="bg-white"
         right={

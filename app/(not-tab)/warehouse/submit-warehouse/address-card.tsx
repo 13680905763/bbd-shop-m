@@ -17,7 +17,7 @@ interface BackendAddress {
 interface AddressCardProps {
   data?: BackendAddress;
   onEdit?: (id: string) => void;
-  onSelect?: (id: string) => void;
+  onSelect?: (id: string | null) => void;
   isSelected?: boolean;
 }
 
@@ -38,7 +38,6 @@ export default function AddressCard({
     city = "",
     address = "",
     postcode = "",
-    defaultAddress = 0,
   } = data;
 
   const fullAddress =
@@ -47,40 +46,41 @@ export default function AddressCard({
   return (
     <Card
       isPressable
-      className={`flex-1 p-4 rounded-2xl border transition ${
-        isSelected ? "border-primary border-2 bg-orange-50" : "border-gray-200"
-      } hover:shadow-md cursor-pointer`}
+      className={`h-24 flex-1 rounded-xl border px-3 py-2 transition ${isSelected ? "border-2 border-primary bg-orange-50" : "border-gray-200"} cursor-pointer active:scale-[0.98]`}
       shadow="none"
-      onClick={() => id && onSelect?.(id)}
+      onClick={() => {
+        if (id && isSelected) {
+          onSelect?.(null);
+        } else if (id) {
+          onSelect?.(id);
+        }
+      }}
     >
-      <div className="flex justify-between items-start">
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-2">
-            <span className="text-lg font-semibold">{recipient}</span>
-            {/* {defaultAddress === 1 && (
-              <Badge
-                className="text-orange-600 border-orange-500"
-                variant="outline"
-              >
-                默认
-              </Badge>
-            )} */}
-          </div>
-          <span className="text-gray-600 text-sm">{phone}</span>
-          <span className="text-gray-700 text-sm leading-relaxed">
+      <div className="flex h-full items-center justify-between">
+        {/* 左侧文字 */}
+        <div className="flex flex-1 flex-col gap-1 overflow-hidden">
+          <span className="line-clamp-1 text-sm font-bold leading-none text-gray-900">
+            {recipient}
+          </span>
+
+          <span className="text-xs leading-none text-gray-500">{phone}</span>
+
+          <span className="line-clamp-2 text-xs leading-snug text-gray-600">
             {fullAddress}
           </span>
         </div>
 
+        {/* 编辑按钮 */}
         {onEdit && (
           <span
+            className="p-2 text-gray-500 hover:text-gray-800"
             role="button"
             onClick={(e) => {
               e.stopPropagation();
               id && onEdit(id);
             }}
           >
-            <FiEdit className="w-4 h-4" />
+            <FiEdit className="h-4 w-4" />
           </span>
         )}
       </div>

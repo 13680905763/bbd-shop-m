@@ -2,12 +2,11 @@
 import { InfiniteScroll, NavBar } from "antd-mobile";
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Checkbox, Tab, Tabs } from "@heroui/react";
+import { Button, Checkbox, Spinner, Tab, Tabs } from "@heroui/react";
 import { useTranslations } from "next-intl";
 
 import WarehouseItem from "./warehouse-item";
 
-import ConfirmModal from "@/components/confirm-modal";
 import { useWarehouseList } from "@/hook";
 import { createWarehousePreviewKeyByCart } from "@/services";
 const tabKeyToStatusCode: Record<string, string> = {
@@ -16,15 +15,20 @@ const tabKeyToStatusCode: Record<string, string> = {
 };
 
 export default function Settingpage() {
-  const t = useTranslations("Profile.WarehousePage"); // ✅ 命名空间
+  const t = useTranslations("profile.warehouse"); // ✅ 命名空间
 
   // 传入订单状态，例如 "ALL"、"WAIT_PAY"
   const [activeTab, setActiveTab] = useState("all");
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, error } =
-    useWarehouseList(tabKeyToStatusCode[activeTab]);
-  const [pendingCancelOrderId, setPendingCancelOrderId] = useState<
-    string | null
-  >(null);
+  const {
+    data,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isFetching,
+    error,
+  } = useWarehouseList(tabKeyToStatusCode[activeTab]);
+
   const [selected, setSelected] = useState<Record<string, boolean>>({});
   const [isSubmitting, setIsSubmitting] = useState(false); // ✅ 批量支付 loading
   const router = useRouter();
@@ -68,11 +72,8 @@ export default function Settingpage() {
         packageSet: selectedIds,
       });
 
-      console.log("key", key);
-
       router.push("/warehouse/submit-warehouse?key=" + key);
-    } catch (error) {
-      console.error("批量支付失败:", error);
+    } catch {
     } finally {
       setIsSubmitting(false); // ✅ 恢复
     }
@@ -94,10 +95,86 @@ export default function Settingpage() {
     }
   }, [data]);
 
+  const WarehouseTabContent = ({
+    warehouse,
+  }: {
+    warehouse: any[];
+    footer?: React.ReactNode;
+  }) => {
+    // console.log("isLoading", isLoading);
+    // console.log("!warehouse?.length", warehouse?.length);
+
+    if (isLoading)
+      return (
+        <div className="flex h-[60vh] flex-col items-center justify-center text-gray-500">
+          <div className="mb-2 text-lg">
+            <Spinner />
+          </div>
+        </div>
+      );
+    if (!warehouse?.length)
+      return (
+        <div className="flex h-[60vh] flex-col items-center justify-center text-gray-500">
+          <p className="mb-2 text-lg">{t("noOrders")}</p>
+        </div>
+      );
+
+    return (
+      <>
+        {isFetching && !isFetchingNextPage && (
+          <div className="flex flex-col items-center justify-center text-gray-500">
+            <div className="mb-2 text-lg">
+              <Spinner />
+            </div>
+          </div>
+        )}
+        <div className="flex flex-col gap-3">
+          {warehouse.map((warehouse: any) => (
+            <WarehouseItem
+              key={warehouse.id}
+              activeTab={activeTab}
+              selected={!!selected[warehouse.packageCode]}
+              warehouse={warehouse}
+              onChange={(e: any) => {
+                setSelected((prev) => ({
+                  ...prev,
+                  [warehouse.packageCode]: e.target.checked,
+                }));
+              }}
+            />
+          ))}
+        </div>
+        <InfiniteScroll
+          hasMore={!!hasNextPage}
+          loadMore={(isRetry) => fetchNextPage().then(() => undefined)}
+        >
+          {!hasNextPage && (
+            <div
+              style={{
+                textAlign: "center",
+                padding: "12px 0",
+                color: "#999",
+              }}
+            >
+              {t("noMoreRecords")}
+            </div>
+          )}
+          {isFetchingNextPage && (
+            <div className="flex flex-col items-center justify-center text-gray-500">
+              <div className="mb-2 text-lg">
+                <Spinner />
+              </div>
+            </div>
+          )}
+        </InfiniteScroll>
+      </>
+    );
+  };
+
   return (
     <div className="flex h-screen flex-col bg-[#f7f8f9]">
       <NavBar className="flex-[0_0_45px] bg-white" onBack={() => router.back()}>
-        {t("navbar")}
+        {t("title")}
       </NavBar>
 
       <Tabs
@@ -114,42 +191,11 @@ export default function Settingpage() {
         onSelectionChange={(key) => setActiveTab(String(key))}
       >
         <Tab key="all" title={t("all")}>
-          {warehouse?.map((warehouse: any) => (
-            <WarehouseItem
-              key={warehouse.packageCode}
-              activeTab={activeTab}
-              warehouse={warehouse}
-            />
-          ))}
-          <InfiniteScroll
-            hasMore={!!hasNextPage}
-            loadMore={(isRetry) => fetchNextPage().then(() => undefined)}
-          />
+          <WarehouseTabContent warehouse={warehouse} />
         </Tab>
 
         <Tab key="submit" title={t("submit")}>
-          <>
-            <div className="flex flex-col gap-3">
-              {warehouse.map((warehouse: any) => (
-                <WarehouseItem
-                  key={warehouse.packageCode}
-                  activeTab={activeTab}
-                  selected={!!selected[warehouse.packageCode]}
-                  warehouse={warehouse}
-                  onChange={(e: any) => {
-                    setSelected((prev) => ({
-                      ...prev,
-                      [warehouse.packageCode]: e.target.checked,
-                    }));
-                  }}
-                />
-              ))}
-            </div>
-            <InfiniteScroll
-              hasMore={!!hasNextPage}
-              loadMore={() => fetchNextPage().then(() => undefined)}
-            />
-          </>
+          <WarehouseTabContent warehouse={warehouse} />
         </Tab>
       </Tabs>
 
@@ -183,17 +229,6 @@ export default function Settingpage() {
           </div>
         </div>
       )}
-      <ConfirmModal
-        content={t("confirmCancelContent")}
-        isOpen={!!pendingCancelOrderId}
-        title={t("confirmCancelTitle")}
-        onConfirm={async () => {
-          if (!pendingCancelOrderId) return;
-          // await onCancelOrder(pendingCancelOrderId);
-          setPendingCancelOrderId(null);
-        }}
-        onOpenChange={() => setPendingCancelOrderId(null)}
-      />
     </div>
   );
 }

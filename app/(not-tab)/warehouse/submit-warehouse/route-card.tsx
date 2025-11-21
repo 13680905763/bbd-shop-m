@@ -1,5 +1,5 @@
 "use client";
-import { Avatar, Chip, Card } from "@heroui/react";
+import { Avatar, Card } from "@heroui/react";
 
 interface BackendRoute {
   id?: string;
@@ -37,7 +37,7 @@ export default function RouteCard({
   } = data;
 
   const name = templateName || methodName;
-  const price = `$ ${firstWeightFee.toFixed(2)}`;
+  const price = `$ ${firstWeightFee}`;
   const time = minDays && maxDays ? `${minDays}-${maxDays} days` : "暂无时效";
 
   return (
@@ -54,14 +54,6 @@ export default function RouteCard({
         <div className="flex w-[80px] flex-shrink-0 flex-col items-center">
           <Avatar className="h-12 w-12" radius="sm" src={logoUrl} />
           <p className="mt-1 text-center text-xs font-medium">{name}</p>
-          <div className="mt-1 flex flex-wrap justify-center gap-1">
-            <Chip className="text-[10px]" color="primary" size="sm">
-              可投保
-            </Chip>
-            <Chip className="text-[10px] text-[#fff]" color="success" size="sm">
-              免税
-            </Chip>
-          </div>
         </div>
 
         {/* 右侧 */}

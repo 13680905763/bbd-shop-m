@@ -11,6 +11,8 @@ import {
   Tab,
   Tabs,
   Image,
+  Textarea,
+  addToast,
 } from "@heroui/react";
 import { useTranslations } from "next-intl";
 
@@ -18,9 +20,15 @@ import OrderItem from "./order-item";
 
 import { useOrderList } from "@/hook";
 import ConfirmModal from "@/components/confirm-modal";
-import { batchPayOrder, OrderRefund, putOrderCancel } from "@/services";
+import {
+  batchPayOrder,
+  OrderRefund,
+  putOrderCancel,
+  putOrderRevoke,
+} from "@/services";
 import { queryClient } from "@/lib/react-query";
 import CommonModal from "@/components/modal/common-modal";
+import { useGlobalStore } from "@/store";
 const tabKeyToStatusCode: Record<string, string> = {
   all: "",
   waitPay: "201",
@@ -28,7 +36,7 @@ const tabKeyToStatusCode: Record<string, string> = {
 };
 
 export default function Settingpage() {
-  const t = useTranslations("profile.orderPage"); // ✅ 命名空间
+  const t = useTranslations("profile.order"); // ✅ 命名空间
   // 传入订单状态，例如 "ALL"、"WAIT_PAY"
   const [activeTab, setActiveTab] = useState("all");
   const {
@@ -43,9 +51,8 @@ export default function Settingpage() {
 
   const [selected, setSelected] = useState<Record<string, boolean>>({});
   const [isSubmitting, setIsSubmitting] = useState(false); // ✅ 批量支付 loading
-  const [pendingRequestRefundId, setPendingRequestRefundId] = useState<
-    string | null
-  >(null);
+
+  const { currency } = useGlobalStore();
 
   // === 新增两个 state 分开控制 ===
   const [cancelConfig, setCancelConfig] = useState<{
@@ -56,7 +63,11 @@ export default function Settingpage() {
   const [refundConfig, setRefundConfig] = useState<{
     order: any;
   } | null>(null);
-
+  const [revokeConfig, setRevokeConfig] = useState<{
+    title: string;
+    content: string;
+    onConfirm: () => Promise<void>;
+  } | null>(null);
   const router = useRouter();
   const onCancelOrder = async (orderId: string): Promise<void> => {
     try {
@@ -67,8 +78,12 @@ export default function Settingpage() {
       queryClient.invalidateQueries({ queryKey: ["orderList"] });
     } catch {}
   };
+  const onRevokeOrder = async (refundId: string): Promise<void> => {
+    await putOrderRevoke(refundId);
+    queryClient.invalidateQueries({ queryKey: ["orderList"] });
+  };
   const onPayOrderRedirect = (bizCode: string) => {
-    router.push(`/order/pay-order/${bizCode}`);
+    router.push(`/payment/${bizCode}`);
   };
   const orders = data?.pages?.flatMap((page: any) => page.records) ?? [];
   const allIds = useMemo<string[]>(() => {
@@ -87,6 +102,9 @@ export default function Settingpage() {
 
     setSelected(newSelected);
   };
+  const toggleOrder = (orderCode: string, checked: boolean) => {
+    setSelected((prev) => ({ ...prev, [orderCode]: checked }));
+  };
   // 选中的 orderCode
   const selectedIds = useMemo<string[]>(() => {
     return Object.entries(selected)
@@ -104,7 +122,7 @@ export default function Settingpage() {
         orderCodeSet: selectedIds,
       });
 
-      router.push(`/order/pay-order/${bizCode}`);
+      router.push(`/payment/${bizCode}`);
     } catch {
     } finally {
       setIsSubmitting(false); // ✅ 恢复
@@ -160,17 +178,18 @@ export default function Settingpage() {
         sourceProductId: p.sourceProductId,
         sourceSkuId: p.sourceSkuId,
         quantity: p.refundQuantity,
+        remark: p?.remark || "",
       }));
 
     if (selectedProducts.length === 0) {
-      alert("请选择要退款的商品");
+      addToast({
+        title: "Please select the item to be refunded",
+        timeout: 1000,
+        color: "danger",
+      });
 
       return;
     }
-    console.log("555", {
-      orderId: refundConfig.order.id,
-      skuList: selectedProducts,
-    });
 
     await OrderRefund({
       orderId: refundConfig.order.id,
@@ -202,15 +221,22 @@ export default function Settingpage() {
       order: { ...refundConfig?.order, products: newProducts },
     });
   };
+  const handleRemarkChange = (index: number, value: string) => {
+    const newProducts = refundConfig?.order.products.map((p: any, i: number) =>
+      i === index ? { ...p, remark: value } : p,
+    );
+
+    setRefundConfig({
+      ...refundConfig,
+      order: { ...refundConfig?.order, products: newProducts },
+    });
+  };
+
   const EmptyOrder = () => (
     <div className="flex h-[60vh] flex-col items-center justify-center text-gray-500">
-      <p className="mb-2 text-lg">{t("noOrders") || "空"}</p>
+      <p className="mb-2 text-lg">{t("noOrders")}</p>
     </div>
   );
-
-  console.log("isLoading", isLoading);
-  console.log("hasNextPage", hasNextPage);
-  console.log("isFetchingNextPage", isFetchingNextPage);
 
   const OrderTabContent = ({
     orders,
@@ -235,20 +261,28 @@ export default function Settingpage() {
               key={order.id}
               activeTab={activeTab}
               order={order}
+              revokeRefund={(refundId: any) => {
+                setRevokeConfig({
+                  title: t("withdrawTitle"),
+                  content: t("withdrawContent"),
+                  onConfirm: async () => {
+                    await onRevokeOrder(refundId);
+                  },
+                });
+              }}
               selected={!!selected[order.orderCode]}
-              texts={t.raw("texts")}
               onCancelOrder={() =>
                 setCancelConfig({
-                  title: t("cancelTitle") || "123",
-                  content: t("cancelContent") || "123",
+                  title: t("cancelTitle"),
+                  content: t("cancelContent"),
                   onConfirm: async () => {
                     await onCancelOrder(order.id);
                   },
                 })
               }
-              // onChange={(e: any) =>
-              //   toggleOrder(order.orderCode, e.target.checked)
-              // }
+              onChange={(e: any) =>
+                toggleOrder(order.orderCode, e.target.checked)
+              }
               onPayOrderRedirect={onPayOrderRedirect}
               onRequestRefund={() => {
                 onRequestRefund(order);
@@ -260,6 +294,17 @@ export default function Settingpage() {
           hasMore={!!hasNextPage}
           loadMore={(isRetry) => fetchNextPage().then(() => undefined)}
         >
+          {!hasNextPage && (
+            <div
+              style={{
+                textAlign: "center",
+                padding: "12px 0",
+                color: "#999",
+              }}
+            >
+              {t("noMoreRecords")}
+            </div>
+          )}
           <div className="flex flex-col items-center justify-center text-gray-500">
             <div className="mb-2 text-lg">
               <Spinner />
@@ -273,7 +318,7 @@ export default function Settingpage() {
   return (
     <div className="flex h-screen flex-col bg-[#f7f8f9]">
       <NavBar className="flex-[0_0_45px] bg-white" onBack={() => router.back()}>
-        代购订单
+        {t("title")}
       </NavBar>
 
       <Tabs
@@ -299,25 +344,6 @@ export default function Settingpage() {
           ) : (
             <OrderTabContent orders={orders || []} />
           )}
-
-          {/* {orders?.map((order: any) => (
-            <OrderItem
-              key={order.id}
-              activeTab={activeTab}
-              order={order}
-              selected={!!selected[order.orderCode]}
-              texts={t.raw("texts")}
-              onCancelOrder={() => setPendingCancelOrderId(order.id)}
-              onChange={(e: any) => {
-                setSelected((prev) => ({
-                  ...prev,
-                  [order.orderCode]: e.target.checked,
-                }));
-              }}
-              onPayOrderRedirect={onPayOrderRedirect}
-              onRequestRefund={() => setPendingRequestRefundId(order.id)}
-            />
-          ))} */}
         </Tab>
 
         <Tab key="waitPay" title={t("tabs.waitPay")}>
@@ -331,31 +357,6 @@ export default function Settingpage() {
             ) : (
               <OrderTabContent orders={orders || []} />
             )}
-            {/* <div className="flex flex-col gap-3">
-              {orders.map((order: any) => (
-                <OrderItem
-                  key={order.id}
-                  activeTab={activeTab}
-                  order={order}
-                  selected={!!selected[order.orderCode]}
-                  texts={t.raw("texts")}
-                  onCancelOrder={() => setPendingCancelOrderId(order.id)}
-                  onChange={(e: any) => {
-                    setSelected((prev) => ({
-                      ...prev,
-                      [order.orderCode]: e.target.checked,
-                    }));
-                  }}
-                  onPayOrderRedirect={onPayOrderRedirect}
-                  onRequestRefund={() => setPendingRequestRefundId(order.id)}
-                />
-              ))}
-            </div>
-
-            <InfiniteScroll
-              hasMore={!!hasNextPage}
-              loadMore={() => fetchNextPage().then(() => undefined)}
-            /> */}
           </>
         </Tab>
 
@@ -369,19 +370,6 @@ export default function Settingpage() {
           ) : (
             <OrderTabContent orders={orders || []} />
           )}
-          {/* {orders.map((order: any) => (
-            <OrderItem
-              key={order.id}
-              order={order}
-              texts={t.raw("texts")}
-              onPayOrderRedirect={onPayOrderRedirect}
-              onRequestRefund={() => setPendingRequestRefundId(order.id)}
-            />
-          ))}
-          <InfiniteScroll
-            hasMore={!!hasNextPage}
-            loadMore={() => fetchNextPage().then(() => undefined)}
-          /> */}
         </Tab>
       </Tabs>
 
@@ -430,14 +418,26 @@ export default function Settingpage() {
           onOpenChange={() => setCancelConfig(null)}
         />
       )}
+      {revokeConfig && (
+        <ConfirmModal
+          content={revokeConfig.content}
+          isOpen={!!revokeConfig}
+          title={revokeConfig.title}
+          onConfirm={async () => {
+            await revokeConfig.onConfirm();
+            setRevokeConfig(null);
+          }}
+          onOpenChange={() => setRevokeConfig(null)}
+        />
+      )}
       {refundConfig && (
         <CommonModal
           isOpen={!!refundConfig}
-          title={t("requestRefund")}
+          title={t("refundTitle")}
           onConfirm={handleRefundSubmit}
           onOpenChange={() => setRefundConfig(null)}
         >
-          <div className="space-y-2">
+          <div className="space-y-3">
             {refundConfig?.order?.products.map(
               (product: any, index: number) => (
                 <Card
@@ -449,74 +449,113 @@ export default function Settingpage() {
                   }`}
                   isPressable={false}
                 >
-                  <CardBody>
-                    <div className="flex items-center justify-between gap-2 p-2">
-                      {/* 左侧：选择框 + 商品信息 */}
-                      <div className="flex min-w-0 items-center gap-2">
-                        <Checkbox
-                          isDisabled={
-                            product.isRefunded || product.canRefundQty === 0
-                          }
-                          isSelected={product.selected || false}
-                          size="sm"
-                          onValueChange={(checked) =>
-                            handleSelect(index, checked)
-                          }
-                        />
-
-                        <div className="h-12 w-12 flex-shrink-0">
+                  <CardBody className="flex flex-col gap-3 p-4">
+                    {/* 商品项 */}
+                    <div className="flex gap-3">
+                      <Checkbox
+                        className="mt-1"
+                        isDisabled={
+                          product.isRefunded || product.canRefundQty === 0
+                        }
+                        isSelected={product.selected || false}
+                        size="sm"
+                        onValueChange={(checked) =>
+                          handleSelect(index, checked)
+                        }
+                      />
+                      {/* 左侧：选择框 + 商品图 */}
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="h-[70px] w-[70px] flex-shrink-0">
                           <Image
                             alt={product.productTitle}
                             className="h-full w-full rounded-md object-cover"
-                            height={48}
+                            height={70}
+                            referrerPolicy="no-referrer"
                             src={
                               product.skuPicUrl ||
                               product.picUrl ||
                               "/placeholder.png"
                             }
-                            width={48}
+                            width={70}
                           />
                         </div>
+                      </div>
 
-                        <div className="flex min-w-0 flex-col">
-                          <span className="truncate text-sm font-medium text-gray-900">
-                            {product.productTitle}
-                          </span>
-                          <span className="truncate text-xs text-gray-500">
-                            {product?.sku?.propName_valueName || "-"}
-                          </span>
+                      {/* 右侧内容块 */}
+                      <div className="flex flex-1 flex-col justify-between">
+                        {/* 上 - 标题 + 规格 + 价格 */}
+                        <div className="flex items-start justify-between">
+                          {/* 标题 & 规格 */}
+                          <div className="flex min-w-0 flex-col">
+                            <span className="line-clamp-2 text-sm font-medium text-gray-900">
+                              {product.productTitle}
+                            </span>
+
+                            <span className="mt-0.5 line-clamp-2 text-xs text-gray-500">
+                              {product?.propAndValue?.propName_valueName || "-"}
+                            </span>
+
+                            {product.canRefundQty === 0 && (
+                              <span className="mt-0.5 text-xs text-red-400">
+                                {t("unrefundable")}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* 右边价格 */}
+                          <div className="ml-3 flex-shrink-0 text-right">
+                            <span className="text-sm font-semibold text-gray-900">
+                              {currency.symbol}
+                              {product.price}
+                            </span>
+                            <div className="text-xs text-gray-500">
+                              x{product.purchaseQuantity}
+                            </div>
+                          </div>
                         </div>
+
+                        {/* 下 - 输入框 + 可退数量 */}
                       </div>
+                    </div>
+                    <div className="flex items-center justify-end gap-2">
+                      <input
+                        className="w-16 rounded border px-2 py-1 text-center text-sm focus:outline-none focus:ring-1 focus:ring-primary disabled:bg-gray-100"
+                        disabled={
+                          !product.selected ||
+                          product.isRefunded ||
+                          product.canRefundQty === 0
+                        }
+                        max={product.canRefundQty}
+                        min={1}
+                        type="number"
+                        value={product.refundQuantity}
+                        onChange={(e) =>
+                          handleQtyChange(index, Number(e.target.value))
+                        }
+                      />
 
-                      {/* 右侧：价格 + 数量输入 */}
-                      <div className="flex min-w-[70px] flex-shrink-0 flex-col items-end gap-1">
-                        <span className="text-sm font-semibold text-gray-900">
-                          ¥{product.price}
-                        </span>
-                        <span className="text-xs text-gray-500">
-                          x{product.quantity}
-                        </span>
-
-                        <input
-                          className="w-14 rounded border px-2 py-1 text-center text-xs focus:outline-none focus:ring-1 focus:ring-primary disabled:bg-gray-100"
-                          disabled={
-                            !product.selected ||
-                            product.isRefunded ||
-                            product.canRefundQty === 0
-                          }
-                          max={product.canRefundQty}
-                          min={1}
-                          type="number"
-                          value={product.refundQuantity}
-                          onChange={(e) =>
-                            handleQtyChange(index, Number(e.target.value))
-                          }
-                        />
-
-                        <span className="text-[10px] text-gray-400">
-                          可退 {product.canRefundQty}
-                        </span>
-                      </div>
+                      <span className="text-xs text-gray-400">
+                        {t("refundable")} {product.canRefundQty}
+                      </span>
+                    </div>
+                    {/* 第二行：备注输入框 */}
+                    <div className="">
+                      <Textarea
+                        classNames={{
+                          inputWrapper:
+                            "bg-white border border-gray-300 rounded-md shadow-none " +
+                            "focus-within:bg-white focus-within:border-primary " +
+                            "focus-within:ring-1 focus-within:ring-primary transition-colors",
+                          input:
+                            "text-sm text-gray-800 placeholder:text-gray-400",
+                        }}
+                        minRows={2}
+                        placeholder={t("remarkPlaceholder")}
+                        value={product.remark || ""}
+                        onChange={(e) =>
+                          handleRemarkChange(index, e.target.value)
+                        }
+                      />
                     </div>
                   </CardBody>
                 </Card>

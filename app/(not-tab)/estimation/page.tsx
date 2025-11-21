@@ -130,7 +130,7 @@ export default function EstimationPage() {
             <div className="flex w-full gap-8">
               <Autocomplete
                 isRequired
-                className="flex-1"
+                className="flex-1 text-base"
                 defaultItems={countries}
                 label={t("warehouse")}
                 name="countryId"
@@ -143,6 +143,7 @@ export default function EstimationPage() {
                 {(country: any) => (
                   <AutocompleteItem
                     key={country.id}
+                    className="text-base"
                     startContent={
                       <Avatar
                         alt={country.name}
@@ -158,7 +159,7 @@ export default function EstimationPage() {
             </div>
             <Autocomplete
               isRequired
-              className="flex-1"
+              className="flex-1 text-base"
               defaultItems={categoryOptions}
               label={t("category")}
               name="categoryId"
@@ -175,7 +176,7 @@ export default function EstimationPage() {
 
             <div className="flex flex-1 gap-2">
               <Input
-                className="flex-1"
+                className="flex-1 text-base"
                 label={t("weight")}
                 name="weight"
                 size="sm"
@@ -184,7 +185,7 @@ export default function EstimationPage() {
                 onChange={(e) => handleChange("weight", e.target.value)}
               />
               <Input
-                className="flex-1"
+                className="flex-1 text-base"
                 label={t("length")}
                 name="length"
                 size="sm"
@@ -195,7 +196,7 @@ export default function EstimationPage() {
             </div>
             <div className="flex flex-1 gap-2">
               <Input
-                className="flex-1"
+                className="flex-1 text-base"
                 label={t("width")}
                 name="width"
                 size="sm"
@@ -204,7 +205,7 @@ export default function EstimationPage() {
                 onChange={(e) => handleChange("width", e.target.value)}
               />
               <Input
-                className="flex-1"
+                className="flex-1 text-base"
                 label={t("height")}
                 name="height"
                 size="sm"
@@ -225,10 +226,11 @@ export default function EstimationPage() {
       </div>
       {routes.length > 0 && (
         <div className="p-3">
-          <Accordion className="!border-1" variant="bordered">
+          <Accordion className="!border-1 text-base" variant="bordered">
             {routes.map((route, index) => (
               <AccordionItem
                 key={index}
+                className="text-base"
                 title={
                   <div className="flex flex-col gap-2">
                     {/* 第一行：Logo + 名称 + 价格时效 */}

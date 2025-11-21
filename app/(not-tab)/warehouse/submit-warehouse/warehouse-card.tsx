@@ -17,6 +17,7 @@ export default function OrderItem({ warehouse }: any) {
                 wrapper: "self-start",
               }}
               height={93}
+              referrerPolicy="no-referrer"
               src={warehouse?.orderProduct?.skuPicUrl}
               width={93}
             />

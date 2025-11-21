@@ -10,14 +10,23 @@ import { logoutCustomer } from "@/services";
 
 export default function Settingpage() {
   const router = useRouter();
-  const t = useTranslations("Setting.Page");
+  const t = useTranslations("setting.page");
 
+  const menu = [
+    { key: "language", label: t("menuLanguage"), path: "/setting/language" },
+    { key: "currency", label: t("menuCurrency"), path: "/setting/currency" },
+    {
+      key: "changePassword",
+      label: t("menuChangePassword"),
+      path: "/setting/changepwd",
+    },
+  ];
   const handleLogoutCustomer = async () => {
     try {
       await logoutCustomer();
       localStorage.removeItem("user-storage");
       window.location.reload();
-    } catch (error) {}
+    } catch {}
   };
 
   return (
@@ -34,13 +43,13 @@ export default function Settingpage() {
           }}
           onAction={(key) => router.push(key as string)}
         >
-          {t.raw("menu")?.map((item: any) => (
+          {menu.map((item: any) => (
             <ListboxItem
               key={item.path}
               className="text-black"
               endContent={<IoChevronForwardSharp />}
             >
-              {item.title}
+              {item.label}
             </ListboxItem>
           ))}
         </Listbox>

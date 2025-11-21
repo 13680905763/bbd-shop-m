@@ -81,7 +81,7 @@ export default function OrderCard({ order, openServiceModal }: any) {
                       key={item.serviceCode}
                       className="rounded-md border border-gray-200 bg-white px-2 py-0.5 text-xs text-gray-700"
                     >
-                      {item.serviceName}
+                      {item.serviceName}*{item.quantity}
                     </span>
                   ))
                 ) : (

@@ -157,51 +157,107 @@
             "edit": "编辑",
             "uploading": "头像上传中..."
         },
-        "orderPage": {
-            "texts": {
-                "pay": "支付",
-                "cancel": "取消",
-                "requestRefund": "申请退款"
-            },
-            "title": "购买订单",
+        "order": {
+            "pay": "去支付",
+            "cancel": "取消订单",
+            "requestRefund": "申请退款",
+            "title": "我的订单",
             "tabs": {
                 "all": "全部",
-                "waitPay": "待支付",
-                "paid": "已支付"
+                "waitPay": "待付款",
+                "paid": "已付款"
             },
+            "withdrawRequest": "撤回申请",
+            "selectRefundItems": "请选择要退款的商品",
+            "cancelTitle": "取消订单",
+            "cancelContent": "确定要取消此订单吗？",
+            "withdrawTitle": "撤回申请",
+            "withdrawContent": "确定要撤回当前申请吗？",
+            "refundTitle": "申请退款",
+            "refundContent": "确定要为此订单申请退款吗？",
+            "remarkPlaceholder": "请输入备注（可选）",
+            "refundable": "可退款",
+            "unrefundable": "不可退款",
             "noOrders": "暂无订单",
             "selectAll": "全选",
             "batchPay": "批量支付",
-            "cancelTitle": "取消订单",
-            "cancelContent": "确定要取消此订单吗？",
-            "requestRefund": "申请退款",
-            "requestRefundConfirm": "确定要为此订单申请退款吗？"
+            "requestRefundConfirm": "确定要为此订单申请退款吗？",
+            "noMoreRecords": "没有更多记录"
         },
-        "WarehousePage": {
-            "navbar": "仓库",
+        "warehouse": {
+            "title": "仓库",
             "all": "全部",
             "submit": "可提交",
             "selectAll": "全选",
             "submitPackages": "提交包裹",
             "confirmCancelTitle": "取消订单",
-            "confirmCancelContent": "确定要取消此订单吗？"
+            "confirmCancelContent": "确定要取消此订单吗？",
+            "orderCode": "订单号",
+            "createTime": "创建时间",
+            "weight": "重量",
+            "size": "尺寸",
+            "quantity": "数量",
+            "valueAddedServices": "增值服务",
+            "serviceItemName": "服务项目",
+            "noMoreRecords": "没有更多记录",
+            "noOrders": "暂无订单"
         },
-        "PackagePage": {
-            "navbar": "包裹",
+        "package": {
+            "title": "包裹",
             "all": "全部",
-            "pay": "待支付",
+            "pay": "待付款",
             "shipping": "运输中",
             "received": "已收货",
             "selectAll": "全选",
             "submitPay": "支付",
-            "texts": {
+            "noOrders": "暂无订单",
+            "noMoreRecords": "没有更多记录",
+            "packageItem": {
+                "shippingCode": "运单号：",
                 "productImage": "商品图片",
                 "weight": "重量",
                 "size": "尺寸",
                 "shipping": "运输方式",
                 "serviceFee": "服务费",
                 "totalFee": "总费用",
-                "none": "无"
+                "none": "无",
+                "payButton": "支付",
+                "cancelButton": "取消",
+                "payCancelFee": "支付取消手续费",
+                "requestRefund": "申请取消",
+                "withdrawRequest": "撤回申请",
+                "changeBtn": "更换路线"
+            },
+            "refundModal": {
+                "title": "取消",
+                "cancelCard": {
+                    "title": "确认取消",
+                    "subtitle": "取消该订单",
+                    "submittingTitle": "正在取消...",
+                    "submittingSubtitle": "请稍候",
+                    "serviceFee": "服务费",
+                    "packingFee": "打包费",
+                    "totalFee": "总费用"
+                },
+                "changeRouteCard": {
+                    "title": "更换路线",
+                    "subtitle": "重新选择发货路线"
+                }
+            },
+            "withdrawModal": {
+                "content": "确认撤销取消包裹申请嘛？"
+            },
+            "changeModal": {
+                "title": "更换路线"
+            },
+            "lineModal": {
+                "title": "物流轨迹",
+                "mainWaybillTitle": "主运单轨迹",
+                "subWaybillTitle": "子运单：",
+                "waybillNumber": "运单号：",
+                "currentStatus": "当前状态：",
+                "location": "地点：",
+                "mainTimeline": "主运单轨迹："
             }
         },
         "address": {
@@ -326,26 +382,16 @@
                     "read": "已读"
                 }
             }
-        }
+        },
+        "noMoreRecords": "没有更多记录"
     },
     "setting": {
-        "Page": {
+        "page": {
             "title": "设置",
-            "logout": "退出登录",
-            "menu": [
-                {
-                    "title": "语言",
-                    "path": "/setting/language"
-                },
-                {
-                    "title": "货币",
-                    "path": "/setting/currency"
-                },
-                {
-                    "title": "修改密码",
-                    "path": "/setting/changepwd"
-                }
-            ]
+            "menuLanguage": "语言",
+            "menuCurrency": "货币",
+            "menuChangePassword": "修改密码",
+            "logout": "退出登录"
         },
         "currencyPage": {
             "title": "货币",
@@ -379,17 +425,20 @@
             "enterOtherAmount": "输入其他金额",
             "recharge": "充值",
             "enterValidAmount": "请输入有效金额"
+        },
+        "balanceRecord": {
+            "title": "余额记录"
+        },
+        "points": {
+            "title": "积分",
+            "myPoints": "我的积分",
+            "pointsDetail": "积分明细",
+            "pointsExchange": "积分兑换",
+            "bizType": "类型",
+            "createTime": "时间",
+            "amount": "数量",
+            "noMoreRecords": "没有更多记录"
         }
-    },
-    "PayOrder": {
-        "title": "确认订单",
-        "total": "总计",
-        "handlingFee": "手续费",
-        "billingAddress": "账单地址",
-        "placeOrder": "提交订单",
-        "balance": "余额",
-        "recharge": "充值",
-        "pleaseAddBillingAddress": "请添加账单地址"
     },
     "Goods": {
         "productDetails": "商品详情",
@@ -496,6 +545,170 @@
             "productFee": "商品费用",
             "shopTotal": "店铺总计",
             "add": "添加"
+        }
+    },
+    "submitWarehouse": {
+        "title": "包裹提交",
+        "shippingAddress": "收货地址",
+        "commodityList": "商品列表",
+        "packagingMethod": "打包方式",
+        "deliveryRoute": "物流路线",
+        "textareaPlaceholder": "如有特殊要求请在此备注",
+        "agreement": "我已阅读并同意 bbdbuy 包裹寄送协议",
+        "submitPackage": "提交包裹",
+        "toast": {
+            "checkAgreement": "请勾选免责声明",
+            "selectAddress": "请选择收货地址",
+            "selectRoute": "请选择运输路线",
+            "submitSuccess": "提交成功"
+        },
+        "texts": {
+            "title": {
+                "add": "添加地址",
+                "edit": "编辑地址",
+                "deleteConfirm": "您确定要删除此地址吗？"
+            },
+            "buttons": {
+                "add": "+ 添加地址",
+                "edit": "编辑",
+                "delete": "删除"
+            },
+            "tableEmpty": "暂无地址信息"
+        },
+        "fields": [
+            {
+                "key": "recipient",
+                "type": "input",
+                "name": "recipient",
+                "label": "收件人",
+                "placeholder": "输入收件人姓名",
+                "required": true
+            },
+            {
+                "key": "phone",
+                "type": "input",
+                "name": "phone",
+                "label": "电话",
+                "placeholder": "输入电话号码",
+                "required": true
+            },
+            {
+                "key": "area",
+                "type": "area",
+                "name": "area",
+                "label": "地区",
+                "placeholder": "选择地区",
+                "required": true
+            },
+            {
+                "key": "address",
+                "type": "input",
+                "name": "address",
+                "label": "地址",
+                "placeholder": "输入完整地址",
+                "required": true
+            },
+            {
+                "key": "doorNo",
+                "type": "input",
+                "name": "doorNo",
+                "label": "门牌号",
+                "placeholder": "输入门牌号",
+                "required": true
+            },
+            {
+                "key": "postcode",
+                "type": "input",
+                "name": "postcode",
+                "label": "邮编",
+                "placeholder": "输入邮政编码",
+                "required": true
+            },
+            {
+                "key": "defaultAddress",
+                "type": "checkbox",
+                "name": "defaultAddress",
+                "label": "设为默认地址"
+            }
+        ]
+    },
+    "payment": {
+        "title": "确认订单",
+        "total": "总计",
+        "handlingFee": "手续费",
+        "billingAddress": "账单地址",
+        "submit": "提交",
+        "balance": "余额",
+        "recharge": "充值",
+        "pleaseAddBillingAddress": "请添加账单地址",
+        "result": {
+            "loading": "正在确认支付结果...",
+            "successTitle": "支付成功",
+            "successNotice": "我们已收到您的付款，订单正在处理中。",
+            "transactionId": "交易号：",
+            "amount": "支付金额：",
+            "time": "支付时间：",
+            "failTitle": "支付失败",
+            "failNotice": "支付未完成，请检查订单或重新尝试付款。",
+            "viewOrder": "查看订单",
+            "backHome": "返回首页"
+        }
+    },
+    "promotion": {
+        "title": "联盟会员",
+        "promotionImageAlt": "联盟推广图片",
+        "steps": {
+            "step1": "分享您的联盟代码",
+            "step2": "您邀请的朋友确认后，您将收到联盟佣金",
+            "step3": "收到您的联盟佣金"
+        },
+        "referralLink": {
+            "label": "推荐链接",
+            "copyButton": "一键复制",
+            "desc": "复制这个链接，并使用它将用户重定向到我们的主页，同时带有您的联盟ID。"
+        },
+        "totalReward": {
+            "label": "总奖励",
+            "amount": "CAD 0.00",
+            "recordButton": "记录",
+            "withdrawButton": "提现"
+        },
+        "moneyList": {
+            "inviteUser": {
+                "title": "邀请的用户",
+                "value": "$888"
+            },
+            "withdrawable": {
+                "title": "可提现",
+                "value": "88"
+            },
+            "earned": {
+                "title": "已赚取",
+                "value": "88"
+            }
+        },
+        "myLevel": {
+            "label": "我的等级",
+            "points": "积分: 0"
+        },
+        "promotionConfig": {
+            "bonusLabel": "奖金比例",
+            "experienceLabel": "经验"
+        },
+        "faq": {
+            "title": "权益FAQ",
+            "item1": {
+                "question": "什么是联盟会员计划？",
+                "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            },
+            "item2": {
+                "question": "我的奖金是如何计算的？",
+                "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            },
+            "item3": {
+                "question": "如何免费推广？",
+                "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            }
         }
     }
 }

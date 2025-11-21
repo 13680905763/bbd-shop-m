@@ -5,56 +5,55 @@ import { useState } from "react";
 
 import { addAddress } from "@/services";
 import { queryClient } from "@/lib/react-query";
-import { FieldConfig } from "@/components/form/formItem-renderer";
 
 interface AddAddressCardProps {
   onAdd?: () => void;
 }
-const fieldsaddress: FieldConfig[] = [
-  {
-    type: "input",
-    name: "recipient",
-    label: "收件人",
-    placeholder: "请输入收件人姓名",
-  },
-  {
-    type: "input",
-    name: "phone",
-    label: "联系方式",
-    placeholder: "请输入联系方式",
-  },
-  {
-    type: "area",
-    name: "area",
-    label: "area",
-    placeholder: "area",
-  },
+// const fieldsaddress: FieldConfig[] = [
+//   {
+//     type: "input",
+//     name: "recipient",
+//     label: "收件人",
+//     placeholder: "请输入收件人姓名",
+//   },
+//   {
+//     type: "input",
+//     name: "phone",
+//     label: "联系方式",
+//     placeholder: "请输入联系方式",
+//   },
+//   {
+//     type: "area",
+//     name: "area",
+//     label: "area",
+//     placeholder: "area",
+//   },
 
-  {
-    type: "input",
-    name: "address",
-    label: "详细地址",
-    placeholder: "请输入您详细地址",
-  },
-  {
-    type: "input",
-    name: "doorNo",
-    label: "门牌号",
-    placeholder: "请输入您的门牌号",
-  },
-  {
-    type: "input",
-    name: "postcode",
-    label: "邮编",
-    placeholder: "请输入邮编",
-  },
+//   {
+//     type: "input",
+//     name: "address",
+//     label: "详细地址",
+//     placeholder: "请输入您详细地址",
+//   },
+//   {
+//     type: "input",
+//     name: "doorNo",
+//     label: "门牌号",
+//     placeholder: "请输入您的门牌号",
+//   },
+//   {
+//     type: "input",
+//     name: "postcode",
+//     label: "邮编",
+//     placeholder: "请输入邮编",
+//   },
 
-  {
-    type: "checkbox",
-    name: "defaultAddress",
-    label: "设为默认地址",
-  },
-];
+//   {
+//     type: "checkbox",
+//     name: "defaultAddress",
+//     label: "设为默认地址",
+//   },
+// ];
 const initAddress = {
   recipient: "",
   phone: "",
@@ -92,12 +91,12 @@ export function AddAddressCard({ onAdd }: AddAddressCardProps) {
   return (
     <Card
       isPressable
-      className="flex-1 p-4 rounded-2xl border  border-gray-300 hover:border-primary hover:shadow-md cursor-pointer flex items-center justify-center min-h-[120px]"
+      className="flex min-h-[120px] flex-1 cursor-pointer items-center justify-center rounded-2xl border border-gray-300 p-4 hover:border-primary hover:shadow-md"
       shadow="none"
       onClick={onAdd}
     >
       <div className="flex flex-col items-center gap-2 text-gray-500">
-        <FiPlus className="w-6 h-6" />
+        <FiPlus className="h-6 w-6" />
         <span className="text-sm">Add Address</span>
       </div>
     </Card>

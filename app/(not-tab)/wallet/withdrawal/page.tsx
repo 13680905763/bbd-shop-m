@@ -4,49 +4,47 @@ import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
-import CommonForm from "@/components/form/common-form";
-import { FieldConfig } from "@/components/form/formItem-renderer";
 import { useWalletStore } from "@/store";
-const registerFormFields: FieldConfig[] = [
-  {
-    name: "pwd1",
-    placeholder: "收款人",
-    type: "input",
-  },
-  {
-    name: "pwd2",
-    placeholder: "国家",
-    type: "select",
-    options: [
-      {
-        label: "中国银行",
-        value: "Argentina",
-        // src: "https://flagcdn.com/ar.svg",
-      },
-      {
-        label: "建设银行",
-        value: "Venezuela",
-        // src: "https://flagcdn.com/ve.svg",
-      },
-      {
-        label: "paypal",
-        value: "Brazil",
-        // src: "https://flagcdn.com/ve.svg",
-      },
-    ],
-  },
+// const registerFormFields: FieldConfig[] = [
+//   {
+//     name: "pwd1",
+//     placeholder: "收款人",
+//     type: "input",
+//   },
+//   {
+//     name: "pwd2",
+//     placeholder: "国家",
+//     type: "select",
+//     options: [
+//       {
+//         label: "中国银行",
+//         value: "Argentina",
+//         // src: "https://flagcdn.com/ar.svg",
+//       },
+//       {
+//         label: "建设银行",
+//         value: "Venezuela",
+//         // src: "https://flagcdn.com/ve.svg",
+//       },
+//       {
+//         label: "paypal",
+//         value: "Brazil",
+//         // src: "https://flagcdn.com/ve.svg",
+//       },
+//     ],
+//   },
 
-  {
-    name: "pwd3",
-    placeholder: "银行卡",
-    type: "input",
-  },
-  {
-    name: "pwd4",
-    placeholder: "提现金额",
-    type: "input",
-  },
-];
+//   {
+//     name: "pwd3",
+//     placeholder: "银行卡",
+//     type: "input",
+//   },
+//   {
+//     name: "pwd4",
+//     placeholder: "提现金额",
+//     type: "input",
+//   },
+// ];
 
 interface LoginFormData {
   pwd1: string;
@@ -76,13 +74,13 @@ export default function Settingpage() {
         </div>
         <div className="box-card p-4">提现服务费率：1%</div>
         <div>
-          <CommonForm
+          {/* <CommonForm
             confirmText="提现"
             fields={registerFormFields}
             formData={formData}
             onChange={setFormData}
             onSubmit={() => {}}
-          />
+          /> */}
 
           {/* <Form
             className="flex w-full flex-col gap-2 rounded-lg bg-white p-4"

@@ -48,6 +48,7 @@ export default function ForwardingPage() {
           res.map((s: any) => {
             return {
               ...s,
+              serviceId: s?.id,
               isCheck: false,
               remark: "",
               quantity: 1,
@@ -71,7 +72,7 @@ export default function ForwardingPage() {
     const payload = {
       logisticsCode: data.logisticsCode,
       packageItemName: data.packageItemName,
-      serviceIds: servicesList
+      serviceList: servicesList
         .filter((s: any) => s.isCheck)
         .map((item: any) => {
           return {
@@ -89,11 +90,11 @@ export default function ForwardingPage() {
       setLoading(true);
       const bizCode = await createCustomizeOrder(payload);
 
-      // if (bizCode) {
-      //   router.push("/order/pay-order/" + bizCode);
-      // } else {
-      //   router.push("/dashboard/order");
-      // }
+      if (bizCode) {
+        router.push("/payment/" + bizCode);
+      } else {
+        router.push("/dashboard/order");
+      }
     } catch (err) {
       console.error("创建失败:", err);
     } finally {

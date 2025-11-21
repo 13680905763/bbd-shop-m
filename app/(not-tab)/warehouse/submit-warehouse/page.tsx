@@ -3,6 +3,7 @@ import { NavBar } from "antd-mobile";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { addToast, Button, Checkbox, Textarea } from "@heroui/react";
+import { useTranslations } from "next-intl";
 
 import { AddAddressCard } from "./add-address-card";
 import AddressCard from "./address-card";
@@ -14,59 +15,14 @@ import { useAddressList, useWarehousePreview } from "@/hook";
 import {
   addAddress,
   createWaybill,
-  gettWarehouseRoutesList,
-  gettWarehouseServicesList,
+  getWarehouseRoutesList,
+  getWarehouseRoutesListByCC,
+  getWarehouseServicesList,
   updateAddress,
 } from "@/services";
 import { queryClient } from "@/lib/react-query";
 import FormModal from "@/components/modal/form-modal";
-import { FieldConfig } from "@/components/form/formItem-renderer";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
-const fieldsaddress: FieldConfig[] = [
-  {
-    type: "input",
-    name: "recipient",
-    label: "收件人",
-    placeholder: "请输入收件人姓名",
-  },
-  {
-    type: "input",
-    name: "phone",
-    label: "联系方式",
-    placeholder: "请输入联系方式",
-  },
-  {
-    type: "area",
-    name: "area",
-    label: "area",
-    placeholder: "area",
-  },
-
-  {
-    type: "input",
-    name: "address",
-    label: "详细地址",
-    placeholder: "请输入您详细地址",
-  },
-  {
-    type: "input",
-    name: "doorNo",
-    label: "门牌号",
-    placeholder: "请输入您的门牌号",
-  },
-  {
-    type: "input",
-    name: "postcode",
-    label: "邮编",
-    placeholder: "请输入邮编",
-  },
-
-  {
-    type: "checkbox",
-    name: "defaultAddress",
-    label: "设为默认地址",
-  },
-];
 const initAddress = {
   recipient: "",
   phone: "",
@@ -81,28 +37,60 @@ const initAddress = {
 
 type ModalType = "add" | "edit" | "delete" | null;
 export default function SubmitOrder() {
+  const t = useTranslations("submitWarehouse");
   const searchParam = useSearchParams();
   const router = useRouter();
   const key = searchParam.get("key") as string;
-  const { data, isLoading, isError } = useWarehousePreview(key);
-  const { data: addressData } = useAddressList();
+  // const t = useTranslations("AddressTab");
 
-  const [orderData, setOrderData] = useState<any>(null);
   const [submitting, setSubmitting] = useState(false);
   const [isCheck, setIsCheck] = useState(false);
   const [services, setServices] = useState<any[]>([]);
   const [routesData, setRoutesData] = useState<any[]>([]);
+  const [routesMessage, setRoutesMessage] = useState<string>("");
+
+  const { data, isLoading, isError } = useWarehousePreview(key);
+  const { data: addressData } = useAddressList();
 
   // 都用 string 类型 id 进行比较
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(
     null,
   );
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [selectedServices, setSelectedServices] = useState<
+    { id: string; quantity: number }[]
+  >([]);
   const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
   const [remark, setRemark] = useState("");
   const [currentRowData, setCurrentRowData] = useState<any>(initAddress);
   const [modalType, setModalType] = useState<ModalType>(null);
 
+  useEffect(() => {
+    getWarehouseServicesList().then((res) => setServices(res || []));
+  }, []);
+  useEffect(() => {
+    if (!selectedAddressId) {
+      getWarehouseRoutesList().then((res) => setRoutesData(res || []));
+    }
+  }, [selectedAddressId]);
+  useEffect(() => {
+    const countryId = addressData?.find(
+      (item: any) => item.id == selectedAddressId,
+    )?.countryId;
+
+    if (!countryId) return;
+    getWarehouseRoutesListByCC({
+      categoryIds: data?.packageItemList.map((item: any) => item?.categoryId),
+      countryId,
+    }).then((res) => {
+      if (typeof res != "string" && res?.length) {
+        setRoutesData(res || []);
+      } else {
+        setSelectedRouteId("");
+        setRoutesData([]);
+        setRoutesMessage(res);
+      }
+    });
+  }, [selectedAddressId]);
   const handleAdd = () => {
     setCurrentRowData(initAddress);
     setModalType("add");
@@ -138,28 +126,43 @@ export default function SubmitOrder() {
   };
   // 切换服务选择
   const toggleService = (id: string) => {
+    setSelectedServices((prev) => {
+      const exists = prev.find((item) => item.id === id);
+
+      if (exists) {
+        // 取消选择
+        return prev.filter((item) => item.id !== id);
+      }
+
+      // 新增：默认数量 1
+      return [...prev, { id, quantity: 1 }];
+    });
+  };
+  const handleCountChange = (id: string, nextCount: number) => {
     setSelectedServices((prev) =>
-      prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id],
+      prev.map((item) =>
+        item.id === id ? { ...item, quantity: nextCount } : item,
+      ),
     );
   };
   const handleCartSubmit = async () => {
     if (!isCheck) {
       return addToast({
-        title: "请勾选免责声明",
+        title: t("toast.checkAgreement"),
         timeout: 1500,
         color: "warning",
       });
     }
     if (!selectedAddressId) {
       return addToast({
-        title: "请选择收货地址",
+        title: t("toast.selectAddress"),
         timeout: 1500,
         color: "warning",
       });
     }
     if (!selectedRouteId) {
       return addToast({
-        title: "请选择运输路线",
+        title: t("toast.selectRoute"),
         timeout: 1500,
         color: "warning",
       });
@@ -171,7 +174,8 @@ export default function SubmitOrder() {
     try {
       const payload = {
         serviceList: selectedServices.map((sid) => ({
-          serviceId: sid,
+          serviceId: sid?.id,
+          quantity: sid?.quantity,
           remark: "",
         })),
         templateId: selectedRouteId,
@@ -182,60 +186,56 @@ export default function SubmitOrder() {
 
       console.log("提交数据", payload);
 
-      // 调接口
+      // // 调接口
       await createWaybill(payload);
 
-      addToast({ title: "提交成功", timeout: 1500, color: "success" });
-      router.push(`/profile/order`);
-    } catch (err) {
-      console.error("提交失败", err);
-      addToast({ title: "提交失败", timeout: 1500, color: "danger" });
+      // addToast({ title: "提交成功", timeout: 1500, color: "success" });
+      router.push(`/profile/package`);
+    } catch {
     } finally {
       setSubmitting(false);
     }
   };
 
-  useEffect(() => {
-    gettWarehouseServicesList().then((res) => setServices(res || []));
-    gettWarehouseRoutesList().then((res) => setRoutesData(res || []));
-  }, []);
   {
     isLoading && <FullscreenLoader />;
   }
-  if (isError) return <div>出错了</div>;
 
   return (
     <div className="flex h-screen flex-col bg-[#f7f8f9]">
       {/* 顶部导航 */}
       <NavBar className="bg-white" onBack={() => router.back()}>
-        包裹提交
+        {t("title")}
       </NavBar>
 
       {/* 内容区滚动 */}
       <div className="flex-1 space-y-2 overflow-y-auto px-4 py-3">
         {/* 地址 */}
         <div>
-          <div className="mb-2 text-base font-semibold">Shipping Address</div>
-          <div className="flex gap-3 overflow-x-auto">
-            {addressData?.length === 0 ? (
-              <AddAddressCard onAdd={handleAdd} />
-            ) : (
-              addressData?.map((addr: any) => (
-                <AddressCard
-                  key={addr.id}
-                  data={addr}
-                  isSelected={selectedAddressId === String(addr.id)}
-                  onEdit={() => handleEdit(addr)}
-                  onSelect={(id) => setSelectedAddressId(String(id))}
-                />
-              ))
-            )}
+          <div className="mb-2 text-base font-semibold">
+            {t("shippingAddress")}
+          </div>
+          <div className="grid grid-cols-1 gap-2">
+            {addressData?.length === 0
+              ? null
+              : addressData?.map((addr: any) => (
+                  <AddressCard
+                    key={addr.id}
+                    data={addr}
+                    isSelected={selectedAddressId === String(addr.id)}
+                    onEdit={() => handleEdit(addr)}
+                    onSelect={(id: string | null) => setSelectedAddressId(id)}
+                  />
+                ))}
+            <AddAddressCard onAdd={handleAdd} />
           </div>
         </div>
 
         {/* 商品列表 */}
         <div>
-          <div className="mb-2 text-base font-semibold">Commodity List</div>
+          <div className="mb-2 text-base font-semibold">
+            {t("commodityList")}
+          </div>
           <div className="flex flex-col gap-4">
             {data?.packageItemList?.map((warehouse: any) => (
               <WarehouseCard key={warehouse?.id} warehouse={warehouse} />
@@ -245,22 +245,34 @@ export default function SubmitOrder() {
 
         {/* 服务多选 */}
         <div>
-          <div className="mb-2 text-base font-semibold">Packaging Method</div>
+          <div className="mb-2 text-base font-semibold">
+            {t("packagingMethod")}
+          </div>
           <div className="flex flex-col flex-wrap gap-2">
-            {services?.map((svc) => (
-              <ServiceCard
-                key={svc.id}
-                {...svc}
-                isSelected={selectedServices.includes(String(svc.id))}
-                onSelect={() => toggleService(String(svc.id))}
-              />
-            ))}
+            {services?.map((svc) => {
+              const selectedItem = selectedServices.find(
+                (item) => item.id === String(svc.id),
+              );
+
+              return (
+                <ServiceCard
+                  key={svc.id}
+                  {...svc}
+                  initialCount={selectedItem?.quantity ?? 1}
+                  isSelected={!!selectedItem}
+                  onCountChange={handleCountChange}
+                  onSelect={() => toggleService(String(svc.id))}
+                />
+              );
+            })}
           </div>
         </div>
 
         {/* 路线选择 */}
         <div>
-          <div className="mb-2 text-base font-semibold">Delivery Route</div>
+          <div className="mb-2 text-base font-semibold">
+            {t("deliveryRoute")}
+          </div>
           <div className="flex flex-col gap-3">
             {routesData?.map((route) => (
               <RouteCard
@@ -270,6 +282,11 @@ export default function SubmitOrder() {
                 onSelect={(id) => setSelectedRouteId(String(id))}
               />
             ))}
+            {routesData?.length < 1 && (
+              <div className="flex h-[20vh] flex-col items-center justify-center text-gray-500">
+                <p className="mb-2 text-lg">{routesMessage}</p>
+              </div>
+            )}
           </div>
         </div>
 
@@ -278,13 +295,13 @@ export default function SubmitOrder() {
           classNames={{
             inputWrapper: "bg-white  ",
           }}
-          placeholder="If you have any special requirements, please note here"
+          placeholder={t("textareaPlaceholder")}
           size="lg"
           value={remark}
           onChange={(e) => setRemark(e.target.value)}
         />
         <Checkbox isSelected={isCheck} size="sm" onValueChange={setIsCheck}>
-          I have read and agreed bbdbuy Package Shipping Agreement
+          {t("agreement")}
         </Checkbox>
       </div>
 
@@ -297,14 +314,18 @@ export default function SubmitOrder() {
           size="lg"
           onPress={handleCartSubmit}
         >
-          Submit Package
+          {t("submitPackage")}
         </Button>
       </div>
       <FormModal
-        fields={fieldsaddress}
+        fields={t.raw("fields")}
         formData={currentRowData}
         isOpen={modalType === "add" || modalType === "edit"}
-        title={modalType === "add" ? "添加地址" : "编辑地址"}
+        title={
+          modalType === "add"
+            ? t.raw("texts.title.add")
+            : t.raw("texts.title.edit")
+        }
         onChange={setCurrentRowData}
         onOpenChange={(open) => {
           if (!open) setModalType(null);

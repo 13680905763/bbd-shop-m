@@ -119,3 +119,14 @@ export const createCustomizeOrder = (data: any): Promise<any> => {
     { showToast: true },
   );
 };
+/** 撤销退款 */
+export const putOrderRevoke = (id: string): Promise<any> => {
+  return requestWithOption(
+    { url: `/order-refund/cancelApplyRefund/${id}`, method: "PUT" },
+    { showToast: true },
+  );
+};
+/** 撤销列表 */
+export const getRefundList = (data = {}): Promise<any> => {
+  return request.post("/order-refund/list", data);
+};
