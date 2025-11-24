@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 
 import Stepper from "@/components/stepper";
 import SourceIcon from "@/components/common/source-icon";
+import { useGlobalStore } from "@/store";
 
 export default function OrderCard({ order, openServiceModal }: any) {
   const router = useRouter();
+  const { currency } = useGlobalStore();
 
   return (
     <div className="rounded-box mb-3 px-2 py-3">
@@ -57,13 +59,19 @@ export default function OrderCard({ order, openServiceModal }: any) {
 
               <div className="mt-0 flex items-center justify-between gap-2">
                 <div className="flex flex-1 flex-col">
-                  <span className="text-price-base">¥{product.price}</span>
+                  <span className="text-price-base">
+                    {currency.symbol}
+                    {product.price}
+                  </span>
                 </div>
 
                 <Stepper disabled value={product.quantity} />
               </div>
 
-              <div className="text-light-gray">运费:{product.postFee}</div>
+              <div className="text-light-gray">
+                运费:{currency.symbol}
+                {product.postFee}
+              </div>
             </div>
           </div>
 

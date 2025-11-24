@@ -58,10 +58,8 @@ const FormModal = ({
       setLoading(true);
       const result = await onSave(formData);
 
-      // 只有返回 true 时才关闭
-      if (result === true) {
-        onOpenChange(false);
-      }
+      if (result) return;
+      onOpenChange(false);
     } catch (e) {
       console.error("保存失败:", e);
     } finally {

@@ -19,6 +19,7 @@ interface AddressCardProps {
   onEdit?: (id: string) => void;
   onSelect?: (id: string | null) => void;
   isSelected?: boolean;
+  isDisabled?: boolean;
 }
 
 export default function AddressCard({
@@ -26,6 +27,7 @@ export default function AddressCard({
   onEdit,
   onSelect,
   isSelected,
+  isDisabled,
 }: AddressCardProps) {
   if (!data) return null;
 
@@ -47,8 +49,10 @@ export default function AddressCard({
     <Card
       isPressable
       className={`h-24 flex-1 rounded-xl border px-3 py-2 transition ${isSelected ? "border-2 border-primary bg-orange-50" : "border-gray-200"} cursor-pointer active:scale-[0.98]`}
+      isDisabled={isDisabled}
       shadow="none"
       onClick={() => {
+        if (isDisabled) return; // ✅ 手动阻止
         if (id && isSelected) {
           onSelect?.(null);
         } else if (id) {

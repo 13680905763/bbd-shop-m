@@ -66,10 +66,9 @@ const BalancePayment = ({ payment, wallet, onRecharge, t }: any) => {
       <div className="flex w-full items-center justify-between">
         <div className="flex items-center gap-2">
           <IoWallet className="h-12 w-12 text-[#f0700c]" />
-          <span className="text-sm text-gray-500">{t("balance")}</span>
           <span className="text-xl font-bold text-[#333]">
             {currency.symbol}
-            {wallet?.availabalBalance ?? "--"}
+            {wallet?.availabalBalance}
           </span>
         </div>
         <Button color="primary" size="sm" onPress={onRecharge}>
@@ -195,7 +194,8 @@ export default function PayOrder() {
             {t("total")}
           </div>
           <div className="text-3xl font-extrabold leading-tight text-[#f0700c]">
-            {currency.symbol} {currentPayMethod?.payAmount}
+            {currency.symbol}
+            {currentPayMethod?.payAmount}
           </div>
           <p className="text-sm text-gray-600">
             {t("handlingFee")}

@@ -15,7 +15,7 @@ import {
 import { useTranslations } from "next-intl";
 import { IoCloseCircleOutline, IoSwapHorizontalOutline } from "react-icons/io5";
 
-import RouteCard from "../../warehouse/submit-warehouse/route-card";
+import ShippingRouteCard from "../../warehouse/submit-warehouse/shipping-route-card";
 
 import PackageItem from "./package-item";
 
@@ -24,6 +24,7 @@ import {
   batchPayPackage,
   changePayPackage,
   changePrePayPackage,
+  refundPayPackage,
   refundPrePayPackage,
   routePackage,
   withdrawPayPackage,
@@ -156,6 +157,31 @@ export default function Settingpage() {
 
     setLineConfig({ ...res });
   };
+
+  // 提交退款逻辑
+  const handleRefundSubmit = async () => {
+    if (!refundConfig) {
+      // toast.error("退款配置异常，请稍后重试");
+      return;
+    }
+    try {
+      setIsSubmitting(true);
+
+      // 1. 根据不同类型处理不同逻辑
+      const bizCode = await refundPayPackage(refundConfig?.param?.id);
+
+      if (bizCode) {
+        router.push("/order/pay-order/" + bizCode);
+      }
+    } catch {
+    } finally {
+      setIsSubmitting(false);
+      // 3. 清空配置
+      setRefundConfig(null);
+      queryClient.invalidateQueries({ queryKey: ["packageList"] }); // 手动刷新
+    }
+  };
+
   const PackageTabContent = ({
     pack,
   }: {
@@ -324,7 +350,7 @@ export default function Settingpage() {
             <Card
               isPressable
               className="w-52 rounded-2xl border border-gray-200 shadow-sm transition-all duration-200 hover:border-red-500 hover:bg-red-50"
-              // onPress={() => handleRefundSubmit("cancel")}
+              onPress={() => handleRefundSubmit()}
             >
               <CardBody className="flex flex-col items-center justify-between space-y-3 px-3 py-4 text-center">
                 {/* 上半部分：图标与文字 */}
@@ -404,7 +430,6 @@ export default function Settingpage() {
       {changeConfig && (
         <CommonModal
           isOpen={!!changeConfig}
-          size={"4xl"}
           title={t("changeModal.title")}
           onConfirm={async () => {
             const selected = changeConfig.find((i: any) => i.checked);
@@ -417,44 +442,38 @@ export default function Settingpage() {
                 templateId: selected.id,
               };
 
-              const res = await changePayPackage(payload);
+              await changePayPackage(payload);
 
               await queryClient.invalidateQueries({
                 queryKey: ["packageList"],
               });
-
-              console.log("res", res);
-            } catch (error) {
-              console.error("Failed to change pay package:", error);
-            }
+            } catch {}
           }}
           onOpenChange={() => setChangeConfig(null)}
         >
           {/* 路线 */}
-          <div>
-            <div className="text-title">Delivery Route</div>
-            <div className="flex flex-col gap-4">
-              {changeConfig?.map((route: any) => (
-                <RouteCard
-                  key={route.id}
-                  data={route}
-                  isSelected={route?.checked}
-                  onSelect={(id) =>
-                    setChangeConfig(
-                      changeConfig.map((item: any) => {
-                        return {
-                          ...item,
-                          checked: id == item?.id ? true : false,
-                        };
-                      }),
-                    )
-                  }
-                />
-              ))}
-            </div>
+          <div className="flex flex-col gap-2">
+            {changeConfig?.map((route: any) => (
+              <ShippingRouteCard
+                key={route.id}
+                isSelected={route?.checked}
+                route={route}
+                onSelect={(id: any) =>
+                  setChangeConfig(
+                    changeConfig.map((item: any) => {
+                      return {
+                        ...item,
+                        checked: id == item?.id ? true : false,
+                      };
+                    }),
+                  )
+                }
+              />
+            ))}
           </div>
         </CommonModal>
       )}
+
       {lineConfig && (
         <CommonModal
           footer={<div />}
@@ -567,14 +586,13 @@ export default function Settingpage() {
         isOpen={!!withdrawConfig}
         onConfirm={async () => {
           if (!withdrawConfig) return;
-          console.log("withdrawConfig", withdrawConfig);
 
           try {
             // 调用后端撤销接口，例如 withdrawCancelPackage
             await withdrawPayPackage(withdrawConfig.id);
-            // setWithdrawConfig(null);
           } catch {
           } finally {
+            setWithdrawConfig(null);
             queryClient.invalidateQueries({ queryKey: ["packageList"] }); // 手动刷新
           }
         }}

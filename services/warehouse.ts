@@ -28,7 +28,7 @@ export const getWarehouseRoutesListByCC = (data: any): Promise<any> => {
 export const searchWarehouseRoutesList = (data: any): Promise<any> => {
   return requestWithOption(
     { url: "/shipping-line-template/estimate", method: "POST", data },
-    { showToast: true },
+    { showToast: true, isSuccess: false },
   );
 };
 

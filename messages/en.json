@@ -427,7 +427,8 @@
             "enterValidAmount": "Please enter a valid amount"
         },
         "balanceRecord": {
-            "title": "Balance Record"
+            "title": "Balance Record",
+            "noMoreRecords": "No more records"
         },
         "points": {
             "title": "Points",
@@ -487,24 +488,24 @@
         "stock": "Stock",
         "shippingFee": "Shipping Fee"
     },
-    "estimationPage": {
+    "estimation": {
         "fillWeightOrSize": "Please enter weight or dimensions (L, W, H)!",
-        "title": "Shipping Fee Estimation",
+        "title": "Shipping Estimation",
         "warehouse": "From Warehouse",
         "weight": "Weight (g)",
         "length": "Length (cm)",
         "width": "Width (cm)",
         "height": "Height (cm)",
         "search": "Search Now",
-        "insurable": "Insurable",
-        "taxFree": "Tax-Free",
+        "selectCountry": "Please select a country",
+        "selectCategory": "Please select a cargo category",
         "price": "Price",
-        "time": "Delivery Time",
+        "time": "Transit Time",
         "pricingStandard": "Pricing Standard",
         "firstWeightFee": "First Weight Fee",
         "additionalWeightFee": "Additional Weight Fee",
         "customsFee": "Customs Fee",
-        "shippingLimit": "Shipping Restrictions",
+        "shippingLimit": "Shipping Limit",
         "routeFeature": "Route Features",
         "category": "Cargo Category"
     },
@@ -594,73 +595,39 @@
             "selectRoute": "Please select a delivery route",
             "submitSuccess": "Submitted successfully"
         },
-        "fields": [
-            {
-                "key": "recipient",
-                "type": "input",
-                "name": "recipient",
-                "label": "Recipient",
-                "placeholder": "Enter recipient name",
-                "required": true
+        "addressModal": {
+            "addAddress": "Add Address",
+            "editAddress": "Edit Address",
+            "fields": {
+                "recipient": {
+                    "label": "Recipient",
+                    "placeholder": "Enter recipient name"
+                },
+                "phone": {
+                    "label": "Phone",
+                    "placeholder": "Enter phone number"
+                },
+                "area": {
+                    "label": "Area",
+                    "placeholder": "Select area"
+                },
+                "address": {
+                    "label": "Address",
+                    "placeholder": "Enter full address"
+                },
+                "doorNo": {
+                    "label": "Door No.",
+                    "placeholder": "Enter door number"
+                },
+                "postcode": {
+                    "label": "Postcode",
+                    "placeholder": "Enter postal code"
+                },
+                "defaultAddress": {
+                    "label": "Set as default address"
+                }
             },
-            {
-                "key": "phone",
-                "type": "input",
-                "name": "phone",
-                "label": "Phone",
-                "placeholder": "Enter phone number",
-                "required": true
-            },
-            {
-                "key": "area",
-                "type": "area",
-                "name": "area",
-                "label": "Area",
-                "placeholder": "Select area"
-            },
-            {
-                "key": "address",
-                "type": "input",
-                "name": "address",
-                "label": "Address",
-                "placeholder": "Enter full address",
-                "required": true
-            },
-            {
-                "key": "doorNo",
-                "type": "input",
-                "name": "doorNo",
-                "label": "Door No",
-                "placeholder": "Enter door number",
-                "required": true
-            },
-            {
-                "key": "postcode",
-                "type": "input",
-                "name": "postcode",
-                "label": "Postcode",
-                "placeholder": "Enter postcode",
-                "required": true
-            },
-            {
-                "key": "defaultAddress",
-                "type": "checkbox",
-                "name": "defaultAddress",
-                "label": "Set as default address"
-            }
-        ],
-        "texts": {
-            "title": {
-                "add": "Add Address",
-                "edit": "Edit Address",
-                "deleteConfirm": "Are you sure you want to delete this address?"
-            },
-            "buttons": {
-                "add": "+ Add Address",
-                "edit": "Edit",
-                "delete": "Delete"
-            },
-            "tableEmpty": "No address information available at the moment."
+            "tableEmpty": "No address information available"
         }
     },
     "promotion": {

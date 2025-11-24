@@ -17,20 +17,57 @@ function formatTime(ts: string) {
   return new Date(ms).toLocaleString();
 }
 
+/**
+ * 汇率转换（金额 → 中间汇率A → 最终汇率B）
+ * 返回保留两位小数的数字
+ */
+export function convertCurrency(
+  amount: number | string,
+  rateA: number | string,
+  rateB: number | string,
+  digits = 2,
+) {
+  // 转成数字
+  const numAmount = Number(amount);
+  const numRateA = Number(rateA);
+  const numRateB = Number(rateB);
+
+  if (isNaN(numAmount) || isNaN(numRateA) || isNaN(numRateB)) {
+    throw new Error(
+      "amount and rates must be valid numbers or numeric strings",
+    );
+  }
+
+  const scale = Math.pow(10, 6); // 提升精度，避免 JS 浮点误差
+
+  // 原币 → 中间币（如 USD → RMB）
+  const middle = Math.round(numAmount * numRateA * scale) / scale;
+
+  // 中间币 → 目标币（如 RMB → EUR）
+  const result = Math.round((middle / numRateB) * scale) / scale;
+
+  // 最终保留指定小数位
+  const finalScale = Math.pow(10, digits);
+
+  return Math.round(result * finalScale) / finalScale;
+}
+
 export default function PaymentResultPage() {
   const t = useTranslations("payment.result"); // 使用翻译
-  const { currency } = useGlobalStore();
+  const { currency, currencies } = useGlobalStore();
 
   const searchParams = useSearchParams();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
   const payOrderId = searchParams.get("payOrderId") || "";
-  const amount = searchParams.get("amount") || "0.00";
+  const amount = searchParams.get("amount") || 0;
   const paySuccTime = searchParams.get("paySuccTime") || "";
   const resultCode = searchParams.get("resultCode");
   const status = searchParams.get("status");
   const payMethodCode = searchParams.get("payMethodCode"); // 新增
+  const payCurrency = searchParams.get("currency"); // 新增
+  const [result, setResult] = useState(amount);
 
   const isSuccess = useMemo(() => {
     if (resultCode) return resultCode === "SUCCESS";
@@ -40,6 +77,26 @@ export default function PaymentResultPage() {
   }, [resultCode, status]);
 
   useEffect(() => {
+    console.log("currency 汇率", currencies);
+    console.log("payCurrency 当前货币", payCurrency);
+
+    if (currencies?.length) {
+      const rateFromToIntermediate = currencies.find(
+        (item: any) => item.label == payCurrency,
+      )?.rate as number; // 从源币种到中间币种
+
+      const rateIntermediateToTarget = currency?.rate; // 从中间币种到目标币种
+
+      setResult(
+        convertCurrency(
+          amount,
+          rateFromToIntermediate,
+          rateIntermediateToTarget,
+        ),
+      );
+      console.log("result 展示价格", result);
+    }
+
     async function notifyBackend() {
       try {
         if (payMethodCode !== "WALLET") {
@@ -51,11 +108,11 @@ export default function PaymentResultPage() {
       }
     }
     notifyBackend();
-  }, [searchParams, payMethodCode]);
+  }, [searchParams, payMethodCode, currency, currencies]);
 
   if (loading) {
     return (
-      <div className="flex h-[70vh] items-center justify-center text-lg">
+      <div className="flex h-[100vh] items-center justify-center text-lg">
         {t("loading")}
       </div>
     );
@@ -82,7 +139,7 @@ export default function PaymentResultPage() {
                 <p>
                   {t("amount")}
                   {currency.symbol}
-                  {amount}
+                  {result}
                 </p>
                 <p>
                   {t("time")} {formatTime(paySuccTime)}

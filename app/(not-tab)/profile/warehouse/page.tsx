@@ -1,6 +1,6 @@
 "use client";
 import { InfiniteScroll, NavBar } from "antd-mobile";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Checkbox, Spinner, Tab, Tabs } from "@heroui/react";
 import { useTranslations } from "next-intl";
@@ -9,12 +9,14 @@ import WarehouseItem from "./warehouse-item";
 
 import { useWarehouseList } from "@/hook";
 import { createWarehousePreviewKeyByCart } from "@/services";
+import { useSelection } from "@/hook/useSelection";
+import FullscreenLoader from "@/components/common/fullscreen-loader";
 const tabKeyToStatusCode: Record<string, string> = {
   all: "",
   submit: "302",
 };
 
-export default function Settingpage() {
+export default function Warehouse() {
   const t = useTranslations("profile.warehouse"); // ✅ 命名空间
 
   // 传入订单状态，例如 "ALL"、"WAIT_PAY"
@@ -29,42 +31,21 @@ export default function Settingpage() {
     error,
   } = useWarehouseList(tabKeyToStatusCode[activeTab]);
 
-  const [selected, setSelected] = useState<Record<string, boolean>>({});
   const [isSubmitting, setIsSubmitting] = useState(false); // ✅ 批量支付 loading
   const router = useRouter();
   const warehouse = data?.pages?.flatMap((page: any) => page.records) ?? [];
 
-  // const onPayOrderRedirect = (bizCode: string) => {
-  //   router.push(`/order/pay-order/${bizCode}`);
-  // };
-  const allIds = useMemo<string[]>(() => {
-    return warehouse.map((w: any) => w.packageCode) || [];
-  }, [data]);
-  // 是否全选
-  const allSelected = useMemo(() => {
-    return (
-      allIds.length > 0 && allIds.every((packageCode) => selected[packageCode])
-    );
-  }, [allIds, selected]);
-
-  // 切换全选
-  const toggleAll = (checked: boolean) => {
-    const newSelected = Object.fromEntries(
-      allIds.map((packageCode) => [packageCode, checked]),
-    );
-
-    setSelected(newSelected);
-  };
-  // 选中的 orderCode
-  const selectedIds = useMemo<string[]>(() => {
-    return Object.entries(selected)
-      .filter(([_, value]) => value)
-      .map(([key]) => key);
-  }, [selected]);
-
+  // ================= 使用 useSelection =================
+  const {
+    selectedIds,
+    isSelected,
+    hasSelected,
+    toggle,
+    isAllSelected,
+    toggleSelectAll,
+  } = useSelection(warehouse, { idKey: "packageCode" });
   // 提交
   const handleWarehouseSubmit = async () => {
-    if (selectedIds.length === 0) return;
     try {
       setIsSubmitting(true); // ✅ 开始loading
 
@@ -72,75 +53,35 @@ export default function Settingpage() {
         packageSet: selectedIds,
       });
 
-      router.push("/warehouse/submit-warehouse?key=" + key);
+      router.push(`/warehouse/submit-warehouse?key=${key}`);
     } catch {
     } finally {
       setIsSubmitting(false); // ✅ 恢复
     }
   };
 
-  // 初始化选中状态
-  useEffect(() => {
-    if (data?.pages) {
-      const initialSelected: Record<string, boolean> = data.pages.reduce(
-        (acc: any, item: any) => {
-          acc[item.packageCode] = false;
-
-          return acc;
-        },
-        {} as Record<string, boolean>,
-      );
-
-      setSelected(initialSelected);
-    }
-  }, [data]);
-
-  const WarehouseTabContent = ({
-    warehouse,
-  }: {
-    warehouse: any[];
-    footer?: React.ReactNode;
-  }) => {
-    // console.log("isLoading", isLoading);
-    // console.log("!warehouse?.length", warehouse?.length);
-
-    if (isLoading)
-      return (
-        <div className="flex h-[60vh] flex-col items-center justify-center text-gray-500">
-          <div className="mb-2 text-lg">
-            <Spinner />
-          </div>
-        </div>
-      );
+  const WarehouseTabContent = ({ warehouse }: { warehouse: any[] }) => {
+    if (isLoading) return <FullscreenLoader />;
     if (!warehouse?.length)
       return (
-        <div className="flex h-[60vh] flex-col items-center justify-center text-gray-500">
-          <p className="mb-2 text-lg">{t("noOrders")}</p>
+        <div className="flex h-[60vh] flex-col items-center justify-center text-lg text-gray-500">
+          {t("noOrders")}
         </div>
       );
 
     return (
       <>
         {isFetching && !isFetchingNextPage && (
-          <div className="flex flex-col items-center justify-center text-gray-500">
-            <div className="mb-2 text-lg">
-              <Spinner />
-            </div>
-          </div>
+          <Spinner className="mb-2 flex justify-center text-gray-500" />
         )}
         <div className="flex flex-col gap-3">
-          {warehouse.map((warehouse: any) => (
+          {warehouse.map((w: any) => (
             <WarehouseItem
-              key={warehouse.id}
+              key={w.id}
               activeTab={activeTab}
-              selected={!!selected[warehouse.packageCode]}
-              warehouse={warehouse}
-              onChange={(e: any) => {
-                setSelected((prev) => ({
-                  ...prev,
-                  [warehouse.packageCode]: e.target.checked,
-                }));
-              }}
+              selected={isSelected(w.packageCode)}
+              warehouse={w}
+              onChange={() => toggle(w.packageCode)}
             />
           ))}
         </div>
@@ -149,30 +90,16 @@ export default function Settingpage() {
           loadMore={(isRetry) => fetchNextPage().then(() => undefined)}
         >
           {!hasNextPage && (
-            <div
-              style={{
-                textAlign: "center",
-                padding: "12px 0",
-                color: "#999",
-              }}
-            >
-              {t("noMoreRecords")}
-            </div>
+            <div className="text-center text-[#999]">{t("noMoreRecords")}</div>
           )}
-          {isFetchingNextPage && (
-            <div className="flex flex-col items-center justify-center text-gray-500">
-              <div className="mb-2 text-lg">
-                <Spinner />
-              </div>
-            </div>
-          )}
+          {isFetchingNextPage && <Spinner />}
         </InfiniteScroll>
       </>
     );
   };
 
   return (
-    <div className="flex h-screen flex-col bg-[#f7f8f9]">
+    <div className="flex h-screen flex-col justify-between bg-[#f7f8f9]">
       <NavBar className="flex-[0_0_45px] bg-white" onBack={() => router.back()}>
         {t("title")}
       </NavBar>
@@ -185,7 +112,7 @@ export default function Settingpage() {
           tab: " px-0 h-12 flex-1",
           cursor: "h-0",
           tabContent: "group-data-[selected=true]:text-[#f0700c] font-bold",
-          panel: "bg-[#f7f8f9] px-2 flex-1",
+          panel: "bg-[#f7f8f9] px-2 flex-1 overflow-auto ",
         }}
         variant="underlined"
         onSelectionChange={(key) => setActiveTab(String(key))}
@@ -205,10 +132,7 @@ export default function Settingpage() {
             {/* 全选 */}
             <div className="flex gap-4">
               <div className="flex gap-2">
-                <Checkbox
-                  isSelected={allSelected}
-                  onChange={(e) => toggleAll(e.target.checked)}
-                >
+                <Checkbox isSelected={isAllSelected} onChange={toggleSelectAll}>
                   {t("selectAll")}
                 </Checkbox>
               </div>
@@ -219,7 +143,7 @@ export default function Settingpage() {
               <Button
                 className="w-[150px]"
                 color="primary"
-                isDisabled={selectedIds.length === 0}
+                isDisabled={!hasSelected}
                 isLoading={isSubmitting}
                 onPress={handleWarehouseSubmit}
               >

@@ -64,11 +64,24 @@ export default function BalanceRecord() {
           hasMore={!!hasNextPage}
           loadMore={() => fetchNextPage().then(() => undefined)}
         >
-          <div className="flex flex-col items-center justify-center text-gray-500">
-            <div className="mb-2 text-lg">
-              <Spinner />
+          {!hasNextPage && (
+            <div
+              style={{
+                textAlign: "center",
+                padding: "12px 0",
+                color: "#999",
+              }}
+            >
+              {t("noMoreRecords")}
             </div>
-          </div>
+          )}
+          {isFetchingNextPage && (
+            <div className="flex flex-col items-center justify-center text-gray-500">
+              <div className="mb-2 text-lg">
+                <Spinner />
+              </div>
+            </div>
+          )}
         </InfiniteScroll>
       </div>
     </div>

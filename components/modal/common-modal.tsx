@@ -17,6 +17,7 @@ interface CommonModalProps {
   children?: React.ReactNode;
   footer?: React.ReactNode;
   showCancel?: boolean;
+  isDisabledConfirm?: boolean;
   onCancel?: () => void;
   onConfirm?: () => Promise<void> | void; // 不再传 onClose
   confirmText?: string;
@@ -47,6 +48,7 @@ export default function CommonModal({
   onConfirm,
   confirmText,
   cancelText,
+  isDisabledConfirm = false,
   size = "md",
   isDismissable = true,
   isKeyboardDismissDisabled = false,
@@ -84,7 +86,9 @@ export default function CommonModal({
       <ModalContent>
         <>
           {title && <ModalHeader>{title}</ModalHeader>}
-          <ModalBody>{children}</ModalBody>
+          <ModalBody className="max-h-[70vh] overflow-y-auto">
+            {children}
+          </ModalBody>
           <ModalFooter>
             {footer ? (
               footer
@@ -101,6 +105,7 @@ export default function CommonModal({
                 )}
                 <Button
                   color="primary"
+                  isDisabled={isDisabledConfirm}
                   isLoading={loading}
                   onPress={handleConfirm}
                 >

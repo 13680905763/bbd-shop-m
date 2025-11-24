@@ -5,7 +5,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import { IoCart, IoStar } from "react-icons/io5";
 import {
   addToast,
-  Avatar,
   Button,
   Drawer,
   DrawerBody,
@@ -394,7 +393,14 @@ export default function GoodsPage() {
               <div>
                 {goodsInfo?.productDetail?.productDescImgList?.map(
                   (item: any) => {
-                    return <Image key={item} fit="contain" src={item} />;
+                    return (
+                      <Image
+                        key={item}
+                        fit="contain"
+                        referrerPolicy="no-referrer"
+                        src={item}
+                      />
+                    );
                   },
                 )}
               </div>
@@ -444,7 +450,7 @@ export default function GoodsPage() {
       <Drawer
         isOpen={isOpen}
         placement="bottom"
-        size="2xl"
+        size="xl"
         onOpenChange={onOpenChange}
       >
         <DrawerContent>
@@ -455,6 +461,7 @@ export default function GoodsPage() {
                   <Image
                     fit="contain"
                     height={70}
+                    referrerPolicy="no-referrer"
                     src={
                       currentSku?.imgUrl ?? goodsInfo?.productInfo.imgList[0]
                     }
@@ -499,9 +506,11 @@ export default function GoodsPage() {
                                     }
                                   >
                                     {spec.imageUrl ? (
-                                      <Avatar
-                                        radius="none"
+                                      <Image
+                                        height={40}
+                                        referrerPolicy="no-referrer"
                                         src={spec.imageUrl}
+                                        width={40}
                                       />
                                     ) : null}
                                     {spec.valueName}
@@ -562,7 +571,6 @@ export default function GoodsPage() {
       </Drawer>
 
       <CommonModal
-        // cancelText="该商品涉及版权问题"
         confirmText="继续购买其他"
         isDismissable={false}
         isKeyboardDismissDisabled={true}
@@ -579,11 +587,6 @@ export default function GoodsPage() {
           <div className="my-4 rounded-lg bg-[#ffeee1] p-2 text-sm">
             {t("riskMessage")}
           </div>
-          {/* <div className="mt-5 mb-2">如果您支付成功，请点击支付完成。</div>
-          <div className="mb-5">
-            如果您在付款时遇到问题，请重试或给我们一个{" "}
-            <span className="text-blue-600">反馈</span>
-          </div> */}
         </div>
       </CommonModal>
     </div>

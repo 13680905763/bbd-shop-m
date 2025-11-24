@@ -91,11 +91,13 @@ export const getServicesList = (): Promise<any> => {
   );
 };
 /** 订单取消 */
-export const putOrderCancel = (data: { id: string }): Promise<any> => {
-  return requestWithOption(
-    { url: "/orders/cancel?orderId=" + data.id, method: "PUT" },
-    { showToast: true },
-  );
+export const putOrderCancel = (id: string): Promise<any> => {
+  return request.put(`/orders/cancel?orderId=${id}`);
+
+  // return requestWithOption(
+  //   { url: "/orders/cancel?orderId=" + data.id, method: "PUT" },
+  //   { showToast: true },
+  // );
 };
 /** 订单批量支付 */
 export const batchPayOrder = (data: any): Promise<any> => {
@@ -106,10 +108,12 @@ export const batchPayOrder = (data: any): Promise<any> => {
 };
 /** 订单取消 */
 export const OrderRefund = (data: any): Promise<any> => {
-  return requestWithOption(
-    { url: "/order-refund/applyRefund", method: "POST", data },
-    { showToast: true },
-  );
+  return request.post("/order-refund/applyRefund", data);
+
+  // return requestWithOption(
+  //   { url: "/order-refund/applyRefund", method: "POST", data },
+  //   { showToast: true },
+  // );
 };
 
 /** 订单取消 */
@@ -121,10 +125,11 @@ export const createCustomizeOrder = (data: any): Promise<any> => {
 };
 /** 撤销退款 */
 export const putOrderRevoke = (id: string): Promise<any> => {
-  return requestWithOption(
-    { url: `/order-refund/cancelApplyRefund/${id}`, method: "PUT" },
-    { showToast: true },
-  );
+  // return requestWithOption(
+  //   { url: `/order-refund/cancelApplyRefund/${id}`, method: "PUT" },
+  //   { showToast: true },
+  // );
+  return request.put(`/order-refund/cancelApplyRefund/${id}`);
 };
 /** 撤销列表 */
 export const getRefundList = (data = {}): Promise<any> => {

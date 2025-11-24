@@ -158,7 +158,7 @@
             "uploading": "头像上传中..."
         },
         "order": {
-            "pay": "去支付",
+            "pay": "支付",
             "cancel": "取消订单",
             "requestRefund": "申请退款",
             "title": "我的订单",
@@ -427,7 +427,8 @@
             "enterValidAmount": "请输入有效金额"
         },
         "balanceRecord": {
-            "title": "余额记录"
+            "title": "余额记录",
+            "noMoreRecords": "没有更多记录"
         },
         "points": {
             "title": "积分",
@@ -455,7 +456,7 @@
         "stock": "库存",
         "shippingFee": "运费"
     },
-    "estimationPage": {
+    "estimation": {
         "fillWeightOrSize": "请输入重量或尺寸（长、宽、高）！",
         "title": "运费估算",
         "warehouse": "仓库至",
@@ -464,8 +465,8 @@
         "width": "宽度 (厘米)",
         "height": "高度 (厘米)",
         "search": "立即查询",
-        "insurable": "可投保",
-        "taxFree": "免税",
+        "selectCountry": "请选择国家",
+        "selectCategory": "请选择货物类别",
         "price": "价格",
         "time": "时效",
         "pricingStandard": "计价标准",
@@ -562,75 +563,40 @@
             "selectRoute": "请选择运输路线",
             "submitSuccess": "提交成功"
         },
-        "texts": {
-            "title": {
-                "add": "添加地址",
-                "edit": "编辑地址",
-                "deleteConfirm": "您确定要删除此地址吗？"
-            },
-            "buttons": {
-                "add": "+ 添加地址",
-                "edit": "编辑",
-                "delete": "删除"
+        "addressModal": {
+            "addAddress": "添加地址",
+            "editAddress": "编辑地址",
+            "fields": {
+                "recipient": {
+                    "label": "收件人",
+                    "placeholder": "输入收件人姓名"
+                },
+                "phone": {
+                    "label": "电话",
+                    "placeholder": "输入电话号码"
+                },
+                "area": {
+                    "label": "地区",
+                    "placeholder": "选择地区"
+                },
+                "address": {
+                    "label": "地址",
+                    "placeholder": "输入完整地址"
+                },
+                "doorNo": {
+                    "label": "门牌号",
+                    "placeholder": "输入门牌号"
+                },
+                "postcode": {
+                    "label": "邮编",
+                    "placeholder": "输入邮政编码"
+                },
+                "defaultAddress": {
+                    "label": "设为默认地址"
+                }
             },
             "tableEmpty": "暂无地址信息"
-        },
-        "fields": [
-            {
-                "key": "recipient",
-                "type": "input",
-                "name": "recipient",
-                "label": "收件人",
-                "placeholder": "输入收件人姓名",
-                "required": true
-            },
-            {
-                "key": "phone",
-                "type": "input",
-                "name": "phone",
-                "label": "电话",
-                "placeholder": "输入电话号码",
-                "required": true
-            },
-            {
-                "key": "area",
-                "type": "area",
-                "name": "area",
-                "label": "地区",
-                "placeholder": "选择地区",
-                "required": true
-            },
-            {
-                "key": "address",
-                "type": "input",
-                "name": "address",
-                "label": "地址",
-                "placeholder": "输入完整地址",
-                "required": true
-            },
-            {
-                "key": "doorNo",
-                "type": "input",
-                "name": "doorNo",
-                "label": "门牌号",
-                "placeholder": "输入门牌号",
-                "required": true
-            },
-            {
-                "key": "postcode",
-                "type": "input",
-                "name": "postcode",
-                "label": "邮编",
-                "placeholder": "输入邮政编码",
-                "required": true
-            },
-            {
-                "key": "defaultAddress",
-                "type": "checkbox",
-                "name": "defaultAddress",
-                "label": "设为默认地址"
-            }
-        ]
+        }
     },
     "payment": {
         "title": "确认订单",

@@ -146,6 +146,7 @@ export default function Home() {
             <div className="flex-1 text-sm font-bold">Shipping Estimate</div>
             <div className="flex-1">
               <Input
+                readOnly
                 aria-label="Search"
                 classNames={{
                   inputWrapper: "bg-[#f7f8f9]",
