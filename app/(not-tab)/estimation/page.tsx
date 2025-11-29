@@ -161,6 +161,11 @@ export default function Estimation() {
           <div className="flex w-full gap-8">
             <Autocomplete
               className="flex-1 text-base"
+              classNames={
+                {
+                  input: "text-base",
+                } as any
+              }
               defaultItems={countries}
               label={t("warehouse")}
               name="countryId"
@@ -188,7 +193,12 @@ export default function Estimation() {
             </Autocomplete>
           </div>
           <Autocomplete
-            className="flex-1 text-base"
+            className="flex-1 !text-base"
+            classNames={
+              {
+                input: "text-base",
+              } as any
+            }
             defaultItems={categoryOptions}
             label={t("category")}
             name="categoryId"

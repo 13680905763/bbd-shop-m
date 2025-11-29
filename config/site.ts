@@ -24,43 +24,7 @@ export const siteConfig = {
       title: "Fill & Buy",
     },
   ],
-  toolTab: [
-    {
-      image: "/m/images/home/tab1.png",
-      title: "tab1",
-    },
-    {
-      image: "/m/images/home/tab2.png",
-      title: "tab2",
-      // to: "/pages/member/promotion/index",
-    },
-    {
-      image: "/m/images/home/tab3.png",
-      title: "tab3",
-      // to: "/pages/home/shipforme/index",
-    },
-    {
-      image: "/m/images/home/tab4.png",
-      title: "tab4",
-    },
-  ],
-  affiliatsList: [
-    {
-      title: "总奖励",
-      value: "$888",
-      to: "/pages/member/account/index",
-    },
-    {
-      title: "联盟余额",
-      value: "88",
-      to: "/pages/member/points/index",
-    },
-    {
-      title: "已提现金额",
-      value: "88",
-      to: "/pages/member/points/index",
-    },
-  ],
+
   orderList: [
     {
       title: "代购订单",

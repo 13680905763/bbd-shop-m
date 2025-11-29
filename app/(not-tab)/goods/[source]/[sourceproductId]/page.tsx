@@ -1,5 +1,5 @@
 "use client";
-import { NavBar, Swiper, Image } from "antd-mobile";
+import { NavBar, Swiper, Image, ImageViewer } from "antd-mobile";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import { IoCart, IoStar } from "react-icons/io5";
@@ -15,14 +15,14 @@ import {
   Textarea,
   useDisclosure,
 } from "@heroui/react";
-import NextLink from "next/link";
 import { GrPowerReset } from "react-icons/gr";
 import { IoIosLink } from "react-icons/io";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
-import ProgressBar from "@/components/progress-bar";
-import DisclaimerDrawer from "@/components/disclaimer-drawer";
+import ProgressBar from "./progress-bar";
+import DisclaimerDrawer from "./disclaimer-drawer";
+
 import Stepper from "@/components/stepper";
 import { addCart } from "@/services/cart";
 import { getGoodsInfo } from "@/services/goods";
@@ -120,7 +120,7 @@ function getAllCombinations(
   return combinations;
 }
 export default function GoodsPage() {
-  const t = useTranslations("Goods");
+  const t = useTranslations("goods");
   const { currency } = useGlobalStore();
 
   const params = useParams();
@@ -137,6 +137,7 @@ export default function GoodsPage() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isOpen1, setIsOpen1] = useState(false);
 
+  const [visible, setVisible] = useState(false);
   const queryClient = useQueryClient();
   const handleBuyNow = async () => {
     if (issub) return;
@@ -164,7 +165,7 @@ export default function GoodsPage() {
         remark,
       });
 
-      router.push("/order/submit-order?type=product&key=" + key);
+      router.push("/submit/order?type=product&key=" + key);
     } catch (err: any) {
     } finally {
       setissub(false);
@@ -311,7 +312,7 @@ export default function GoodsPage() {
   return (
     <div className="flex h-[calc(var(--vh)_*_100)] flex-col justify-between">
       <NavBar className="bg-white" onBack={() => router.back()}>
-        {t("productDetails")}
+        {t("title")}
       </NavBar>
 
       {isLoading ? (
@@ -365,7 +366,7 @@ export default function GoodsPage() {
               </div>
               <div className="text-base font-bold">
                 <p>{goodsInfo?.productInfo.title}</p>
-                <div className="inline-block flex gap-2 text-sm text-[#f0700c]">
+                <div className="flex gap-2 text-sm text-[#f0700c]">
                   <a
                     className="flex items-center gap-1 !text-[#f0700c]"
                     href={goodsInfo?.productInfo?.productUrl}
@@ -389,7 +390,7 @@ export default function GoodsPage() {
             <DisclaimerDrawer />
 
             <div className="box-card mx-2 !mt-0 p-2">
-              <div className="p-2 text-base font-bold">商品详情</div>
+              <div className="p-2 text-base font-bold"> {t("title")}</div>
               <div>
                 {goodsInfo?.productDetail?.productDescImgList?.map(
                   (item: any) => {
@@ -410,11 +411,9 @@ export default function GoodsPage() {
           <div className="flex items-center justify-between gap-8 bg-white p-2">
             <div className="flex gap-4">
               <div className="flex flex-col items-center justify-center">
-                <NextLink href="/cart">
-                  <div>
-                    <IoCart className="h-[30px] w-[30px]" />
-                  </div>
-                </NextLink>
+                <button onClick={() => router.push("/cart")}>
+                  <IoCart className="h-[30px] w-[30px]" />
+                </button>
               </div>
               <div className="flex flex-col items-center justify-center">
                 <div>
@@ -450,7 +449,7 @@ export default function GoodsPage() {
       <Drawer
         isOpen={isOpen}
         placement="bottom"
-        size="xl"
+        size="lg"
         onOpenChange={onOpenChange}
       >
         <DrawerContent>
@@ -466,6 +465,18 @@ export default function GoodsPage() {
                       currentSku?.imgUrl ?? goodsInfo?.productInfo.imgList[0]
                     }
                     width={70}
+                    onClick={() => {
+                      setVisible(true);
+                    }}
+                  />
+                  <ImageViewer.Multi
+                    images={[
+                      currentSku?.imgUrl ?? goodsInfo?.productInfo.imgList[0],
+                    ]}
+                    visible={visible}
+                    onClose={() => {
+                      setVisible(false);
+                    }}
                   />
                 </div>
                 <div className="">
@@ -473,9 +484,14 @@ export default function GoodsPage() {
                     {currency.symbol}
                     {currentSku?.price ?? goodsInfo?.productInfo.price}
                   </div>
-                  <div className="text-sm">库存 : {currentSku?.stock}</div>
                   <div className="text-sm">
-                    运费 : {goodsInfo?.productInfo?.postFee}
+                    {t("stock")}
+                    {currentSku?.stock}
+                  </div>
+                  <div className="text-sm">
+                    {t("shippingFee")}
+                    {currency.symbol}
+                    {goodsInfo?.productInfo?.postFee}
                   </div>
                 </div>
               </DrawerHeader>
@@ -487,7 +503,7 @@ export default function GoodsPage() {
                         <div className="my-2 text-sm font-bold">
                           {specs.propName}
                         </div>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-1">
                           {specs.propValueList.map(
                             (spec: any, indey: number) => {
                               return (
@@ -496,24 +512,26 @@ export default function GoodsPage() {
                                   data-index={spec.selected}
                                 >
                                   <Button
-                                    className={`bg-white pl-2 ${spec.selected ? "border-[#f0700c] text-[#f0700c]" : "border-[#ccc]"} `}
+                                    className={`bg-white pl-2 ${spec.selected ? "border-[#f0700c] text-[#f0700c]" : "border-[#ccc]"} whitespace-normal break-words text-left`}
                                     isDisabled={spec.disabled}
-                                    radius="lg"
+                                    radius="sm"
                                     size={spec.imageUrl ? "md" : "sm"}
                                     variant="bordered"
                                     onPress={() =>
                                       changeSelectedStatus(index, indey)
                                     }
                                   >
-                                    {spec.imageUrl ? (
+                                    {spec.imageUrl && (
                                       <Image
                                         height={40}
                                         referrerPolicy="no-referrer"
                                         src={spec.imageUrl}
                                         width={40}
                                       />
-                                    ) : null}
-                                    {spec.valueName}
+                                    )}
+                                    <span className="block">
+                                      {spec.valueName}
+                                    </span>
                                   </Button>
                                 </div>
                               );
@@ -534,7 +552,7 @@ export default function GoodsPage() {
                   </div>
                 </div>
                 <div className="mb-4">
-                  <div className="my-2 text-sm font-bold">备注</div>
+                  <div className="my-2 text-sm font-bold"> {t("remark")}</div>
                   <Textarea
                     classNames={{
                       inputWrapper: "bg-[#f5f5f5]",
@@ -550,6 +568,7 @@ export default function GoodsPage() {
                   <Button
                     className="w-full"
                     color="primary"
+                    isDisabled={!currentSku}
                     isLoading={issub}
                     onPress={handleBuyNow}
                   >
@@ -558,6 +577,7 @@ export default function GoodsPage() {
                 ) : (
                   <Button
                     className="w-full bg-[linear-gradient(to_right,#ffd01e,#ff8917)] text-white"
+                    isDisabled={!currentSku}
                     isLoading={issub}
                     onPress={() => add()}
                   >
@@ -571,13 +591,13 @@ export default function GoodsPage() {
       </Drawer>
 
       <CommonModal
-        confirmText="继续购买其他"
+        confirmText={t("continueShopping")}
         isDismissable={false}
         isKeyboardDismissDisabled={true}
         isOpen={isOpen1}
         showCancel={false}
         size="xl"
-        title="风险提示"
+        title={t("riskNotice")}
         onConfirm={async () => {
           router.push("/");
         }}

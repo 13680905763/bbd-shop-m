@@ -11,7 +11,7 @@ import CommonForm from "@/components/form/common-form";
 import { FieldConfig } from "@/components/form/formItem-renderer";
 
 export default function LoginPage() {
-  const t = useTranslations("login");
+  const t = useTranslations("auth.login");
   const router = useRouter();
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",

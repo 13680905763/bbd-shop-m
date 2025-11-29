@@ -27,10 +27,12 @@ export const refundPayPackage = (id: string): Promise<any> => {
 };
 /** 包裹撤销取消 */
 export const withdrawPayPackage = (id: string): Promise<any> => {
-  return requestWithOption(
-    { url: `/waybill/cancel/withdraw/${id}`, method: "put" },
-    { showToast: true },
-  );
+  return request.put(`/waybill/cancel/withdraw/${id}`);
+
+  // return requestWithOption(
+  //   { url: `/waybill/cancel/withdraw/${id}`, method: "put" },
+  //   { showToast: true },
+  // );
 };
 /** 包裹更换路线预览 */
 
@@ -46,4 +48,9 @@ export const changePayPackage = (data: any): Promise<any> => {
 
 export const routePackage = (params: any): Promise<any> => {
   return request.get(`/track`, { params });
+};
+/** 包裹收货 */
+
+export const ReceiptPackage = (outboundPackingId: string): Promise<any> => {
+  return request.put(`/waybill/sign?outboundPackingId=${outboundPackingId}`);
 };

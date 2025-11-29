@@ -1,20 +1,20 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-import { getPackageList } from "@/services";
+import { getRefundList } from "@/services/order";
 
-export function usePackageList(statusCode: string) {
+export function useOrderRefundList() {
   return useInfiniteQuery({
-    queryKey: ["packageList", statusCode],
+    queryKey: ["orderRefundList"],
+
     queryFn: ({ pageParam = 1 }) => {
       const params: any = {
         current: pageParam,
         size: 10,
-        statusCode,
       };
 
-      return getPackageList(params);
+      return getRefundList(params);
     },
-    getNextPageParam: (lastPage: any) => {
+    getNextPageParam: (lastPage) => {
       const loaded = lastPage.current * lastPage.size;
 
       return loaded < lastPage.total ? lastPage.current + 1 : undefined;

@@ -8,9 +8,11 @@ import {
   DrawerHeader,
   useDisclosure,
 } from "@heroui/react";
+import { useTranslations } from "next-intl";
 import { IoBagCheck, IoChevronForwardSharp } from "react-icons/io5";
 
 export default function DisclaimerDrawer() {
+  const t = useTranslations("goods.disclaimerDrawer");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
@@ -20,7 +22,7 @@ export default function DisclaimerDrawer() {
           <div className="items-center">
             <div className="my-1 flex items-center gap-2 text-sm">
               <IoBagCheck className="h-[20px] w-[20px]" />
-              免责声明
+              {t("title")}
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -34,12 +36,10 @@ export default function DisclaimerDrawer() {
           {() => (
             <>
               <DrawerHeader className="flex flex-col gap-1">
-                免责声明
+                {t("buttonLabel")}
               </DrawerHeader>
               <DrawerBody>
-                <p>
-                  BBDbuy上展示的所有代购商品均来自第三方代购平台，非BBDbuy直接销售。因此，BBDbuy对侵犯知识产权和侵犯商品著作权所引起的问题不承担任何责任和法律责任。使用BBDbuy代购服务即表示您默认接受上述风险。
-                </p>
+                <p>{t("content")}</p>
               </DrawerBody>
               <DrawerFooter />
             </>

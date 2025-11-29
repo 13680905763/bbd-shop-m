@@ -15,3 +15,6 @@ export const getWalletDetailList = (
 export const payNotice = (param: any): Promise<any> => {
   return request.get("/onlypay/callback/redirect?" + param);
 };
+export const payPaypel = (param: any): Promise<any> => {
+  return request.get("/paypal/return/redirect?" + param);
+};

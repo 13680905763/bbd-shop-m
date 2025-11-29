@@ -1,6 +1,6 @@
 "use client";
 
-import { addToast, Button, NumberInput } from "@heroui/react";
+import { Button, NumberInput } from "@heroui/react";
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -13,7 +13,7 @@ import FullscreenLoader from "@/components/common/fullscreen-loader";
 import { useGlobalStore } from "@/store";
 
 export default function WalletRechargePage() {
-  const t = useTranslations("wallet.walletPage"); // ✅ 命名空间
+  const t = useTranslations("wallet.page"); // ✅ 命名空间
   const { currency } = useGlobalStore();
 
   const [loading, setLoading] = useState(true);
@@ -37,27 +37,14 @@ export default function WalletRechargePage() {
   useEffect(() => {
     fetchWallet();
   }, []);
-  const changePrice = (price: number) => {
-    setCurrentPrice(price);
-  };
 
   const handleRecharge = async () => {
-    if (!currentPrice || currentPrice <= 0) {
-      addToast({
-        title: t("enterValidAmount"),
-        timeout: 1000,
-        color: "danger",
-      });
-
-      return;
-    }
     const bizCode: any = await createOrderByRecharge({
       currencyAmount: currentPrice,
       currencyCode: currency.value,
     });
 
     router.push("/payment/" + bizCode);
-    // router.push("/order/pay-order/" + bizCode);
   };
 
   return (
@@ -106,7 +93,7 @@ export default function WalletRechargePage() {
                     ? "border border-orange-500 font-semibold text-orange-600"
                     : ""
                 }`}
-                onClick={() => changePrice(item)}
+                onClick={() => setCurrentPrice(item)}
               >
                 {currency.symbol} {item}
               </button>
@@ -120,6 +107,7 @@ export default function WalletRechargePage() {
           <NumberInput
             className="my-2"
             classNames={{ inputWrapper: "bg-white" }}
+            minValue={1}
             placeholder={t("enterOtherAmount")}
             size="lg"
             startContent={<IoWallet className="h-6 w-6" />}
@@ -127,7 +115,12 @@ export default function WalletRechargePage() {
             value={currentPrice}
             onValueChange={(value) => setCurrentPrice(value)}
           />
-          <Button className="w-full" color="primary" onPress={handleRecharge}>
+          <Button
+            className="w-full"
+            color="primary"
+            isDisabled={!currentPrice}
+            onPress={handleRecharge}
+          >
             {t("recharge")}
           </Button>
         </div>

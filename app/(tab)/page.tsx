@@ -16,6 +16,28 @@ import { siteConfig } from "@/config/site";
 import { Logo } from "@/components/icons";
 import { getGoodsImageId } from "@/services";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
+const toolTab = [
+  {
+    image: "/m/images/home/tab1.png",
+    title: "tab1",
+    href: "https://discord.gg/N34Q27Vts8",
+  },
+  {
+    image: "/m/images/home/tab2.png",
+    title: "tab2",
+    href: "/m/dashboard",
+  },
+  {
+    image: "/m/images/home/tab3.png",
+    title: "tab3",
+    href: "/m/estimation",
+  },
+  {
+    image: "/m/images/home/tab4.png",
+    title: "tab4",
+    href: "/m/register",
+  },
+];
 
 export default function Home() {
   const router = useRouter();
@@ -176,14 +198,15 @@ export default function Home() {
           src={"/m/images/home/footer.jpg"}
         />
         <div className="my-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          {siteConfig.toolTab.map((item) => {
+          {toolTab.map((item, index) => {
             return (
-              <Image
-                key={item.title}
-                className="h-auto w-full rounded-lg object-cover"
-                height={100}
-                src={item.image}
-              />
+              <a key={index} href={item.href}>
+                <Image
+                  className="h-auto w-full rounded-lg object-cover"
+                  height={100}
+                  src={item.image}
+                />
+              </a>
             );
           })}
         </div>

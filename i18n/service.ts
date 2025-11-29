@@ -13,13 +13,16 @@ export async function getUserLocale() {
   const cookieStore = await cookies();
   const locale = cookieStore.get(COOKIE_LOCALE)?.value;
 
+  // console.log("服务端 getUserLocale cookie", locale);
+
   if (locale && languages.some((l) => l.value === locale)) return locale;
 
   const headerStore = await headers();
   const acceptLanguage = headerStore.get("accept-language") || "";
   const parsedLocale = acceptLanguage?.split(",")[0].split("-")[0] || "";
 
-  console.log("parsedLocale", parsedLocale, defaultLocale);
+  // console.log("服务端 getUserLocale 请求头", parsedLocale);
+  // console.log("服务端 getUserLocale 默认", defaultLocale);
 
   return languages.some((l) => l.value === parsedLocale)
     ? parsedLocale
@@ -33,5 +36,6 @@ export async function setUserLocale(locale: string) {
     name: COOKIE_LOCALE,
     value: locale,
     path: "/",
+    maxAge: 60 * 60 * 24 * 365 * 5, // 5 年
   });
 }

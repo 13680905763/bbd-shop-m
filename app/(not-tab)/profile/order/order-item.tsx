@@ -16,7 +16,7 @@ export default function OrderItem({
   onRefundOrder,
   onRevokeRefundOrder,
 }: any) {
-  const t = useTranslations("profile.order"); // ✅ 命名空间
+  const t = useTranslations("profile.order.buttons"); // ✅ 命名空间
 
   const router = useRouter();
   const { currency } = useGlobalStore();
@@ -34,19 +34,19 @@ export default function OrderItem({
           <Image
             alt="商品图"
             className="rounded-lg object-cover shadow-sm"
-            height={100}
+            height={80}
             referrerPolicy="no-referrer"
             src={product.skuPicUrl || product?.picUrl}
-            width={100}
+            width={80}
           />
         </button>
 
         {/* 商品信息 */}
         <div className="flex-1">
-          <div className="line-clamp-2 text-base font-semibold text-gray-900">
+          <div className="line-clamp-2 text-sm font-semibold text-gray-900">
             {product.productTitle}
           </div>
-          <div className="line-clamp-2 text-sm text-gray-500">
+          <div className="line-clamp-2 text-xs text-gray-500">
             {product.sku?.propName_valueName}
           </div>
         </div>
@@ -89,7 +89,7 @@ export default function OrderItem({
             size="sm"
             onPress={() => onRevokeRefundOrder(product?.refundId)}
           >
-            {t("withdrawRequest")}
+            {t("withdraw")}
           </Button>
         </div>
       )}
@@ -100,23 +100,21 @@ export default function OrderItem({
     <div className="rounded-xl border border-gray-100 bg-white p-3 shadow-sm">
       {/* 顶部：订单号 + 下单时间 */}
       <div className="flex items-center justify-between border-gray-100">
-        <div>
-          <div className="flex items-center gap-2 text-sm font-medium text-gray-800">
-            {activeTab === "waitPay" && (
-              <Checkbox
-                classNames={{
-                  base: "p-0 m-0",
-                  wrapper: "m-0",
-                }}
-                isSelected={selected}
-                onChange={onChange}
-              />
-            )}
-            <SourceIcon source={order.source} />
-            <div className="font-semibold">
-              {order?.orderCode}
-              <div className="text-xs text-gray-500">{order?.createTime}</div>
-            </div>
+        <div className="flex items-center gap-2 text-sm font-medium text-gray-800">
+          {activeTab === "waitPay" && (
+            <Checkbox
+              classNames={{
+                base: "p-0 m-0",
+                wrapper: "m-0",
+              }}
+              isSelected={selected}
+              onChange={onChange}
+            />
+          )}
+          <SourceIcon source={order.source} />
+          <div className="font-semibold">
+            {order?.orderCode}
+            <div className="text-xs text-gray-500">{order?.createTime}</div>
           </div>
         </div>
         <div className="self-start text-right text-sm font-bold text-[#f0700c]">
@@ -128,11 +126,10 @@ export default function OrderItem({
       {order?.products.map((product: any) => (
         <ProductItem key={product.id} product={product} status={order.status} />
       ))}
-      <div className="mt-1 font-semibold text-[#f0700c]" />
       {/* 金额 + 按钮 */}
       <div className="text-right">
         <p className="text-sm text-gray-700">
-          <span className="text-lg font-bold">
+          <span className="text-base font-bold">
             {currency.symbol}
             {order?.totalFee}
           </span>
@@ -160,7 +157,7 @@ export default function OrderItem({
         )}
         {order?.canRefundFlag && (
           <Button color="primary" radius="sm" size="sm" onPress={onRefundOrder}>
-            {t("requestRefund")}
+            {t("refund")}
           </Button>
         )}
       </div>

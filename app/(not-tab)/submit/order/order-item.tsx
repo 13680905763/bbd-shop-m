@@ -1,14 +1,15 @@
 "use client";
 
 import { Button, Image } from "@heroui/react";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import Stepper from "@/components/stepper";
 import SourceIcon from "@/components/common/source-icon";
 import { useGlobalStore } from "@/store";
 
-export default function OrderCard({ order, openServiceModal }: any) {
-  const router = useRouter();
+export default function OrderItem({ order, openServiceModal }: any) {
+  const t = useTranslations("submit.order");
+
   const { currency } = useGlobalStore();
 
   return (
@@ -25,25 +26,18 @@ export default function OrderCard({ order, openServiceModal }: any) {
           {/* 商品内容 */}
           <div className="my-3 flex gap-2">
             {/* 左侧图片 */}
-            <button
-              onClick={() =>
-                router.push(
-                  `/goods/${product.source}/${product?.sourceProductId}`,
-                )
-              }
-            >
-              <Image
-                alt="商品图"
-                className="rounded-md object-cover"
-                classNames={{
-                  wrapper: "self-start",
-                }}
-                height={93}
-                referrerPolicy="no-referrer"
-                src={product.skuPicUrl}
-                width={93}
-              />
-            </button>
+
+            <Image
+              alt="商品图"
+              className="rounded-md object-cover"
+              classNames={{
+                wrapper: "self-start",
+              }}
+              height={93}
+              referrerPolicy="no-referrer"
+              src={product.skuPicUrl}
+              width={93}
+            />
 
             {/* 右侧信息 */}
             <div className="flex-1">
@@ -54,7 +48,8 @@ export default function OrderCard({ order, openServiceModal }: any) {
                 {product.propAndValue.propName_valueName}
               </div>
               <div className="line-clamp-1 !text-sm">
-                备注：{product.remark}
+                {t("remark")}
+                {product.remark}
               </div>
 
               <div className="mt-0 flex items-center justify-between gap-2">
@@ -64,13 +59,7 @@ export default function OrderCard({ order, openServiceModal }: any) {
                     {product.price}
                   </span>
                 </div>
-
                 <Stepper disabled value={product.quantity} />
-              </div>
-
-              <div className="text-light-gray">
-                运费:{currency.symbol}
-                {product.postFee}
               </div>
             </div>
           </div>
@@ -80,7 +69,7 @@ export default function OrderCard({ order, openServiceModal }: any) {
             <div className="flex items-center justify-between">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-sm font-medium text-gray-800">
-                  增值服务
+                  {t("valueAddedService")}
                 </span>
 
                 {product?.orderServiceList?.length > 0 ? (
@@ -93,7 +82,9 @@ export default function OrderCard({ order, openServiceModal }: any) {
                     </span>
                   ))
                 ) : (
-                  <span className="text-xs text-gray-400">暂无服务</span>
+                  <span className="text-xs text-gray-400">
+                    {t("noService")}
+                  </span>
                 )}
               </div>
 
@@ -103,16 +94,40 @@ export default function OrderCard({ order, openServiceModal }: any) {
                 onPress={() => {
                   openServiceModal(
                     product?.cartId || 1,
-                    product?.sku?.propId_valueId,
+                    product?.propAndValue?.propId_valueId,
                   );
                 }}
               >
-                添加
+                {t("add")}
               </Button>
             </div>
           </div>
         </div>
       ))}
+
+      {/* 底部合计 */}
+      <div className="mt-2 text-right">
+        <div>
+          {t("shippingFee")}
+          {currency.symbol}
+          {order?.postFee}
+        </div>
+        <div>
+          {t("serviceFee")}
+          {currency.symbol}
+          {order?.serviceFee}
+        </div>
+        <div>
+          {t("productFee")}
+          {currency.symbol}
+          {order?.productFee}
+        </div>
+        <div className="font-bold">
+          {t("shopTotal")}
+          {currency.symbol}
+          {order?.totalFee}
+        </div>
+      </div>
     </div>
   );
 }

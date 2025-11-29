@@ -8,10 +8,10 @@ export default function MessageItem({
   message,
   isEdit,
   selected,
-  onSelect,
+  onChange,
   onView,
 }: any) {
-  const t = useTranslations("profile.messagePage.item");
+  const t = useTranslations("profile.message");
   const isUnread = message.statusCode === 0;
 
   return (
@@ -26,8 +26,12 @@ export default function MessageItem({
             {/* 编辑模式勾选框 */}
             {isEdit && (
               <Checkbox
+                classNames={{
+                  base: "p-0 m-0",
+                  wrapper: "m-0",
+                }}
                 isSelected={selected}
-                onValueChange={(val) => onSelect?.(message, val)}
+                onChange={onChange}
               />
             )}
             <span
@@ -43,7 +47,7 @@ export default function MessageItem({
               isUnread ? "text-orange-500" : "text-gray-400"
             }`}
           >
-            {isUnread ? t("status.unread") : t("status.read")}
+            {isUnread ? t("unread") : t("read")}
           </span>
         </div>
 

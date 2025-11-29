@@ -4,6 +4,7 @@ import React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Divider } from "@heroui/react";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import { useTranslations } from "next-intl";
 
 import { Logo } from "@/components/icons";
 import { loginWithGoogle } from "@/services";
@@ -12,6 +13,7 @@ export default function AuthLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const t = useTranslations("auth");
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/"; // 默认为首页
@@ -37,8 +39,8 @@ export default function AuthLayout({
       <div className="pt-16">
         <Logo width={170} />
         <div className="my-[20px]">
-          <p className="font-bold">提供一站式服务</p>
-          <p className="text-xs">轻松从中国购物，专业运输全球</p>
+          <p className="font-bold">{t("sloganTitle")}</p>
+          <p className="text-xs">{t("sloganDesc")}</p>
         </div>
         {children}
       </div>

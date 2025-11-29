@@ -12,7 +12,7 @@ import {
 import { FaCamera } from "react-icons/fa";
 import { useTranslations } from "next-intl";
 
-import OrderCard from "./order-card";
+import OrderItem from "./order-item";
 
 import {
   createOrderByCart,
@@ -28,7 +28,7 @@ import CommonModal from "@/components/modal/common-modal";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
 
 export default function SubmitOrder() {
-  const t = useTranslations("submitOrder");
+  const t = useTranslations("submit.order");
   const { currency } = useGlobalStore();
 
   const searchParam = useSearchParams();
@@ -75,20 +75,20 @@ export default function SubmitOrder() {
 
   // 当前服务详情对象
   const [currentService, setCurrentService] = useState<any>(null);
-  // 新增状态
-  const [isServiceSubmitting, setIsServiceSubmitting] = useState(false);
+
   // 打开商品服务列表弹窗
   const openServiceModal = (cartId: string, skuId: string) => {
     setCurrentCartId(cartId);
     const handleSO = orderData?.orderList?.find((item: any) => {
       return item?.products.find((iitem: any) => {
-        return iitem?.sku?.propId_valueId == skuId;
+        return iitem?.propAndValue?.propId_valueId == skuId;
       });
     });
+
     const hanldeSer =
       handleSO.products
         .find((item: any) => {
-          return item?.sku?.propId_valueId == skuId;
+          return item?.propAndValue?.propId_valueId == skuId;
         })
         ?.orderServiceList?.map((item: any) => {
           return {
@@ -158,8 +158,6 @@ export default function SubmitOrder() {
 
   // 修改 handleServiceSubmit
   const handleServiceSubmit = async () => {
-    console.log("currentCartId", currentCartId);
-
     if (!currentCartId) return;
 
     const checkedServices = localServices
@@ -170,10 +168,7 @@ export default function SubmitOrder() {
         quantity: s.quantity,
       }));
 
-    console.log("checkedServices", checkedServices);
-
     try {
-      setIsServiceSubmitting(true); // ✅ 开始 loading
       let res;
 
       if (type === "cart") {
@@ -196,39 +191,9 @@ export default function SubmitOrder() {
     } catch (err) {
       addToast({ title: "提交失败", color: "danger" });
     } finally {
-      setIsServiceSubmitting(false); // ✅ 结束 loading
     }
   };
-  const toggleProductFee = useMemo(() => {
-    const totalCents =
-      orderData?.orderList?.reduce(
-        (sum: number, item: any) =>
-          sum + Math.round(Number(item?.productFee || 0) * 100),
-        0,
-      ) || 0;
 
-    return totalCents / 100;
-  }, [orderData]);
-  const toggleServiceFee = useMemo(() => {
-    const totalCents =
-      orderData?.orderList?.reduce(
-        (sum: number, item: any) =>
-          sum + Math.round(Number(item?.serviceFee || 0) * 100),
-        0,
-      ) || 0;
-
-    return totalCents / 100;
-  }, [orderData]);
-  const togglePostFee = useMemo(() => {
-    const totalCents =
-      orderData?.orderList?.reduce(
-        (sum: number, item: any) =>
-          sum + Math.round(Number(item?.postFee || 0) * 100),
-        0,
-      ) || 0;
-
-    return totalCents / 100;
-  }, [orderData]);
   const togglePrice = useMemo(() => {
     const totalCents =
       orderData?.orderList?.reduce(
@@ -261,13 +226,13 @@ export default function SubmitOrder() {
     <div className="flex h-screen flex-col bg-[#f7f8f9]">
       {/* 顶部导航 */}
       <NavBar className="bg-white" onBack={() => router.back()}>
-        订单支付
+        {t("title")}
       </NavBar>
       {isLoading && <FullscreenLoader />}
       {/* 中间可滚动商品列表 */}
       <div className="flex-1 overflow-auto p-2">
         {orderData?.orderList?.map((order: any) => (
-          <OrderCard
+          <OrderItem
             key={order?.shopName}
             openServiceModal={openServiceModal}
             order={order}
@@ -278,24 +243,13 @@ export default function SubmitOrder() {
       {/* 底部费用汇总 & 提交按钮 */}
       <div className="sticky bottom-0 z-10 w-full border-t bg-white px-4 py-3">
         <div className="mb-3 flex flex-col gap-2">
-          {/* 单行费用展示 */}
-          <div className="flex justify-between text-sm text-gray-500">
-            <span>商品价格</span>
-            <span>{toggleProductFee}</span>
-          </div>
-          <div className="flex justify-between text-sm text-gray-500">
-            <span>国内快递费</span>
-            <span>{togglePostFee}</span>
-          </div>
-          <div className="flex justify-between text-sm text-gray-500">
-            <span>服务费</span>
-            <span>{toggleServiceFee}</span>
-          </div>
-
           {/* 总计 */}
-          <div className="flex justify-between border-t pt-2 text-base font-bold text-gray-900">
-            <span>总计</span>
-            <span>{togglePrice}</span>
+          <div className="flex justify-between pt-2 text-base font-bold text-gray-900">
+            <span>{t("total")}</span>
+            <span>
+              {currency.symbol}
+              {togglePrice}
+            </span>
           </div>
         </div>
 
@@ -307,7 +261,7 @@ export default function SubmitOrder() {
           size="lg"
           onPress={handleCartSubmit}
         >
-          提交订单
+          {t("submitOrder")}
         </Button>
       </div>
 
@@ -346,22 +300,21 @@ export default function SubmitOrder() {
               <div className="mt-2 flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 py-2">
                 <div className="flex flex-col">
                   <span className="text-sm font-medium text-gray-800">
-                    {t("serviceItem")}
+                    {/* {t("serviceItem")} */}
                   </span>
-                  {service.remark && (
-                    <span className="mt-0.5 truncate text-[11px] text-gray-400">
-                      {t("remark")}: {service.remark}
-                    </span>
-                  )}
+                  <span className="mt-0.5 truncate text-[11px] text-gray-400">
+                    {t("remark")}: {service.remark}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[12px] text-gray-500">
-                    x{service.quantity}
-                  </span>
                   <span className="text-sm font-semibold text-red-500">
                     {currency.symbol}
                     {service.price}
                   </span>
+                  <span className="text-[12px] text-gray-500">
+                    x{service.quantity}
+                  </span>
+
                   <Button
                     className="h-6 px-2 text-[11px]"
                     color="danger"
@@ -388,7 +341,7 @@ export default function SubmitOrder() {
           onConfirm={saveServiceDetail}
           onOpenChange={setIsServiceDetailOpen}
         >
-          <div className="space-y-5">
+          <div className="space-y-4">
             {/* 服务介绍 */}
             <div className="space-y-4 rounded-lg bg-[#f8f8f8] p-4">
               <div className="space-y-2">
@@ -436,7 +389,7 @@ export default function SubmitOrder() {
 
             {/* 服务费（id != 1 时才展示） */}
             {currentService.id != 1 && (
-              <div className="flex items-center justify-between pt-3">
+              <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-700">{t("serviceFee")}</span>
                 <div className="flex gap-2">
                   <span className="text-lg font-semibold text-rose-600">
@@ -447,8 +400,6 @@ export default function SubmitOrder() {
                     <Stepper
                       value={currentService?.quantity}
                       onChange={(quantity) => {
-                        console.log("quantity", quantity);
-
                         setCurrentService({
                           ...currentService,
                           quantity: quantity,
@@ -463,7 +414,7 @@ export default function SubmitOrder() {
             {/* 备注输入框（id != 1 时才展示） */}
             {currentService.id != 1 && (
               <Textarea
-                className="mt-2 w-full"
+                className="w-full"
                 minRows={3}
                 placeholder={t("remarkPlaceholder")}
                 value={currentService.remark}

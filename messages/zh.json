@@ -26,29 +26,33 @@
             "cancelText": "取消"
         }
     },
-    "login": {
-        "title": "用户登录",
-        "emailLabel": "邮箱",
-        "emailPlaceholder": "请输入邮箱地址",
-        "passwordPlaceholder": "请输入密码",
-        "loginButton": "登录",
-        "registerButton": "注册",
-        "loginSuccess": "登录成功",
-        "loginFailed": "登录失败，请检查账号或密码"
-    },
-    "register": {
-        "title": "用户注册",
-        "emailPlaceholder": "请输入邮箱地址",
-        "passwordPlaceholder": "请输入密码",
-        "inviteCodePlaceholder": "请输入邀请码（没有请留空）",
-        "agreeToTerms": "我已阅读并同意网站条款与条件",
-        "registerButton": "注册",
-        "loginHint": "已经有账号？",
-        "goLogin": "去登录",
-        "mustAgree": "请先勾选同意网站条款",
-        "verifyTitle": "验证你的电子邮箱（请勿离开此页面）",
-        "verifyInstruction1": "我们已经发送验证码到",
-        "verifyInstruction2": "。请在下面输入验证码进行验证"
+    "auth": {
+        "sloganTitle": "提供一站式服务",
+        "sloganDesc": "轻松从中国购物，专业运输全球",
+        "login": {
+            "title": "用户登录",
+            "emailLabel": "邮箱",
+            "emailPlaceholder": "请输入邮箱地址",
+            "passwordPlaceholder": "请输入密码",
+            "loginButton": "登录",
+            "registerButton": "注册",
+            "loginSuccess": "登录成功",
+            "loginFailed": "登录失败，请检查账号或密码"
+        },
+        "register": {
+            "title": "用户注册",
+            "emailPlaceholder": "请输入邮箱地址",
+            "passwordPlaceholder": "请输入密码",
+            "inviteCodePlaceholder": "请输入邀请码（没有请留空）",
+            "agreeToTerms": "我已阅读并同意网站条款与条件",
+            "registerButton": "注册",
+            "loginHint": "已经有账号？",
+            "goLogin": "去登录",
+            "mustAgree": "请先勾选同意网站条款",
+            "verifyTitle": "验证你的电子邮箱（请勿离开此页面）",
+            "verifyInstruction1": "我们已经发送验证码到",
+            "verifyInstruction2": "。请在下面输入验证码进行验证"
+        }
     },
     "dashboard": {
         "balance": "余额",
@@ -81,17 +85,17 @@
             "stats": [
                 {
                     "title": "总奖励",
-                    "value": "$888",
+                    "value": "0",
                     "to": "/pages/member/account/index"
                 },
                 {
                     "title": "联盟余额",
-                    "value": "88",
+                    "value": "0",
                     "to": "/pages/member/points/index"
                 },
                 {
                     "title": "已提现金额",
-                    "value": "88",
+                    "value": "0",
                     "to": "/pages/member/points/index"
                 }
             ]
@@ -139,10 +143,8 @@
         "toast": {
             "noSelect": "请先选择商品"
         },
-        "confirm": {
-            "deleteTitle": "从购物车删除",
-            "deleteContent": "确定要删除选中的商品吗？"
-        },
+        "deleteTitle": "从购物车删除",
+        "deleteContent": "确定要删除选中的商品吗？",
         "remark": {
             "title": "备注",
             "placeholder": "输入备注"
@@ -158,77 +160,81 @@
             "uploading": "头像上传中..."
         },
         "order": {
-            "pay": "支付",
-            "cancel": "取消订单",
-            "requestRefund": "申请退款",
             "title": "我的订单",
             "tabs": {
                 "all": "全部",
                 "waitPay": "待付款",
-                "paid": "已付款"
+                "paid": "已付款",
+                "refund": "退款"
             },
-            "withdrawRequest": "撤回申请",
-            "selectRefundItems": "请选择要退款的商品",
+            "buttons": {
+                "pay": "支付",
+                "cancel": "取消订单",
+                "batchPay": "批量支付",
+                "withdraw": "撤回申请",
+                "refund": "申请退款"
+            },
             "cancelTitle": "取消订单",
             "cancelContent": "确定要取消此订单吗？",
             "withdrawTitle": "撤回申请",
             "withdrawContent": "确定要撤回当前申请吗？",
             "refundTitle": "申请退款",
-            "refundContent": "确定要为此订单申请退款吗？",
             "remarkPlaceholder": "请输入备注（可选）",
             "refundable": "可退款",
             "unrefundable": "不可退款",
             "noOrders": "暂无订单",
             "selectAll": "全选",
-            "batchPay": "批量支付",
-            "requestRefundConfirm": "确定要为此订单申请退款吗？",
-            "noMoreRecords": "没有更多记录"
+            "noMoreRecords": "没有更多记录",
+            "refundReason": "退款原因",
+            "reviewReason": "审核原因",
+            "refundAmount": "退款金额",
+            "reviewTime": "审核时间"
         },
         "warehouse": {
             "title": "仓库",
-            "all": "全部",
-            "submit": "可提交",
+            "tabs": {
+                "all": "全部",
+                "submit": "可提交"
+            },
             "selectAll": "全选",
             "submitPackages": "提交包裹",
-            "confirmCancelTitle": "取消订单",
-            "confirmCancelContent": "确定要取消此订单吗？",
-            "orderCode": "订单号",
-            "createTime": "创建时间",
             "weight": "重量",
             "size": "尺寸",
-            "quantity": "数量",
             "valueAddedServices": "增值服务",
-            "serviceItemName": "服务项目",
             "noMoreRecords": "没有更多记录",
             "noOrders": "暂无订单"
         },
         "package": {
             "title": "包裹",
-            "all": "全部",
-            "pay": "待付款",
-            "shipping": "运输中",
-            "received": "已收货",
-            "selectAll": "全选",
-            "submitPay": "支付",
-            "noOrders": "暂无订单",
-            "noMoreRecords": "没有更多记录",
-            "packageItem": {
-                "shippingCode": "运单号：",
-                "productImage": "商品图片",
-                "weight": "重量",
-                "size": "尺寸",
-                "shipping": "运输方式",
-                "serviceFee": "服务费",
-                "totalFee": "总费用",
-                "none": "无",
-                "payButton": "支付",
-                "cancelButton": "取消",
-                "payCancelFee": "支付取消手续费",
-                "requestRefund": "申请取消",
-                "withdrawRequest": "撤回申请",
-                "changeBtn": "更换路线"
+            "tabs": {
+                "all": "全部",
+                "pay": "待付款",
+                "shipping": "运输中",
+                "received": "已收货"
             },
-            "refundModal": {
+            "selectAll": "全选",
+            "submitPay": "批量支付",
+            "noOrders": "暂无包裹",
+            "noMoreRecords": "没有更多记录",
+            "withdrawTitle": "撤回申请",
+            "withdrawContent": "确定要撤回当前申请吗？",
+            "receiptTitle": "确认收货",
+            "receiptContent": "确认完整该商品的收货？",
+            "refundTitle": "申请退款",
+            "buttons": {
+                "cancel": "取消",
+                "withdraw": "撤回申请",
+                "change": "更换路线",
+                "pay": "支付",
+                "payCancel": "支付取消手续费",
+                "receipt": "确认收货"
+            },
+            "weight": "重量：",
+            "size": "尺寸：",
+            "serviceFee": "服务费：",
+            "totalFee": "总费用：",
+            "shippingCode": "运输号：",
+            "cancelModal": {
                 "title": "取消",
                 "cancelCard": {
                     "title": "确认取消",
@@ -244,12 +250,7 @@
                     "subtitle": "重新选择发货路线"
                 }
             },
-            "withdrawModal": {
-                "content": "确认撤销取消包裹申请嘛？"
-            },
-            "changeModal": {
-                "title": "更换路线"
-            },
+            "changeTitle": "更换路线",
             "lineModal": {
                 "title": "物流轨迹",
                 "mainWaybillTitle": "主运单轨迹",
@@ -348,42 +349,26 @@
                 "cancelText": "取消"
             }
         },
-        "messagePage": {
-            "navBar": {
-                "title": "消息",
-                "manage": "管理",
-                "cancel": "取消"
-            },
+        "message": {
+            "title": "消息",
+            "manage": "管理",
+            "cancel": "取消",
             "tabs": {
                 "all": "全部",
                 "unread": "未读",
                 "read": "已读"
             },
-            "bottomBar": {
-                "selectAll": "全选",
-                "delete": "删除"
-            },
-            "modal": {
-                "view": {
-                    "close": "关闭",
-                    "noContent": "暂无内容",
-                    "markAsRead": "标记为已读"
-                },
-                "delete": {
-                    "close": "关闭",
-                    "confirm": "删除",
-                    "title": "删除消息",
-                    "content": "确定删除选中的 {count} 条消息吗？"
-                }
-            },
-            "item": {
-                "status": {
-                    "unread": "未读",
-                    "read": "已读"
-                }
-            }
-        },
-        "noMoreRecords": "没有更多记录"
+            "deleteTitle": "删除消息",
+            "deleteContent": "确定删除选中的 {count} 条消息吗？",
+            "selectAll": "全选",
+            "delete": "删除",
+            "detailCancel": "关闭",
+            "detailConfirm": "标记为已读",
+            "unread": "未读",
+            "read": "已读",
+            "noOrders": "暂无包裹",
+            "noMoreRecords": "没有更多记录"
+        }
     },
     "setting": {
         "page": {
@@ -415,7 +400,7 @@
         }
     },
     "wallet": {
-        "walletPage": {
+        "page": {
             "title": "我的账户",
             "record": "记录",
             "totalBalance": "总余额",
@@ -441,11 +426,25 @@
             "noMoreRecords": "没有更多记录"
         }
     },
-    "Goods": {
-        "productDetails": "商品详情",
+    "goods": {
+        "title": "商品详情",
         "originalLink": "原链接",
         "refresh": "刷新",
+        "progressBar": {
+            "step1": "付款产品",
+            "step2": "提交包裹",
+            "step3": "包裹收到",
+            "tipText": "我们免费提供3-7张高清质检照片",
+            "fromSellerToBBD": "从卖家到BBD",
+            "fromBBDToYou": "从BBD到您"
+        },
+        "disclaimerDrawer": {
+            "title": "免责声明",
+            "buttonLabel": "免责声明",
+            "content": "BBDbuy上展示的所有代购商品均来自第三方代购平台，非BBDbuy直接销售。因此，BBDbuy对侵犯知识产权和侵犯商品著作权所引起的问题不承担任何责任和法律责任。使用BBDbuy代购服务即表示您默认接受上述风险。"
+        },
         "quantity": "数量",
+        "remark": "备注",
         "enterDescription": "请输入备注",
         "buyNow": "立即购买",
         "addToCart": "加入购物车",
@@ -453,149 +452,78 @@
         "continueShopping": "继续购买其他",
         "riskMessage": "您提交的产品可能存在一定的寄送风险。为了您的资金安全，我们暂时无法为您提供在线订购服务。如需了解更多信息，请联系在线客服！",
         "productDescription": "商品详情",
-        "stock": "库存",
-        "shippingFee": "运费"
+        "stock": "库存：",
+        "shippingFee": "运费："
     },
-    "estimation": {
-        "fillWeightOrSize": "请输入重量或尺寸（长、宽、高）！",
-        "title": "运费估算",
-        "warehouse": "仓库至",
-        "weight": "重量 (克)",
-        "length": "长度 (厘米)",
-        "width": "宽度 (厘米)",
-        "height": "高度 (厘米)",
-        "search": "立即查询",
-        "selectCountry": "请选择国家",
-        "selectCategory": "请选择货物类别",
-        "price": "价格",
-        "time": "时效",
-        "pricingStandard": "计价标准",
-        "firstWeightFee": "首重费用",
-        "additionalWeightFee": "续重费用",
-        "customsFee": "关税",
-        "shippingLimit": "运输限制",
-        "routeFeature": "路线特点",
-        "category": "货物类别"
-    },
-    "forwardingPage": {
-        "title": "代发包裹",
-        "warehouseAddress": "仓库地址",
-        "warehouseFullAddress": "中国广东省惠州市水口街道荔城工业园胜豪科技大厦8A-801",
-        "forwardingPackage": "代发包裹",
-        "trackingNo": "物流单号:",
-        "trackingNoPlaceholder": "输入您的物流单号",
-        "errorTrackingNo": "请输入有效的物流单号",
-        "packageName": "包裹名称:",
-        "packageNamePlaceholder": "输入您的包裹名称",
-        "errorPackageName": "请输入有效的包裹名称",
-        "extraServices": "额外服务",
-        "serviceInspection": "开箱检查违禁物品",
-        "serviceConfirmation": "BBDbuy代发默认不提供商品确认。如需确认，请选择'商品确认'服务。",
-        "serviceRemoveInvoice": "移除发票（可能降低被税概率）",
-        "serviceOriginalBox": "原箱储存",
-        "submit": "提交",
-        "acceptAgreement": "我已阅读并接受《代发包裹检查规则与服务协议》",
-        "serviceIntro": "服务介绍",
-        "noIntro": "无介绍",
-        "sample": "样品",
-        "serviceFee": "服务费",
-        "remarkPlaceholder": "请输入备注（可选）",
-        "remark": "备注",
-        "valueAddedService": "增值服务",
-        "free": "免费",
-        "add": "添加",
-        "serviceItem": "服务项目",
-        "delete": "删除",
-        "save": "保存",
-        "confirm": "确认"
-    },
-    "submitOrder": {
-        "confirmProductInfo": "确认商品信息",
-        "product": "商品",
-        "remark": "备注",
-        "noRemark": "无备注",
-        "price": "价格",
-        "quantity": "数量",
-        "subtotal": "小计",
-        "declaration": "禁运物品声明",
-        "terms": "服务条款和用户管理",
-        "returnPolicy": "退换货服务",
-        "disclaimer": "免责声明",
-        "agreement": "我已阅读并同意BBDbuy的免责声明",
-        "notice": "注意：完成支付后，商品到达并存入仓库后，您需要提交包裹进行国际运输。",
-        "amountDue": "应付金额:",
-        "submit": "提交",
-        "valueAddedService": "增值服务",
-        "free": "免费",
-        "add": "添加",
-        "serviceItem": "服务项目",
-        "delete": "删除",
-        "save": "保存",
-        "confirm": "确认",
-        "serviceIntro": "服务介绍",
-        "noIntro": "无介绍",
-        "sample": "样品",
-        "serviceFee": "服务费",
-        "remarkPlaceholder": "请输入备注（可选）",
-        "OrderItem": {
+    "submit": {
+        "order": {
+            "title": "订单确认",
+            "total": "总计",
+            "submitOrder": "提交订单",
             "valueAddedService": "增值服务",
-            "noService": "无服务",
-            "remark": "备注",
-            "shippingFee": "运费",
-            "serviceFee": "服务费",
-            "productFee": "商品费用",
-            "shopTotal": "店铺总计",
-            "add": "添加"
-        }
-    },
-    "submitWarehouse": {
-        "title": "包裹提交",
-        "shippingAddress": "收货地址",
-        "commodityList": "商品列表",
-        "packagingMethod": "打包方式",
-        "deliveryRoute": "物流路线",
-        "textareaPlaceholder": "如有特殊要求请在此备注",
-        "agreement": "我已阅读并同意 bbdbuy 包裹寄送协议",
-        "submitPackage": "提交包裹",
-        "toast": {
-            "checkAgreement": "请勾选免责声明",
-            "selectAddress": "请选择收货地址",
-            "selectRoute": "请选择运输路线",
-            "submitSuccess": "提交成功"
+            "noService": "暂无服务",
+            "free": "免费",
+            "add": "添加",
+            "remark": "备注：",
+            "delete": "删除",
+            "serviceIntro": "服务介绍",
+            "noIntro": "暂无介绍",
+            "sample": "示例",
+            "serviceFee": "服务费：",
+            "remarkPlaceholder": "请输入备注",
+            "shippingFee": "运费：",
+            "productFee": "商品费：",
+            "shopTotal": "店铺合计："
         },
-        "addressModal": {
-            "addAddress": "添加地址",
-            "editAddress": "编辑地址",
-            "fields": {
-                "recipient": {
-                    "label": "收件人",
-                    "placeholder": "输入收件人姓名"
-                },
-                "phone": {
-                    "label": "电话",
-                    "placeholder": "输入电话号码"
-                },
-                "area": {
-                    "label": "地区",
-                    "placeholder": "选择地区"
-                },
-                "address": {
-                    "label": "地址",
-                    "placeholder": "输入完整地址"
-                },
-                "doorNo": {
-                    "label": "门牌号",
-                    "placeholder": "输入门牌号"
-                },
-                "postcode": {
-                    "label": "邮编",
-                    "placeholder": "输入邮政编码"
-                },
-                "defaultAddress": {
-                    "label": "设为默认地址"
-                }
+        "warehouse": {
+            "title": "包裹提交",
+            "shippingAddress": "收货地址",
+            "commodityList": "商品列表",
+            "packagingMethod": "打包方式",
+            "deliveryRoute": "物流路线",
+            "textareaPlaceholder": "如有特殊要求请在此备注",
+            "agreement": "我已阅读并同意 bbdbuy 包裹寄送协议",
+            "submitPackage": "提交包裹",
+            "toast": {
+                "checkAgreement": "请勾选免责声明",
+                "selectAddress": "请选择收货地址",
+                "selectRoute": "请选择运输路线",
+                "submitSuccess": "提交成功"
             },
-            "tableEmpty": "暂无地址信息"
+            "addressModal": {
+                "addAddress": "添加地址",
+                "editAddress": "编辑地址",
+                "fields": {
+                    "recipient": {
+                        "label": "收件人",
+                        "placeholder": "输入收件人姓名"
+                    },
+                    "phone": {
+                        "label": "电话",
+                        "placeholder": "输入电话号码"
+                    },
+                    "area": {
+                        "label": "地区",
+                        "placeholder": "选择地区"
+                    },
+                    "address": {
+                        "label": "地址",
+                        "placeholder": "输入完整地址"
+                    },
+                    "doorNo": {
+                        "label": "门牌号",
+                        "placeholder": "输入门牌号"
+                    },
+                    "postcode": {
+                        "label": "邮编",
+                        "placeholder": "输入邮政编码"
+                    },
+                    "defaultAddress": {
+                        "label": "设为默认地址"
+                    }
+                },
+                "tableEmpty": "暂无地址信息"
+            }
         }
     },
     "payment": {
@@ -608,7 +536,7 @@
         "recharge": "充值",
         "pleaseAddBillingAddress": "请添加账单地址",
         "result": {
-            "loading": "正在确认支付结果...",
+            "loading": "正在确认支付结果",
             "successTitle": "支付成功",
             "successNotice": "我们已收到您的付款，订单正在处理中。",
             "transactionId": "交易号：",
@@ -676,5 +604,58 @@
                 "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
             }
         }
+    },
+    "estimation": {
+        "fillWeightOrSize": "请输入重量或尺寸（长、宽、高）！",
+        "title": "运费估算",
+        "warehouse": "仓库至",
+        "weight": "重量 (克)",
+        "length": "长度 (厘米)",
+        "width": "宽度 (厘米)",
+        "height": "高度 (厘米)",
+        "search": "立即查询",
+        "selectCountry": "请选择国家",
+        "selectCategory": "请选择货物类别",
+        "price": "价格",
+        "time": "时效",
+        "pricingStandard": "计价标准",
+        "firstWeightFee": "首重费用",
+        "additionalWeightFee": "续重费用",
+        "customsFee": "关税",
+        "shippingLimit": "运输限制",
+        "routeFeature": "路线特点",
+        "category": "货物类别"
+    },
+    "forwardingPage": {
+        "title": "代发包裹",
+        "warehouseAddress": "仓库地址",
+        "warehouseFullAddress": "中国广东省惠州市水口街道荔城工业园胜豪科技大厦8A-801",
+        "forwardingPackage": "代发包裹",
+        "trackingNo": "物流单号:",
+        "trackingNoPlaceholder": "输入您的物流单号",
+        "errorTrackingNo": "请输入有效的物流单号",
+        "packageName": "包裹名称:",
+        "packageNamePlaceholder": "输入您的包裹名称",
+        "errorPackageName": "请输入有效的包裹名称",
+        "extraServices": "额外服务",
+        "serviceInspection": "开箱检查违禁物品",
+        "serviceConfirmation": "BBDbuy代发默认不提供商品确认。如需确认，请选择'商品确认'服务。",
+        "serviceRemoveInvoice": "移除发票（可能降低被税概率）",
+        "serviceOriginalBox": "原箱储存",
+        "submit": "提交",
+        "acceptAgreement": "我已阅读并接受《代发包裹检查规则与服务协议》",
+        "serviceIntro": "服务介绍",
+        "noIntro": "无介绍",
+        "sample": "样品",
+        "serviceFee": "服务费",
+        "remarkPlaceholder": "请输入备注（可选）",
+        "remark": "备注",
+        "valueAddedService": "增值服务",
+        "free": "免费",
+        "add": "添加",
+        "serviceItem": "服务项目",
+        "delete": "删除",
+        "save": "保存",
+        "confirm": "确认"
     }
 }

@@ -1,6 +1,6 @@
 "use client";
 import { Checkbox, Image, Input } from "@heroui/react";
-import { FaEdit, FaTrashAlt } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
@@ -11,11 +11,9 @@ import { useGlobalStore } from "@/store";
 function ProductItem({
   product,
   isSelected,
-  onToggle,
-  isEdit,
-  handleProductDelete,
+  toggle,
   handleProductQuantity,
-  handleProductRemark,
+  openRemarkModal,
 }: any) {
   const t = useTranslations("cart"); // ✅ 命名空间 cart
   const { currency } = useGlobalStore();
@@ -29,7 +27,7 @@ function ProductItem({
           classNames={{ wrapper: "p-0 m-0" }}
           isSelected={isSelected}
           size="sm"
-          onChange={(e) => onToggle(e.target.checked)}
+          onChange={toggle}
         />
         <button
           onClick={() =>
@@ -61,7 +59,13 @@ function ProductItem({
             </div>
 
             <div className="flex items-center gap-1">
-              {isEdit ? (
+              <Stepper
+                value={product.quantity}
+                onChange={(quantity) =>
+                  handleProductQuantity(product.id, quantity)
+                }
+              />
+              {/* {isEdit ? (
                 <button
                   className="h-6 w-6"
                   onClick={() => handleProductDelete(product.id)}
@@ -75,7 +79,7 @@ function ProductItem({
                     handleProductQuantity(product.id, quantity)
                   }
                 />
-              )}
+              )} */}
             </div>
           </div>
         </div>
@@ -84,9 +88,7 @@ function ProductItem({
         isReadOnly
         classNames={{ inputWrapper: "bg-[#f8f8f8]", input: "!text-[#333]" }}
         endContent={
-          <button
-            onClick={() => handleProductRemark(product.id, product.remark)}
-          >
+          <button onClick={() => openRemarkModal(product.id, product.remark)}>
             <FaEdit className="h-6 w-6" />
           </button>
         }
@@ -100,40 +102,39 @@ function ProductItem({
 
 export default function ShopCard({
   shop,
-  selectedMap,
-  onToggleItem,
-  onToggleShop,
-  isEdit,
   handleProductDelete,
   handleProductQuantity,
   handleProductRemark,
+  isGroupAllSelected,
+  toggleGroup,
+  isSelected,
+  toggle,
+  openRemarkModal,
 }: any) {
-  const isAllSelected = shop.cartList.every((p: any) => selectedMap[p.id]);
-
   return (
     <div className="rounded-box mb-3 px-2 py-3">
       <div className="flex items-center gap-2">
         <Checkbox
           className="m-0 p-0"
           classNames={{ wrapper: "p-0 m-0" }}
-          isSelected={isAllSelected}
+          isSelected={isGroupAllSelected}
           size="sm"
-          onChange={(e) => onToggleShop(e.target.checked)}
+          onChange={toggleGroup}
         />
         <SourceIcon source={shop.cartList[0]?.source} />
         <div className="text-title">{shop?.shopName}</div>
       </div>
 
-      {shop.cartList.map((product: any) => (
+      {shop.cartList.map((p: any) => (
         <ProductItem
-          key={product.id}
+          key={p.id}
           handleProductDelete={handleProductDelete}
           handleProductQuantity={handleProductQuantity}
           handleProductRemark={handleProductRemark}
-          isEdit={isEdit}
-          isSelected={selectedMap[product.id]}
-          product={product}
-          onToggle={(checked: any) => onToggleItem(product.id, checked)}
+          isSelected={isSelected(p.id)}
+          openRemarkModal={openRemarkModal}
+          product={p}
+          toggle={() => toggle(p.id)}
         />
       ))}
     </div>

@@ -20,8 +20,9 @@ import BillingAddress from "./billing-address";
 
 import { useBillingAddressList, usePaymentMethodList } from "@/hook";
 import { createPayOrder } from "@/services";
-import { useGlobalStore, useWalletStore } from "@/store";
+import { useGlobalStore } from "@/store";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
+import { getWalletInfo } from "@/services/wallet";
 // 自定义 Radio 组件
 const CustomRadio = (props: RadioProps) => {
   const {
@@ -114,9 +115,25 @@ export default function PayOrder() {
   const { data: billingAddress } = useBillingAddressList();
 
   const { data, isLoading, isError } = usePaymentMethodList(params.bizCode);
-  const [paymentId, setPaymentId] = useState("");
-  const wallet = useWalletStore((state) => state.wallet);
+  const [loading, setLoading] = useState(true);
 
+  const [wallet, setWallet] = useState<any>(null);
+  const [paymentId, setPaymentId] = useState("");
+
+  // 获取钱包信息
+  const fetchWallet = async () => {
+    try {
+      const res = await getWalletInfo();
+
+      setWallet(res);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchWallet();
+  }, []);
   const hanldeCreatePayOrder = async () => {
     if (submitting) return;
     setSubmitting(true);
@@ -187,7 +204,7 @@ export default function PayOrder() {
       <NavBar className="bg-white" onBack={() => router.back()}>
         {t("title")}
       </NavBar>
-      {isLoading && <FullscreenLoader />}
+      {(isLoading || loading) && <FullscreenLoader />}
       <div className="px-2">
         <div className="box-card space-y-2 p-3 text-center">
           <div className="text-sm tracking-wide text-gray-500">

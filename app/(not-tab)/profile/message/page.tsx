@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { InfiniteScroll, NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
-import { Checkbox, Tab, Tabs } from "@heroui/react";
+import { Button, Checkbox, Spinner, Tab, Tabs } from "@heroui/react";
 import { useTranslations } from "next-intl";
 
 import MessageItem from "./message-item";
@@ -12,6 +12,8 @@ import ConfirmModal from "@/components/confirm-modal";
 import { useMessageList } from "@/hook";
 import { queryClient } from "@/lib/react-query";
 import { delMessage, readMessage } from "@/services";
+import FullscreenLoader from "@/components/common/fullscreen-loader";
+import { useSelection } from "@/hook/useSelection";
 
 const tabKeyToStatusCode: any = {
   all: "",
@@ -19,73 +21,102 @@ const tabKeyToStatusCode: any = {
   read: 1,
 };
 
+type ModalType = "delete" | "detail" | null;
+interface ModalState {
+  type: ModalType;
+  confirm?: () => Promise<void>;
+  message?: any;
+}
 export default function MessagePage() {
-  const t = useTranslations("profile.messagePage");
+  const t = useTranslations("profile.message");
   const [activeTab, setActiveTab] = useState("all");
   const [isEdit, setIsEdit] = useState(false);
-  const [selectedMessages, setSelectedMessages] = useState<any[]>([]);
-  const [modalType, setModalType] = useState<"view" | "delete" | null>(null);
-  const [selectedMessage, setSelectedMessage] = useState<any>(null);
 
   const router = useRouter();
-  const { data, fetchNextPage, hasNextPage } = useMessageList(
-    tabKeyToStatusCode[activeTab],
-  );
+  const {
+    data,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+  } = useMessageList(tabKeyToStatusCode[activeTab]);
 
-  const messageList = data?.pages?.flatMap((page: any) => page.records) ?? [];
+  const messages = data?.pages?.flatMap((page: any) => page.records) ?? [];
+  // ================= 使用 useSelection =================
+  const {
+    selectedIds,
+    isSelected,
+    hasSelected,
+    toggle,
+    isAllSelected,
+    toggleSelectAll,
+    unselectAll,
+  } = useSelection(messages, { idKey: "id" });
 
-  const handleViewMessage = (message: any) => {
-    setSelectedMessage(message);
-    setModalType("view");
+  const [modal, setModal] = useState<ModalState>({ type: null });
+
+  const openDeleteModal = () => {
+    setModal({
+      type: "delete",
+      confirm: async () => {
+        await delMessage(selectedIds);
+        await queryClient.invalidateQueries({ queryKey: ["messageList"] });
+        setModal({ type: null });
+        setIsEdit(false);
+      },
+    });
+  };
+  const openDetailModal = (message: any) => {
+    setModal({
+      type: "detail",
+      confirm: async () => {
+        await readMessage(message.id); // 调用已读接口
+        await queryClient.invalidateQueries({ queryKey: ["messageList"] });
+        setModal({ type: null });
+      },
+      message,
+    });
   };
 
-  const handleSelectMessage = (message: any, checked: boolean) => {
-    setSelectedMessages((prev) =>
-      checked ? [...prev, message] : prev.filter((m) => m.id !== message.id),
+  const MessageTabContent = ({ messages }: { messages: any[] }) => {
+    if (isLoading) return <FullscreenLoader />;
+    if (!messages?.length)
+      return (
+        <div className="flex h-[60vh] flex-col items-center justify-center text-lg text-gray-500">
+          {t("noOrders")}
+        </div>
+      );
+
+    return (
+      <>
+        {isFetching && !isFetchingNextPage && (
+          <Spinner className="mb-2 flex justify-center text-gray-500" />
+        )}
+        <div className="flex flex-col gap-3">
+          {messages.map((m: any) => (
+            <MessageItem
+              key={m.id}
+              activeTab={activeTab}
+              isEdit={isEdit}
+              message={m}
+              selected={isSelected(m.id)}
+              onChange={() => toggle(m.id)}
+              onView={() => openDetailModal(m)} //取消订单
+            />
+          ))}
+        </div>
+        <InfiniteScroll
+          hasMore={!!hasNextPage}
+          loadMore={(isRetry) => fetchNextPage().then(() => undefined)}
+        >
+          {!hasNextPage && (
+            <div className="text-center text-[#999]">{t("noMoreRecords")}</div>
+          )}
+          {isFetchingNextPage && <Spinner />}
+        </InfiniteScroll>
+      </>
     );
-  };
-
-  const handleSelectAll = (checked: boolean) => {
-    console.log("checked", checked, [...messageList]);
-
-    setSelectedMessages(checked ? [...messageList] : []);
-  };
-
-  const handleDeleteSelected = () => {
-    if (selectedMessages.length === 0) return;
-    setModalType("delete");
-  };
-
-  const handleConfirmDelete = async () => {
-    try {
-      const ids = selectedMessages.map((m) => m.id);
-
-      await delMessage(ids);
-      setSelectedMessages([]);
-      queryClient.invalidateQueries({ queryKey: ["messageList"] });
-    } catch (error) {
-      console.error("删除失败", error);
-    } finally {
-      setModalType(null);
-    }
-  };
-  const handleMarkAsRead = async () => {
-    if (!selectedMessage || selectedMessage.statusCode !== 0) {
-      setModalType(null);
-
-      return;
-    }
-
-    try {
-      await readMessage(selectedMessage.id); // 调用已读接口
-      // 手动更新本地状态
-      selectedMessage.statusCode = 1;
-      queryClient.invalidateQueries({ queryKey: ["messageList"] });
-    } catch (error) {
-      console.error("标记已读失败", error);
-    } finally {
-      setModalType(null);
-    }
   };
 
   return (
@@ -94,12 +125,12 @@ export default function MessagePage() {
         className="bg-white"
         right={
           <button onClick={() => setIsEdit(!isEdit)}>
-            {isEdit ? t("navBar.cancel") : t("navBar.manage")}
+            {isEdit ? t("cancel") : t("manage")}
           </button>
         }
         onBack={() => router.back()}
       >
-        {t("navBar.title")}
+        {t("title")}
       </NavBar>
 
       <Tabs
@@ -113,83 +144,56 @@ export default function MessagePage() {
           panel: "bg-[#f7f8f9] px-2 flex-1 overflow-auto",
         }}
         variant="underlined"
-        onSelectionChange={(key) => setActiveTab(String(key))}
+        onSelectionChange={(key) => {
+          setActiveTab(String(key));
+          unselectAll();
+        }}
       >
         {["all", "unread", "read"].map((key) => (
-          <Tab
-            key={key}
-            title={
-              key === "all"
-                ? t("tabs.all")
-                : key === "unread"
-                  ? t("tabs.unread")
-                  : t("tabs.read")
-            }
-          >
-            {messageList?.map((message: any) => (
-              <MessageItem
-                key={message.id}
-                isEdit={isEdit}
-                message={message}
-                selected={selectedMessages.some((m) => m.id === message.id)}
-                onSelect={handleSelectMessage}
-                onView={handleViewMessage}
-              />
-            ))}
-            <InfiniteScroll
-              hasMore={!!hasNextPage}
-              loadMore={() => fetchNextPage().then(() => undefined)}
-            />
+          <Tab key={key} title={t(`tabs.${key}`)}>
+            <MessageTabContent messages={messages} />
           </Tab>
         ))}
       </Tabs>
 
       {isEdit && (
         <div className="flex items-center justify-between border-t bg-white px-4 py-2">
-          <Checkbox
-            isSelected={
-              messageList.length > 0 &&
-              selectedMessages.length === messageList.length
-            }
-            onValueChange={(checked: boolean) => handleSelectAll(checked)}
-          >
-            {t("bottomBar.selectAll")}
+          <Checkbox isSelected={isAllSelected} onChange={toggleSelectAll}>
+            {t("selectAll")}
           </Checkbox>
-          <button
-            className="rounded bg-red-500 px-4 py-2 text-white"
-            onClick={handleDeleteSelected}
+          <Button
+            className="w-[150px]"
+            color="primary"
+            isDisabled={!hasSelected}
+            onPress={openDeleteModal}
           >
-            {t("bottomBar.delete")}
-          </button>
+            {t("delete")}
+          </Button>
         </div>
       )}
-
-      <ConfirmModal
-        cancelText={
-          modalType === "view" ? t("modal.view.close") : t("modal.delete.close")
-        }
-        confirmText={modalType === "view" ? "" : t("modal.delete.confirm")}
-        content={
-          modalType === "view"
-            ? (selectedMessage?.content ?? t("modal.view.noContent"))
-            : t("modal.delete.content", { count: selectedMessages.length })
-        }
-        isOpen={modalType !== null}
-        showConfirm={
-          !(modalType === "view" && selectedMessage?.statusCode !== 0)
-        }
-        title={
-          modalType === "view"
-            ? selectedMessage?.title
-            : t("modal.delete.title")
-        }
-        onConfirm={
-          modalType === "view" ? handleMarkAsRead : handleConfirmDelete
-        }
-        onOpenChange={(open) => {
-          if (!open) setModalType(null);
-        }}
-      />
+      {modal.type === "delete" && (
+        <ConfirmModal
+          isOpen
+          content={t("deleteContent", {
+            count: selectedIds.length,
+          })}
+          title={t("deleteTitle")}
+          onConfirm={modal.confirm as () => Promise<void>}
+          onOpenChange={() => setModal({ type: null })}
+        />
+      )}
+      {modal.type === "detail" && (
+        <ConfirmModal
+          isOpen
+          cancelText={t("detailCancel")}
+          confirmText={t("detailConfirm")}
+          content={modal?.message?.content}
+          showConfirm={modal?.message?.statusCode == 0}
+          title={modal?.message?.title}
+          onConfirm={modal.confirm as () => Promise<void>}
+          onOpenChange={() => setModal({ type: null })}
+        />
+      )}
     </div>
   );
 }

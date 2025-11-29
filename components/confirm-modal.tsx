@@ -49,6 +49,7 @@ const ConfirmModal = ({
   return (
     <Modal
       hideCloseButton={true}
+      isDismissable={false}
       isOpen={isOpen}
       placement="center"
       scrollBehavior="inside" // ✅ 内容滚动

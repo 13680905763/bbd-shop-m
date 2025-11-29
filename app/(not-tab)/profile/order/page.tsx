@@ -17,6 +17,7 @@ import {
 import { useTranslations } from "next-intl";
 
 import OrderItem from "./order-item";
+import OrderRefundItem from "./order-refund-item";
 
 import { useOrderList } from "@/hook";
 import ConfirmModal from "@/components/confirm-modal";
@@ -29,8 +30,8 @@ import {
 import { queryClient } from "@/lib/react-query";
 import CommonModal from "@/components/modal/common-modal";
 import { useGlobalStore } from "@/store";
-import FullscreenLoader from "@/components/common/fullscreen-loader";
 import { useSelection } from "@/hook/useSelection";
+import { useOrderRefundList } from "@/hook/order/useOrderRefundList";
 const tabKeyToStatusCode: Record<string, string> = {
   all: "",
   waitPay: "201",
@@ -60,11 +61,22 @@ export default function Settingpage() {
     isFetching,
     isFetchingNextPage,
   } = useOrderList(tabKeyToStatusCode[activeTab]);
+  const {
+    data: dataR,
+    fetchNextPage: fetchNextPageR,
+    hasNextPage: hasNextPageR,
+    isLoading: isLoadingR,
+    isFetching: isFetchingR,
+    isFetchingNextPage: isFetchingNextPageR,
+  } = useOrderRefundList();
 
   const [isSubmitting, setIsSubmitting] = useState(false); // ✅ 批量支付 loading
   const [modal, setModal] = useState<ModalState>({ type: null });
 
   const orders = data?.pages?.flatMap((page: any) => page.records) ?? [];
+  const orderRefunds = dataR?.pages?.flatMap((page: any) => page.records) ?? [];
+
+  console.log("orderRefunds", orderRefunds);
 
   // ================= 使用 useSelection =================
   const {
@@ -159,8 +171,41 @@ export default function Settingpage() {
     }
   };
 
+  const OrderRefundTabContent = ({ orders }: { orders: any[] }) => {
+    if (isLoadingR)
+      return <Spinner className="flex h-[70vh] flex-col items-center" />;
+    if (!orders?.length)
+      return (
+        <div className="flex h-[60vh] flex-col items-center justify-center text-lg text-gray-500">
+          {t("noOrders")}
+        </div>
+      );
+
+    return (
+      <>
+        {isFetchingR && !isFetchingNextPageR && (
+          <Spinner className="mb-2 flex justify-center text-gray-500" />
+        )}
+        <div className="flex flex-col gap-3">
+          {orders.map((o: any) => (
+            <OrderRefundItem key={o.id} activeTab={activeTab} order={o} />
+          ))}
+        </div>
+        <InfiniteScroll
+          hasMore={!!hasNextPageR}
+          loadMore={(isRetry) => fetchNextPageR().then(() => undefined)}
+        >
+          {!hasNextPageR && (
+            <div className="text-center text-[#999]">{t("noMoreRecords")}</div>
+          )}
+          {isFetchingNextPageR && <Spinner />}
+        </InfiniteScroll>
+      </>
+    );
+  };
   const OrderTabContent = ({ orders }: { orders: any[] }) => {
-    if (isLoading) return <FullscreenLoader />;
+    if (isLoading)
+      return <Spinner className="flex h-[70vh] flex-col items-center" />;
     if (!orders?.length)
       return (
         <div className="flex h-[60vh] flex-col items-center justify-center text-lg text-gray-500">
@@ -221,7 +266,13 @@ export default function Settingpage() {
           panel: "bg-[#f7f8f9] px-2 flex-1 overflow-auto ",
         }}
         variant="underlined"
-        onSelectionChange={(key) => setActiveTab(String(key))}
+        onSelectionChange={(key) => {
+          if (key != "refund") {
+            setActiveTab(String(key));
+          } else {
+          }
+        }}
+        // onSelectionChange={(key) => setActiveTab(String(key))}
       >
         <Tab key="all" className="" title={t("tabs.all")}>
           <OrderTabContent orders={orders} />
@@ -231,6 +282,9 @@ export default function Settingpage() {
         </Tab>
         <Tab key="paid" title={t("tabs.paid")}>
           <OrderTabContent orders={orders} />
+        </Tab>
+        <Tab key="refund" title={t("tabs.refund")}>
+          <OrderRefundTabContent orders={orderRefunds} />
         </Tab>
       </Tabs>
 
@@ -253,7 +307,7 @@ export default function Settingpage() {
                 isLoading={isSubmitting}
                 onPress={handleBatchPay}
               >
-                {t("batchPay")}
+                {t("buttons.batchPay")}
               </Button>
             </div>
           </div>

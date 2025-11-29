@@ -17,7 +17,7 @@ import { FieldConfig } from "@/components/form/formItem-renderer";
 import { SignUpFormData } from "@/types";
 
 export default function RegisterPage() {
-  const t = useTranslations("register");
+  const t = useTranslations("auth.register");
   const router = useRouter();
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [formData, setFormData] = useState<SignUpFormData>({

@@ -16,6 +16,7 @@ import { useGlobalStore } from "@/store";
 export interface ProvidersProps {
   children: React.ReactNode;
   themeProps?: ThemeProviderProps;
+  initialLocale?: any;
 }
 
 declare module "@react-types/shared" {
@@ -26,16 +27,19 @@ declare module "@react-types/shared" {
   }
 }
 
-export function Providers({ children, themeProps }: ProvidersProps) {
+export function Providers({
+  children,
+  themeProps,
+  initialLocale,
+}: ProvidersProps) {
   const router = useRouter();
-  const { fetchConfig, currency, language, currencies } = useGlobalStore();
+  const { fetchConfig, setLanguage } = useGlobalStore();
 
   useEffect(() => {
     const init = async () => {
-      console.log("初始化 store");
+      console.log("初始化 store 服务端拿到", initialLocale);
       await fetchConfig(); // 等待异步执行完成
-
-      // await setUserLocale(language);
+      await setLanguage(initialLocale);
     };
 
     init();

@@ -8,46 +8,72 @@ import { Spinner } from "@heroui/react";
 import { useGlobalStore } from "@/store";
 import { useWalletDetailList } from "@/hook";
 
-function OrderCard({ record }: any) {
-  const { currency } = useGlobalStore();
-
-  return (
-    <div className="mb-3 rounded-lg bg-white px-2 py-3">
-      <div className="flex justify-between">
-        <div className="flex flex-col gap-1">
-          <div className="text-title !text-base font-medium">
-            {record?.bizReference}
-          </div>
-          <div className="text-sm text-gray-500">{record?.bizType}</div>
-          <div className="text-xs text-gray-400">{record?.updateTime}</div>
-        </div>
-        <div className="flex flex-col items-end gap-1">
-          <p className="text-price-lg font-semibold">
-            {currency.symbol}
-            {record.amount}
-          </p>
-          <p className="text-sm">{record.status}</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function BalanceRecord() {
-  const router = useRouter();
   const t = useTranslations("wallet.balanceRecord");
+  const { currency } = useGlobalStore();
+  const router = useRouter();
 
   const {
     data,
+    isLoading,
     fetchNextPage,
     hasNextPage,
+    isFetching,
     isFetchingNextPage,
     error,
-    isLoading,
   } = useWalletDetailList();
 
-  const walletDetailList =
-    data?.pages?.flatMap((page: any) => page?.records) ?? [];
+  const records = data?.pages?.flatMap((page: any) => page?.records) ?? [];
+
+  const BalanceRecordContent = ({ records }: { records: any[] }) => {
+    if (isLoading)
+      return <Spinner className="flex h-[70vh] flex-col items-center" />;
+    if (!records?.length)
+      return (
+        <div className="flex h-[60vh] flex-col items-center justify-center text-lg text-gray-500">
+          {t("noOrders")}
+        </div>
+      );
+
+    return (
+      <>
+        {isFetching && !isFetchingNextPage && (
+          <Spinner className="mb-2 flex justify-center text-gray-500" />
+        )}
+        <div className="flex flex-col gap-3">
+          {records.map((r: any) => (
+            <div key={r.id} className="rounded-lg bg-white px-2 py-3">
+              <div className="flex justify-between">
+                <div className="flex flex-col gap-1">
+                  <div className="text-title !text-base font-medium">
+                    {r?.bizReference}
+                  </div>
+                  <div className="text-sm text-gray-500">{r?.bizType}</div>
+                  <div className="text-xs text-gray-400">{r?.updateTime}</div>
+                </div>
+                <div className="flex flex-col items-end gap-1">
+                  <p className="text-price-lg font-semibold">
+                    {currency.symbol}
+                    {r.amount}
+                  </p>
+                  <p className="text-sm">{r.status}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <InfiniteScroll
+          hasMore={!!hasNextPage}
+          loadMore={(isRetry) => fetchNextPage().then(() => undefined)}
+        >
+          {!hasNextPage && (
+            <div className="text-center text-[#999]">{t("noMoreRecords")}</div>
+          )}
+          {isFetchingNextPage && <Spinner />}
+        </InfiniteScroll>
+      </>
+    );
+  };
 
   return (
     <div className="flex h-screen flex-col justify-between bg-[#f7f8f9]">
@@ -56,33 +82,7 @@ export default function BalanceRecord() {
       </NavBar>
 
       <div className="flex-1 overflow-auto p-2">
-        {walletDetailList.map((record: any) => (
-          <OrderCard key={record.id} record={record} />
-        ))}
-
-        <InfiniteScroll
-          hasMore={!!hasNextPage}
-          loadMore={() => fetchNextPage().then(() => undefined)}
-        >
-          {!hasNextPage && (
-            <div
-              style={{
-                textAlign: "center",
-                padding: "12px 0",
-                color: "#999",
-              }}
-            >
-              {t("noMoreRecords")}
-            </div>
-          )}
-          {isFetchingNextPage && (
-            <div className="flex flex-col items-center justify-center text-gray-500">
-              <div className="mb-2 text-lg">
-                <Spinner />
-              </div>
-            </div>
-          )}
-        </InfiniteScroll>
+        <BalanceRecordContent records={records} />
       </div>
     </div>
   );

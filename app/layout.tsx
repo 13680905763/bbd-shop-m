@@ -32,16 +32,21 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const locale = await getLocale();
+  const initialLocale = await getLocale();
   const messages = await getMessages();
 
+  console.log("服务端initialLocale", initialLocale);
+
   return (
-    <html suppressHydrationWarning lang={locale}>
+    <html suppressHydrationWarning lang={initialLocale}>
       <head />
       <body className="bg-[#f5f5f5]">
         <ViewportFixer />
         <NextIntlClientProvider messages={messages}>
-          <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
+          <Providers
+            initialLocale={initialLocale}
+            themeProps={{ attribute: "class", defaultTheme: "light" }}
+          >
             {/* <Suspense fallback={<FullscreenLoader />}>{children}</Suspense> */}
             <Suspense>{children}</Suspense>
           </Providers>

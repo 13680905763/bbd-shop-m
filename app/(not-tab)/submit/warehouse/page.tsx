@@ -5,8 +5,8 @@ import React, { useEffect, useState } from "react";
 import { addToast, Button, Checkbox, Spinner, Textarea } from "@heroui/react";
 import { useTranslations } from "next-intl";
 
-import { AddAddressCard } from "./add-address-card";
 import AddressCard from "./address-card";
+import { AddAddressCard } from "./add-address-card";
 import WarehouseCard from "./warehouse-card";
 import ServiceCard from "./service-card";
 import ShippingRouteCard from "./shipping-route-card";
@@ -27,7 +27,7 @@ import { FieldConfig } from "@/components/form/formItem-renderer";
 
 type ModalType = "add" | "edit" | null;
 export default function SubmitOrder() {
-  const t = useTranslations("submitWarehouse");
+  const t = useTranslations("submit.warehouse");
   const searchParam = useSearchParams();
   const router = useRouter();
   const key = searchParam.get("key") as string;

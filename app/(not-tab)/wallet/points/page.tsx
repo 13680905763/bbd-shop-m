@@ -1,5 +1,5 @@
 "use client";
-import { Tab, Tabs } from "@heroui/react";
+import { Spinner, Tab, Tabs } from "@heroui/react";
 import { InfiniteScroll, NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -8,7 +8,6 @@ import { useTranslations } from "next-intl";
 
 import { usePointsList } from "@/hook/wallet/usePointsList";
 import { getUserInfo } from "@/services";
-import FullscreenLoader from "@/components/common/fullscreen-loader";
 
 export default function Settingpage() {
   const t = useTranslations("wallet.points");
@@ -20,11 +19,12 @@ export default function Settingpage() {
     data,
     fetchNextPage,
     hasNextPage,
+    isFetching,
     isFetchingNextPage,
     error,
     isLoading,
   } = usePointsList();
-  const pointsList = data?.pages?.flatMap((page: any) => page?.records) ?? [];
+  const records = data?.pages?.flatMap((page: any) => page?.records) ?? [];
   // 获取用户信息
   const fetchUser = async () => {
     try {
@@ -40,7 +40,61 @@ export default function Settingpage() {
     fetchUser();
   }, []);
 
-  if (loading) return <FullscreenLoader />;
+  const PointsRecordContent = ({ records }: { records: any[] }) => {
+    if (isLoading)
+      return <Spinner className="flex h-[70vh] flex-col items-center" />;
+    if (!records?.length)
+      return (
+        <div className="flex h-[60vh] flex-col items-center justify-center text-lg text-gray-500">
+          {t("noOrders")}
+        </div>
+      );
+
+    return (
+      <>
+        {isFetching && !isFetchingNextPage && (
+          <Spinner className="mb-2 flex justify-center text-gray-500" />
+        )}
+        <div className="flex flex-col gap-3">
+          {records.map((r: any) => (
+            <div
+              key={r?.id}
+              className="rounded-lg bg-white px-4 py-3 shadow-sm transition-shadow"
+            >
+              <div className="flex justify-between">
+                {/* 左侧 */}
+                <div className="flex flex-col gap-1">
+                  <div className="text-title !text-base font-medium text-gray-800">
+                    {r?.bizType}
+                  </div>
+                  <div className="text-sm text-gray-500">{r?.createTime}</div>
+                </div>
+
+                {/* 右侧 */}
+                <div className="flex flex-col items-end gap-1">
+                  <p className="text-money-xl font-semibold text-green-600">
+                    {r?.amount > 0 ? `+${r?.amount}` : r?.amount}
+                  </p>
+                  {r?.status && (
+                    <p className="text-sm text-gray-400">{r?.status}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <InfiniteScroll
+          hasMore={!!hasNextPage}
+          loadMore={(isRetry) => fetchNextPage().then(() => undefined)}
+        >
+          {!hasNextPage && (
+            <div className="text-center text-[#999]">{t("noMoreRecords")}</div>
+          )}
+          {isFetchingNextPage && <Spinner />}
+        </InfiniteScroll>
+      </>
+    );
+  };
 
   return (
     <div className="h-screen bg-[#f7f8f9]">
@@ -72,55 +126,7 @@ export default function Settingpage() {
             variant="underlined"
           >
             <Tab key="photos" title={t("pointsDetail")}>
-              {pointsList.map((record: any) => (
-                <div
-                  key={record?.id}
-                  className="mb-3 rounded-lg bg-white px-4 py-3 shadow-sm transition-shadow"
-                >
-                  <div className="flex justify-between">
-                    {/* 左侧 */}
-                    <div className="flex flex-col gap-1">
-                      <div className="text-title !text-base font-medium text-gray-800">
-                        {record?.bizType}
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        {record?.createTime}
-                      </div>
-                    </div>
-
-                    {/* 右侧 */}
-                    <div className="flex flex-col items-end gap-1">
-                      <p className="text-money-xl font-semibold text-green-600">
-                        {record?.amount > 0
-                          ? `+${record?.amount}`
-                          : record?.amount}
-                      </p>
-                      {record?.status && (
-                        <p className="text-sm text-gray-400">
-                          {record?.status}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-
-              <InfiniteScroll
-                hasMore={!!hasNextPage}
-                loadMore={(isRetry) => fetchNextPage().then(() => undefined)}
-              >
-                {!hasNextPage && (
-                  <div
-                    style={{
-                      textAlign: "center",
-                      padding: "12px 0",
-                      color: "#999",
-                    }}
-                  >
-                    {t("noMoreRecords")}
-                  </div>
-                )}
-              </InfiniteScroll>
+              <PointsRecordContent records={records} />
             </Tab>
 
             <Tab key="videos" title={t("pointsExchange")}>

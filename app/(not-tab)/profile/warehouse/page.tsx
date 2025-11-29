@@ -10,7 +10,6 @@ import WarehouseItem from "./warehouse-item";
 import { useWarehouseList } from "@/hook";
 import { createWarehousePreviewKeyByCart } from "@/services";
 import { useSelection } from "@/hook/useSelection";
-import FullscreenLoader from "@/components/common/fullscreen-loader";
 const tabKeyToStatusCode: Record<string, string> = {
   all: "",
   submit: "302",
@@ -53,7 +52,7 @@ export default function Warehouse() {
         packageSet: selectedIds,
       });
 
-      router.push(`/warehouse/submit-warehouse?key=${key}`);
+      router.push(`/submit/warehouse?key=${key}`);
     } catch {
     } finally {
       setIsSubmitting(false); // ✅ 恢复
@@ -61,7 +60,8 @@ export default function Warehouse() {
   };
 
   const WarehouseTabContent = ({ warehouse }: { warehouse: any[] }) => {
-    if (isLoading) return <FullscreenLoader />;
+    if (isLoading)
+      return <Spinner className="flex h-[70vh] flex-col items-center" />;
     if (!warehouse?.length)
       return (
         <div className="flex h-[60vh] flex-col items-center justify-center text-lg text-gray-500">
@@ -117,11 +117,11 @@ export default function Warehouse() {
         variant="underlined"
         onSelectionChange={(key) => setActiveTab(String(key))}
       >
-        <Tab key="all" title={t("all")}>
+        <Tab key="all" title={t("tabs.all")}>
           <WarehouseTabContent warehouse={warehouse} />
         </Tab>
 
-        <Tab key="submit" title={t("submit")}>
+        <Tab key="submit" title={t("tabs.submit")}>
           <WarehouseTabContent warehouse={warehouse} />
         </Tab>
       </Tabs>

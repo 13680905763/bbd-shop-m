@@ -14,5 +14,7 @@ export function useOrderPreview(type: "cart" | "product", key: string) {
     gcTime: 0,
     staleTime: 0,
     refetchOnMount: true,
+    // ❌ 切换标签页不再重新请求
+    refetchOnWindowFocus: false,
   });
 }

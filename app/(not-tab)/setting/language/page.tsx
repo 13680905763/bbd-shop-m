@@ -43,7 +43,6 @@ export default function Settingpage() {
     try {
       console.log("保存选择语言:", tempLanguage);
       setLanguage(tempLanguage);
-      localStorage.setItem("locale", tempLanguage);
       await setUserLocale(tempLanguage);
       router.push("/");
       // window.location.reload();

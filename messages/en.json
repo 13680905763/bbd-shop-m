@@ -26,29 +26,33 @@
             "cancelText": "Cancel"
         }
     },
-    "login": {
-        "title": "Sign In",
-        "emailLabel": "Email",
-        "emailPlaceholder": "Enter your email",
-        "passwordPlaceholder": "Enter your password",
-        "loginButton": "Login",
-        "registerButton": "Register",
-        "loginSuccess": "Login successful",
-        "loginFailed": "Login failed, please check your email or password"
-    },
-    "register": {
-        "title": "Sign Up",
-        "emailPlaceholder": "Enter your email",
-        "passwordPlaceholder": "Enter your password",
-        "inviteCodePlaceholder": "Enter your invitation code (leave blank if none)",
-        "agreeToTerms": "I have read and agree to the website terms and conditions",
-        "registerButton": "Register",
-        "loginHint": "Already have an account?",
-        "goLogin": "Go login",
-        "mustAgree": "Please check the unified agreement first",
-        "verifyTitle": "Verify your email (please stay on this page)",
-        "verifyInstruction1": "We have sent a verification code to",
-        "verifyInstruction2": ". Please enter the code below to verify"
+    "auth": {
+        "sloganTitle": "One-Stop Service",
+        "sloganDesc": "Shop from China with Ease, Ship Worldwide Professionally",
+        "login": {
+            "title": "User Login",
+            "emailLabel": "Email",
+            "emailPlaceholder": "Please enter email address",
+            "passwordPlaceholder": "Please enter password",
+            "loginButton": "Login",
+            "registerButton": "Register",
+            "loginSuccess": "Login successful",
+            "loginFailed": "Login failed, please check your account or password"
+        },
+        "register": {
+            "title": "User Registration",
+            "emailPlaceholder": "Please enter email address",
+            "passwordPlaceholder": "Please enter password",
+            "inviteCodePlaceholder": "Please enter invitation code (leave blank if none)",
+            "agreeToTerms": "I have read and agree to the website terms and conditions",
+            "registerButton": "Register",
+            "loginHint": "Already have an account?",
+            "goLogin": "Go to login",
+            "mustAgree": "Please agree to the website terms first",
+            "verifyTitle": "Verify your email (please stay on this page)",
+            "verifyInstruction1": "We have sent a verification code to",
+            "verifyInstruction2": ". Please enter the code below to verify"
+        }
     },
     "dashboard": {
         "balance": "Balance",
@@ -81,17 +85,17 @@
             "stats": [
                 {
                     "title": "Invited Users",
-                    "value": "$888",
+                    "value": "0",
                     "to": "/pages/member/account/index"
                 },
                 {
                     "title": "Withdrawals",
-                    "value": "88",
+                    "value": "0",
                     "to": "/pages/member/points/index"
                 },
                 {
                     "title": "Earned",
-                    "value": "88",
+                    "value": "0",
                     "to": "/pages/member/points/index"
                 }
             ]
@@ -139,10 +143,8 @@
         "toast": {
             "noSelect": "Please select a product first"
         },
-        "confirm": {
-            "deleteTitle": "Delete from Cart",
-            "deleteContent": "Are you sure you want to delete the selected items?"
-        },
+        "deleteTitle": "Delete from Cart",
+        "deleteContent": "Are you sure you want to delete the selected items?",
         "remark": {
             "title": "Remark",
             "placeholder": "Enter remark"
@@ -155,81 +157,84 @@
             "mobileLabel": "Mobile Number",
             "saveButton": "Save",
             "edit": "Edit",
-            "uploading": "Uploading avatar...",
-            "loadError": "Failed to load, please try again"
+            "uploading": "Uploading avatar..."
         },
         "order": {
-            "pay": "Pay",
-            "cancel": "Cancel",
-            "requestRefund": "Request Refund",
-            "title": "Orders",
+            "title": "My Orders",
             "tabs": {
                 "all": "All",
                 "waitPay": "Pending Payment",
-                "paid": "Paid"
+                "paid": "Paid",
+                "refund": "Refund"
             },
-            "withdrawRequest": "Withdraw Request",
-            "selectRefundItems": "Please select the item to be refunded",
+            "buttons": {
+                "pay": "Pay",
+                "cancel": "Cancel Order",
+                "batchPay": "Batch Pay",
+                "withdraw": "Withdraw Application",
+                "refund": "Request Refund"
+            },
             "cancelTitle": "Cancel Order",
             "cancelContent": "Are you sure you want to cancel this order?",
-            "withdrawTitle": "Withdraw",
-            "withdrawContent": "Are you sure you want to withdraw the current request?",
+            "withdrawTitle": "Withdraw Application",
+            "withdrawContent": "Are you sure you want to withdraw this application?",
             "refundTitle": "Request Refund",
-            "refundContent": "Are you sure you want to request a refund for this order?",
-            "remarkPlaceholder": "Enter remarks (optional)",
+            "remarkPlaceholder": "Please enter remarks (optional)",
             "refundable": "Refundable",
             "unrefundable": "Non-refundable",
-            "noOrders": "No orders yet",
+            "noOrders": "No Orders",
             "selectAll": "Select All",
-            "batchPay": "Batch Pay",
-            "requestRefundConfirm": "Are you sure you want to request a refund for this order?",
-            "noMoreRecords": "No more records"
+            "noMoreRecords": "No More Records",
+            "refundReason": "Refund Reason",
+            "reviewReason": "Review Reason",
+            "refundAmount": "Refund Amount",
+            "reviewTime": "Review Time"
         },
         "warehouse": {
             "title": "Warehouse",
-            "all": "All",
-            "submit": "Submittable",
+            "tabs": {
+                "all": "All",
+                "submit": "Submittable Packages"
+            },
             "selectAll": "Select All",
             "submitPackages": "Submit Packages",
-            "confirmCancelTitle": "Cancel Order",
-            "confirmCancelContent": "Are you sure you want to cancel this order?",
-            "orderCode": "Order Number",
-            "createTime": "Created At",
             "weight": "Weight",
             "size": "Size",
-            "quantity": "Quantity",
-            "valueAddedServices": "Value-added Services",
-            "serviceItemName": "Service Item",
-            "noOrders": "No orders yet",
-            "noMoreRecords": "No more records"
+            "valueAddedServices": "Value Added Services",
+            "noMoreRecords": "No More Records",
+            "noOrders": "No Orders"
         },
         "package": {
-            "title": "Package",
-            "all": "All",
-            "pay": "Pending Payment",
-            "shipping": "Shipping",
-            "received": "Received",
-            "selectAll": "Select All",
-            "submitPay": "Pay",
-            "noOrders": "No orders yet",
-            "noMoreRecords": "No more records",
-            "packageItem": {
-                "shippingCode": "Tracking Number:",
-                "productImage": "Product Image",
-                "weight": "Weight",
-                "size": "Size",
-                "shipping": "Shipping Method",
-                "serviceFee": "Service Fee",
-                "totalFee": "Total Fee",
-                "none": "None",
-                "payButton": "Pay",
-                "cancelButton": "Cancel",
-                "payCancelFee": "Payment Cancellation Fee",
-                "requestRefund": "Request Cancellation",
-                "withdrawRequest": "Withdraw Request",
-                "changeBtn": "Change Route"
+            "title": "Packages",
+            "tabs": {
+                "all": "All",
+                "pay": "Pending Payment",
+                "shipping": "In Transit",
+                "received": "Received"
             },
-            "refundModal": {
+            "selectAll": "Select All",
+            "submitPay": "Batch Pay",
+            "noOrders": "No Packages",
+            "noMoreRecords": "No More Records",
+            "withdrawTitle": "Withdraw Application",
+            "withdrawContent": "Are you sure you want to withdraw this application?",
+            "receiptTitle": "Confirm Receipt",
+            "receiptContent": "Confirm receipt of this item?",
+            "refundTitle": "Request Refund",
+            "buttons": {
+                "cancel": "Cancel",
+                "withdraw": "Withdraw Application",
+                "change": "Change Route",
+                "pay": "Pay",
+                "payCancel": "Pay Cancellation Fee",
+                "receipt": "Confirm Receipt"
+            },
+            "weight": "Weight:",
+            "size": "Size:",
+            "serviceFee": "Service Fee:",
+            "totalFee": "Total Fee:",
+            "shippingCode": "Tracking Number:",
+            "cancelModal": {
                 "title": "Cancel",
                 "cancelCard": {
                     "title": "Confirm Cancellation",
@@ -242,18 +247,13 @@
                 },
                 "changeRouteCard": {
                     "title": "Change Route",
-                    "subtitle": "Re-select shipping route"
+                    "subtitle": "Reselect shipping route"
                 }
             },
-            "withdrawModal": {
-                "content": "Are you sure to withdraw the cancellation request?"
-            },
-            "changeModal": {
-                "title": "Change Route"
-            },
+            "changeTitle": "Change Route",
             "lineModal": {
-                "title": "Tracking Information",
-                "mainWaybillTitle": "Main Waybill Timeline",
+                "title": "Shipping Tracking",
+                "mainWaybillTitle": "Main Waybill Tracking",
                 "subWaybillTitle": "Sub Waybill:",
                 "waybillNumber": "Waybill Number:",
                 "currentStatus": "Current Status:",
@@ -349,40 +349,25 @@
                 "cancelText": "Cancel"
             }
         },
-        "messagePage": {
-            "navBar": {
-                "title": "Messages",
-                "manage": "Manage",
-                "cancel": "Cancel"
-            },
+        "message": {
+            "title": "Messages",
+            "manage": "Manage",
+            "cancel": "Cancel",
             "tabs": {
                 "all": "All",
                 "unread": "Unread",
                 "read": "Read"
             },
-            "bottomBar": {
-                "selectAll": "Select All",
-                "delete": "Delete"
-            },
-            "modal": {
-                "view": {
-                    "close": "Close",
-                    "noContent": "No content",
-                    "markAsRead": "Mark as read"
-                },
-                "delete": {
-                    "close": "Close",
-                    "confirm": "Delete",
-                    "title": "Delete Messages",
-                    "content": "Are you sure you want to delete {count} selected messages?"
-                }
-            },
-            "item": {
-                "status": {
-                    "unread": "Unread",
-                    "read": "Read"
-                }
-            }
+            "deleteTitle": "Delete Messages",
+            "deleteContent": "Are you sure you want to delete the selected {count} message(s)?",
+            "selectAll": "Select All",
+            "delete": "Delete",
+            "detailCancel": "Close",
+            "detailConfirm": "Mark as Read",
+            "unread": "Unread",
+            "read": "Read",
+            "noOrders": "No Packages",
+            "noMoreRecords": "No More Records"
         }
     },
     "setting": {
@@ -415,7 +400,7 @@
         }
     },
     "wallet": {
-        "walletPage": {
+        "page": {
             "title": "My Account",
             "record": "Record",
             "totalBalance": "Total Balance",
@@ -441,15 +426,105 @@
             "noMoreRecords": "No more records"
         }
     },
-    "payOrder": {
-        "title": "Confirm Order",
-        "total": "Total",
-        "handlingFee": "Handling Fee",
-        "billingAddress": "Billing Address",
-        "placeOrder": "Place Order",
-        "balance": "Balance",
-        "recharge": "Recharge",
-        "pleaseAddBillingAddress": "Please add billing address"
+    "goods": {
+        "title": "Product Details",
+        "originalLink": "Original Link",
+        "refresh": "Refresh",
+        "progressBar": {
+            "step1": "Pay for Product",
+            "step2": "Submit Package",
+            "step3": "Package Received",
+            "tipText": "We provide 3-7 high-definition quality inspection photos for free",
+            "fromSellerToBBD": "From Seller to BBD",
+            "fromBBDToYou": "From BBD to You"
+        },
+        "disclaimerDrawer": {
+            "title": "Disclaimer",
+            "buttonLabel": "Disclaimer",
+            "content": "All purchasing agent products displayed on BBDbuy are sourced from third-party purchasing platforms and are not directly sold by BBDbuy. Therefore, BBDbuy assumes no responsibility or legal liability for issues arising from intellectual property infringement and copyright infringement of goods. By using BBDbuy's purchasing agent service, you acknowledge and accept the aforementioned risks."
+        },
+        "quantity": "Quantity",
+        "remark": "Remarks",
+        "enterDescription": "Please enter remarks",
+        "buyNow": "Buy Now",
+        "addToCart": "Add to Cart",
+        "riskNotice": "Risk Notice",
+        "continueShopping": "Continue Shopping",
+        "riskMessage": "The product you submitted may have certain delivery risks. For the security of your funds, we are temporarily unable to provide online ordering services. For more information, please contact online customer service!",
+        "productDescription": "Product Description",
+        "stock": "Stock:",
+        "shippingFee": "Shipping Fee:"
+    },
+    "submit": {
+        "order": {
+            "title": "Order Confirmation",
+            "total": "Total",
+            "submitOrder": "Submit Order",
+            "valueAddedService": "Value Added Service",
+            "noService": "No Services Available",
+            "free": "Free",
+            "add": "Add",
+            "remark": "Remarks:",
+            "delete": "Delete",
+            "serviceIntro": "Service Introduction",
+            "noIntro": "No Introduction Available",
+            "sample": "Example",
+            "serviceFee": "Service Fee:",
+            "remarkPlaceholder": "Please enter remarks",
+            "shippingFee": "Shipping Fee:",
+            "productFee": "Product Fee:",
+            "shopTotal": "Shop Total:"
+        },
+        "warehouse": {
+            "title": "Package Submit",
+            "shippingAddress": "Shipping Address",
+            "commodityList": "Commodity List",
+            "packagingMethod": "Packaging Method",
+            "deliveryRoute": "Delivery Route",
+            "textareaPlaceholder": "If you have any special requirements, please leave a note here",
+            "agreement": "I have read and agreed to the bbdbuy Package Shipping Agreement",
+            "submitPackage": "Submit Package",
+            "toast": {
+                "checkAgreement": "Please check the disclaimer",
+                "selectAddress": "Please select a shipping address",
+                "selectRoute": "Please select a delivery route",
+                "submitSuccess": "Submitted successfully"
+            },
+            "addressModal": {
+                "addAddress": "Add Address",
+                "editAddress": "Edit Address",
+                "fields": {
+                    "recipient": {
+                        "label": "Recipient",
+                        "placeholder": "Enter recipient name"
+                    },
+                    "phone": {
+                        "label": "Phone",
+                        "placeholder": "Enter phone number"
+                    },
+                    "area": {
+                        "label": "Area",
+                        "placeholder": "Select area"
+                    },
+                    "address": {
+                        "label": "Address",
+                        "placeholder": "Enter full address"
+                    },
+                    "doorNo": {
+                        "label": "Door No.",
+                        "placeholder": "Enter door number"
+                    },
+                    "postcode": {
+                        "label": "Postcode",
+                        "placeholder": "Enter postal code"
+                    },
+                    "defaultAddress": {
+                        "label": "Set as default address"
+                    }
+                },
+                "tableEmpty": "No address information available"
+            }
+        }
     },
     "payment": {
         "title": "Confirm Order",
@@ -461,7 +536,7 @@
         "recharge": "Recharge",
         "pleaseAddBillingAddress": "Please add billing address",
         "result": {
-            "loading": "Confirming payment result...",
+            "loading": "Confirming payment result",
             "successTitle": "Payment Successful",
             "successNotice": "We have received your payment, your order is being processed.",
             "transactionId": "Transaction ID:",
@@ -471,163 +546,6 @@
             "failNotice": "Payment not completed. Please check your order or try again.",
             "viewOrder": "View Order",
             "backHome": "Back to Home"
-        }
-    },
-    "Goods": {
-        "productDetails": "Product Details",
-        "originalLink": "Original Link",
-        "refresh": "Refresh",
-        "quantity": "Quantity",
-        "enterDescription": "Enter your description",
-        "buyNow": "Buy Now",
-        "addToCart": "Add to Cart",
-        "riskNotice": "Risk Notice",
-        "continueShopping": "Continue Shopping",
-        "riskMessage": "The product you submitted may involve certain shipping risks. For your fund safety, online purchase is temporarily unavailable. Please contact online support for more information.",
-        "productDescription": "Product Description",
-        "stock": "Stock",
-        "shippingFee": "Shipping Fee"
-    },
-    "estimation": {
-        "fillWeightOrSize": "Please enter weight or dimensions (L, W, H)!",
-        "title": "Shipping Estimation",
-        "warehouse": "From Warehouse",
-        "weight": "Weight (g)",
-        "length": "Length (cm)",
-        "width": "Width (cm)",
-        "height": "Height (cm)",
-        "search": "Search Now",
-        "selectCountry": "Please select a country",
-        "selectCategory": "Please select a cargo category",
-        "price": "Price",
-        "time": "Transit Time",
-        "pricingStandard": "Pricing Standard",
-        "firstWeightFee": "First Weight Fee",
-        "additionalWeightFee": "Additional Weight Fee",
-        "customsFee": "Customs Fee",
-        "shippingLimit": "Shipping Limit",
-        "routeFeature": "Route Features",
-        "category": "Cargo Category"
-    },
-    "forwardingPage": {
-        "title": "Forwarding Package",
-        "warehouseAddress": "Warehouse Address",
-        "warehouseFullAddress": "8A-801 Shenghao Technology Building, Licheng Industrial Park, Shuikou Street, Huizhou, Guangdong, China",
-        "forwardingPackage": "Forwarding Package",
-        "trackingNo": "Tracking Number:",
-        "trackingNoPlaceholder": "Enter your tracking number",
-        "errorTrackingNo": "Please enter a valid tracking number",
-        "packageName": "Package Name:",
-        "packageNamePlaceholder": "Enter your package name",
-        "errorPackageName": "Please enter a valid package name",
-        "extraServices": "Additional Services",
-        "serviceInspection": "Open-box inspection for prohibited items",
-        "serviceConfirmation": "BBDbuy forwarding does not provide item confirmation by default. Choose 'Item Confirmation' if needed.",
-        "serviceRemoveInvoice": "Remove invoice (may reduce tax probability)",
-        "serviceOriginalBox": "Original box storage",
-        "submit": "Submit",
-        "acceptAgreement": "I have read and accept the 'Forwarding Package Inspection Rules and Service Agreement'",
-        "serviceIntro": "Service Introduction",
-        "noIntro": "No Introduction",
-        "sample": "Sample",
-        "serviceFee": "Service Fee",
-        "remarkPlaceholder": "Enter remarks (optional)",
-        "remark": "Remark",
-        "valueAddedService": "Value-Added Service",
-        "free": "Free",
-        "add": "Add",
-        "serviceItem": "Service Item",
-        "delete": "Delete",
-        "save": "Save",
-        "confirm": "Confirm"
-    },
-    "submitOrder": {
-        "confirmProductInfo": "Confirm Product Information",
-        "product": "Product",
-        "remark": "Remark",
-        "noRemark": "No Remark",
-        "price": "Price",
-        "quantity": "Quantity",
-        "subtotal": "Subtotal",
-        "declaration": "Prohibited Items Declaration",
-        "terms": "Terms of Service and User Management",
-        "returnPolicy": "Return and Exchange Service",
-        "disclaimer": "Disclaimer",
-        "agreement": "I have read and agree to BBDbuy's Disclaimer",
-        "notice": "Note: After completing payment, when the goods arrive and are stored in the warehouse, you need to submit the package for international shipping.",
-        "amountDue": "Amount Due:",
-        "submit": "Submit",
-        "valueAddedService": "Value-Added Service",
-        "free": "Free",
-        "add": "Add",
-        "serviceItem": "Service Item",
-        "delete": "Delete",
-        "save": "Save",
-        "confirm": "Confirm",
-        "serviceIntro": "Service Introduction",
-        "noIntro": "No Introduction",
-        "sample": "Sample",
-        "serviceFee": "Service Fee",
-        "remarkPlaceholder": "Enter remark (optional)",
-        "OrderItem": {
-            "valueAddedService": "Value-Added Service",
-            "noService": "No Service",
-            "remark": "Remark",
-            "shippingFee": "Shipping Fee",
-            "serviceFee": "Service Fee",
-            "productFee": "Product Fee",
-            "shopTotal": "Shop Total",
-            "add": "Add"
-        }
-    },
-    "submitWarehouse": {
-        "title": "Package Submit",
-        "shippingAddress": "Shipping Address",
-        "commodityList": "Commodity List",
-        "packagingMethod": "Packaging Method",
-        "deliveryRoute": "Delivery Route",
-        "textareaPlaceholder": "If you have any special requirements, please leave a note here",
-        "agreement": "I have read and agreed to the bbdbuy Package Shipping Agreement",
-        "submitPackage": "Submit Package",
-        "toast": {
-            "checkAgreement": "Please check the disclaimer",
-            "selectAddress": "Please select a shipping address",
-            "selectRoute": "Please select a delivery route",
-            "submitSuccess": "Submitted successfully"
-        },
-        "addressModal": {
-            "addAddress": "Add Address",
-            "editAddress": "Edit Address",
-            "fields": {
-                "recipient": {
-                    "label": "Recipient",
-                    "placeholder": "Enter recipient name"
-                },
-                "phone": {
-                    "label": "Phone",
-                    "placeholder": "Enter phone number"
-                },
-                "area": {
-                    "label": "Area",
-                    "placeholder": "Select area"
-                },
-                "address": {
-                    "label": "Address",
-                    "placeholder": "Enter full address"
-                },
-                "doorNo": {
-                    "label": "Door No.",
-                    "placeholder": "Enter door number"
-                },
-                "postcode": {
-                    "label": "Postcode",
-                    "placeholder": "Enter postal code"
-                },
-                "defaultAddress": {
-                    "label": "Set as default address"
-                }
-            },
-            "tableEmpty": "No address information available"
         }
     },
     "promotion": {
@@ -686,5 +604,58 @@
                 "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
             }
         }
+    },
+    "estimation": {
+        "fillWeightOrSize": "Please enter weight or dimensions (L, W, H)!",
+        "title": "Shipping Estimation",
+        "warehouse": "From Warehouse",
+        "weight": "Weight (g)",
+        "length": "Length (cm)",
+        "width": "Width (cm)",
+        "height": "Height (cm)",
+        "search": "Search Now",
+        "selectCountry": "Please select a country",
+        "selectCategory": "Please select a cargo category",
+        "price": "Price",
+        "time": "Transit Time",
+        "pricingStandard": "Pricing Standard",
+        "firstWeightFee": "First Weight Fee",
+        "additionalWeightFee": "Additional Weight Fee",
+        "customsFee": "Customs Fee",
+        "shippingLimit": "Shipping Limit",
+        "routeFeature": "Route Features",
+        "category": "Cargo Category"
+    },
+    "forwardingPage": {
+        "title": "Forwarding Package",
+        "warehouseAddress": "Warehouse Address",
+        "warehouseFullAddress": "8A-801 Shenghao Technology Building, Licheng Industrial Park, Shuikou Street, Huizhou, Guangdong, China",
+        "forwardingPackage": "Forwarding Package",
+        "trackingNo": "Tracking Number:",
+        "trackingNoPlaceholder": "Enter your tracking number",
+        "errorTrackingNo": "Please enter a valid tracking number",
+        "packageName": "Package Name:",
+        "packageNamePlaceholder": "Enter your package name",
+        "errorPackageName": "Please enter a valid package name",
+        "extraServices": "Additional Services",
+        "serviceInspection": "Open-box inspection for prohibited items",
+        "serviceConfirmation": "BBDbuy forwarding does not provide item confirmation by default. Choose 'Item Confirmation' if needed.",
+        "serviceRemoveInvoice": "Remove invoice (may reduce tax probability)",
+        "serviceOriginalBox": "Original box storage",
+        "submit": "Submit",
+        "acceptAgreement": "I have read and accept the 'Forwarding Package Inspection Rules and Service Agreement'",
+        "serviceIntro": "Service Introduction",
+        "noIntro": "No Introduction",
+        "sample": "Sample",
+        "serviceFee": "Service Fee",
+        "remarkPlaceholder": "Enter remarks (optional)",
+        "remark": "Remark",
+        "valueAddedService": "Value-Added Service",
+        "free": "Free",
+        "add": "Add",
+        "serviceItem": "Service Item",
+        "delete": "Delete",
+        "save": "Save",
+        "confirm": "Confirm"
     }
 }
