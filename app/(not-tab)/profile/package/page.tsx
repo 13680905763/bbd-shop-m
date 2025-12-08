@@ -221,8 +221,12 @@ export default function Settingpage() {
               onLine={() => {
                 openLineModal(p);
               }} // 路线详情
-              onPayPackageRedirect={() => {
-                router.push(`/payment/${p?.packingPackageCode}`);
+              onPayPackageRedirect={async () => {
+                const bizCode = await batchPayPackage({
+                  packageSet: [p?.packingPackageCode],
+                });
+
+                if (bizCode) router.push(`/payment/${bizCode}`);
               }} //支付
               onReceiptPackage={() => {
                 openReceiptModal(p?.id);

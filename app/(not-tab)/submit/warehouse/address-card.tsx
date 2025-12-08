@@ -54,7 +54,7 @@ export default function AddressCard({
       onClick={() => {
         if (isDisabled) return; // ✅ 手动阻止
         if (id && isSelected) {
-          onSelect?.(null);
+          // onSelect?.(null);
         } else if (id) {
           onSelect?.(id);
         }

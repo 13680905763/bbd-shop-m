@@ -61,7 +61,7 @@ export default function PaymentResultPage() {
   const [loading, setLoading] = useState(true);
   const [isConvert, setIsConvert] = useState(false);
 
-  const payToken = searchParams.get("token"); // PayPal
+  const paymentMethod = searchParams.get("paymentMethod"); // paymentMethod
 
   const [paymentInfo, setPaymentInfo] = useState<{
     success: boolean;
@@ -77,7 +77,7 @@ export default function PaymentResultPage() {
       try {
         let paymentInfo;
 
-        if (payToken) {
+        if (paymentMethod == "PAYPAL") {
           console.log("走paypel");
 
           // PayPal: 用 token 请求后端
@@ -106,7 +106,7 @@ export default function PaymentResultPage() {
           };
 
           // 同步通知后端（非钱包支付）
-          if (searchParams.get("payMethodCode") !== "WALLET") {
+          if (paymentMethod != "WALLET") {
             await payNotice(searchParams.toString());
           }
         }
