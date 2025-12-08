@@ -4,7 +4,7 @@ bbdbuy-mb.zip
 /node_modules
 /.pnp
 .pnp.js
-# deploy.sh
+deploy.sh
 # testing
 /coverage
 
