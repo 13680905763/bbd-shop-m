@@ -556,6 +556,7 @@ export default function GoodsPage() {
                   <Textarea
                     classNames={{
                       inputWrapper: "bg-[#f5f5f5]",
+                      input: "text-base",
                     }}
                     placeholder={t("enterDescription")}
                     value={remark}

@@ -415,6 +415,9 @@ export default function SubmitOrder() {
             {currentService.id != 1 && (
               <Textarea
                 className="w-full"
+                classNames={{
+                  input: "text-base",
+                }}
                 minRows={3}
                 placeholder={t("remarkPlaceholder")}
                 value={currentService.remark}

@@ -477,7 +477,8 @@ export default function Settingpage() {
                     classNames={{
                       inputWrapper:
                         "bg-white border border-gray-300 rounded-md shadow-none focus-within:bg-white focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-colors",
-                      input: "text-sm text-gray-800 placeholder:text-gray-400",
+                      input:
+                        "text-base text-gray-800 placeholder:text-gray-400",
                     }}
                     minRows={2}
                     placeholder={t("remarkPlaceholder")}

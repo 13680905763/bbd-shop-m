@@ -181,7 +181,9 @@ export default function ForwardingPage() {
           <div className="flex flex-col gap-4">
             <Input
               isRequired
-              className="text-base"
+              classNames={{
+                input: "text-base",
+              }}
               errorMessage={t("errorTrackingNo")}
               label={t("trackingNo")}
               labelPlacement="outside"
@@ -192,7 +194,9 @@ export default function ForwardingPage() {
 
             <Input
               isRequired
-              className="text-base"
+              classNames={{
+                input: "text-base",
+              }}
               errorMessage={t("errorPackageName")}
               label={t("packageName")}
               labelPlacement="outside"
@@ -354,6 +358,9 @@ export default function ForwardingPage() {
               {currentService.id != 1 && (
                 <Textarea
                   className="mt-2 w-full"
+                  classNames={{
+                    input: "text-base",
+                  }}
                   minRows={3}
                   placeholder={t("remarkPlaceholder")}
                   value={currentService.remark}

@@ -388,6 +388,7 @@ export default function SubmitOrder() {
           fullWidth
           classNames={{
             inputWrapper: "bg-white  ",
+            input: "text-base",
           }}
           placeholder={t("textareaPlaceholder")}
           size="lg"

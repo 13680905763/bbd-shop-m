@@ -90,7 +90,7 @@ export default function Searchpage() {
             aria-label="Search"
             classNames={{
               inputWrapper: "bg-white",
-              input: "text-sm",
+              input: "text-base",
             }}
             endContent={
               <div className="flex items-center gap-2">

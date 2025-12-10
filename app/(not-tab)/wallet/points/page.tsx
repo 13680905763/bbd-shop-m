@@ -46,7 +46,7 @@ export default function Settingpage() {
     if (!records?.length)
       return (
         <div className="flex h-[60vh] flex-col items-center justify-center text-lg text-gray-500">
-          {t("noOrders")}
+          {t("noMoreRecords")}
         </div>
       );
 

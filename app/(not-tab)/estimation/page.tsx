@@ -160,13 +160,13 @@ export default function Estimation() {
         <Form onSubmit={onSubmit}>
           <div className="flex w-full gap-8">
             <Autocomplete
-              className="flex-1 text-base"
-              classNames={
-                {
-                  input: "text-base",
-                } as any
-              }
+              className="flex-1"
               defaultItems={countries}
+              inputProps={{
+                classNames: {
+                  input: "text-base",
+                },
+              }}
               label={t("warehouse")}
               name="countryId"
               selectedKey={String(formData.countryId)}
@@ -193,13 +193,13 @@ export default function Estimation() {
             </Autocomplete>
           </div>
           <Autocomplete
-            className="flex-1 !text-base"
-            classNames={
-              {
-                input: "text-base",
-              } as any
-            }
+            className="flex-1"
             defaultItems={categoryOptions}
+            inputProps={{
+              classNames: {
+                input: "text-base",
+              },
+            }}
             label={t("category")}
             name="categoryId"
             selectedKey={String(formData.categoryId)}
@@ -216,6 +216,9 @@ export default function Estimation() {
           <div className="flex flex-1 gap-2">
             <Input
               className="flex-1 text-base"
+              classNames={{
+                input: "text-base",
+              }}
               label={t("weight")}
               name="weight"
               size="sm"
@@ -225,6 +228,9 @@ export default function Estimation() {
             />
             <Input
               className="flex-1 text-base"
+              classNames={{
+                input: "text-base",
+              }}
               label={t("length")}
               name="length"
               size="sm"
@@ -236,6 +242,9 @@ export default function Estimation() {
           <div className="flex flex-1 gap-2">
             <Input
               className="flex-1 text-base"
+              classNames={{
+                input: "text-base",
+              }}
               label={t("width")}
               name="width"
               size="sm"
@@ -245,6 +254,9 @@ export default function Estimation() {
             />
             <Input
               className="flex-1 text-base"
+              classNames={{
+                input: "text-base",
+              }}
               label={t("height")}
               name="height"
               size="sm"

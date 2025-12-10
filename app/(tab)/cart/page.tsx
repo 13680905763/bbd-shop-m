@@ -223,6 +223,9 @@ export default function Cart() {
           onOpenChange={() => setModal({ type: null })}
         >
           <Textarea
+            classNames={{
+              input: "text-base",
+            }}
             placeholder={t("remark.placeholder")}
             value={remark}
             onChange={(e) => setRemark(e.target.value)}
