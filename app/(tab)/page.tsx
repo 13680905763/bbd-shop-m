@@ -11,39 +11,55 @@ import { Swiper, Image, Avatar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 import { FaRegImage } from "react-icons/fa";
 import { useRef, useState } from "react"; // 加了 useState
+import { useTranslations } from "next-intl";
 
-import { siteConfig } from "@/config/site";
 import { Logo } from "@/components/icons";
 import { getGoodsImageId } from "@/services";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
-const toolTab = [
-  {
-    image: "/m/images/home/tab1.png",
-    title: "tab1",
-    href: "https://discord.gg/N34Q27Vts8",
-  },
-  {
-    image: "/m/images/home/tab2.png",
-    title: "tab2",
-    href: "/m/dashboard",
-  },
-  {
-    image: "/m/images/home/tab3.png",
-    title: "tab3",
-    href: "/m/estimation",
-  },
-  {
-    image: "/m/images/home/tab4.png",
-    title: "tab4",
-    href: "/m/register",
-  },
-];
 
 export default function Home() {
+  const t = useTranslations("home");
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [uploading, setUploading] = useState(false); // 上传中状态
-
+  const toolTab = [
+    {
+      image: "/m/images/home/tab1.png",
+      href: "https://discord.gg/N34Q27Vts8",
+    },
+    {
+      image: "/m/images/home/tab2.png",
+      href: "/m/dashboard",
+    },
+    {
+      image: "/m/images/home/tab3.png",
+      href: "/m/estimation",
+    },
+    {
+      image: "/m/images/home/tab4.png",
+      href: "/m/register",
+    },
+  ];
+  const toolList = [
+    {
+      image: "/m/images/home/Guide.png",
+      title: t("toolList.guide"),
+    },
+    {
+      image: "/m/images/home/Community.png",
+      title: t("toolList.community"),
+      // to: "/pages/member/promotion/index",
+    },
+    {
+      image: "/m/images/home/Forwarding.png",
+      title: t("toolList.forwarding"),
+      to: "/forwarding",
+    },
+    {
+      image: "/m/images/home/FillBuy.png",
+      title: t("toolList.fillBuy"),
+    },
+  ];
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -72,7 +88,7 @@ export default function Home() {
     } catch (error) {
       console.error("上传图片失败", error);
       addToast({
-        title: "上传失败，请重试",
+        title: t("toast.uploadFail"),
         timeout: 1000,
         color: "danger",
       });
@@ -100,8 +116,14 @@ export default function Home() {
           </div>
           <div className="flex items-center">
             <IoPeopleCircle className="h-[20px] w-[20px] text-[#ea8407]" />
-            <IoLanguageSharp className="h-[20px] w-[20px] text-[#ea8407]" />
-            <IoLogoUsd className="h-[20px] w-[20px] text-[#ea8407]" />
+            <IoLanguageSharp
+              className="h-[20px] w-[20px] text-[#ea8407]"
+              onClick={() => router.push("/setting/language")}
+            />
+            <IoLogoUsd
+              className="h-[20px] w-[20px] text-[#ea8407]"
+              onClick={() => router.push("/setting/currency")}
+            />
           </div>
         </div>
         <div className="my-4">
@@ -117,7 +139,7 @@ export default function Home() {
             startContent={
               <div className="flex items-center gap-2 bg-white text-base">
                 <IoSearch className="text-xl" />
-                Search...
+                {t("search.placeholder")}
               </div>
             }
             onPress={() => router.push("/goods/search")}
@@ -142,7 +164,7 @@ export default function Home() {
           </Swiper.Item>
         </Swiper>
         <div className="box-card flex py-3">
-          {siteConfig.toolList.map((item, index) => {
+          {toolList.map((item, index) => {
             return (
               <div
                 key={item.title}
@@ -153,7 +175,7 @@ export default function Home() {
                 <div>
                   <Avatar src={item.image} />
                 </div>
-                <p className="mt-3">{item.title}</p>
+                <p className="mt-3 text-sm">{item.title}</p>
               </div>
             );
           })}
@@ -165,7 +187,9 @@ export default function Home() {
           onClick={() => router.push("/estimation")}
         >
           <div className="flex items-center justify-between px-4 py-2">
-            <div className="flex-1 text-sm font-bold">Shipping Estimate</div>
+            <div className="flex-1 text-sm font-bold">
+              {t("shipping.title")}
+            </div>
             <div className="flex-1">
               <Input
                 readOnly
@@ -176,7 +200,7 @@ export default function Home() {
                 }}
                 endContent={<IoSearch className="text-[#f0700c]" />}
                 labelPlacement="outside"
-                placeholder="France /1000g /1..."
+                placeholder={t("shipping.placeholder")}
                 size="sm"
                 type="search"
               />
@@ -185,7 +209,7 @@ export default function Home() {
           <div className="flex items-center justify-between px-4 py-2 pt-0">
             <div className="flex items-center">
               <div className="mr-[5px] h-[6px] w-[6px] rounded-full bg-orange-500" />
-              <span className="text-sm">DHL line fast</span>
+              <span className="text-sm">{t("shipping.lineFast")}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-[#f0700c]">71</span>

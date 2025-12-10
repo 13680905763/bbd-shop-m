@@ -54,6 +54,26 @@
             "verifyInstruction2": ". Please enter the code below to verify"
         }
     },
+    "home": {
+        "search": {
+            "placeholder": "Search..."
+        },
+        "toast": {
+            "uploadFail": "Upload failed, please try again"
+        },
+        "toolList": {
+            "guide": "Guide",
+            "community": "Community",
+            "forwarding": "Forwarding",
+            "fillBuy": "Fill & Buy"
+        },
+        "shipping": {
+            "title": "Shipping Estimate",
+            "placeholder": "France / 1000g / 1...",
+            "lineFast": "DHL Express",
+            "price": "71"
+        }
+    },
     "dashboard": {
         "balance": "Balance",
         "points": "Points",

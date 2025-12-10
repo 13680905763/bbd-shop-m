@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { useGlobalStore } from "@/store";
+import { setUserCurrency } from "@/i18n/service";
 
 const CustomRadio = (props: any) => {
   const { children, ...otherProps } = props;
@@ -41,7 +42,7 @@ export default function CurrencySettingPage() {
     try {
       console.log("保存选择货币:", tempCurrency);
       setCurrency(tempCurrency);
-      localStorage.setItem("currency", JSON.stringify(tempCurrency));
+      await setUserCurrency(tempCurrency);
       window.location.href = "/m";
     } finally {
       setLoading(false);

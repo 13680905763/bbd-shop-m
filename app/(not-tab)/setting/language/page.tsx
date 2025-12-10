@@ -44,8 +44,7 @@ export default function Settingpage() {
       console.log("保存选择语言:", tempLanguage);
       setLanguage(tempLanguage);
       await setUserLocale(tempLanguage);
-      router.push("/");
-      // window.location.reload();
+      window.location.href = "/m";
     } catch {
     } finally {
       setLoading(false);

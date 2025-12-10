@@ -54,6 +54,26 @@
             "verifyInstruction2": "。请在下面输入验证码进行验证"
         }
     },
+    "home": {
+        "search": {
+            "placeholder": "搜索..."
+        },
+        "toast": {
+            "uploadFail": "上传失败，请重试"
+        },
+        "toolList": {
+            "guide": "指南",
+            "community": "社区",
+            "forwarding": "转运",
+            "fillBuy": "代填&代购"
+        },
+        "shipping": {
+            "title": "运费预估",
+            "placeholder": "法国 /1000g /1...",
+            "lineFast": "DHL 快线",
+            "price": "71"
+        }
+    },
     "dashboard": {
         "balance": "余额",
         "points": "积分",

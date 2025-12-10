@@ -54,6 +54,26 @@
             "verifyInstruction2": ". Veuillez saisir le code ci-dessous pour vérifier"
         }
     },
+    "home": {
+        "search": {
+            "placeholder": "Rechercher..."
+        },
+        "toast": {
+            "uploadFail": "Échec du téléversement, veuillez réessayer"
+        },
+        "toolList": {
+            "guide": "Guide",
+            "community": "Communauté",
+            "forwarding": "Transfert",
+            "fillBuy": "Remplissage "
+        },
+        "shipping": {
+            "title": "Estimation des frais d’expédition",
+            "placeholder": "France / 1000g / 1...",
+            "lineFast": "DHL Express",
+            "price": "71"
+        }
+    },
     "dashboard": {
         "balance": "Solde",
         "points": "Points",

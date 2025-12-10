@@ -5,6 +5,7 @@ import { cookies, headers } from "next/headers";
 import { languages, defaultLocale } from "./config";
 
 const COOKIE_LOCALE = "NEXT_LOCALE";
+const COOKIE_CURRENCY = "NEXT_CURRENCY";
 
 // =====================
 // 语言方法
@@ -28,13 +29,32 @@ export async function getUserLocale() {
     ? parsedLocale
     : defaultLocale;
 }
+export async function getUserCurrency() {
+  const cookieStore = await cookies();
+  const currency = cookieStore.get(COOKIE_CURRENCY)?.value;
 
+  console.log("服务端 getUserCurrency ", currency);
+
+  return currency
+    ? JSON.parse(currency)
+    : { label: "CNY", value: "CNY", symbol: "¥", rate: 1 };
+}
 export async function setUserLocale(locale: string) {
   const cookieStore = await cookies();
 
   cookieStore.set({
     name: COOKIE_LOCALE,
     value: locale,
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365 * 5, // 5 年
+  });
+}
+export async function setUserCurrency(currency: any) {
+  const cookieStore = await cookies();
+
+  cookieStore.set({
+    name: COOKIE_CURRENCY,
+    value: JSON.stringify(currency),
     path: "/",
     maxAge: 60 * 60 * 24 * 365 * 5, // 5 年
   });

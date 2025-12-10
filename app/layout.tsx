@@ -8,6 +8,7 @@ import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
 import { ViewportFixer } from "@/components/viewport-fixer";
+import { getUserCurrency } from "@/i18n/service";
 
 export const metadata: Metadata = {
   title: {
@@ -33,6 +34,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const initialLocale = await getLocale();
+  const initialCurrency = await getUserCurrency();
+
   const messages = await getMessages();
 
   console.log("服务端initialLocale", initialLocale);
@@ -44,6 +47,7 @@ export default async function RootLayout({
         <ViewportFixer />
         <NextIntlClientProvider messages={messages}>
           <Providers
+            initialCurrency={initialCurrency}
             initialLocale={initialLocale}
             themeProps={{ attribute: "class", defaultTheme: "light" }}
           >
