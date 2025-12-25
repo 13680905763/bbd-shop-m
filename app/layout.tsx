@@ -9,6 +9,7 @@ import { Providers } from "./providers";
 import { siteConfig } from "@/config/site";
 import { ViewportFixer } from "@/components/viewport-fixer";
 import { getUserCurrency } from "@/i18n/service";
+import ChatBox from "@/components/common/chatbox";
 
 export const metadata: Metadata = {
   title: {
@@ -52,7 +53,10 @@ export default async function RootLayout({
             themeProps={{ attribute: "class", defaultTheme: "light" }}
           >
             {/* <Suspense fallback={<FullscreenLoader />}>{children}</Suspense> */}
-            <Suspense>{children}</Suspense>
+            <Suspense>
+              {children}
+              <ChatBox />
+            </Suspense>
           </Providers>
         </NextIntlClientProvider>
       </body>

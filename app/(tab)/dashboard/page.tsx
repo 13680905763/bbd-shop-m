@@ -9,7 +9,7 @@ import { useTranslations } from "next-intl";
 import { getUserInfo } from "@/services";
 import { getWalletInfo } from "@/services/wallet";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
-import { useGlobalStore } from "@/store";
+import { useGlobalStore, useUserStore } from "@/store";
 
 export default function DashBoard() {
   const t = useTranslations("dashboard");
@@ -17,9 +17,10 @@ export default function DashBoard() {
   const { currency } = useGlobalStore();
 
   // ✅ 页面加载状态
-  const [user, setUser] = useState<any>(null);
+  // const [user, setUser] = useState<any>(null);
   const [wallet, setWallet] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const { user, setUser } = useUserStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,7 +49,7 @@ export default function DashBoard() {
         <NextLink href="/profile">
           <div className="flex items-center gap-2 text-black">
             <Avatar className="h-[80px] w-[80px]" src={user?.avatarUrl} />
-            <span className="text-lg font-bold">{user?.name}</span>
+            <span className="text-lg font-bold">{user?.nickName}</span>
           </div>
         </NextLink>
         <div className="flex items-center">

@@ -169,8 +169,8 @@ export default function ForwardingPage() {
             symbol=""
           >
             <span>Bryant-4-Bryant</span>
-            <span>13602579223</span>
-            <span>中国广东省惠州市水口街道荔城工业园胜豪科技大厦8A-801</span>
+            <span>15916408071</span>
+            <span>广东省惠州市惠城区水口荔枝城青创产业园9楼901</span>
           </Snippet>
         </div>
 

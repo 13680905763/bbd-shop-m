@@ -24,6 +24,14 @@
             "content": "确定要执行这个操作吗？",
             "confirmText": "确认",
             "cancelText": "取消"
+        },
+        "chatbox": {
+            "loginFirst": "请先登录",
+            "onlineSupport": "在线客服",
+            "inputPlaceholder": "请输入消息...",
+            "send": "发送",
+            "connectionLost": "连接断开，请稍后重试",
+            "imageSendFail": "图片发送失败"
         }
     },
     "auth": {

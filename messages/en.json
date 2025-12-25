@@ -24,6 +24,14 @@
             "content": "Are you sure you want to perform this action?",
             "confirmText": "Confirm",
             "cancelText": "Cancel"
+        },
+        "chatbox": {
+            "loginFirst": "Please login first",
+            "onlineSupport": "Online Support",
+            "inputPlaceholder": "Enter message...",
+            "send": "Send",
+            "connectionLost": "Connection lost, please try again later",
+            "imageSendFail": "Image send failed"
         }
     },
     "auth": {

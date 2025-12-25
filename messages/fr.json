@@ -24,6 +24,14 @@
             "content": "Êtes-vous sûr de vouloir effectuer cette action ?",
             "confirmText": "Confirmer",
             "cancelText": "Annuler"
+        },
+        "chatbox": {
+            "loginFirst": "Veuillez vous connecter d'abord",
+            "onlineSupport": "Support en ligne",
+            "inputPlaceholder": "Entrez votre message...",
+            "send": "Envoyer",
+            "connectionLost": "Connexion perdue, veuillez réessayer plus tard",
+            "imageSendFail": "Échec de l'envoi de l'image"
         }
     },
     "auth": {

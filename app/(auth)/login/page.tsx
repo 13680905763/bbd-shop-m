@@ -36,7 +36,7 @@ export default function LoginPage() {
   const handleSubmit = async (data: LoginFormData) => {
     try {
       await loginCustomer(data);
-      router.push("/");
+      router.push("/dashboard");
     } catch {
       // 可以加 toast 提示
     }

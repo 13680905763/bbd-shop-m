@@ -1,7 +1,6 @@
 "use client";
 import {
   IoLanguageSharp,
-  IoPeopleCircle,
   IoLogoUsd,
   IoSearch,
   IoChevronForwardSharp,
@@ -44,10 +43,12 @@ export default function Home() {
     {
       image: "/m/images/home/Guide.png",
       title: t("toolList.guide"),
+      to: "/help/guide",
     },
     {
       image: "/m/images/home/Community.png",
       title: t("toolList.community"),
+      to: "https://discord.gg/N34Q27Vts8",
       // to: "/pages/member/promotion/index",
     },
     {
@@ -115,7 +116,7 @@ export default function Home() {
             <Logo height={21} width={100} />
           </div>
           <div className="flex items-center">
-            <IoPeopleCircle className="h-[20px] w-[20px] text-[#ea8407]" />
+            {/* <IoPeopleCircle className="h-[20px] w-[20px] text-[#ea8407]" /> */}
             <IoLanguageSharp
               className="h-[20px] w-[20px] text-[#ea8407]"
               onClick={() => router.push("/setting/language")}

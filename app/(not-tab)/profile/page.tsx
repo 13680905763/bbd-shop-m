@@ -19,7 +19,7 @@ export default function Settingpage() {
   const [user, setUser] = useState<any>(null);
   const [formData, setFormData] = useState({
     id: "",
-    name: "",
+    nickName: "",
     mobile: "",
   });
   const [loading, setLoading] = useState(true);
@@ -42,8 +42,8 @@ export default function Settingpage() {
   const fields: FieldConfig[] = [
     {
       type: "input",
-      name: "name",
-      key: "name",
+      name: "nickName",
+      key: "nickName",
       size: "md",
       label: t("nameLabel"),
     },
@@ -85,7 +85,7 @@ export default function Settingpage() {
   useEffect(() => {
     setFormData({
       id: user?.id,
-      name: user?.name || "",
+      nickName: user?.nickName || "",
       mobile: user?.mobile || "",
     });
   }, [user]);
