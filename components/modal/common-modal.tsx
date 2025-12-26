@@ -7,8 +7,8 @@ import {
   ModalFooter,
   Button,
 } from "@heroui/react";
-import { useTranslations } from "next-intl";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface CommonModalProps {
   isOpen: boolean;
@@ -53,7 +53,9 @@ export default function CommonModal({
   isDismissable = true,
   isKeyboardDismissDisabled = false,
 }: CommonModalProps) {
-  const t = useTranslations("components.confirmModal"); // Common 是语言包的 namespace
+  const { t } = useTranslation("translation", {
+    keyPrefix: "components.confirmModal",
+  });
 
   const [loading, setLoading] = useState(false);
 

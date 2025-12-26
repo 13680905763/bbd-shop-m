@@ -11,8 +11,8 @@ import {
   Tab,
   Tabs,
 } from "@heroui/react";
-import { useTranslations } from "next-intl";
 import { IoCloseCircleOutline, IoSwapHorizontalOutline } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
 
 import ShippingRouteCard from "../../submit/warehouse/shipping-route-card";
 
@@ -29,7 +29,7 @@ import {
   routePackage,
   withdrawPayPackage,
 } from "@/services";
-import ConfirmModal from "@/components/confirm-modal";
+import ConfirmModal from "@/components/modal/confirm-modal";
 import CommonModal from "@/components/modal/common-modal";
 import { queryClient } from "@/lib/react-query";
 import { useSelection } from "@/hook/useSelection";
@@ -53,7 +53,9 @@ interface ModalState {
   lineDetails?: any; //路线详情
 }
 export default function Settingpage() {
-  const t = useTranslations("profile.package");
+  const { t } = useTranslation("translation", {
+    keyPrefix: "profile.package",
+  });
   const { currency } = useGlobalStore();
 
   const [activeTab, setActiveTab] = useState("all");
@@ -98,7 +100,7 @@ export default function Settingpage() {
           await queryClient.invalidateQueries({ queryKey: ["packageList"] }); // 手动刷新
           setIsSubmitting(false);
           setModal({ type: null });
-          if (bizCode) router.push("/payment/" + bizCode);
+          if (bizCode) router.push(`/payment?bizCode=${bizCode}`);
         } catch {
         } finally {
         }
@@ -186,7 +188,7 @@ export default function Settingpage() {
         packageSet: selectedIds,
       });
 
-      router.push(`/payment/${bizCode}`);
+      router.push(`/payment?bizCode=${bizCode}`);
     } catch {
     } finally {
       setIsSubmitting(false);
@@ -226,7 +228,7 @@ export default function Settingpage() {
                   packageSet: [p?.packingPackageCode],
                 });
 
-                if (bizCode) router.push(`/payment/${bizCode}`);
+                if (bizCode) router.push(`/payment?bizCode=${bizCode}`);
               }} //支付
               onReceiptPackage={() => {
                 openReceiptModal(p?.id);
@@ -249,9 +251,9 @@ export default function Settingpage() {
   };
 
   return (
-    <div className="flex h-screen flex-col bg-[#f7f8f9]">
-      <NavBar className="flex-[0_0_45px] bg-white" onBack={() => router.back()}>
-        {t("title")}
+    <>
+      <NavBar onBack={() => router.back()}>
+        <span className="text-lg font-bold text-gray-900">{t("title")}</span>
       </NavBar>
 
       <Tabs
@@ -570,6 +572,6 @@ export default function Settingpage() {
           </div>
         </CommonModal>
       )}
-    </div>
+    </>
   );
 }

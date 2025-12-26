@@ -1,7 +1,7 @@
 "use client";
 
 import { Autocomplete, AutocompleteItem, Avatar } from "@heroui/react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 import {
   useCountries,
@@ -26,7 +26,7 @@ interface Props {
 }
 
 export default function AreaSelector({ value, onChange }: Props) {
-  const t = useTranslations("components.areaSelector");
+  const { t } = useTranslation();
   const { data: countries = [] } = useCountries();
   const { data: states = [] } = useProvinces(value.countryId);
   const { data: cities = [] } = useCities(value.stateId);
@@ -48,8 +48,8 @@ export default function AreaSelector({ value, onChange }: Props) {
     <div className="flex flex-col gap-4">
       <Autocomplete
         isRequired={true}
-        label={t("country.label")}
-        placeholder={t("country.placeholder")}
+        label={t("components.areaSelector.country.label")}
+        placeholder={t("components.areaSelector.country.placeholder")}
         selectedKey={String(value.countryId) || null}
         variant="bordered"
         onSelectionChange={(code) =>
@@ -65,8 +65,8 @@ export default function AreaSelector({ value, onChange }: Props) {
 
       <Autocomplete
         isRequired={true}
-        label={t("state.label")}
-        placeholder={t("state.placeholder")}
+        label={t("components.areaSelector.state.label")}
+        placeholder={t("components.areaSelector.state.placeholder")}
         selectedKey={String(value.stateId) || null}
         variant="bordered"
         onSelectionChange={(code) => {
@@ -83,8 +83,8 @@ export default function AreaSelector({ value, onChange }: Props) {
       {cities.length > 0 ? (
         <Autocomplete
           isRequired={true}
-          label={t("city.label")}
-          placeholder={t("city.placeholder")}
+          label={t("components.areaSelector.city.label")}
+          placeholder={t("components.areaSelector.city.placeholder")}
           selectedKey={String(value.city) || null}
           variant="bordered"
           onSelectionChange={(code) =>

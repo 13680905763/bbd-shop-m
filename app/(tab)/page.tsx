@@ -6,57 +6,72 @@ import {
   IoSearch,
   IoChevronForwardSharp,
 } from "react-icons/io5";
-import { addToast, Button, Input, Spinner } from "@heroui/react"; // 加了 Spinner
+import { addToast, Button, Spinner } from "@heroui/react"; // 加了 Spinner
 import { Swiper, Image, Avatar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 import { FaRegImage } from "react-icons/fa";
-import { useRef, useState } from "react"; // 加了 useState
-import { useTranslations } from "next-intl";
+import { useRef, useState, useEffect } from "react"; // 加了 useState
+import { useTranslation } from "react-i18next";
 
-import { Logo } from "@/components/icons";
 import { getGoodsImageId } from "@/services";
-import FullscreenLoader from "@/components/common/fullscreen-loader";
+import { Logo } from "@/components/icons";
 
 export default function Home() {
-  const t = useTranslations("home");
+  const { t } = useTranslation("translation", { keyPrefix: "home" });
+
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [uploading, setUploading] = useState(false); // 上传中状态
+  const [isScrolled, setIsScrolled] = useState(false); // 滚动状态
+
+  // 监听滚动事件，改变 Header 背景
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const toolTab = [
     {
-      image: "/m/images/home/tab1.png",
+      image: "/images/home/tab1.png",
       href: "https://discord.gg/N34Q27Vts8",
     },
     {
-      image: "/m/images/home/tab2.png",
+      image: "/images/home/tab2.png",
       href: "/m/dashboard",
     },
     {
-      image: "/m/images/home/tab3.png",
+      image: "/images/home/tab3.png",
       href: "/m/estimation",
     },
     {
-      image: "/m/images/home/tab4.png",
+      image: "/images/home/tab4.png",
       href: "/m/register",
     },
   ];
   const toolList = [
     {
-      image: "/m/images/home/Guide.png",
+      image: "/images/home/Guide.png",
       title: t("toolList.guide"),
     },
     {
-      image: "/m/images/home/Community.png",
+      image: "/images/home/Community.png",
       title: t("toolList.community"),
+
       // to: "/pages/member/promotion/index",
     },
     {
-      image: "/m/images/home/Forwarding.png",
+      image: "/images/home/Forwarding.png",
       title: t("toolList.forwarding"),
+
       to: "/forwarding",
     },
     {
-      image: "/m/images/home/FillBuy.png",
+      image: "/images/home/FillBuy.png",
       title: t("toolList.fillBuy"),
     },
   ];
@@ -88,7 +103,7 @@ export default function Home() {
     } catch (error) {
       console.error("上传图片失败", error);
       addToast({
-        title: t("toast.uploadFail"),
+        title: "toast.uploadFail",
         timeout: 1000,
         color: "danger",
       });
@@ -104,42 +119,48 @@ export default function Home() {
   };
 
   {
-    uploading && <FullscreenLoader />;
   }
 
   return (
-    <section className="hide-scrollbar flex flex-1 flex-col overflow-auto p-3 pb-0">
-      <div>
-        <div className="mt-2 flex justify-between">
-          <div>
-            <Logo height={21} width={100} />
-          </div>
-          <div className="flex items-center">
-            <IoPeopleCircle className="h-[20px] w-[20px] text-[#ea8407]" />
-            <IoLanguageSharp
-              className="h-[20px] w-[20px] text-[#ea8407]"
-              onClick={() => router.push("/setting/language")}
-            />
-            <IoLogoUsd
-              className="h-[20px] w-[20px] text-[#ea8407]"
-              onClick={() => router.push("/setting/currency")}
-            />
+    <div className="flex min-h-screen flex-col">
+      {/* 顶部固定区域：Logo、图标、搜索栏 */}
+      <header
+        className={`sticky top-0 z-30 -mx-3 px-3 pb-2 transition-all duration-300 ${
+          isScrolled
+            ? "bg-[url('/images/bg.png')] pt-[env(safe-area-inset-top)]"
+            : "bg-transparent"
+        }`}
+      >
+        <div className="mb-2 flex items-center justify-between">
+          <Logo height={21} width={100} />
+          <div className="flex items-center gap-3">
+            <IoPeopleCircle className="h-[24px] w-[24px] text-[#ea8407]" />
+            <div role="button" onClick={() => router.push("/setting/language")}>
+              <IoLanguageSharp className="h-[22px] w-[22px] text-[#ea8407]" />
+            </div>
+            <div role="button" onClick={() => router.push("/setting/currency")}>
+              <IoLogoUsd className="h-[22px] w-[22px] text-[#ea8407]" />
+            </div>
           </div>
         </div>
-        <div className="my-4">
+
+        <div className="relative">
           <Button
-            className="w-full justify-between bg-white"
+            className="w-full justify-between bg-white shadow-sm"
             endContent={
               uploading ? (
-                <Spinner color="primary" size="sm" /> // 上传中圈圈
+                <Spinner color="primary" size="sm" />
               ) : (
-                <FaRegImage className="text-xl" onClick={triggerUpload} />
+                <FaRegImage
+                  className="text-xl text-gray-500"
+                  onClick={triggerUpload}
+                />
               )
             }
             startContent={
-              <div className="flex items-center gap-2 bg-white text-base">
+              <div className="flex items-center gap-2 text-gray-500">
                 <IoSearch className="text-xl" />
-                {t("search.placeholder")}
+                <span className="text-sm">{t("search.placeholder")}</span>
               </div>
             }
             onPress={() => router.push("/goods/search")}
@@ -152,89 +173,88 @@ export default function Home() {
             onChange={handleImageUpload}
           />
         </div>
-      </div>
-      <div className="flex-1 overflow-auto scrollbar-hide">
-        <Swiper>
-          <Swiper.Item>
-            <Image
-              className="rounded-lg"
-              fit="contain"
-              src="/m/images/home/Swiper.png"
-            />
-          </Swiper.Item>
-        </Swiper>
-        <div className="box-card flex py-3">
-          {toolList.map((item, index) => {
-            return (
-              <div
-                key={item.title}
-                className="flex flex-1 flex-col items-center justify-center text-center"
-                role="button"
-                onClick={() => router.push(item?.to || "")}
-              >
-                <div>
-                  <Avatar src={item.image} />
-                </div>
-                <p className="mt-3 text-sm">{item.title}</p>
-              </div>
-            );
-          })}
+      </header>
+
+      {/* 可滚动内容区域 */}
+      <main className="flex-1 space-y-4 pb-[calc(env(safe-area-inset-bottom)+90px)]">
+        {/* 轮播图 */}
+        <div className="overflow-hidden rounded-xl">
+          <Swiper autoplay loop>
+            <Swiper.Item>
+              <Image
+                className="w-full object-cover"
+                fit="contain"
+                src="/images/home/Swiper.png"
+              />
+            </Swiper.Item>
+          </Swiper>
         </div>
 
-        <div
-          className="box-card py-2"
-          role="button"
+        {/* 工具图标栏 */}
+        <div className="box-card flex py-4 shadow-sm">
+          {toolList.map((item) => (
+            <button
+              key={item.title}
+              className="flex flex-1 flex-col items-center justify-center gap-2 active:opacity-70"
+              onClick={() => router.push(item?.to || "")}
+            >
+              <Avatar className="h-10 w-10 bg-transparent" src={item.image} />
+              <span className="text-xs font-medium text-gray-700">
+                {item.title}
+              </span>
+            </button>
+          ))}
+        </div>
+
+        {/* 运费估算卡片 */}
+        <button
+          className="box-card w-full overflow-hidden shadow-sm transition-transform active:scale-[0.99]"
           onClick={() => router.push("/estimation")}
         >
           <div className="flex items-center justify-between px-4 py-2">
-            <div className="flex-1 text-sm font-bold">
+            <span className="text-base font-bold text-gray-900">
               {t("shipping.title")}
-            </div>
-            <div className="flex-1">
-              <Input
-                readOnly
-                aria-label="Search"
-                classNames={{
-                  inputWrapper: "bg-[#f7f8f9]",
-                  input: "text-sm",
-                }}
-                endContent={<IoSearch className="text-[#f0700c]" />}
-                labelPlacement="outside"
-                placeholder={t("shipping.placeholder")}
-                size="sm"
-                type="search"
-              />
+            </span>
+            <div className="flex h-8 items-center rounded-full bg-[#f7f8f9] px-3 text-xs text-gray-400">
+              <span className="mr-2">{t("shipping.placeholder")}</span>
+              <IoSearch className="text-[#f0700c]" />
             </div>
           </div>
-          <div className="flex items-center justify-between px-4 py-2 pt-0">
-            <div className="flex items-center">
-              <div className="mr-[5px] h-[6px] w-[6px] rounded-full bg-orange-500" />
-              <span className="text-sm">{t("shipping.lineFast")}</span>
-            </div>
+          <div className="flex items-center justify-between px-4 py-2">
             <div className="flex items-center gap-2">
-              <span className="text-[#f0700c]">71</span>
+              <div className="h-2 w-2 rounded-full bg-orange-500" />
+              <span className="text-sm font-medium text-gray-700">
+                {t("shipping.lineFast")}
+              </span>
+            </div>
+            <div className="flex items-center gap-1 text-[#f0700c]">
+              <span className="text-lg font-bold">71</span>
               <IoChevronForwardSharp />
             </div>
           </div>
+        </button>
+
+        {/* 底部 Banner */}
+        <div className="overflow-hidden rounded-xl shadow-sm">
+          <Image
+            className="w-full object-cover"
+            src={"/images/home/footer.jpg"}
+          />
         </div>
-        <Image
-          className="mt-5 h-auto w-full rounded-lg object-cover"
-          src={"/m/images/home/footer.jpg"}
-        />
-        <div className="my-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          {toolTab.map((item, index) => {
-            return (
-              <a key={index} href={item.href}>
-                <Image
-                  className="h-auto w-full rounded-lg object-cover"
-                  height={100}
-                  src={item.image}
-                />
-              </a>
-            );
-          })}
+
+        {/* 底部 Grid 菜单 */}
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {toolTab.map((item, index) => (
+            <a
+              key={index}
+              className="overflow-hidden rounded-xl shadow-sm transition-opacity active:opacity-80"
+              href={item.href}
+            >
+              <Image className="w-full object-cover" src={item.image} />
+            </a>
+          ))}
         </div>
-      </div>
-    </section>
+      </main>
+    </div>
   );
 }

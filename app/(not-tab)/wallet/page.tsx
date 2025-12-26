@@ -5,7 +5,7 @@ import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { IoWallet } from "react-icons/io5";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 import { createOrderByRecharge } from "@/services";
 import { getWalletInfo } from "@/services/wallet";
@@ -13,12 +13,15 @@ import FullscreenLoader from "@/components/common/fullscreen-loader";
 import { useGlobalStore } from "@/store";
 
 export default function WalletRechargePage() {
-  const t = useTranslations("wallet.page"); // ✅ 命名空间
+  const { t } = useTranslation("translation", {
+    keyPrefix: "wallet.page",
+  });
   const { currency } = useGlobalStore();
 
   const [loading, setLoading] = useState(true);
+  const [rechargeLoading, setRechargeLoading] = useState(false);
 
-  const [currentPrice, setCurrentPrice] = useState<number>(0);
+  const [currentPrice, setCurrentPrice] = useState<number>(1);
   const [wallet, setWallet] = useState<any>(null);
 
   const priceList = [50, 100, 200, 500, 1000, 5000];
@@ -39,19 +42,23 @@ export default function WalletRechargePage() {
   }, []);
 
   const handleRecharge = async () => {
-    const bizCode: any = await createOrderByRecharge({
-      currencyAmount: currentPrice,
-      currencyCode: currency.value,
-    });
+    try {
+      setRechargeLoading(true);
+      const bizCode: any = await createOrderByRecharge({
+        currencyAmount: currentPrice,
+        currencyCode: currency.value,
+      });
 
-    router.push("/payment/" + bizCode);
+      router.push(`/payment?bizCode=${bizCode}`);
+    } catch (error) {
+      setRechargeLoading(false);
+    }
   };
 
   return (
-    <div className="h-screen bg-[#f7f8f9]">
+    <>
       {loading && <FullscreenLoader />}
       <NavBar
-        className="bg-white"
         right={
           <button onClick={() => router.push("/wallet/balance-record")}>
             {t("record")}
@@ -59,10 +66,10 @@ export default function WalletRechargePage() {
         }
         onBack={() => router.back()}
       >
-        {t("title")}
+        <span className="text-lg font-bold text-gray-900">{t("title")}</span>
       </NavBar>
 
-      <div className="px-2">
+      <div className="flex-1 overflow-y-auto bg-[#f5f5f5] p-2">
         {/* 余额展示区域 */}
         <div className="box-card p-2 text-center">
           <div className="my-[10px] text-[24px] font-bold text-[#f3643a]">
@@ -118,6 +125,7 @@ export default function WalletRechargePage() {
           <Button
             className="w-full"
             color="primary"
+            isLoading={rechargeLoading}
             isDisabled={!currentPrice}
             onPress={handleRecharge}
           >
@@ -125,6 +133,6 @@ export default function WalletRechargePage() {
           </Button>
         </div>
       </div>
-    </div>
+    </>
   );
 }

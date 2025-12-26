@@ -14,13 +14,13 @@ import {
   Textarea,
   addToast,
 } from "@heroui/react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 import OrderItem from "./order-item";
 import OrderRefundItem from "./order-refund-item";
 
 import { useOrderList } from "@/hook";
-import ConfirmModal from "@/components/confirm-modal";
+import ConfirmModal from "@/components/modal/confirm-modal";
 import {
   batchPayOrder,
   OrderRefund,
@@ -47,7 +47,9 @@ interface ModalState {
   refundProducts?: any[]; // 退款 modal 选中商品信息
 }
 export default function Settingpage() {
-  const t = useTranslations("profile.order"); // ✅ 命名空间
+  const { t } = useTranslation("translation", {
+    keyPrefix: "profile.order",
+  });
   const { currency } = useGlobalStore();
   const router = useRouter();
 
@@ -164,7 +166,7 @@ export default function Settingpage() {
         orderCodeSet: selectedIds,
       });
 
-      router.push(`/payment/${bizCode}`);
+      router.push(`/payment?bizCode=${bizCode}`);
     } catch {
     } finally {
       setIsSubmitting(false); // ✅ 恢复
@@ -228,7 +230,7 @@ export default function Settingpage() {
               onCancelOrder={() => openCancelModal(o.id)} //取消订单
               onChange={() => toggle(o.orderCode)}
               onPayOrderRedirect={(bizCode: string) => {
-                router.push(`/payment/${bizCode}`);
+                router.push(`/payment?bizCode=${bizCode}`);
               }}
               onRefundOrder={() => openRefundModal(o)} //申请退款订单
               onRevokeRefundOrder={(refundId: string) =>
@@ -251,9 +253,9 @@ export default function Settingpage() {
   };
 
   return (
-    <div className="flex h-screen flex-col justify-between bg-[#f7f8f9]">
-      <NavBar className="flex-[0_0_45px] bg-white" onBack={() => router.back()}>
-        {t("title")}
+    <>
+      <NavBar onBack={() => router.back()}>
+        <span className="text-lg font-bold text-gray-900">{t("title")}</span>
       </NavBar>
       <Tabs
         aria-label="Options"
@@ -500,6 +502,6 @@ export default function Settingpage() {
           </div>
         </CommonModal>
       )}
-    </div>
+    </>
   );
 }

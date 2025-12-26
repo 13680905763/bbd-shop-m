@@ -1,8 +1,8 @@
 import { Button, Checkbox, Image } from "@heroui/react";
 import { FiChevronRight, FiSearch } from "react-icons/fi";
-import { useTranslations } from "next-intl";
 import { ImageViewer } from "antd-mobile";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import MediaPreviewGroup, {
   MediaItem,
@@ -21,7 +21,9 @@ export default function PackageItem({
   onLine,
   onReceiptPackage,
 }: any) {
-  const t = useTranslations("profile.package");
+  const { t } = useTranslation("translation", {
+    keyPrefix: "profile.package",
+  });
   const { currency } = useGlobalStore();
   const [startIndex, setStartIndex] = useState(0);
 

@@ -1,21 +1,19 @@
 "use client";
-import { Button, Checkbox, Textarea } from "@heroui/react";
+import { Button, Checkbox } from "@heroui/react";
 import React, { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 import CartItem from "./cart-item";
 
-import ConfirmModal from "@/components/confirm-modal";
 import { deleteCart, updateCart } from "@/services/cart";
 import { useCartList } from "@/hook";
-import CommonModal from "@/components/modal/common-modal";
 import { useGlobalStore } from "@/store";
-import FullscreenLoader from "@/components/common/fullscreen-loader";
 import { useSelection } from "@/hook/useSelection";
 import { debounce } from "@/lib/debounce";
 import { createOrderPreviewKeyByCart } from "@/services";
+import FullscreenLoader from "@/components/common/fullscreen-loader";
 
 type ModalType = "delete" | "remark" | null;
 interface ModalState {
@@ -24,10 +22,11 @@ interface ModalState {
   productId?: any[]; // 退款 modal 选中商品信息
 }
 export default function Cart() {
-  const t = useTranslations("cart"); // ✅ 命名空间 cart
+  const { t } = useTranslation("translation", { keyPrefix: "cart" });
+
   const { currency } = useGlobalStore();
   const queryClient = useQueryClient();
-  const { data, isLoading, isError } = useCartList();
+  const { data, isLoading } = useCartList();
 
   const router = useRouter();
   const [isEdit, setIsEdit] = useState(false);
@@ -122,8 +121,7 @@ export default function Cart() {
       const key: string = await createOrderPreviewKeyByCart({ previewList });
 
       router.push("/submit/order?type=cart&key=" + key);
-    } catch (error) {
-      console.error(error);
+    } catch {
     } finally {
       setIsSubmitting(false);
     }
@@ -148,90 +146,91 @@ export default function Cart() {
     return total.toFixed(2); // total 一定是数字，toFixed 安全
   }, [data, selectedIds]);
 
-  if (isError) return <div>出错了</div>;
-
   return (
-    <div className="flex h-[100%] flex-col justify-between overflow-hidden">
+    <div className="flex h-[100vh] flex-col p-2">
       {isLoading && <FullscreenLoader />}
-      <div className="flex justify-between p-2">
+
+      {/* 顶部导航 */}
+      <div className="sticky top-0 z-30 flex items-center justify-between">
         <div>
-          <span className="text-lg font-bold">
-            {t("title")}（ {data?.flatMap((shop) => shop.cartList).length}）
+          <span className="text-lg font-bold text-gray-900">
+            {t("title")}
+            <span className="ml-1 text-sm font-normal text-gray-500">
+              ({data?.flatMap((shop) => shop.cartList).length ?? 0})
+            </span>
           </span>
         </div>
-        <div className="flex items-center">
-          <button onClick={() => setIsEdit(!isEdit)}>
-            {isEdit ? t("cancel") : t("manage")}
-          </button>
-        </div>
-      </div>
-      <div className="flex-1 overflow-auto px-3">
-        {data?.map((c) => (
-          <CartItem
-            key={c.shopId}
-            handleProductQuantity={handleProductQuantity}
-            isGroupAllSelected={isGroupAllSelected(c.shopId)} //  店铺selected
-            isSelected={isSelected}
-            openRemarkModal={(productId: any, productRemark: any) =>
-              openRemarkModal(productId, productRemark)
-            }
-            shop={c}
-            toggle={toggle}
-            toggleGroup={() => toggleGroup(c.shopId)} // 店铺onChange
-          />
-        ))}
-      </div>
-      <div className="flex items-center justify-between border-b border-[#f5f5f5] bg-white px-3 py-2">
-        <div className="flex gap-2">
-          <Checkbox isSelected={isAllSelected} onChange={toggleSelectAll}>
-            {t("selectAll")}
-          </Checkbox>
-          <span className="text-price-lg">{selectedIds.length}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <p className="text-price-lg">
-            {currency.symbol}
-            {togglePrice}
-          </p>
-          <Button
-            color="primary"
-            isDisabled={!hasSelected}
-            isLoading={isSubmitting}
-            onPress={submitCart}
-          >
-            {isEdit ? t("delete") : t("checkout")}
-          </Button>
-        </div>
+        <button
+          className="text-sm font-medium text-gray-600 active:opacity-70"
+          onClick={() => setIsEdit(!isEdit)}
+        >
+          {isEdit ? "完成" : "管理"}
+        </button>
       </div>
 
-      {modal.type === "delete" && (
-        <ConfirmModal
-          isOpen
-          content={t("deleteContent")}
-          title={t("deleteTitle")}
-          onConfirm={modal.confirm as () => Promise<void>}
-          onOpenChange={() => setModal({ type: null })}
-        />
-      )}
-      {modal.type === "remark" && (
-        <CommonModal
-          isOpen
-          title={t("remark.title")}
-          onConfirm={async () => {
-            if (modal?.confirm) await modal?.confirm(remark);
-          }}
-          onOpenChange={() => setModal({ type: null })}
-        >
-          <Textarea
-            classNames={{
-              input: "text-base",
-            }}
-            placeholder={t("remark.placeholder")}
-            value={remark}
-            onChange={(e) => setRemark(e.target.value)}
-          />
-        </CommonModal>
-      )}
+      {/* 购物车列表 - 增加底部 padding 防止被底部栏遮挡 */}
+      <div className="flex-1 space-y-3 overflow-y-auto">
+        {data?.map((c) => (
+          <div
+            key={c.shopId}
+            className="overflow-hidden rounded-xl bg-white shadow-sm"
+          >
+            <CartItem
+              handleProductQuantity={handleProductQuantity}
+              isGroupAllSelected={isGroupAllSelected(c.shopId)}
+              isSelected={isSelected}
+              openRemarkModal={(productId: any, productRemark: any) =>
+                openRemarkModal(productId, productRemark)
+              }
+              shop={c}
+              toggle={toggle}
+              toggleGroup={() => toggleGroup(c.shopId)}
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* 底部结算栏 - 固定在 TabBar 之上 */}
+      <div className="fixed bottom-[calc(env(safe-area-inset-bottom)+45px)] left-0 right-0 z-30 border-t border-gray-100 bg-white px-4 py-3 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Checkbox
+              classNames={{ label: "text-sm text-gray-600" }}
+              isSelected={isAllSelected}
+              onChange={toggleSelectAll}
+            >
+              {"全选"}
+            </Checkbox>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {!isEdit && (
+              <div className="text-right">
+                <p className="text-lg font-bold text-[#f0700c]">
+                  <span className="mr-0.5 text-sm">{currency.symbol}</span>
+                  {togglePrice}
+                </p>
+              </div>
+            )}
+
+            <Button
+              className={`h-10 min-w-[100px] rounded-full px-6 font-medium text-white shadow-md ${
+                isEdit
+                  ? "bg-red-500 shadow-red-500/20"
+                  : "bg-[#f0700c] shadow-orange-500/20"
+              }`}
+              isDisabled={!hasSelected}
+              isLoading={isSubmitting}
+              size="md"
+              onPress={submitCart}
+            >
+              {isEdit
+                ? `删除 (${selectedIds.length})`
+                : `结算 (${selectedIds.length})`}
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

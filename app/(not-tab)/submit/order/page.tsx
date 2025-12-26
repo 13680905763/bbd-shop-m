@@ -10,7 +10,7 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { FaCamera } from "react-icons/fa";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 import OrderItem from "./order-item";
 
@@ -28,7 +28,9 @@ import CommonModal from "@/components/modal/common-modal";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
 
 export default function SubmitOrder() {
-  const t = useTranslations("submit.order");
+  const { t } = useTranslation("translation", {
+    keyPrefix: "submit.order",
+  });
   const { currency } = useGlobalStore();
 
   const searchParam = useSearchParams();
@@ -47,13 +49,13 @@ export default function SubmitOrder() {
     if (type === "cart") {
       const bizCode = await createOrderByCart(orderData?.param);
 
-      router.push("/payment/" + bizCode);
+      router.push(`/payment?bizCode=${bizCode}`);
     } else if (type === "product") {
       const bizCode = await createOrderByProduct(
         orderData?.param as createOrderPreviewKeyByProductParams,
       );
 
-      router.push("/payment/" + bizCode);
+      router.push(`/payment?bizCode=${bizCode}`);
     }
     setSubmitting(false);
   };
@@ -223,14 +225,15 @@ export default function SubmitOrder() {
   if (isError) return <div>出错了</div>;
 
   return (
-    <div className="flex h-screen flex-col bg-[#f7f8f9]">
+    <>
       {/* 顶部导航 */}
-      <NavBar className="bg-white" onBack={() => router.back()}>
-        {t("title")}
+      <NavBar onBack={() => router.back()}>
+        <span className="text-lg font-bold text-gray-900">{t("title")}1</span>
       </NavBar>
       {isLoading && <FullscreenLoader />}
+
       {/* 中间可滚动商品列表 */}
-      <div className="flex-1 overflow-auto p-2">
+      <div className="flex-1 overflow-auto bg-[#f5f5f5] p-2">
         {orderData?.orderList?.map((order: any) => (
           <OrderItem
             key={order?.shopName}
@@ -241,7 +244,7 @@ export default function SubmitOrder() {
       </div>
 
       {/* 底部费用汇总 & 提交按钮 */}
-      <div className="sticky bottom-0 z-10 w-full border-t bg-white px-4 py-3">
+      <div className="w-full border-t bg-white px-4 py-3">
         <div className="mb-3 flex flex-col gap-2">
           {/* 总计 */}
           <div className="flex justify-between pt-2 text-base font-bold text-gray-900">
@@ -432,6 +435,6 @@ export default function SubmitOrder() {
           </div>
         </CommonModal>
       )}
-    </div>
+    </>
   );
 }

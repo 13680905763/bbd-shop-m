@@ -4,7 +4,7 @@ import { Avatar, Spinner } from "@heroui/react";
 import { NavBar } from "antd-mobile";
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 import CommonForm from "@/components/form/common-form";
 import { getUserInfo, updateUserInfo, uploadAvatar } from "@/services"; // ✅ uploadAvatar 是上传接口
@@ -12,14 +12,16 @@ import { FieldConfig } from "@/components/form/formItem-renderer";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
 
 export default function Settingpage() {
-  const t = useTranslations("profile.profilePage");
+  const { t } = useTranslation("translation", {
+    keyPrefix: "profile.profilePage",
+  });
   const router = useRouter();
 
   // --- 状态管理 ---
   const [user, setUser] = useState<any>(null);
   const [formData, setFormData] = useState({
     id: "",
-    name: "",
+    nickName: "",
     mobile: "",
   });
   const [loading, setLoading] = useState(true);
@@ -42,8 +44,8 @@ export default function Settingpage() {
   const fields: FieldConfig[] = [
     {
       type: "input",
-      name: "name",
-      key: "name",
+      name: "nickName",
+      key: "nickName",
       size: "md",
       label: t("nameLabel"),
     },
@@ -85,7 +87,7 @@ export default function Settingpage() {
   useEffect(() => {
     setFormData({
       id: user?.id,
-      name: user?.name || "",
+      nickName: user?.nickName || "",
       mobile: user?.mobile || "",
     });
   }, [user]);
@@ -93,13 +95,13 @@ export default function Settingpage() {
   // if (loading) return <FullscreenLoader />;
 
   return (
-    <div className="h-screen bg-[#f7f8f9]">
+    <>
       {loading && <FullscreenLoader />}
 
-      <NavBar className="bg-white" onBack={() => router.back()}>
-        {t("title")}
+      <NavBar onBack={() => router.back()}>
+        <span className="text-lg font-bold text-gray-900">{t("title")}</span>
       </NavBar>
-      <div className="px-2">
+      <div className="flex-1 bg-[#f5f5f5] p-2">
         <div className="box-card flex flex-col items-center justify-center p-2">
           <button
             className="relative cursor-pointer"
@@ -121,19 +123,17 @@ export default function Settingpage() {
             type="file"
             onChange={handleFileChange}
           />
-          <div className="text-lg font-bold">{user?.name}</div>
+          <div className="text-lg font-bold">{user?.nickName}</div>
         </div>
-        <div className="h-full p-2">
-          <CommonForm
-            confirmText={t("saveButton")}
-            fields={fields}
-            formData={formData}
-            showCancelButton={false}
-            onChange={setFormData}
-            onSubmit={handleSubmit}
-          />
-        </div>
+        <CommonForm
+          confirmText={t("saveButton")}
+          fields={fields}
+          formData={formData}
+          showCancelButton={false}
+          onChange={setFormData}
+          onSubmit={handleSubmit}
+        />
       </div>
-    </div>
+    </>
   );
 }

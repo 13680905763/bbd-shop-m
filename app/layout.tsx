@@ -1,60 +1,45 @@
 import "@/styles/globals.css";
-import { Metadata, Viewport } from "next";
+import type { Viewport, Metadata } from "next";
+
 import { Suspense } from "react";
-import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
 
 import { Providers } from "./providers";
 
-import { siteConfig } from "@/config/site";
-import { ViewportFixer } from "@/components/viewport-fixer";
-import { getUserCurrency } from "@/i18n/service";
+// 🎯 静态导出时硬编码值
+const staticLocale = "zh";
+const staticCurrency = "CNY";
+
+// 🎯 静态导出时直接导入语言文件
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  userScalable: false,
+};
 
 export const metadata: Metadata = {
-  title: {
-    default: siteConfig.name,
-    template: `%s - ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
+  title: "bbd-shop",
   icons: {
     icon: "/favicon.ico",
   },
 };
 
-export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
-  ],
-};
-
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const initialLocale = await getLocale();
-  const initialCurrency = await getUserCurrency();
-
-  const messages = await getMessages();
-
-  console.log("服务端initialLocale", initialLocale);
-
   return (
-    <html suppressHydrationWarning lang={initialLocale}>
-      <head />
+    <html suppressHydrationWarning lang={staticLocale}>
       <body className="bg-[#f5f5f5]">
-        <ViewportFixer />
-        <NextIntlClientProvider messages={messages}>
-          <Providers
-            initialCurrency={initialCurrency}
-            initialLocale={initialLocale}
-            themeProps={{ attribute: "class", defaultTheme: "light" }}
-          >
-            {/* <Suspense fallback={<FullscreenLoader />}>{children}</Suspense> */}
-            <Suspense>{children}</Suspense>
-          </Providers>
-        </NextIntlClientProvider>
+        <Providers
+          initialCurrency={staticCurrency}
+          initialLocale={staticLocale}
+          themeProps={{ attribute: "class", defaultTheme: "light" }}
+        >
+          <Suspense>{children}</Suspense>
+        </Providers>
       </body>
     </html>
   );

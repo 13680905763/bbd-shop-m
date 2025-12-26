@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { IoLockClosed, IoPerson } from "react-icons/io5";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 import { LoginFormData } from "@/types";
 import { loginCustomer } from "@/services";
@@ -11,25 +11,25 @@ import CommonForm from "@/components/form/common-form";
 import { FieldConfig } from "@/components/form/formItem-renderer";
 
 export default function LoginPage() {
-  const t = useTranslations("auth.login");
+  const { t } = useTranslation();
   const router = useRouter();
   const [formData, setFormData] = useState<LoginFormData>({
-    email: "",
-    password: "",
+    email: "test@bbd.com",
+    password: "123456",
   });
   const loginFormFields: FieldConfig[] = [
     {
       type: "input",
       name: "email",
       key: "email",
-      placeholder: t("emailPlaceholder"),
+      placeholder: t("auth.login.emailPlaceholder"),
       startContent: <IoPerson />,
     },
     {
       type: "input",
       name: "password",
       key: "password",
-      placeholder: t("passwordPlaceholder"),
+      placeholder: t("auth.login.passwordPlaceholder"),
       startContent: <IoLockClosed />,
     },
   ];
@@ -45,8 +45,8 @@ export default function LoginPage() {
   return (
     <div>
       <CommonForm
-        cancelText={t("registerButton")}
-        confirmText={t("loginButton")}
+        cancelText={t("auth.login.registerButton")}
+        confirmText={t("auth.login.loginButton")}
         fields={loginFormFields}
         formData={formData}
         onCancel={() => router.push("/register")}

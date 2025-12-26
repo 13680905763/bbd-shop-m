@@ -8,7 +8,7 @@ import {
   addToast,
 } from "@heroui/react";
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 import FormItemRenderer, { FieldConfig } from "../form/formItem-renderer";
 
@@ -39,7 +39,8 @@ const FormModal = ({
   cancelText,
 }: FormModalProps) => {
   const [loading, setLoading] = useState(false);
-  const t = useTranslations("components.form");
+  const { t } = useTranslation("translation", { keyPrefix: "components.form" });
+
   const handleSave = async () => {
     const missingFields = fields
       .filter((f) => f.required && !formData[f.name])

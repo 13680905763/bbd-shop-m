@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Card, Checkbox } from "@heroui/react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 export default function MessageItem({
   message,
@@ -11,7 +11,8 @@ export default function MessageItem({
   onChange,
   onView,
 }: any) {
-  const t = useTranslations("profile.message");
+  const { t } = useTranslation("translation", { keyPrefix: "profile.message" });
+
   const isUnread = message.statusCode === 0;
 
   return (

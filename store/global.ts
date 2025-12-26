@@ -15,7 +15,6 @@ interface GlobalState {
 }
 
 export const useGlobalStore = create<GlobalState>((set) => ({
-  // ⚠️ 不在顶层直接读 localStorage
   language: "en",
   currency: { label: "CNY", value: "CNY", symbol: "¥", rate: 1 },
   languages: [],

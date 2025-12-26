@@ -12,9 +12,9 @@ import {
   AccordionItem,
   addToast,
 } from "@heroui/react";
-import { useTranslations } from "next-intl";
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 import { getCategory, searchWarehouseRoutesList } from "@/services";
 import { useCountries } from "@/hook";
@@ -22,7 +22,8 @@ import { useGlobalStore } from "@/store";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
 
 export default function Estimation() {
-  const t = useTranslations("estimation");
+  const { t } = useTranslation("translation", { keyPrefix: "estimation" });
+
   const { currency } = useGlobalStore();
   const [loading, setLoading] = useState(false);
   const { data: countries = [], isLoading } = useCountries();
@@ -150,203 +151,203 @@ export default function Estimation() {
   };
 
   return (
-    <div>
+    <>
       {isLoading && <FullscreenLoader />}
-      <NavBar className="bg-white" onBack={() => router.push("/")}>
-        {t("title")}
-      </NavBar>
-      <div className="bg-[url('/m/images/estimation/bg.webp')] bg-center pt-[30%]" />
-      <div className="bg-[#fff] p-5">
-        <Form onSubmit={onSubmit}>
-          <div className="flex w-full gap-8">
+      <NavBar onBack={() => router.push("/")}>{t("title")}</NavBar>
+      <div className="flex-1 overflow-y-auto">
+        <div className="bg-[url('/images/estimation/bg.webp')] bg-center pt-[30%]" />
+        <div className="bg-[#fff] p-5">
+          <Form onSubmit={onSubmit}>
+            <div className="flex w-full gap-8">
+              <Autocomplete
+                className="flex-1"
+                defaultItems={countries}
+                inputProps={{
+                  classNames: {
+                    input: "text-base",
+                  },
+                }}
+                label={t("warehouse")}
+                name="countryId"
+                selectedKey={String(formData.countryId)}
+                size="sm"
+                onSelectionChange={(key) =>
+                  handleChange("countryId", Number(key))
+                }
+              >
+                {(country: any) => (
+                  <AutocompleteItem
+                    key={country.id}
+                    className="text-base"
+                    startContent={
+                      <Avatar
+                        alt={country.name}
+                        className="h-6 w-6"
+                        src={country.nationalFlag}
+                      />
+                    }
+                  >
+                    {country.name}
+                  </AutocompleteItem>
+                )}
+              </Autocomplete>
+            </div>
             <Autocomplete
               className="flex-1"
-              defaultItems={countries}
+              defaultItems={categoryOptions}
               inputProps={{
                 classNames: {
                   input: "text-base",
                 },
               }}
-              label={t("warehouse")}
-              name="countryId"
-              selectedKey={String(formData.countryId)}
+              label={t("category")}
+              name="categoryId"
+              selectedKey={String(formData.categoryId)}
               size="sm"
-              onSelectionChange={(key) =>
-                handleChange("countryId", Number(key))
-              }
+              onSelectionChange={(key) => handleChange("categoryId", key)}
             >
-              {(country: any) => (
-                <AutocompleteItem
-                  key={country.id}
-                  className="text-base"
-                  startContent={
-                    <Avatar
-                      alt={country.name}
-                      className="h-6 w-6"
-                      src={country.nationalFlag}
-                    />
-                  }
-                >
-                  {country.name}
+              {(category: any) => (
+                <AutocompleteItem key={category.id}>
+                  {category.categoryName}
                 </AutocompleteItem>
               )}
             </Autocomplete>
-          </div>
-          <Autocomplete
-            className="flex-1"
-            defaultItems={categoryOptions}
-            inputProps={{
-              classNames: {
-                input: "text-base",
-              },
-            }}
-            label={t("category")}
-            name="categoryId"
-            selectedKey={String(formData.categoryId)}
-            size="sm"
-            onSelectionChange={(key) => handleChange("categoryId", key)}
-          >
-            {(category: any) => (
-              <AutocompleteItem key={category.id}>
-                {category.categoryName}
-              </AutocompleteItem>
-            )}
-          </Autocomplete>
 
-          <div className="flex flex-1 gap-2">
-            <Input
-              className="flex-1 text-base"
-              classNames={{
-                input: "text-base",
-              }}
-              label={t("weight")}
-              name="weight"
-              size="sm"
-              type="number"
-              value={formData.weight}
-              onChange={(e) => handleChange("weight", e.target.value)}
-            />
-            <Input
-              className="flex-1 text-base"
-              classNames={{
-                input: "text-base",
-              }}
-              label={t("length")}
-              name="length"
-              size="sm"
-              type="number"
-              value={formData.length}
-              onChange={(e) => handleChange("length", e.target.value)}
-            />
-          </div>
-          <div className="flex flex-1 gap-2">
-            <Input
-              className="flex-1 text-base"
-              classNames={{
-                input: "text-base",
-              }}
-              label={t("width")}
-              name="width"
-              size="sm"
-              type="number"
-              value={formData.width}
-              onChange={(e) => handleChange("width", e.target.value)}
-            />
-            <Input
-              className="flex-1 text-base"
-              classNames={{
-                input: "text-base",
-              }}
-              label={t("height")}
-              name="height"
-              size="sm"
-              type="number"
-              value={formData.height}
-              onChange={(e) => handleChange("height", e.target.value)}
-            />
-          </div>
+            <div className="flex flex-1 gap-2">
+              <Input
+                className="flex-1 text-base"
+                classNames={{
+                  input: "text-base",
+                }}
+                label={t("weight")}
+                name="weight"
+                size="sm"
+                type="number"
+                value={formData.weight}
+                onChange={(e) => handleChange("weight", e.target.value)}
+              />
+              <Input
+                className="flex-1 text-base"
+                classNames={{
+                  input: "text-base",
+                }}
+                label={t("length")}
+                name="length"
+                size="sm"
+                type="number"
+                value={formData.length}
+                onChange={(e) => handleChange("length", e.target.value)}
+              />
+            </div>
+            <div className="flex flex-1 gap-2">
+              <Input
+                className="flex-1 text-base"
+                classNames={{
+                  input: "text-base",
+                }}
+                label={t("width")}
+                name="width"
+                size="sm"
+                type="number"
+                value={formData.width}
+                onChange={(e) => handleChange("width", e.target.value)}
+              />
+              <Input
+                className="flex-1 text-base"
+                classNames={{
+                  input: "text-base",
+                }}
+                label={t("height")}
+                name="height"
+                size="sm"
+                type="number"
+                value={formData.height}
+                onChange={(e) => handleChange("height", e.target.value)}
+              />
+            </div>
 
-          <Spacer y={2} />
-          <Button
-            className="w-full bg-[#f0700c] text-white"
-            isLoading={loading}
-            type="submit"
-            variant="bordered"
-          >
-            {t("search")}
-          </Button>
-        </Form>
-        {routes.length > 0 && (
-          <div className="mt-3">
-            <Accordion className="!border-1" variant="bordered">
-              {routes.map((route, index) => (
-                <AccordionItem
-                  key={index}
-                  title={<ShippingRouteCard route={route} />}
-                >
-                  {/* 展开后的内容 */}
-                  <div className="flex flex-col gap-3 pb-3">
-                    {/* 价格规则 */}
-                    <div className="rounded-lg border border-gray-100 bg-white p-3 shadow-sm">
-                      <p className="mb-2 text-sm font-semibold">
-                        {t("pricingStandard")}
-                      </p>
-                      <div className="grid grid-cols-2 gap-4 text-sm">
-                        <div className="flex flex-col gap-1">
-                          <span className="text-xs text-gray-500">
-                            {t("firstWeightFee")}
-                          </span>
-                          <span className="font-semibold text-gray-800">
-                            {currency.symbol}
-                            {route.firstWeightFee}
-                          </span>
+            <Spacer y={2} />
+            <Button
+              className="w-full bg-[#f0700c] text-white"
+              isLoading={loading}
+              type="submit"
+              variant="bordered"
+            >
+              {t("search")}
+            </Button>
+          </Form>
+          {routes.length > 0 && (
+            <div className="mt-3">
+              <Accordion className="!border-1" variant="bordered">
+                {routes.map((route, index) => (
+                  <AccordionItem
+                    key={index}
+                    title={<ShippingRouteCard route={route} />}
+                  >
+                    {/* 展开后的内容 */}
+                    <div className="flex flex-col gap-3 pb-3">
+                      {/* 价格规则 */}
+                      <div className="rounded-lg border border-gray-100 bg-white p-3 shadow-sm">
+                        <p className="mb-2 text-sm font-semibold">
+                          {t("pricingStandard")}
+                        </p>
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                          <div className="flex flex-col gap-1">
+                            <span className="text-xs text-gray-500">
+                              {t("firstWeightFee")}
+                            </span>
+                            <span className="font-semibold text-gray-800">
+                              {currency.symbol}
+                              {route.firstWeightFee}
+                            </span>
+                          </div>
+                          <div className="flex flex-col gap-1">
+                            <span className="text-xs text-gray-500">
+                              {t("additionalWeightFee")}
+                            </span>
+                            <span className="font-semibold text-gray-800">
+                              {currency.symbol}
+                              {route.additionalWeightFee}
+                            </span>
+                          </div>
                         </div>
-                        <div className="flex flex-col gap-1">
-                          <span className="text-xs text-gray-500">
-                            {t("additionalWeightFee")}
+                      </div>
+
+                      {/* 限重 + 特点 */}
+                      <div className="flex flex-col gap-2 rounded-lg border border-gray-100 bg-white p-3 shadow-sm">
+                        {/* 限重 */}
+                        <p className="text-sm font-semibold">
+                          {t("shippingLimit")}
+                        </p>
+                        <div className="inline-flex items-center rounded-md border border-gray-200 px-3 py-2">
+                          <span className="text-base font-semibold text-gray-800">
+                            {route.shippingLine.minWeight} -{" "}
+                            {route.shippingLine.maxWeight}
                           </span>
-                          <span className="font-semibold text-gray-800">
-                            {currency.symbol}
-                            {route.additionalWeightFee}
-                          </span>
+                          <span className="ml-1 text-xs text-gray-500">g</span>
+                        </div>
+
+                        {/* 特点 */}
+                        <p className="mt-2 text-sm font-semibold">
+                          {t("routeFeature")}
+                        </p>
+                        <div className="line-clamp-5 rounded-md bg-gray-50 p-3 text-xs leading-snug text-gray-700">
+                          {route.shippingLine.description}
                         </div>
                       </div>
                     </div>
-
-                    {/* 限重 + 特点 */}
-                    <div className="flex flex-col gap-2 rounded-lg border border-gray-100 bg-white p-3 shadow-sm">
-                      {/* 限重 */}
-                      <p className="text-sm font-semibold">
-                        {t("shippingLimit")}
-                      </p>
-                      <div className="inline-flex items-center rounded-md border border-gray-200 px-3 py-2">
-                        <span className="text-base font-semibold text-gray-800">
-                          {route.shippingLine.minWeight} -{" "}
-                          {route.shippingLine.maxWeight}
-                        </span>
-                        <span className="ml-1 text-xs text-gray-500">g</span>
-                      </div>
-
-                      {/* 特点 */}
-                      <p className="mt-2 text-sm font-semibold">
-                        {t("routeFeature")}
-                      </p>
-                      <div className="line-clamp-5 rounded-md bg-gray-50 p-3 text-xs leading-snug text-gray-700">
-                        {route.shippingLine.description}
-                      </div>
-                    </div>
-                  </div>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
-        )}
-        {routes?.length < 1 && (
-          <div className="mt-5 flex flex-col items-center justify-center text-gray-500">
-            <p className="text-lg">{routesMessage}</p>
-          </div>
-        )}
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+          )}
+          {routes?.length < 1 && (
+            <div className="mt-5 flex flex-col items-center justify-center text-gray-500">
+              <p className="text-lg">{routesMessage}</p>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

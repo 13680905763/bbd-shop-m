@@ -1,7 +1,7 @@
 import { Button, Checkbox } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { Image } from "@heroui/react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 import { useGlobalStore } from "@/store";
 import SourceIcon from "@/components/common/source-icon";
@@ -16,8 +16,9 @@ export default function OrderItem({
   onRefundOrder,
   onRevokeRefundOrder,
 }: any) {
-  const t = useTranslations("profile.order.buttons"); // ✅ 命名空间
-
+  const { t } = useTranslation("translation", {
+    keyPrefix: "profile.order.buttons",
+  });
   const router = useRouter();
   const { currency } = useGlobalStore();
 
@@ -28,7 +29,9 @@ export default function OrderItem({
         {/* 商品图 */}
         <button
           onClick={() =>
-            router.push(`/goods/${product.source}/${product?.sourceProductId}`)
+            router.push(
+              `/goods?source=${product.source}&sourceProductId=${product?.sourceProductId}`,
+            )
           }
         >
           <Image

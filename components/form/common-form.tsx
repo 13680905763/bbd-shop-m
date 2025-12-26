@@ -1,6 +1,6 @@
 import { addToast, Button, Form } from "@heroui/react";
 import React, { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 import FormItemRenderer, { FieldConfig } from "./formItem-renderer";
 
@@ -25,7 +25,7 @@ export default function CommonForm<T extends Record<string, any>>({
   cancelText,
   showCancelButton = true, // 默认 true
 }: CommonFormProps<T>) {
-  const t = useTranslations("components.form");
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
 
   const handleCancel = async () => {
@@ -46,7 +46,9 @@ export default function CommonForm<T extends Record<string, any>>({
 
     if (missingFields.length > 0) {
       addToast({
-        title: t("missingFieldsTitle", { fields: missingFields.join("、") }),
+        title: t("components.form.missingFieldsTitle", {
+          fields: missingFields.join("、"),
+        }),
 
         timeout: 1000,
         color: "danger",
@@ -76,17 +78,19 @@ export default function CommonForm<T extends Record<string, any>>({
         <Button
           color="primary"
           isLoading={loading} // ✅ 内部 loading
+          size="lg"
           type="submit"
         >
-          {confirmText || t("confirm")}
+          {confirmText || t("components.form.confirm")}
         </Button>
         {showCancelButton && ( // ✅ 根据 props 判断是否渲染
           <Button
             className="button-default"
             isDisabled={loading}
+            size="lg"
             onPress={handleCancel}
           >
-            {cancelText ?? t("cancel")}
+            {cancelText ?? t("components.form.cancel")}
           </Button>
         )}
       </div>

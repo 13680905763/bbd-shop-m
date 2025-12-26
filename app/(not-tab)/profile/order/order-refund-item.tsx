@@ -1,12 +1,13 @@
 import { Image } from "@heroui/react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 import { useGlobalStore } from "@/store";
 import SourceIcon from "@/components/common/source-icon";
 
 export default function OrderRefundItem({ order }: any) {
-  const t = useTranslations("profile.order"); // ✅ 命名空间
-
+  const { t } = useTranslation("translation", {
+    keyPrefix: "profile.order",
+  });
   const { currency } = useGlobalStore();
 
   return (

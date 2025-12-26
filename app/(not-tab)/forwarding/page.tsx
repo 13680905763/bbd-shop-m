@@ -9,10 +9,10 @@ import {
   Image,
 } from "@heroui/react";
 import React, { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { FaCamera } from "react-icons/fa";
 import { ImageViewer, NavBar, Stepper } from "antd-mobile";
+import { useTranslation } from "react-i18next";
 
 import { useGlobalStore } from "@/store";
 import { createCustomizeOrder, getServicesList } from "@/services";
@@ -20,7 +20,8 @@ import FullscreenLoader from "@/components/common/fullscreen-loader";
 import CommonModal from "@/components/modal/common-modal";
 
 export default function ForwardingPage() {
-  const t = useTranslations("forwardingPage");
+  const { t } = useTranslation("translation", { keyPrefix: "forwardingPage" });
+
   const [isLoading, setIsLoading] = useState(false);
 
   const { currency } = useGlobalStore();
@@ -91,7 +92,7 @@ export default function ForwardingPage() {
       const bizCode = await createCustomizeOrder(payload);
 
       if (bizCode) {
-        router.push("/payment/" + bizCode);
+        router.push(`/payment?bizCode=${bizCode}`);
       } else {
         router.push("/dashboard/order");
       }
@@ -146,242 +147,197 @@ export default function ForwardingPage() {
   };
 
   return (
-    <div className="relative pb-[100px]">
+    <>
       {isLoading && <FullscreenLoader />}
-      <NavBar className="bg-white" onBack={() => router.push("/")}>
-        {t("title")}
+
+      {/* 顶部导航栏 - 与设置页保持一致 */}
+      <NavBar onBack={() => router.push("/")}>
+        <span className="text-lg font-bold text-gray-900">{t("title")}</span>
       </NavBar>
-      {/* 顶部移动端 Banner */}
-      <div className="h-[120px] bg-[url('https://hoobuy.com/_nuxt/estimation_bg.BPnQS2i-.webp')] bg-cover bg-no-repeat" />
-      <Form
-        className="flex flex-col gap-4 p-4"
-        id="form"
-        onSubmit={handleSubmit}
-      >
-        {/* 整体内容竖向排版 */}
-        {/* 地址块 */}
-        <div className="w-full rounded-lg bg-white p-4">
-          <p className="mb-3 text-lg font-semibold">{t("warehouseAddress")}</p>
-          <Snippet
-            classNames={{
-              pre: "break-words whitespace-pre-line text-base text-gray-700",
-            }}
-            symbol=""
-          >
-            <span>Bryant-4-Bryant</span>
-            <span>13602579223</span>
-            <span>中国广东省惠州市水口街道荔城工业园胜豪科技大厦8A-801</span>
-          </Snippet>
-        </div>
 
-        {/* 包裹信息 */}
-        <div className="w-full rounded-lg bg-white p-4">
-          <p className="mb-3 text-lg font-semibold">{t("forwardingPackage")}</p>
-
-          <div className="flex flex-col gap-4">
-            <Input
-              isRequired
+      <div className="flex-1 overflow-y-auto bg-[#f5f5f5]">
+        {/* 顶部 Banner */}
+        <div className="bg-[url('/images/estimation/bg.webp')] bg-center pt-[30%]" />
+        <Form
+          className="flex flex-col gap-4 p-4"
+          id="form"
+          onSubmit={handleSubmit}
+        >
+          {/* 地址块 */}
+          <div className="space-y-2 rounded-xl bg-white p-4">
+            <span className="text-base font-bold text-gray-900">
+              {t("warehouseAddress")}
+            </span>
+            <Snippet
               classNames={{
-                input: "text-base",
+                base: "bg-gray-50 border border-gray-100 rounded-lg p-3",
+                pre: "break-words whitespace-pre-line text-sm text-gray-600 font-normal",
               }}
-              errorMessage={t("errorTrackingNo")}
-              label={t("trackingNo")}
-              labelPlacement="outside"
-              name="logisticsCode"
-              placeholder={t("trackingNoPlaceholder")}
-              type="text"
-            />
-
-            <Input
-              isRequired
-              classNames={{
-                input: "text-base",
-              }}
-              errorMessage={t("errorPackageName")}
-              label={t("packageName")}
-              labelPlacement="outside"
-              name="packageItemName"
-              placeholder={t("packageNamePlaceholder")}
-              type="text"
-            />
-          </div>
-        </div>
-
-        {/* 服务 */}
-        <div className="flex w-full flex-col gap-2 rounded-lg bg-white p-4">
-          <p className="mb-3 text-lg font-semibold">{t("extraServices")}</p>
-          {servicesList.map((service: any) => (
-            <div
-              key={service.id}
-              className="items-center rounded-lg border p-2"
+              symbol=""
             >
-              <div className="flex items-center justify-between">
-                <div className="font-medium">{service.serviceName}</div>
-                {service.id == 1 ? (
-                  // 免费的 icon
-                  <button
-                    className="flex h-8 w-16 items-center justify-center gap-1 text-sm text-green-500"
-                    type="button" // ✅ 关键点
-                    onClick={() => openServiceDetail(service.id)}
-                  >
-                    <FaCamera />
-                    {t("free")}
-                  </button>
-                ) : (
-                  <Button
-                    className="button-white"
-                    size="sm"
-                    type="button" // ✅ 关键点
-                    onPress={() => openServiceDetail(service.id)}
-                  >
-                    {t("add")}
-                  </Button>
-                )}
+              <div className="flex flex-col gap-1">
+                <span className="font-medium text-gray-900">
+                  Bryant-4-Bryant
+                </span>
+                <span>13602579223</span>
+                <span>
+                  中国广东省惠州市水口街道荔城工业园胜豪科技大厦8A-801
+                </span>
               </div>
+            </Snippet>
+          </div>
 
-              {service.isCheck && service.id != 1 && (
-                <div className="mt-2 flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 py-2">
-                  <div className="flex flex-col">
-                    <span className="text-sm font-medium text-gray-800">
-                      {t("serviceItem")}
+          {/* 包裹信息 */}
+          <div className="space-y-2 rounded-xl bg-white p-4">
+            <span className="text-base font-bold text-gray-900">
+              {t("forwardingPackage")}
+            </span>
+            <div className="flex flex-col gap-4 p-4">
+              <Input
+                isRequired
+                classNames={{
+                  label: "text-sm font-medium text-gray-700",
+                  input: "text-base",
+                  inputWrapper:
+                    "bg-gray-50 border-gray-200 hover:border-gray-300 focus-within:!bg-white",
+                }}
+                errorMessage={t("errorTrackingNo")}
+                label={t("trackingNo")}
+                labelPlacement="outside"
+                name="logisticsCode"
+                placeholder={t("trackingNoPlaceholder")}
+                type="text"
+                variant="bordered"
+              />
+
+              <Input
+                isRequired
+                classNames={{
+                  label: "text-sm font-medium text-gray-700",
+                  input: "text-base",
+                  inputWrapper:
+                    "bg-gray-50 border-gray-200 hover:border-gray-300 focus-within:!bg-white",
+                }}
+                errorMessage={t("errorPackageName")}
+                label={t("packageName")}
+                labelPlacement="outside"
+                name="packageItemName"
+                placeholder={t("packageNamePlaceholder")}
+                type="text"
+                variant="bordered"
+              />
+            </div>
+          </div>
+
+          {/* 服务 */}
+          <div className="overflow-hidden rounded-xl bg-white shadow-sm">
+            <div className="border-b border-gray-50 px-4 py-3">
+              <span className="text-base font-bold text-gray-900">
+                {t("extraServices")}
+              </span>
+            </div>
+            <div className="flex flex-col gap-3 p-4">
+              {servicesList.map((service: any) => (
+                <div
+                  key={service.id}
+                  className={`rounded-xl border transition-colors ${
+                    service.isCheck
+                      ? "border-[#f0700c] bg-orange-50/30"
+                      : "border-gray-100 bg-white"
+                  }`}
+                >
+                  <div className="flex items-center justify-between p-3">
+                    <span className="font-medium text-gray-800">
+                      {service.serviceName}
                     </span>
-                    {service.remark && (
-                      <span className="mt-0.5 truncate text-[11px] text-gray-400">
-                        {t("remark")}: {service.remark}
-                      </span>
+                    {service.id == 1 ? (
+                      <button
+                        className="flex items-center gap-1.5 rounded-full bg-green-50 px-3 py-1 text-xs font-medium text-green-600 transition-colors active:scale-95"
+                        type="button"
+                        onClick={() => openServiceDetail(service.id)}
+                      >
+                        <FaCamera />
+                        {t("free")}
+                      </button>
+                    ) : (
+                      <Button
+                        className={`h-7 min-w-[60px] rounded-full text-xs font-medium ${
+                          service.isCheck
+                            ? "bg-[#f0700c] text-white shadow-sm"
+                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                        }`}
+                        size="sm"
+                        type="button"
+                        onPress={() => openServiceDetail(service.id)}
+                      >
+                        {service.isCheck ? t("edit") : t("add")}
+                      </Button>
                     )}
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[12px] text-gray-500">
-                      x{service.quantity}
-                    </span>
-                    <span className="text-sm font-semibold text-red-500">
-                      {currency.symbol}
-                      {service.price}
-                    </span>
-                    <Button
-                      className="h-6 px-2 text-[11px]"
-                      color="danger"
-                      size="sm"
-                      variant="light"
-                      onPress={() => removeService(service.id)}
-                    >
-                      {t("delete")}
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
 
-        {/* 服务详情弹窗 */}
-        {currentService && (
-          <CommonModal
-            isDismissable={false}
-            isOpen={isServiceDetailOpen}
-            showCancel={currentService.id != 1}
-            title={currentService.serviceName}
-            onConfirm={saveServiceDetail}
-            onOpenChange={setIsServiceDetailOpen}
-          >
-            <div className="space-y-5">
-              {/* 服务介绍 */}
-              <div className="space-y-4 rounded-lg bg-[#f8f8f8] p-4">
-                <div className="space-y-2">
-                  <h3 className="text-sm font-medium text-gray-900">
-                    {t("serviceIntro")}
-                  </h3>
-                  <p className="text-sm leading-relaxed text-gray-600">
-                    {currentService.introduction || t("noIntro")}
-                  </p>
-                </div>
-
-                {/* 示例（id != 1 时才展示） */}
-                {currentService.sample.length > 0 && (
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-medium text-gray-900">
-                      {t("sample")}
-                    </h3>
-                    <div className="grid grid-cols-4 gap-2">
-                      {currentService.sample.map((url: string, index: any) => (
-                        <Image
-                          key={url}
-                          className="h-full w-full object-cover"
-                          radius="none"
-                          src={url}
-                          onClick={() => {
-                            setStartIndex(index); // 点击哪张图片就从哪张开始预览
-                            setVisible(true);
-                          }}
-                        />
-                      ))}
+                  {service.isCheck && service.id != 1 && (
+                    <div className="mx-3 mb-3 flex items-center justify-between rounded-lg border border-[#f0700c]/20 bg-white px-3 py-2">
+                      <div className="flex flex-col gap-0.5 overflow-hidden">
+                        {service.remark ? (
+                          <span className="truncate text-xs text-gray-500">
+                            {t("remark")}: {service.remark}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-gray-400">无备注</span>
+                        )}
+                      </div>
+                      <div className="flex flex-shrink-0 items-center gap-3 pl-2">
+                        <span className="text-xs text-gray-500">
+                          x{service.quantity}
+                        </span>
+                        <span className="text-sm font-bold text-[#f0700c]">
+                          {currency.symbol}
+                          {service.price}
+                        </span>
+                        <div
+                          className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-red-50 text-red-500 active:scale-90"
+                          role="button"
+                          onClick={() => removeService(service.id)}
+                        >
+                          <svg
+                            className="h-3.5 w-3.5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              d="M6 18L18 6M6 6l12 12"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                            />
+                          </svg>
+                        </div>
+                      </div>
                     </div>
-                    <ImageViewer.Multi
-                      key={startIndex} // ★ 让组件强制重新创建
-                      defaultIndex={startIndex} // 从点击的那张开始
-                      images={currentService.sample}
-                      visible={visible}
-                      onClose={() => setVisible(false)}
-                    />
-                  </div>
-                )}
-              </div>
-
-              {/* 服务费（id != 1 时才展示） */}
-              {currentService.id != 1 && (
-                <div className="flex items-center justify-between border-t pt-3">
-                  <span className="text-sm text-gray-700">
-                    {t("serviceFee")}
-                  </span>
-                  <div className="flex gap-2">
-                    <span className="text-lg font-semibold text-rose-600">
-                      {currency.symbol}
-                      {currentService.price}
-                    </span>
-                    {currentService?.stacked == 1 ? (
-                      <Stepper
-                        value={currentService?.quantity}
-                        onChange={(quantity) => {
-                          setCurrentService({
-                            ...currentService,
-                            quantity: quantity,
-                          });
-                        }}
-                      />
-                    ) : null}
-                  </div>
+                  )}
                 </div>
-              )}
-
-              {/* 备注输入框（id != 1 时才展示） */}
-              {currentService.id != 1 && (
-                <Textarea
-                  className="mt-2 w-full"
-                  classNames={{
-                    input: "text-base",
-                  }}
-                  minRows={3}
-                  placeholder={t("remarkPlaceholder")}
-                  value={currentService.remark}
-                  onChange={(e) =>
-                    setCurrentService({
-                      ...currentService,
-                      remark: e.target.value,
-                    })
-                  }
-                />
-              )}
+              ))}
             </div>
-          </CommonModal>
-        )}
-      </Form>
-      {/* 占位避免提交按钮挡内容 */}
-      <div className="h-[50px]" />
-      {/* 底部吸底按钮 */}
-      <div className="fixed bottom-0 left-0 right-0 flex flex-col gap-3 border-t bg-white p-4">
+          </div>
+        </Form>
+      </div>
+
+      {/* 底部吸底按钮 - 增加阴影和层级 */}
+      <div className="flex flex-col gap-3 border-t border-gray-100 bg-white px-4 py-3">
+        <Checkbox
+          classNames={{
+            label: "text-sm text-gray-600",
+            wrapper: "before:border-gray-300",
+          }}
+          isSelected={acceptAgreement}
+          size="sm"
+          onValueChange={setAcceptAgreement}
+        >
+          {t("acceptAgreement")}
+        </Checkbox>
         <Button
-          className="w-full bg-[#f0700c] py-6 text-lg text-white"
+          className="h-11 w-full rounded-xl bg-[#f0700c] text-base font-bold text-white shadow-lg shadow-orange-500/20 active:scale-[0.98]"
           form="form"
           isDisabled={!acceptAgreement || loading}
           isLoading={loading}
@@ -389,15 +345,106 @@ export default function ForwardingPage() {
         >
           {t("submit")}
         </Button>
-
-        <Checkbox
-          className="text-base"
-          isSelected={acceptAgreement}
-          onValueChange={setAcceptAgreement}
-        >
-          {t("acceptAgreement")}
-        </Checkbox>
       </div>
-    </div>
+
+      {/* 服务详情弹窗 */}
+      {currentService && (
+        <CommonModal
+          isDismissable={false}
+          isOpen={isServiceDetailOpen}
+          showCancel={currentService.id != 1}
+          title={currentService.serviceName}
+          onConfirm={saveServiceDetail}
+          onOpenChange={setIsServiceDetailOpen}
+        >
+          <div className="space-y-5">
+            {/* 服务介绍 */}
+            <div className="space-y-4 rounded-lg bg-[#f8f8f8] p-4">
+              <div className="space-y-2">
+                <h3 className="text-sm font-medium text-gray-900">
+                  {t("serviceIntro")}
+                </h3>
+                <p className="text-sm leading-relaxed text-gray-600">
+                  {currentService.introduction || t("noIntro")}
+                </p>
+              </div>
+
+              {/* 示例（id != 1 时才展示） */}
+              {currentService.sample.length > 0 && (
+                <div className="space-y-2">
+                  <h3 className="text-sm font-medium text-gray-900">
+                    {t("sample")}
+                  </h3>
+                  <div className="grid grid-cols-4 gap-2">
+                    {currentService.sample.map((url: string, index: any) => (
+                      <Image
+                        key={url}
+                        className="h-full w-full object-cover"
+                        radius="none"
+                        src={url}
+                        onClick={() => {
+                          setStartIndex(index); // 点击哪张图片就从哪张开始预览
+                          setVisible(true);
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <ImageViewer.Multi
+                    key={startIndex} // ★ 让组件强制重新创建
+                    defaultIndex={startIndex} // 从点击的那张开始
+                    images={currentService.sample}
+                    visible={visible}
+                    onClose={() => setVisible(false)}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* 服务费（id != 1 时才展示） */}
+            {currentService.id != 1 && (
+              <div className="flex items-center justify-between border-t pt-3">
+                <span className="text-sm text-gray-700">{t("serviceFee")}</span>
+                <div className="flex gap-2">
+                  <span className="text-lg font-semibold text-rose-600">
+                    {currency.symbol}
+                    {currentService.price}
+                  </span>
+                  {currentService?.stacked == 1 ? (
+                    <Stepper
+                      value={currentService?.quantity}
+                      onChange={(quantity) => {
+                        setCurrentService({
+                          ...currentService,
+                          quantity: quantity,
+                        });
+                      }}
+                    />
+                  ) : null}
+                </div>
+              </div>
+            )}
+
+            {/* 备注输入框（id != 1 时才展示） */}
+            {currentService.id != 1 && (
+              <Textarea
+                className="mt-2 w-full"
+                classNames={{
+                  input: "text-base",
+                }}
+                minRows={3}
+                placeholder={t("remarkPlaceholder")}
+                value={currentService.remark}
+                onChange={(e) =>
+                  setCurrentService({
+                    ...currentService,
+                    remark: e.target.value,
+                  })
+                }
+              />
+            )}
+          </div>
+        </CommonModal>
+      )}
+    </>
   );
 }

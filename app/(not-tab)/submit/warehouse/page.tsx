@@ -3,7 +3,7 @@ import { NavBar } from "antd-mobile";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { addToast, Button, Checkbox, Spinner, Textarea } from "@heroui/react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 import AddressCard from "./address-card";
 import { AddAddressCard } from "./add-address-card";
@@ -27,7 +27,9 @@ import { FieldConfig } from "@/components/form/formItem-renderer";
 
 type ModalType = "add" | "edit" | null;
 export default function SubmitOrder() {
-  const t = useTranslations("submit.warehouse");
+  const { t } = useTranslation("translation", {
+    keyPrefix: "submit.warehouse",
+  });
   const searchParam = useSearchParams();
   const router = useRouter();
   const key = searchParam.get("key") as string;
@@ -282,11 +284,11 @@ export default function SubmitOrder() {
   };
 
   return (
-    <div className="flex h-screen flex-col bg-[#f7f8f9]">
+    <>
       {(isLoading || loadingService) && <FullscreenLoader />}
       {/* 顶部导航 */}
-      <NavBar className="bg-white" onBack={() => router.back()}>
-        {t("title")}
+      <NavBar onBack={() => router.back()}>
+        <span className="text-lg font-bold text-gray-900">{t("title")}</span>
       </NavBar>
 
       {/* 内容区滚动 */}
@@ -429,6 +431,6 @@ export default function SubmitOrder() {
         }}
         onSave={handleSave}
       />
-    </div>
+    </>
   );
 }

@@ -1,5 +1,4 @@
 import { Divider } from "@heroui/react";
-import { useTranslations } from "next-intl";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
 
 type AddressItemProps = {
@@ -13,8 +12,6 @@ export default function AddressItem({
   handleDelete,
   handleEdit,
 }: AddressItemProps) {
-  const t = useTranslations("profile.address"); // 绑定 JSON 路径
-
   return (
     <div className="my-3 flex flex-col gap-2 rounded-lg border border-gray-200 bg-white p-4 text-[15px] shadow-sm">
       {/* 收件人 + 电话 */}
@@ -39,13 +36,7 @@ export default function AddressItem({
 
       {/* 底部操作栏 */}
       <div className="flex items-center justify-between text-[13px]">
-        {addressDetail.defaultAddress ? (
-          <span className="rounded border border-orange-100 bg-orange-50 px-2 py-0.5 text-xs text-orange-600">
-            {/* {t("defaultAddress")} 、 */}
-          </span>
-        ) : (
-          <div className="w-1" />
-        )}
+        <div className="w-1" />
 
         <div className="flex gap-3">
           <button

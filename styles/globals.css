@@ -1,24 +1,47 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* 全局移除所有滚动条 */
+* {
+  -ms-overflow-style: none; /* IE 10+ */
+  scrollbar-width: none; /* Firefox */
+}
 
-/* 在竖屏模式下，我们设置 `padding-top` 和 `padding-bottom` 为 `env(safe-area-inset-top)` 和 `env(safe-area-inset-bottom)` 的值，以达到内容不被地址栏、菜单栏或工具栏遮挡的效果。 */
-@media (orientation: portrait) {
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* 保留滚动功能但隐藏滚动条 */
+.scrollable {
+  -webkit-overflow-scrolling: touch;
+  overflow: auto;
+}
+
+.scrollable::-webkit-scrollbar {
+  display: none;
+}
+
+@supports (-webkit-touch-callout: none) {
+  html,
   body {
-    /* 当屏幕方向为竖屏时应用的样式 */
-    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
-body {
-  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;
-  height: -webkit-fill-available;
-  height: calc(100% - env(safe-area-inset-top, 0px));
+:root {
+  --safe-area-bg: transparent;
 }
 
 .bg {
+  padding-top: env(safe-area-inset-top) !important;
+}
+.bgimg {
   /* stylelint-disable-next-line at-rule-no-deprecated */
-  @apply bg-[url('/m/images/bg.png')] bg-cover bg-center bg-no-repeat;
+  @apply bg-[url('/images/bg.png')] bg-cover bg-center bg-no-repeat;
 }
 
 a {
@@ -71,8 +94,30 @@ a {
   @apply border border-[#ccc] bg-[#fff] text-[#000];
 }
 .box-card {
-  @apply my-3 rounded-xl bg-white;
+  @apply my-2 rounded-xl bg-white shadow-sm transition-all;
 }
+
+/* Dashboard 特定样式 */
+.dashboard-card-title {
+  @apply text-sm font-bold text-gray-900;
+}
+
+.dashboard-card-subtitle {
+  @apply text-xs text-gray-500;
+}
+
+.dashboard-icon-btn {
+  @apply flex flex-1 flex-col items-center justify-center text-center transition-opacity active:opacity-70;
+}
+
+.dashboard-stat-value {
+  @apply text-xl font-bold text-gray-900;
+}
+
+.dashboard-stat-label {
+  @apply mt-1 text-xs text-gray-500;
+}
+
 /* 购物车卡片 */
 .rounded-box {
   @apply rounded-lg bg-white;

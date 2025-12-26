@@ -7,29 +7,6 @@ import React, { useState } from "react";
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 
-import ProductItem from "./product-item";
-
-export type Product = {
-  id: string;
-  productTitle: string;
-  sku: {
-    propName_valueName: string;
-  };
-  skuPicUrl: string;
-  remark?: string;
-  totalPrice: number;
-  price: number;
-  postFee: number;
-  quantity: number;
-  source: string;
-  sourceProductId: string;
-};
-
-export type Shop = {
-  shopId: string;
-  shopName: string;
-  cartList: Product[];
-};
 const a = [
   {
     createTime: "2025-06-04 18:39:55",
@@ -119,9 +96,9 @@ export default function HistoryPage() {
       </NavBar>
 
       <div className="flex-1 overflow-auto px-3">
-        {a.map((product: Product) => (
+        {/* {a.map((product: any) => (
           <ProductItem key={product.id} product={product} />
-        ))}
+        ))} */}
       </div>
       {isEdit ? (
         <div className="flex items-center justify-between border-b border-[#f5f5f5] bg-white px-3 py-2">

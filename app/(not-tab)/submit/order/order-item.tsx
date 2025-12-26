@@ -1,15 +1,16 @@
 "use client";
 
 import { Button, Image } from "@heroui/react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 import Stepper from "@/components/stepper";
 import SourceIcon from "@/components/common/source-icon";
 import { useGlobalStore } from "@/store";
 
 export default function OrderItem({ order, openServiceModal }: any) {
-  const t = useTranslations("submit.order");
-
+  const { t } = useTranslation("translation", {
+    keyPrefix: "submit.order",
+  });
   const { currency } = useGlobalStore();
 
   return (

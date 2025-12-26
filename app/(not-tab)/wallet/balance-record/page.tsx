@@ -2,14 +2,16 @@
 import { InfiniteScroll, NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { useTranslations } from "next-intl";
 import { Spinner } from "@heroui/react";
+import { useTranslation } from "react-i18next";
 
 import { useGlobalStore } from "@/store";
 import { useWalletDetailList } from "@/hook";
 
 export default function BalanceRecord() {
-  const t = useTranslations("wallet.balanceRecord");
+  const { t } = useTranslation("translation", {
+    keyPrefix: "wallet.balanceRecord",
+  });
   const { currency } = useGlobalStore();
   const router = useRouter();
 
@@ -76,14 +78,14 @@ export default function BalanceRecord() {
   };
 
   return (
-    <div className="flex h-screen flex-col justify-between bg-[#f7f8f9]">
-      <NavBar className="bg-white" onBack={() => router.back()}>
-        {t("title")}
+    <>
+      <NavBar onBack={() => router.back()}>
+        <span className="text-lg font-bold text-gray-900">{t("title")}</span>
       </NavBar>
 
-      <div className="flex-1 overflow-auto p-2">
+      <div className="flex-1 overflow-y-auto bg-[#f5f5f5] p-2">
         <BalanceRecordContent records={records} />
       </div>
-    </div>
+    </>
   );
 }

@@ -2,7 +2,6 @@ import axios, { AxiosResponse, AxiosRequestConfig, AxiosError } from "axios";
 import { addToast } from "@heroui/react";
 
 import { ApiResponse } from "@/types";
-import { useGlobalStore } from "@/store";
 
 export const request = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "/api",
@@ -20,10 +19,22 @@ export const request = axios.create({
 // 请求拦截器：注入 token、语言等
 request.interceptors.request.use(
   (config) => {
-    const { language, currency } = useGlobalStore.getState();
+    // 🔍 [Debug Log] 请求开始
+    console.log(`🚀 [API Request] ${config.method?.toUpperCase()} ${config.url}`, {
+        baseURL: config.baseURL,
+        headers: config.headers,
+        params: config.params,
+        data: config.data
+    });
 
-    config.headers["X-Language"] = language;
-    config.headers["X-Currency"] = currency.value;
+    // const { language, currency } = useGlobalStore.getState();
+
+    // config.headers["X-Language"] = language;
+    config.headers["X-Language"] = "zh";
+
+    // config.headers["X-Currency"] = currency.value;
+    config.headers["X-Currency"] = "CNY";
+
     // config.headers["X-Language"] = "en";
     // config.headers["X-Currency"] = "USD";
     config.headers["X-Timezone"] = "Asia/Shanghai";
@@ -38,7 +49,10 @@ request.interceptors.response.use(
   (response: AxiosResponse<ApiResponse<any> & { config?: any }>) => {
     const res = response.data;
 
-    // console.log("res", res);
+    // 🔍 [Debug Log] 请求成功
+    console.log(`✅ [API Response] ${response.config.url}`, res);
+
+    // console.log("res请求", res);
 
     const showToast = (response.config as any)?.showToast ?? false; // 默认不显示提示
     const isSuccess = (response.config as any)?.isSuccess ?? true; // 默认不显示提示
@@ -73,6 +87,13 @@ request.interceptors.response.use(
     return res.data; // ✅ 直接返回 data
   },
   (error: AxiosError<any>) => {
+    // 🔍 [Debug Log] 请求失败
+    console.log(`❌ [API Error] ${error.config?.url}`, {
+        status: error.response?.status,
+        message: error.message,
+        response: error.response?.data
+    });
+
     // 先获取 config，并扩展类型
     const config = error.config as any;
     const showToast = config?.showToast ?? false;
@@ -87,6 +108,14 @@ request.interceptors.response.use(
       localStorage.removeItem("wallet-storage");
       localStorage.removeItem("services-storage");
       localStorage.removeItem("billingAddress-storage");
+
+      if (typeof window !== "undefined") {
+        if (!window.location.pathname.startsWith("/login")) {
+          window.location.href = `/login?redirect=${encodeURIComponent(
+            window.location.pathname,
+          )}`;
+        }
+      }
 
       return null;
     }

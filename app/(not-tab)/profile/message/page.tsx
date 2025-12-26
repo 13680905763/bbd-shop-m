@@ -4,11 +4,11 @@ import React, { useState } from "react";
 import { InfiniteScroll, NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 import { Button, Checkbox, Spinner, Tab, Tabs } from "@heroui/react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 import MessageItem from "./message-item";
 
-import ConfirmModal from "@/components/confirm-modal";
+import ConfirmModal from "@/components/modal/confirm-modal";
 import { useMessageList } from "@/hook";
 import { queryClient } from "@/lib/react-query";
 import { delMessage, readMessage } from "@/services";
@@ -28,7 +28,8 @@ interface ModalState {
   message?: any;
 }
 export default function MessagePage() {
-  const t = useTranslations("profile.message");
+  const { t } = useTranslation("translation", { keyPrefix: "profile.message" });
+
   const [activeTab, setActiveTab] = useState("all");
   const [isEdit, setIsEdit] = useState(false);
 
@@ -120,9 +121,8 @@ export default function MessagePage() {
   };
 
   return (
-    <div className="flex h-screen flex-col justify-between bg-[#f7f8f9]">
+    <>
       <NavBar
-        className="bg-white"
         right={
           <button onClick={() => setIsEdit(!isEdit)}>
             {isEdit ? t("cancel") : t("manage")}
@@ -130,7 +130,7 @@ export default function MessagePage() {
         }
         onBack={() => router.back()}
       >
-        {t("title")}
+        <span className="text-lg font-bold text-gray-900">{t("title")}</span>
       </NavBar>
 
       <Tabs
@@ -194,6 +194,6 @@ export default function MessagePage() {
           onOpenChange={() => setModal({ type: null })}
         />
       )}
-    </div>
+    </>
   );
 }

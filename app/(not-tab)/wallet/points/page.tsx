@@ -4,13 +4,16 @@ import { InfiniteScroll, NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { IoWallet } from "react-icons/io5";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 import { usePointsList } from "@/hook/wallet/usePointsList";
 import { getUserInfo } from "@/services";
+import FullscreenLoader from "@/components/common/fullscreen-loader";
 
 export default function Settingpage() {
-  const t = useTranslations("wallet.points");
+  const { t } = useTranslation("translation", {
+    keyPrefix: "wallet.points",
+  });
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -97,12 +100,13 @@ export default function Settingpage() {
   };
 
   return (
-    <div className="h-screen bg-[#f7f8f9]">
+    <>
+      {loading && <FullscreenLoader />}
       <NavBar className="bg-white" onBack={() => router.back()}>
-        {t("title")}
+        <span className="text-lg font-bold text-gray-900">{t("title")}</span>
       </NavBar>
 
-      <div className="p-2">
+      <div className="flex-1 overflow-y-auto bg-[#f5f5f5] p-2">
         <div className="flex rounded-lg bg-[#ffeee1] p-6">
           <div className="flex flex-1 items-center gap-2">
             <IoWallet className="h-5 w-5 text-[#f0700c]" />
@@ -135,6 +139,6 @@ export default function Settingpage() {
           </Tabs>
         </div>
       </div>
-    </div>
+    </>
   );
 }

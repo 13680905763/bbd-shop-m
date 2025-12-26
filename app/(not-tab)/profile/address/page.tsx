@@ -4,11 +4,11 @@ import React, { useState } from "react";
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 import AddressItem from "./address-item";
 
-import ConfirmModal from "@/components/confirm-modal";
+import ConfirmModal from "@/components/modal/confirm-modal";
 import FormModal from "@/components/modal/form-modal";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
 import { addAddress, deleteAddress, updateAddress } from "@/services/address";
@@ -30,7 +30,9 @@ const initAddress = {
 };
 
 export default function Cart() {
-  const t = useTranslations("profile.address"); // 绑定 JSON 路径
+  const { t } = useTranslation("translation", {
+    keyPrefix: "profile.address",
+  });
   const { data, isLoading } = useAddressList();
   const [modalType, setModalType] = useState<ModalType>(null);
   const [currentData, setCurrentData] = useState<any>(initAddress);
@@ -136,16 +138,15 @@ export default function Cart() {
   if (isLoading) return <FullscreenLoader />;
 
   return (
-    <div className="flex h-[calc(var(--vh)_*_100)] flex-col justify-between overflow-hidden">
+    <>
       <NavBar
-        className="bg-white"
         right={<button onClick={handleAdd}>{t("addButton")}</button>}
         onBack={() => router.back()}
       >
-        {t("title")}
+        <span className="text-lg font-bold text-gray-900">{t("title")}</span>
       </NavBar>
 
-      <div className="flex-1 overflow-auto px-3">
+      <div className="flex-1 space-y-4 bg-[#f5f5f5] p-4">
         {data?.map((addressDetail: any) => (
           <AddressItem
             key={addressDetail.id}
@@ -184,6 +185,6 @@ export default function Cart() {
           if (!open) setModalType(null);
         }}
       />
-    </div>
+    </>
   );
 }

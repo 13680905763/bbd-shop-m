@@ -1,22 +1,21 @@
 "use client";
 import { IoChevronBack } from "react-icons/io5";
 import React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Divider } from "@heroui/react";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
-import { Logo } from "@/components/icons";
 import { loginWithGoogle } from "@/services";
+import { Logo } from "@/components/icons";
 export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const t = useTranslations("auth");
+  const { t } = useTranslation("translation", { keyPrefix: "auth" });
+
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") || "/"; // 默认为首页
   const handleLoginWithGoogle = async (
     credentialResponse: CredentialResponse,
   ) => {
@@ -25,22 +24,20 @@ export default function AuthLayout({
     try {
       const res = await loginWithGoogle(credential as string);
 
-      router.push(redirect);
-    } catch (err) {
-      // 同样的错误处理
-    }
+      router.push("/");
+    } catch {}
   };
 
   return (
-    <div className="bg h-[100dvh] p-2">
+    <div className="bgimg min-h-[100vh] p-2 pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <button onClick={() => router.back()}>
         <IoChevronBack className="h-[30px] w-[30px] text-[#f0700c]" />
       </button>
       <div className="pt-16">
         <Logo width={170} />
-        <div className="my-[20px]">
-          <p className="font-bold">{t("sloganTitle")}</p>
-          <p className="text-xs">{t("sloganDesc")}</p>
+        <div className="my-5">
+          <p className="text-lg font-bold">{t("sloganTitle")}</p>
+          <p className="">{t("sloganDesc")}</p>
         </div>
         {children}
       </div>

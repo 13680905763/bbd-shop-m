@@ -9,7 +9,7 @@ import {
   IoPerson,
 } from "react-icons/io5";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 import { activateEmail, signUpCustomer } from "@/services";
 import CommonForm from "@/components/form/common-form";
@@ -17,7 +17,7 @@ import { FieldConfig } from "@/components/form/formItem-renderer";
 import { SignUpFormData } from "@/types";
 
 export default function RegisterPage() {
-  const t = useTranslations("auth.register");
+  const { t } = useTranslation();
   const router = useRouter();
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [formData, setFormData] = useState<SignUpFormData>({
@@ -33,7 +33,7 @@ export default function RegisterPage() {
       name: "email",
       key: "email",
       required: true,
-      placeholder: t("emailPlaceholder"),
+      placeholder: t("auth.register.emailPlaceholder"),
       startContent: <IoPerson />,
     },
     {
@@ -41,21 +41,21 @@ export default function RegisterPage() {
       name: "password",
       key: "password",
       required: true,
-      placeholder: t("passwordPlaceholder"),
+      placeholder: t("auth.register.passwordPlaceholder"),
       startContent: <IoLockClosed />,
     },
     {
       type: "input",
       name: "inviteCode",
       key: "inviteCode",
-      placeholder: t("inviteCodePlaceholder"),
+      placeholder: t("auth.register.inviteCodePlaceholder"),
       startContent: <IoPeopleSharp />,
     },
     {
       type: "checkbox",
       key: "agreeToTerms",
       name: "agreeToTerms",
-      label: t("agreeToTerms"),
+      label: t("auth.register.agreeToTerms"),
       size: "sm",
     },
   ];
@@ -64,7 +64,7 @@ export default function RegisterPage() {
     const { agreeToTerms, ...data } = formData;
 
     if (!agreeToTerms) {
-      addToast({ title: t("mustAgree"), timeout: 1500 });
+      addToast({ title: t("auth.register.mustAgree"), timeout: 1500 });
 
       return;
     }
@@ -81,9 +81,6 @@ export default function RegisterPage() {
           activationCode: code,
         });
         router.push("/dashboard");
-
-        // 成功逻辑，如跳转到首页
-        // await handleAuthSuccess("/dashboard", res, router);
       } catch {}
     }
   };
@@ -93,7 +90,7 @@ export default function RegisterPage() {
       {!isEmailVerified ? (
         <>
           <CommonForm
-            confirmText={t("registerButton")}
+            confirmText={t("auth.register.registerButton")}
             fields={registerFormFields}
             formData={formData}
             showCancelButton={false}
@@ -101,12 +98,12 @@ export default function RegisterPage() {
             onSubmit={handleSubmit}
           />
           <div className="my-4 text-center text-sm">
-            <span>{t("loginHint")} </span>
+            <span>{t("auth.register.loginHint")} </span>
             <button
               className="text-[#f0700c] hover:underline"
               onClick={() => router.push("/login")}
             >
-              {t("goLogin")}
+              {t("auth.register.goLogin")}
             </button>
           </div>
         </>
@@ -117,12 +114,14 @@ export default function RegisterPage() {
               className="cursor-pointer text-lg"
               onClick={() => setIsEmailVerified(false)}
             />
-            <p className="text-xl font-semibold">{t("verifyTitle")}</p>
+            <p className="text-xl font-semibold">
+              {t("auth.register.verifyTitle")}
+            </p>
           </div>
           <div className="my-4 text-sm">
-            <span>{t("verifyInstruction1")} </span>
+            <span>{t("auth.register.verifyInstruction1")} </span>
             <span className="font-bold">{formData.email}</span>
-            <span>{t("verifyInstruction2")}</span>
+            <span>{t("auth.register.verifyInstruction2")}</span>
           </div>
           <InputOtp
             className="m-auto"

@@ -4,10 +4,8 @@ import React, { useState } from "react";
 import { NavBar } from "antd-mobile";
 import { Radio, RadioGroup, cn, Button } from "@heroui/react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl"; // ✅ 翻译钩子
+import { useTranslation } from "react-i18next";
 
-import { languages } from "@/i18n/config";
-import { setUserLocale } from "@/i18n/service";
 import { useGlobalStore } from "@/store";
 
 const CustomRadio = (props: any) => {
@@ -19,10 +17,11 @@ const CustomRadio = (props: any) => {
       {...otherProps}
       classNames={{
         base: cn(
-          "inline-flex m-0 bg-content1 hover:bg-content2 items-center justify-between",
-          "flex-row-reverse max-w-[100%] cursor-pointer rounded-lg p-3 border-2 border-transparent",
-          "data-[selected=true]:border-primary",
+          "inline-flex m-0 bg-transparent hover:bg-gray-50 items-center justify-between",
+          "flex-row-reverse max-w-[100%] cursor-pointer px-4 py-4 ",
+          "data-[selected=true]:bg-gray-50",
         ),
+        label: "text-base font-medium text-gray-700",
       }}
     >
       {children}
@@ -31,19 +30,26 @@ const CustomRadio = (props: any) => {
 };
 
 export default function Settingpage() {
-  const t = useTranslations("setting.languagePage"); // ✅ 命名空间建议叫 Setting
+  const { t, i18n } = useTranslation();
   const router = useRouter();
   const { language, setLanguage } = useGlobalStore();
 
-  const [tempLanguage, setTempLanguage] = useState<string>(language);
+  const [tempLanguage, setTempLanguage] = useState<string>(
+    i18n.language || language,
+  );
   const [loading, setLoading] = useState(false);
+
+  const languages = [
+    { label: "中文", value: "zh" },
+    { label: "English", value: "en" },
+    { label: "Français", value: "fr" },
+  ];
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      console.log("保存选择语言:", tempLanguage);
       setLanguage(tempLanguage);
-      await setUserLocale(tempLanguage);
+      await i18n.changeLanguage(tempLanguage);
       window.location.href = "/m";
     } catch {
     } finally {
@@ -52,32 +58,37 @@ export default function Settingpage() {
   };
 
   return (
-    <div className="h-screen bg-[#f7f8f9]">
-      <NavBar className="bg-white" onBack={() => router.back()}>
-        {t("title")} {/* 语言 */}
+    <>
+      <NavBar onBack={() => router.back()}>
+        <span className="text-lg font-bold text-gray-900">
+          {t("setting.languagePage.title")}
+        </span>
       </NavBar>
-      <div className="flex flex-col gap-4 p-2">
-        <RadioGroup
-          className="w-full"
-          value={tempLanguage}
-          onValueChange={(val) => setTempLanguage(val as string)}
-        >
-          {languages.map((item) => (
-            <CustomRadio key={item.value} value={item.value}>
-              {item.label}
-            </CustomRadio>
-          ))}
-        </RadioGroup>
+      <div className="flex-1 space-y-6 bg-[#f5f5f5] p-4">
+        <div className="rounded-xl bg-white shadow-sm">
+          <RadioGroup
+            className="w-full gap-0 p-0"
+            value={tempLanguage}
+            onValueChange={(val) => setTempLanguage(val as string)}
+          >
+            {languages.map((item) => (
+              <CustomRadio key={item.value} value={item.value}>
+                {item.label}
+              </CustomRadio>
+            ))}
+          </RadioGroup>
+        </div>
 
         <Button
           className="w-full"
           color="primary"
           isLoading={loading}
+          size="lg"
           onPress={handleSubmit}
         >
-          {t("save")} {/* 保存 */}
+          {t("setting.languagePage.save")}
         </Button>
       </div>
-    </div>
+    </>
   );
 }

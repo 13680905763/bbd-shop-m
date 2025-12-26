@@ -2,10 +2,7 @@
 import { Checkbox, Image, Input } from "@heroui/react";
 import { FaEdit } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
 
-import Stepper from "@/components/stepper";
-import SourceIcon from "@/components/common/source-icon";
 import { useGlobalStore } from "@/store";
 
 function ProductItem({
@@ -15,7 +12,6 @@ function ProductItem({
   handleProductQuantity,
   openRemarkModal,
 }: any) {
-  const t = useTranslations("cart"); // ✅ 命名空间 cart
   const { currency } = useGlobalStore();
   const router = useRouter();
 
@@ -31,7 +27,9 @@ function ProductItem({
         />
         <button
           onClick={() =>
-            router.push(`/goods/${product.source}/${product?.sourceProductId}`)
+            router.push(
+              `/goods?source=${product.source}&sourceProductId=${product.sourceProductId}`,
+            )
           }
         >
           <Image
@@ -59,12 +57,6 @@ function ProductItem({
             </div>
 
             <div className="flex items-center gap-1">
-              <Stepper
-                value={product.quantity}
-                onChange={(quantity) =>
-                  handleProductQuantity(product.id, quantity)
-                }
-              />
               {/* {isEdit ? (
                 <button
                   className="h-6 w-6"
@@ -92,7 +84,7 @@ function ProductItem({
             <FaEdit className="h-6 w-6" />
           </button>
         }
-        placeholder={t("remark.placeholder")}
+        placeholder={"remark.placeholder"}
         size="sm"
         value={product.remark}
       />
@@ -121,7 +113,6 @@ export default function ShopCard({
           size="sm"
           onChange={toggleGroup}
         />
-        <SourceIcon source={shop.cartList[0]?.source} />
         <div className="text-title">{shop?.shopName}</div>
       </div>
 

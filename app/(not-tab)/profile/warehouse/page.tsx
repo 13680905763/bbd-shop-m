@@ -3,21 +3,23 @@ import { InfiniteScroll, NavBar } from "antd-mobile";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Checkbox, Spinner, Tab, Tabs } from "@heroui/react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 import WarehouseItem from "./warehouse-item";
 
 import { useWarehouseList } from "@/hook";
 import { createWarehousePreviewKeyByCart } from "@/services";
 import { useSelection } from "@/hook/useSelection";
+
 const tabKeyToStatusCode: Record<string, string> = {
   all: "",
   submit: "302",
 };
 
 export default function Warehouse() {
-  const t = useTranslations("profile.warehouse"); // ✅ 命名空间
-
+  const { t } = useTranslation("translation", {
+    keyPrefix: "profile.warehouse",
+  });
   // 传入订单状态，例如 "ALL"、"WAIT_PAY"
   const [activeTab, setActiveTab] = useState("all");
   const {
@@ -99,9 +101,9 @@ export default function Warehouse() {
   };
 
   return (
-    <div className="flex h-screen flex-col justify-between bg-[#f7f8f9]">
-      <NavBar className="flex-[0_0_45px] bg-white" onBack={() => router.back()}>
-        {t("title")}
+    <>
+      <NavBar onBack={() => router.back()}>
+        <span className="text-lg font-bold text-gray-900">{t("title")}</span>
       </NavBar>
 
       <Tabs
@@ -153,6 +155,6 @@ export default function Warehouse() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

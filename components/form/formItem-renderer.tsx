@@ -54,7 +54,7 @@ export default function FormItemRenderer<T extends Record<string, any>>({
           label,
           placeholder,
           options = [],
-          size = "md",
+          size = "lg",
           startContent = "",
           required = false,
         } = field; // 默认 md

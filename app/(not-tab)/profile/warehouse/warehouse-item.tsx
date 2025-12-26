@@ -1,5 +1,5 @@
 import { Checkbox, Image } from "@heroui/react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 import MediaPreviewGroup, {
   MediaItem,
@@ -12,7 +12,9 @@ export default function WarehouseItem({
   onChange,
   selected,
 }: any) {
-  const t = useTranslations("profile.warehouse");
+  const { t } = useTranslation("translation", {
+    keyPrefix: "profile.warehouse",
+  });
   const product = warehouse?.orderProduct;
 
   return (

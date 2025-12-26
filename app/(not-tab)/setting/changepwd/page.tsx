@@ -2,16 +2,15 @@
 import { NavBar } from "antd-mobile";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
 import { addToast } from "@heroui/react";
+import { useTranslation } from "react-i18next";
 
 import CommonForm from "@/components/form/common-form";
-import { FieldConfig } from "@/components/form/formItem-renderer";
 import { updatePwd } from "@/services";
 
 export default function Settingpage() {
   const router = useRouter();
-  const t = useTranslations("setting.changePassword");
+  const { t } = useTranslation();
 
   const [formData, setFormData] = useState({
     oldPassword: "",
@@ -19,23 +18,23 @@ export default function Settingpage() {
     confirmPassword: "",
   });
 
-  const registerFormFields: FieldConfig[] = [
+  const registerFormFields = [
     {
       name: "oldPassword",
       key: "oldPassword",
-      placeholder: t("form.oldPassword"),
+      placeholder: t("setting.changePassword.form.oldPassword"),
       type: "input",
     },
     {
       name: "newPassword",
       key: "newPassword",
-      placeholder: t("form.newPassword"),
+      placeholder: t("setting.changePassword.form.newPassword"),
       type: "input",
     },
     {
       name: "confirmPassword",
       key: "confirmPassword",
-      placeholder: t("form.confirmPassword"),
+      placeholder: t("setting.changePassword.form.confirmPassword"),
       type: "input",
     },
   ];
@@ -43,7 +42,7 @@ export default function Settingpage() {
     // 校验两次密码一致性
     if (formData.newPassword !== formData.confirmPassword) {
       addToast({
-        title: "两次输入的新密码不一致",
+        title: t("setting.changePassword.tip", "两次输入的新密码不一致"),
         timeout: 1000,
         color: "danger",
       });
@@ -66,21 +65,25 @@ export default function Settingpage() {
   };
 
   return (
-    <div className="h-screen bg-[#f7f8f9]">
-      <NavBar className="bg-white" onBack={() => router.back()}>
-        {t("navBar.title")}
+    <>
+      <NavBar onBack={() => router.back()}>
+        <span className="text-lg font-bold text-gray-900">
+          {t("setting.changePassword.navBar.title")}
+        </span>
       </NavBar>
 
-      <div className="m-2">
-        <CommonForm
-          confirmText={t("form.submit")}
-          fields={registerFormFields}
-          formData={formData}
-          showCancelButton={false}
-          onChange={setFormData}
-          onSubmit={handleSubmit}
-        />
+      <div className="flex-1 bg-[#f5f5f5] p-4">
+        <div className="overflow-hidden rounded-xl bg-white p-4 shadow-sm">
+          <CommonForm
+            confirmText={t("setting.changePassword.form.submit")}
+            fields={registerFormFields as any}
+            formData={formData}
+            showCancelButton={false}
+            onChange={setFormData}
+            onSubmit={handleSubmit}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 }

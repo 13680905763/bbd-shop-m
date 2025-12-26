@@ -76,12 +76,14 @@ export default function Searchpage() {
 
     const res: any = await getGoodsId({ url });
 
-    router.push(`/goods/${res.source}/${res.sourceProductId}`);
+    router.push(
+      `/goods?source=${res.source}&sourceProductId=${res.sourceProductId}`,
+    );
   };
 
   return (
-    <div className="bg flex h-[100vh] flex-col">
-      <div className="flex items-center justify-between p-4">
+    <>
+      <div className="flex items-center justify-between p-2">
         <button onClick={() => router.back()}>
           <IoChevronBack className="h-[25px] w-[25px]" />
         </button>
@@ -131,7 +133,7 @@ export default function Searchpage() {
         </Form>
       </div>
 
-      <div className="flex-1 bg-white p-4">
+      <div className="flex-1 overflow-y-auto bg-[#f8f8f8] p-4">
         <div className="font-bold">历史记录</div>
         <Divider className="my-2" />
         <div className="flex flex-wrap gap-2 p-2">
@@ -143,6 +145,6 @@ export default function Searchpage() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

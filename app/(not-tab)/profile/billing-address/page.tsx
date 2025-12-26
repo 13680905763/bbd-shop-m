@@ -6,16 +6,17 @@ import React, { useState } from "react";
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 import AddressItem from "./address-item";
 
-import ConfirmModal from "@/components/confirm-modal";
+import ConfirmModal from "@/components/modal/confirm-modal";
 import FormModal from "@/components/modal/form-modal";
 import { addAddress, deleteAddress, updateAddress } from "@/services/address";
 import { FieldConfig } from "@/components/form/formItem-renderer";
 import { useBillingAddressList } from "@/hook";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
+
 type ModalType = "add" | "edit" | "delete" | null;
 const initAddress = {
   familyName: "",
@@ -30,7 +31,9 @@ const initAddress = {
 };
 
 export default function BillingAddress() {
-  const t = useTranslations("profile.billingAddress"); // 绑定 JSON 路径
+  const { t } = useTranslation("translation", {
+    keyPrefix: "profile.billingAddress",
+  });
 
   const { data, isLoading } = useBillingAddressList();
   const [modalType, setModalType] = useState<ModalType>(null);
@@ -140,9 +143,8 @@ export default function BillingAddress() {
   }
 
   return (
-    <div className="flex h-[calc(var(--vh)_*_100)] flex-col justify-between overflow-hidden">
+    <>
       <NavBar
-        className="bg-white"
         right={
           data?.length === 0 ? (
             <button onClick={handleAdd}>{t("addButton")}</button>
@@ -150,10 +152,10 @@ export default function BillingAddress() {
         }
         onBack={() => router.back()}
       >
-        {t("title")}
+        <span className="text-lg font-bold text-gray-900">{t("title")}</span>
       </NavBar>
 
-      <div className="flex-1 overflow-auto px-3">
+      <div className="flex-1 bg-[#f5f5f5] p-4">
         {data?.map((addressDetail: any) => (
           <AddressItem
             key={addressDetail.id}
@@ -190,6 +192,6 @@ export default function BillingAddress() {
           if (!open) setModalType(null);
         }}
       />
-    </div>
+    </>
   );
 }

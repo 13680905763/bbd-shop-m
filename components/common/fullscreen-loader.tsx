@@ -21,7 +21,7 @@ export default function FullscreenLoader() {
           <Image
             alt="Loading..."
             className="w-56 object-contain" // 调整大小
-            src="/m/logo.png" // 换成你的 logo
+            src="/images/logo.png" // 换成你的 logo
           />
         </motion.div>
       </motion.div>
