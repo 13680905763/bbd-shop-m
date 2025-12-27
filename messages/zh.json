@@ -481,7 +481,12 @@
         "riskMessage": "您提交的产品可能存在一定的寄送风险。为了您的资金安全，我们暂时无法为您提供在线订购服务。如需了解更多信息，请联系在线客服！",
         "productDescription": "商品详情",
         "stock": "库存：",
-        "shippingFee": "运费："
+        "shippingFee": "运费：",
+        "singleItemSalesTitle": "单个商品销量",
+        "avgArrivalTime": "平均到达仓库",
+        "salesVolume": "商品销量",
+        "weightWithUnit": "重量(g)",
+        "volumeWithUnit": "体积 (cm)"
     },
     "submit": {
         "order": {

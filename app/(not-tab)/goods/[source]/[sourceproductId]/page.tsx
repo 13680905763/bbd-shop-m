@@ -138,6 +138,8 @@ export default function GoodsPage() {
   const [isOpen1, setIsOpen1] = useState(false);
 
   const [visible, setVisible] = useState(false);
+  const [qcVisible, setQcVisible] = useState(false);
+  const [qcIndex, setQcIndex] = useState(0);
   const queryClient = useQueryClient();
   const handleBuyNow = async () => {
     if (issub) return;
@@ -279,6 +281,43 @@ export default function GoodsPage() {
     if (currentSku) return currentSku;
     // else return goodsInfo.productInfo.skuList[0];
   }, [goodsInfo]); // 依赖 cart，当 cart 变化时才重新计算
+  // Calculate display values for sales, weight, etc.
+  const displayValues = useMemo(() => {
+    const defaultSales = goodsInfo?.productInfo?.sales || "--";
+    const daysToArrival = goodsInfo?.productInfo?.daysToArrival || "--";
+
+    let weight = "--";
+    let size = "--";
+
+    // Attempt to find specific SKU info from skuVmMap if available
+    if (goodsInfo?.productInfo?.skuVmMap) {
+      // Priority: Current SKU -> First available SKU in map -> Default
+      const skuId = currentSku?.skuID;
+      const skuData = skuId ? goodsInfo.productInfo.skuVmMap[skuId] : null;
+
+      // Fallback to first item in skuVmMap if current not found, or just keep default
+      const firstSkuKey = Object.keys(goodsInfo.productInfo.skuVmMap)[0];
+      const fallbackData = firstSkuKey
+        ? goodsInfo.productInfo.skuVmMap[firstSkuKey]
+        : null;
+
+      const activeData = skuData || fallbackData;
+
+      if (activeData) {
+        if (activeData.weight) weight = activeData.weight;
+        if (activeData.length && activeData.width && activeData.height) {
+          size = `${activeData.length}x${activeData.width}x${activeData.height}`;
+        }
+      }
+    }
+
+    return {
+      sales: defaultSales,
+      daysToArrival,
+      weight,
+      size,
+    };
+  }, [goodsInfo, currentSku]);
 
   useEffect(() => {
     setisLoading(true);
@@ -388,8 +427,73 @@ export default function GoodsPage() {
             </div>
             <ProgressBar />
             <DisclaimerDrawer />
-
             <div className="box-card mx-2 !mt-0 p-2">
+              <div className="p-2 text-base font-bold">
+                {t("singleItemSalesTitle")}
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-1 flex-col justify-between rounded-lg bg-gray-50 p-3 text-center">
+                  <div className="mb-1 text-sm text-gray-500">
+                    {t("avgArrivalTime")}
+                  </div>
+                  <div className="font-semibold">
+                    {displayValues.daysToArrival} days
+                  </div>
+                </div>
+                <div className="flex flex-1 flex-col justify-between rounded-lg bg-gray-50 p-3 text-center">
+                  <div className="mb-1 text-sm text-gray-500">
+                    {t("salesVolume")}
+                  </div>
+                  <div className="font-semibold">{displayValues.sales}</div>
+                </div>
+                <div className="flex flex-1 flex-col justify-between rounded-lg bg-gray-50 p-3 text-center">
+                  <div className="mb-1 text-sm text-gray-500">
+                    {t("weightWithUnit")}
+                  </div>
+                  <div className="font-semibold">{displayValues.weight}</div>
+                </div>
+                <div className="flex flex-1 flex-col justify-between rounded-lg bg-gray-50 p-3 text-center">
+                  <div className="mb-1 text-sm text-gray-500">
+                    {t("volumeWithUnit")}
+                  </div>
+                  <div className="font-semibold">{displayValues.size}</div>
+                </div>
+              </div>
+            </div>
+            {goodsInfo?.productInfo?.qcList?.length && (
+              <div className="box-card mx-2 !mt-0 p-2">
+                <div className="p-2 text-base font-bold">Product QC</div>
+                <div className="mx-auto grid grid-cols-5 gap-y-2">
+                  {goodsInfo?.productInfo?.qcList.map(
+                    (url: string, index: number) => (
+                      <div key={index} className="flex justify-center">
+                        <Image
+                          className="cursor-pointer"
+                          height={60}
+                          src={url}
+                          width={60}
+                          onClick={() => {
+                            setQcIndex(index);
+                            setQcVisible(true);
+                          }}
+                        />
+                      </div>
+                    ),
+                  )}
+                  <ImageViewer.Multi
+                    defaultIndex={qcIndex}
+                    images={goodsInfo?.productInfo?.qcList}
+                    visible={qcVisible}
+                    onClose={() => {
+                      setQcVisible(false);
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+            {/* 商品详情 */}
+            <div className="box-card mx-2 p-2 pb-24">
               <div className="p-2 text-base font-bold"> {t("title")}</div>
               <div>
                 {goodsInfo?.productDetail?.productDescImgList?.map(

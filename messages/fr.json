@@ -481,7 +481,12 @@
         "riskMessage": "Le produit que vous avez soumis peut présenter certains risques d'expédition. Pour la sécurité de vos fonds, nous sommes temporairement incapables de fournir des services de commande en ligne. Pour plus d'informations, veuillez contacter le service client en ligne !",
         "productDescription": "Description du Produit",
         "stock": "Stock :",
-        "shippingFee": "Frais d'Expédition :"
+        "shippingFee": "Frais d'Expédition :",
+        "singleItemSalesTitle": "Ventes à l'Unité",
+        "avgArrivalTime": "Temps Moyen d'Arrivée",
+        "salesVolume": "Volume des Ventes",
+        "weightWithUnit": "Poids (g)",
+        "volumeWithUnit": "Volume (cm)"
     },
     "submit": {
         "order": {

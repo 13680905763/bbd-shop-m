@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useLayoutEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Button,
   Card,
@@ -14,6 +14,7 @@ import { FaComments, FaImage, FaTimes } from "react-icons/fa";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { useTranslations } from "next-intl";
+import { motion } from "framer-motion";
 
 import { useUserStore } from "@/store";
 import { useChat } from "@/hook/chat/useChat";
@@ -28,7 +29,7 @@ export default function ChatBox() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-
+  const isDraggingRef = useRef(false);
   // Use the custom hook
   const {
     messages,
@@ -48,6 +49,7 @@ export default function ChatBox() {
     if (isLoadingHistory || !hasMoreHistory) return;
 
     const target = e.currentTarget;
+
     if (target.scrollTop <= 10) {
       const container = scrollContainerRef.current;
       const prevScrollHeight = container?.scrollHeight ?? 0;
@@ -60,8 +62,9 @@ export default function ChatBox() {
           if (container) {
             const newScrollHeight = container.scrollHeight;
             const diff = newScrollHeight - prevScrollHeight;
+
             if (diff > 0) {
-               container.scrollTop = diff;
+              container.scrollTop = diff;
             }
           }
         });
@@ -73,6 +76,7 @@ export default function ChatBox() {
   useEffect(() => {
     if (shouldScrollRef.current) {
       const container = scrollContainerRef.current;
+
       if (container) {
         requestAnimationFrame(() => {
           container.scrollTop = container.scrollHeight;
@@ -85,9 +89,11 @@ export default function ChatBox() {
   const handleSend = () => {
     if (!user?.id) {
       addToast({ title: t("loginFirst"), timeout: 1000, color: "danger" });
+
       return;
     }
     const msgText = input.trim();
+
     if (!msgText) return;
     sendMessage(msgText, "TEXT");
     setInput("");
@@ -96,12 +102,14 @@ export default function ChatBox() {
   const insertEmoji = (emoji: string) => {
     if (!textareaRef.current) {
       setInput((prev) => prev + emoji);
+
       return;
     }
     const textarea = textareaRef.current;
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const newValue = input.substring(0, start) + emoji + input.substring(end);
+
     setInput(newValue);
     setTimeout(() => {
       textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
@@ -113,9 +121,11 @@ export default function ChatBox() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!user?.id) {
       addToast({ title: t("loginFirst"), timeout: 1000, color: "danger" });
+
       return;
     }
     const file = e.target.files?.[0];
+
     if (!file) return;
     sendImage(file);
     if (fileInputRef.current) fileInputRef.current.value = "";
@@ -123,15 +133,27 @@ export default function ChatBox() {
 
   return (
     <>
-      <div className="fixed bottom-24 right-6 z-50">
+      <motion.div
+        drag
+        className="fixed bottom-24 right-6 z-50"
+        dragMomentum={false}
+        onDragEnd={() => setTimeout(() => (isDraggingRef.current = false), 100)}
+        onDragStart={() => (isDraggingRef.current = true)}
+      >
         <Button
           isIconOnly
           className="h-10 w-10 shadow-lg"
           color="primary"
           radius="full"
           onPress={() => {
+            if (isDraggingRef.current) return;
             if (!user?.id) {
-              addToast({ title: t("loginFirst"), timeout: 1000, color: "danger" });
+              addToast({
+                title: t("loginFirst"),
+                timeout: 1000,
+                color: "danger",
+              });
+
               return;
             }
             setIsOpen(true);
@@ -139,7 +161,7 @@ export default function ChatBox() {
         >
           <FaComments className="h-6 w-6" />
         </Button>
-      </div>
+      </motion.div>
 
       <Modal
         backdrop="transparent"
@@ -153,8 +175,14 @@ export default function ChatBox() {
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-4">
               <div className="flex items-center gap-2">
-                <img alt="logo" className="w-15 h-6 rounded" src="/m/logo.png" />
-                <span className="text-sm font-semibold">{t("onlineSupport")}</span>
+                <img
+                  alt="logo"
+                  className="w-15 h-6 rounded"
+                  src="/m/logo.png"
+                />
+                <span className="text-sm font-semibold">
+                  {t("onlineSupport")}
+                </span>
               </div>
               <button
                 className="rounded p-1 hover:bg-white/20"
@@ -222,7 +250,8 @@ export default function ChatBox() {
               <Textarea
                 ref={textareaRef}
                 classNames={{
-                  inputWrapper: "w-full border border-gray-300 rounded-md px-3 py-2",
+                  inputWrapper:
+                    "w-full border border-gray-300 rounded-md px-3 py-2",
                   input: "text-base",
                 }}
                 placeholder={t("inputPlaceholder")}

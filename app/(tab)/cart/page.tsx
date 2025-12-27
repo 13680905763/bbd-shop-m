@@ -27,7 +27,7 @@ export default function Cart() {
   const t = useTranslations("cart"); // ✅ 命名空间 cart
   const { currency } = useGlobalStore();
   const queryClient = useQueryClient();
-  const { data, isLoading, isError } = useCartList();
+  const { data, isLoading, isError, isFetching } = useCartList();
 
   const router = useRouter();
   const [isEdit, setIsEdit] = useState(false);
@@ -48,7 +48,6 @@ export default function Cart() {
     toggle,
     isAllSelected,
     toggleSelectAll,
-    // groupIds,
     hasSelected,
     isGroupAllSelected,
     toggleGroup,
@@ -110,20 +109,16 @@ export default function Cart() {
 
       return;
     }
-
     try {
       setIsSubmitting(true);
-
       const previewList = (selectedIds as string[]).map((cartId) => ({
         cartId,
         serviceList: [],
       }));
-
       const key: string = await createOrderPreviewKeyByCart({ previewList });
 
       router.push("/submit/order?type=cart&key=" + key);
-    } catch (error) {
-      console.error(error);
+    } catch {
     } finally {
       setIsSubmitting(false);
     }
@@ -131,28 +126,42 @@ export default function Cart() {
 
   const togglePrice = useMemo(() => {
     const allItems = data?.flatMap((shop) => shop.cartList) ?? [];
-
     const selectedItems = allItems.filter((item) =>
       selectedIds.includes(item.id),
     );
 
-    const total = selectedItems.reduce((sum, item) => {
-      // 保证 fee 是数字
-      const fee =
-        Number(item.totalFee ?? item.unitPrice ?? 0) *
-        Number(item.quantity ?? 1);
+    // 转换为分（cents）计算，避免小数
+    const totalInCents = selectedItems.reduce((sumInCents, item) => {
+      let itemTotalInCents = 0;
 
-      return sum + fee;
-    }, 0); // 初始值必须是数字 0
+      // 情况1: totalFee 是总价
+      if (item.totalFee !== undefined && item.totalFee !== null) {
+        itemTotalInCents = Math.round(Number(item.totalFee) * 100);
+      }
+      // 情况2: 单价 × 数量
+      else if (item.unitPrice !== undefined && item.quantity !== undefined) {
+        // 单价转换为分，乘以数量
+        const unitPriceInCents = Math.round(Number(item.unitPrice) * 100);
+        const quantity = Number(item.quantity);
 
-    return total.toFixed(2); // total 一定是数字，toFixed 安全
+        itemTotalInCents = Math.round(unitPriceInCents * quantity);
+      }
+
+      return sumInCents + itemTotalInCents;
+    }, 0);
+
+    // 转换回元，并格式化为2位小数
+    const total = totalInCents / 100;
+
+    return total.toFixed(2);
   }, [data, selectedIds]);
 
   if (isError) return <div>出错了</div>;
 
   return (
-    <div className="flex h-[100%] flex-col justify-between overflow-hidden">
+    <div className="relative flex h-[100%] flex-col justify-between overflow-hidden">
       {isLoading && <FullscreenLoader />}
+
       <div className="flex justify-between p-2">
         <div>
           <span className="text-lg font-bold">
@@ -160,7 +169,10 @@ export default function Cart() {
           </span>
         </div>
         <div className="flex items-center">
-          <button onClick={() => setIsEdit(!isEdit)}>
+          <button
+            className="text-sm font-semibold"
+            onClick={() => setIsEdit(!isEdit)}
+          >
             {isEdit ? t("cancel") : t("manage")}
           </button>
         </div>
@@ -181,6 +193,11 @@ export default function Cart() {
           />
         ))}
       </div>
+      {isFetching && !isLoading && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/50">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-orange-500" />
+        </div>
+      )}
       <div className="flex items-center justify-between border-b border-[#f5f5f5] bg-white px-3 py-2">
         <div className="flex gap-2">
           <Checkbox isSelected={isAllSelected} onChange={toggleSelectAll}>

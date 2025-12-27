@@ -126,7 +126,7 @@ export default function Promotion() {
                   <div className="py-4 text-center text-lg font-semibold text-[#f0700c]">
                     {item.rangeCode}
                   </div>
-                  <div className="flex flex-col items-center gap-1 py-4">
+                  <div className="flex flex-col items-center gap-1 py-4 text-center">
                     <div className="text-sm text-gray-500">
                       {t("promotionConfig.bonusLabel")}
                     </div>

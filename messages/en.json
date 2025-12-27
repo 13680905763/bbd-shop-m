@@ -481,7 +481,12 @@
         "riskMessage": "The product you submitted may have certain delivery risks. For the security of your funds, we are temporarily unable to provide online ordering services. For more information, please contact online customer service!",
         "productDescription": "Product Description",
         "stock": "Stock:",
-        "shippingFee": "Shipping Fee:"
+        "shippingFee": "Shipping Fee:",
+        "singleItemSalesTitle": "Single Item Sales",
+        "avgArrivalTime": "Avg Arrival Time",
+        "salesVolume": "Sales Volume",
+        "weightWithUnit": "Weight (g)",
+        "volumeWithUnit": "Volume (cm)"
     },
     "submit": {
         "order": {

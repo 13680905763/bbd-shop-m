@@ -3,6 +3,7 @@
 import type { ThemeProviderProps } from "next-themes";
 
 import * as React from "react";
+import "antd-mobile/es/global"; // 🎯 关键：引入全局样式
 import { HeroUIProvider } from "@heroui/system";
 import { useRouter } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";

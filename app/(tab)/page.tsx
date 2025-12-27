@@ -48,7 +48,7 @@ export default function Home() {
     {
       image: "/m/images/home/Community.png",
       title: t("toolList.community"),
-      to: "https://discord.gg/N34Q27Vts8",
+      to: "/promotion",
       // to: "/pages/member/promotion/index",
     },
     {
