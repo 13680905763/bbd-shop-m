@@ -320,7 +320,7 @@ export default function GoodsPage() {
   return (
     <>
       <NavBar onBack={() => router.back()}>
-        <span className="text-lg font-bold text-gray-900">{t("title")}99</span>
+        <span className="text-lg font-bold text-gray-900">{t("title")}</span>
       </NavBar>
 
       {isLoading ? (
@@ -359,7 +359,7 @@ export default function GoodsPage() {
                   </a>
                   <button
                     className="flex items-center gap-1"
-                    onClick={() => window.location.reload()}
+                    // onClick={() => window.location.reload()}
                   >
                     <GrPowerReset />
                     {t("refresh")}
@@ -545,7 +545,7 @@ export default function GoodsPage() {
                   />
                 </div>
               </DrawerBody>
-              <DrawerFooter>
+              <DrawerFooter className="pb-[env(safe-area-inset-bottom)]">
                 {drawerType === "buyNow" ? (
                   <Button
                     className="w-full"

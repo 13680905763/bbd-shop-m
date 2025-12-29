@@ -204,7 +204,7 @@ export default function PayOrder() {
   return (
     <>
       <NavBar onBack={() => router.back()}>
-        <span className="text-lg font-bold text-gray-900">{t("title")}1</span>
+        <span className="text-lg font-bold text-gray-900">{t("title")}</span>
       </NavBar>
       {(isLoading || loading) && <FullscreenLoader />}
       <div className="flex-1 overflow-y-auto overflow-x-hidden bg-[#f5f5f5] p-2">
@@ -267,7 +267,7 @@ export default function PayOrder() {
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-end gap-4 border-t-[1px] bg-white p-4">
+      <div className="flex items-center justify-end gap-4 border-t-[1px] bg-white p-4 pb-[env(safe-area-inset-bottom)]">
         <Button
           className="w-full"
           color="primary"

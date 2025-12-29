@@ -2,38 +2,32 @@ import axios, { AxiosResponse, AxiosRequestConfig, AxiosError } from "axios";
 import { addToast } from "@heroui/react";
 
 import { ApiResponse } from "@/types";
+import { useGlobalStore } from "@/store";
 
 export const request = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "/api",
   timeout: 500000,
-  headers: {
-    "Content-Type": "application/json",
-  },
   withCredentials: true,
 });
-// console.log(
-//   "process.env.NEXT_PUBLIC_API_BASE_URL",
-//   process.env.NEXT_PUBLIC_API_BASE_URL,
-// );
 
 // 请求拦截器：注入 token、语言等
 request.interceptors.request.use(
   (config) => {
     // 🔍 [Debug Log] 请求开始
-    console.log(`🚀 [API Request] ${config.method?.toUpperCase()} ${config.url}`, {
+    console.log(
+      `🚀 [API Request] ${config.method?.toUpperCase()} ${config.url}`,
+      {
         baseURL: config.baseURL,
         headers: config.headers,
         params: config.params,
-        data: config.data
-    });
+        data: config.data,
+      },
+    );
 
-    // const { language, currency } = useGlobalStore.getState();
+    const { language, currency } = useGlobalStore.getState();
 
-    // config.headers["X-Language"] = language;
-    config.headers["X-Language"] = "zh";
-
-    // config.headers["X-Currency"] = currency.value;
-    config.headers["X-Currency"] = "CNY";
+    config.headers["X-Language"] = language;
+    config.headers["X-Currency"] = currency.value;
 
     // config.headers["X-Language"] = "en";
     // config.headers["X-Currency"] = "USD";
@@ -89,9 +83,9 @@ request.interceptors.response.use(
   (error: AxiosError<any>) => {
     // 🔍 [Debug Log] 请求失败
     console.log(`❌ [API Error] ${error.config?.url}`, {
-        status: error.response?.status,
-        message: error.message,
-        response: error.response?.data
+      status: error.response?.status,
+      message: error.message,
+      response: error.response?.data,
     });
 
     // 先获取 config，并扩展类型

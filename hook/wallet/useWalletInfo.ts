@@ -15,7 +15,8 @@ export const useWalletInfo = (enabled: boolean = false) => {
 
       return data;
     },
-    staleTime: 5 * 60 * 1000, // 缓存 5 分钟
+    staleTime: 0, // 每次都视为过期，触发重新请求
+    refetchOnMount: true, // 组件挂载时强制请求
     enabled,
   });
 };

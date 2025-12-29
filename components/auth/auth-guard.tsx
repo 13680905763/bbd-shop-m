@@ -1,8 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
+
 import { useUserStore } from "@/store";
+import { getUserInfo } from "@/services";
+import FullscreenLoader from "@/components/common/fullscreen-loader";
 
 // 需要登录的路由前缀
 const PROTECTED_PATHS = [
@@ -18,28 +21,62 @@ const PROTECTED_PATHS = [
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { user } = useUserStore();
+  const { user, setUser } = useUserStore();
+  const [isChecking, setIsChecking] = useState(false);
 
   useEffect(() => {
-    // 检查是否在受保护的路由
-    const isProtected = PROTECTED_PATHS.some((path) =>
-      pathname?.startsWith(path),
-    );
+    const checkAuth = async () => {
+      // 检查是否在受保护的路由
+      const isProtected = PROTECTED_PATHS.some((path) =>
+        pathname?.startsWith(path),
+      );
 
-    // 如果在受保护路由且未登录，重定向到登录页
-    if (isProtected && !user) {
-      const loginUrl = `/login?redirect=${encodeURIComponent(pathname || "/")}`;
-      router.replace(loginUrl);
-    }
-  }, [pathname, user, router]);
+      console.log(
+        "路由拦截",
+        "是否保护路由",
+        isProtected,
+        "store是否存在",
+        !user,
+        "路由路径",
+        pathname,
+      );
+      // 如果在受保护路由且未登录
+      if (isProtected && !user) {
+        setIsChecking(true);
+        try {
+          // 尝试获取用户信息，确认是否真的未登录（可能是刷新页面导致 Store 丢失但 Cookie 还在）
+          const userInfo = await getUserInfo();
 
-  // 可以选择在检查期间显示 loading，或者直接渲染 children（会有一瞬间的闪烁，但在 useEffect 中跳转是 Next.js 常用做法）
-  // 为了用户体验，如果确定未登录且在保护路由，可以暂时返回 null
+          console.log("userInfo", userInfo);
+          setUser(userInfo);
+          // 获取成功，放行
+        } catch (error) {
+          // 获取失败，确实未登录，重定向
+          const loginUrl = `/login?redirect=${encodeURIComponent(
+            pathname || "/",
+          )}`;
+          router.replace(loginUrl);
+        } finally {
+          setIsChecking(false);
+        }
+      }
+    };
+
+    checkAuth();
+  }, [pathname, user, router, setUser]);
+
   const isProtected = PROTECTED_PATHS.some((path) =>
     pathname?.startsWith(path),
   );
-  if (isProtected && !user) {
-    return null; // 或者返回一个 Loading 组件
+
+  // 如果在受保护路由，且没有用户信息，正在检查中 -> 显示 Loading
+  if (isProtected && !user && isChecking) {
+    return <FullscreenLoader />;
+  }
+
+  // 如果在受保护路由，且没有用户信息，且检查完毕（失败了） -> 返回 null（等待跳转）
+  if (isProtected && !user && !isChecking) {
+    return null;
   }
 
   return <>{children}</>;

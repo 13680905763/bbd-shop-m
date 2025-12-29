@@ -17,7 +17,7 @@ const CustomRadio = (props: any) => {
         {...otherProps}
         classNames={{
           base: cn(
-            "inline-flex m-0 bg-transparent hover:bg-gray-50 items-center justify-between",
+            "inline-flex m-0 bg-transparent items-center justify-between",
             "flex-row-reverse max-w-[100%] cursor-pointer px-4 py-4 border-b border-gray-50 last:border-none",
             "data-[selected=true]:bg-gray-50",
           ),
@@ -30,7 +30,8 @@ const CustomRadio = (props: any) => {
   };
   
   export default function CurrencySettingPage() {
-    const { t } = useTranslation(); // ✅ 使用 react-i18next
+      const { t } = useTranslation("translation", { keyPrefix: "setting.currencyPage" });
+    
     const router = useRouter();
     const { currency, setCurrency, currencies } = useGlobalStore();
   
@@ -42,19 +43,18 @@ const CustomRadio = (props: any) => {
       try {
         console.log("保存选择货币:", tempCurrency);
         setCurrency(tempCurrency);
-        // await setUserCurrency(tempCurrency);
-        window.location.href = "/m";
+        window.location.href = "/";
       } finally {
         setLoading(false);
       }
     };
   
     return (
-      <div className="flex min-h-[calc(100vh-env(safe-area-inset-top))] flex-col bg-[#f5f5f5]">
-        <NavBar className="border-b border-gray-100 bg-white" onBack={() => router.back()}>
-          <span className="text-lg font-bold text-gray-900">{t("setting.currencyPage.title")}</span>
+      <>
+        <NavBar  onBack={() => router.back()}>
+        <span className="text-lg font-bold text-gray-900">{t("title")}</span>
         </NavBar>
-        <div className="flex flex-1 flex-col gap-6 p-4">
+        <div className="flex flex-1 flex-col gap-6 p-4 bg-[#f5f5f5] overflow-auto">
           <div className="overflow-hidden rounded-xl bg-white shadow-sm">
             <RadioGroup
               className="w-full p-0"
@@ -78,9 +78,9 @@ const CustomRadio = (props: any) => {
             isLoading={loading}
             onPress={handleSubmit}
           >
-            {t("setting.currencyPage.save")}
+            {t("save")}
           </Button>
         </div>
-      </div>
+      </>
     );
   }

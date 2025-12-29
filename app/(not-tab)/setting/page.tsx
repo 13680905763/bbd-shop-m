@@ -5,10 +5,14 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { IoChevronForwardSharp } from "react-icons/io5";
 import { useTranslation } from "react-i18next"; // 改用 react-i18next
+import { logoutCustomer } from "@/services";
+
+import { useUserStore } from "@/store";
 
 export default function Settingpage() {
   const router = useRouter();
   const { t } = useTranslation("translation", { keyPrefix: "setting.page" });
+  const { clearUser } = useUserStore();
   const menu = [
     {
       key: "language",
@@ -28,7 +32,13 @@ export default function Settingpage() {
   ];
 
   const handleLogoutCustomer = async () => {
-    router.push("/login");
+    try {
+      await logoutCustomer();
+    } finally {
+      // 无论后端接口成功与否，前端都要清除状态
+      clearUser();
+      window.location.href = "/login";
+    }
   };
 
   return (

@@ -136,14 +136,14 @@ export default function Searchpage() {
       <div className="flex-1 overflow-y-auto bg-[#f8f8f8] p-4">
         <div className="font-bold">历史记录</div>
         <Divider className="my-2" />
-        <div className="flex flex-wrap gap-2 p-2">
+        {/* <div className="flex flex-wrap gap-2 p-2">
           <div className="bg-[#f8f8f8] p-2">123</div>
           <div className="bg-[#f8f8f8] p-2">jfaljgf;ljsa;gjs</div>
           <div className="bg-[#f8f8f8] p-2">agsahhdsfhfdh</div>
           <div className="line-clamp-1 overflow-hidden text-ellipsis text-nowrap bg-[#f8f8f8] p-2">
             https://item.taobao.com/item.htm?id=775526482716&pisk=gv1sHpjcscm62vdxld4e...
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

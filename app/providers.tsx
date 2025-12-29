@@ -15,6 +15,8 @@ import { useEffect, useState } from "react";
 import { queryClient } from "@/lib/react-query";
 import { initI18n } from "@/lib/i18n";
 import AuthGuard from "@/components/auth/auth-guard";
+import StoreInitializer from "@/components/auth/store-initializer";
+import { SplashScreen } from "@capacitor/splash-screen";
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -52,6 +54,20 @@ export function Providers({
     };
 
     loadI18n();
+
+    // 隐藏启动页
+    const hideSplashScreen = async () => {
+      try {
+        await SplashScreen.hide();
+      } catch (e) {
+        console.log("SplashScreen hide error", e);
+      }
+    };
+    
+    // 稍微延迟一点，确保应用渲染完成
+    setTimeout(() => {
+        hideSplashScreen();
+    }, 500);
   }, []);
   // 等待 i18n 初始化完成
   if (!i18nInstance) {
@@ -72,11 +88,15 @@ export function Providers({
           <HeroUIProvider navigate={router.push}>
             <ToastProvider
               placement="top-center"
+              toastOffset={50}
               toastProps={{
                 timeout: 1000,
               }}
             />
-            <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
+            <NextThemesProvider {...themeProps}>
+              <StoreInitializer />
+              <AuthGuard>{children}</AuthGuard>
+            </NextThemesProvider>
           </HeroUIProvider>
         </QueryClientProvider>
       </GoogleOAuthProvider>

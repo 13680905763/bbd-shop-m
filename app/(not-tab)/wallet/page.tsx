@@ -3,43 +3,29 @@
 import { Button, NumberInput } from "@heroui/react";
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { IoWallet } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 
 import { createOrderByRecharge } from "@/services";
-import { getWalletInfo } from "@/services/wallet";
-import FullscreenLoader from "@/components/common/fullscreen-loader";
-import { useGlobalStore } from "@/store";
+import { useGlobalStore, useWalletStore } from "@/store";
+import { useWalletInfo } from "@/hook/wallet/useWalletInfo";
 
 export default function WalletRechargePage() {
   const { t } = useTranslation("translation", {
     keyPrefix: "wallet.page",
   });
   const { currency } = useGlobalStore();
+  const { wallet } = useWalletStore();
 
-  const [loading, setLoading] = useState(true);
+  // 静默刷新钱包信息
+  useWalletInfo(true);
+
   const [rechargeLoading, setRechargeLoading] = useState(false);
-
   const [currentPrice, setCurrentPrice] = useState<number>(1);
-  const [wallet, setWallet] = useState<any>(null);
 
   const priceList = [50, 100, 200, 500, 1000, 5000];
   const router = useRouter();
-  // 获取钱包信息
-  const fetchWallet = async () => {
-    try {
-      const res = await getWalletInfo();
-
-      setWallet(res);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchWallet();
-  }, []);
 
   const handleRecharge = async () => {
     try {
@@ -57,7 +43,6 @@ export default function WalletRechargePage() {
 
   return (
     <>
-      {loading && <FullscreenLoader />}
       <NavBar
         right={
           <button onClick={() => router.push("/wallet/balance-record")}>
@@ -125,8 +110,8 @@ export default function WalletRechargePage() {
           <Button
             className="w-full"
             color="primary"
-            isLoading={rechargeLoading}
             isDisabled={!currentPrice}
+            isLoading={rechargeLoading}
             onPress={handleRecharge}
           >
             {t("recharge")}

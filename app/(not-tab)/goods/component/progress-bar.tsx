@@ -13,7 +13,7 @@ const ProgressBar: React.FC<ProgressBarProps> = () => {
   const steps = [t("step1"), t("step2"), t("step3")];
 
   return (
-    <div className="m-2 rounded-lg bg-white p-2">
+    <div className="rounded-lg bg-white p-2">
       <div className="flex h-[2.3125rem] w-full items-center justify-between">
         <div className="flex w-1/2">
           <div className="flex h-[2.3125rem] w-full items-center justify-center bg-[#fff7ef] text-sm font-normal text-[#f0700c]">

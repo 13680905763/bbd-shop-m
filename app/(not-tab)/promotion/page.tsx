@@ -86,7 +86,9 @@ export default function Promotion() {
             {t("totalReward.amount")}
           </div>
           <div className="text-sm text-[#999]">{t("totalReward.label")}</div>
-          <div className="flex justify-center border-b border-[#eeeeee] px-[10px] py-[15px]">
+          {/* <div className="flex justify-center border-b border-[#eeeeee] px-[10px] py-[15px]"> */}
+          <div className="flex justify-center  px-[10px] py-[15px]">
+
             <button className="flex-1 rounded-full border border-[#ccc] py-2 text-sm">
               {t("totalReward.recordButton")}
             </button>
@@ -96,7 +98,7 @@ export default function Promotion() {
             </button>
           </div>
 
-          <div className="my-4 grid grid-cols-3">
+          {/* <div className="my-4 grid grid-cols-3">
             {["inviteUser", "withdrawable", "earned"].map((key) => (
               <div key={key} className="flex flex-col items-center">
                 <div className="mb-1 text-base font-bold">
@@ -107,7 +109,7 @@ export default function Promotion() {
                 </div>
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
 
         {/* 我的等级 */}

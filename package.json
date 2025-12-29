@@ -12,6 +12,7 @@
     "@capacitor/core": "^8.0.0",
     "@capacitor/http": "^0.0.2",
     "@capacitor/ios": "^8.0.0",
+    "@capacitor/splash-screen": "^8.0.0",
     "@capacitor/status-bar": "^8.0.0",
     "@heroui/button": "2.2.19",
     "@heroui/code": "2.2.14",
@@ -43,11 +44,13 @@
     "react-dom": "18.3.1",
     "react-i18next": "^16.5.0",
     "react-icons": "^5.5.0",
+    "sharp": "^0.34.5",
     "swr": "^2.3.3",
     "tailwind-scrollbar-hide": "^2.0.0",
     "zustand": "^5.0.6"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "^8.0.0",
     "@eslint/compat": "1.2.8",
     "@eslint/eslintrc": "3.3.1",

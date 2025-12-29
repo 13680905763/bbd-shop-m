@@ -17,7 +17,7 @@ const CustomRadio = (props: any) => {
       {...otherProps}
       classNames={{
         base: cn(
-          "inline-flex m-0 bg-transparent hover:bg-gray-50 items-center justify-between",
+          "inline-flex m-0 bg-transparent  items-center justify-between",
           "flex-row-reverse max-w-[100%] cursor-pointer px-4 py-4 ",
           "data-[selected=true]:bg-gray-50",
         ),
@@ -50,7 +50,7 @@ export default function Settingpage() {
     try {
       setLanguage(tempLanguage);
       await i18n.changeLanguage(tempLanguage);
-      window.location.href = "/m";
+      window.location.href = "/";
     } catch {
     } finally {
       setLoading(false);

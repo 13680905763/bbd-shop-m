@@ -7,9 +7,10 @@ import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
 import CommonForm from "@/components/form/common-form";
-import { getUserInfo, updateUserInfo, uploadAvatar } from "@/services"; // ✅ uploadAvatar 是上传接口
+import { updateUserInfo, uploadAvatar } from "@/services"; // ✅ uploadAvatar 是上传接口
 import { FieldConfig } from "@/components/form/formItem-renderer";
-import FullscreenLoader from "@/components/common/fullscreen-loader";
+import { useUserStore } from "@/store";
+import { useUserInfo } from "@/hook/user/useUserInfo";
 
 export default function Settingpage() {
   const { t } = useTranslation("translation", {
@@ -18,29 +19,17 @@ export default function Settingpage() {
   const router = useRouter();
 
   // --- 状态管理 ---
-  const [user, setUser] = useState<any>(null);
+  const { user } = useUserStore();
+  const { refetch } = useUserInfo(); // 使用 Hook 来刷新数据
+
   const [formData, setFormData] = useState({
     id: "",
     nickName: "",
     mobile: "",
   });
-  const [loading, setLoading] = useState(true);
   const [avatarLoading, setAvatarLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  // 获取用户信息
-  const fetchUser = async () => {
-    try {
-      const res = await getUserInfo();
 
-      setUser(res);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
   const fields: FieldConfig[] = [
     {
       type: "input",
@@ -61,7 +50,8 @@ export default function Settingpage() {
   const handleSubmit = async (data: any) => {
     await updateUserInfo(data);
     // 更新最新用户信息
-    await fetchUser();
+    await refetch();
+    // router.back();
   };
 
   // 点击头像触发文件选择
@@ -78,26 +68,25 @@ export default function Settingpage() {
     setAvatarLoading(true);
     try {
       await uploadAvatar(file);
-      await fetchUser();
+      await refetch();
     } finally {
       setAvatarLoading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     }
   };
 
   useEffect(() => {
     setFormData({
-      id: user?.id,
+      id: user?.id || "",
       nickName: user?.nickName || "",
       mobile: user?.mobile || "",
     });
   }, [user]);
 
-  // if (loading) return <FullscreenLoader />;
-
   return (
     <>
-      {loading && <FullscreenLoader />}
-
       <NavBar onBack={() => router.back()}>
         <span className="text-lg font-bold text-gray-900">{t("title")}</span>
       </NavBar>

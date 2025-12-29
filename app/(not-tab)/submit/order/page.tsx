@@ -228,7 +228,7 @@ export default function SubmitOrder() {
     <>
       {/* 顶部导航 */}
       <NavBar onBack={() => router.back()}>
-        <span className="text-lg font-bold text-gray-900">{t("title")}1</span>
+        <span className="text-lg font-bold text-gray-900">{t("title")}</span>
       </NavBar>
       {isLoading && <FullscreenLoader />}
 
@@ -244,7 +244,7 @@ export default function SubmitOrder() {
       </div>
 
       {/* 底部费用汇总 & 提交按钮 */}
-      <div className="w-full border-t bg-white px-4 py-3">
+      <div className="w-full border-t bg-white px-4 pb-[env(safe-area-inset-bottom)] pt-1">
         <div className="mb-3 flex flex-col gap-2">
           {/* 总计 */}
           <div className="flex justify-between pt-2 text-base font-bold text-gray-900">
@@ -337,6 +337,7 @@ export default function SubmitOrder() {
       {/* 服务详情弹窗 */}
       {currentService && (
         <CommonModal
+        footer={visible&&<div/>}
           isDismissable={false}
           isOpen={isServiceDetailOpen}
           showCancel={currentService.id != 1}
@@ -386,6 +387,25 @@ export default function SubmitOrder() {
                     visible={visible}
                     onClose={() => setVisible(false)}
                   />
+                  {visible && (
+                    <style>
+                      {`
+                        /* 提升图片预览容器的层级 */
+                        .adm-image-viewer-popup {
+                          z-index: 2147483647 !important;
+                        }
+                        /* 提升图片预览背景遮罩的层级 */
+                        .adm-mask {
+                          z-index: 2147483646 !important;
+                        }
+                        /* 隐藏 CommonModal，防止穿透点击 */
+                        /* 注意：这里假设 CommonModal 的 wrapper 有特定类名，或者我们暴力隐藏所有其他 modal */
+                        .nextui-modal-backdrop, .nextui-modal-wrapper {
+                           display: none !important;
+                        }
+                      `}
+                    </style>
+                  )}
                 </div>
               )}
             </div>

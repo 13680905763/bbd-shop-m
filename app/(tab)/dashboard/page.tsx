@@ -7,14 +7,21 @@ import { useTranslation } from "react-i18next";
 
 import { getUserInfo } from "@/services";
 import { getWalletInfo } from "@/services/wallet";
-import { useGlobalStore } from "@/store";
-import FullscreenLoader from "@/components/common/fullscreen-loader";
+import { useGlobalStore, useUserStore, useWalletStore } from "@/store";
+import { useUserInfo } from "@/hook/user/useUserInfo";
+import { useWalletInfo } from "@/hook/wallet/useWalletInfo";
 
 export default function DashBoard() {
   const { t } = useTranslation("translation", { keyPrefix: "dashboard" });
 
   const router = useRouter();
   const { currency } = useGlobalStore();
+  const { user } = useUserStore();
+  const { wallet } = useWalletStore();
+
+  // 静默更新数据 (无 loading 效果，直接更新 Store)
+  useUserInfo(true);
+  useWalletInfo(true);
 
   // 静态数据配置
   const menuItems = [
@@ -82,34 +89,9 @@ export default function DashBoard() {
   ];
 
   // ✅ 页面加载状态
-  const [user, setUser] = useState<any>(null);
-  const [wallet, setWallet] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [userRes, walletRes]: any = await Promise.all([
-          getUserInfo(),
-          getWalletInfo(),
-        ]);
-
-        setUser(userRes);
-        setWallet(walletRes);
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <div className="flex flex-1 flex-col overflow-auto pb-[env(safe-area-inset-bottom)]">
-      {loading && <FullscreenLoader />}
-
       {/* 顶部用户信息 */}
       <div className="flex items-center justify-between py-2">
         <div role="button" onClick={() => router.push("/profile")}>
