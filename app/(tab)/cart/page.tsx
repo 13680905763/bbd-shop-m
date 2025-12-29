@@ -165,7 +165,7 @@ export default function Cart() {
       <div className="flex justify-between p-2">
         <div>
           <span className="text-lg font-bold">
-            {t("title")}（ {data?.flatMap((shop) => shop.cartList).length}）
+            {t("title")}({data?.flatMap((shop) => shop.cartList).length})
           </span>
         </div>
         <div className="flex items-center">

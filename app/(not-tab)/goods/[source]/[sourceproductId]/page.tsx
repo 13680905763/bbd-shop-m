@@ -120,7 +120,7 @@ function getAllCombinations(
   return combinations;
 }
 export default function GoodsPage() {
-  const t = useTranslations("goods");
+  const t = useTranslations("goods.details");
   const { currency } = useGlobalStore();
 
   const params = useParams();
@@ -229,7 +229,7 @@ export default function GoodsPage() {
         });
       }
     });
-    console.log("cloned", cloned);
+    // console.log("cloned", cloned);
 
     // setGoodsInfo(cloned);
 
@@ -271,12 +271,28 @@ export default function GoodsPage() {
     if (!goodsInfo) return;
     const selectedValues = getSelectedValues(goodsInfo.productInfo.skuPropList);
 
+    console.log("selectedValues", selectedValues);
+
     const currentSku = goodsInfo.productInfo.skuList.find((item: any) => {
-      return (
-        selectedValues.filter((i: any) => item?.propId_valueId.includes(i))
-          ?.length == selectedValues.length
+      if (!item?.propId_valueId) return false;
+
+      // 1. 将 propId_valueId 字符串拆分成数组
+      const propValuePairs = item.propId_valueId.split(";");
+
+      // 2. 提取所有值部分（冒号后面的部分）
+      const values = propValuePairs.map((pair: any) => {
+        const parts = pair.split(":");
+
+        return parts[1]; // 获取值部分
+      });
+
+      // 3. 检查每个选中的值是否都在 values 数组中
+      return selectedValues.every((selectedValue: any) =>
+        values.includes(selectedValue),
       );
     });
+
+    console.log("currentSku", currentSku);
 
     if (currentSku) return currentSku;
     // else return goodsInfo.productInfo.skuList[0];
@@ -385,7 +401,7 @@ export default function GoodsPage() {
         </div>
       ) : (
         <>
-          <div className="flex-1 overflow-auto">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden">
             <Swiper autoplay>
               {goodsInfo?.productInfo.imgList.map((item: any) => (
                 <Swiper.Item key={item}>

@@ -25,6 +25,11 @@
             "confirmText": "Confirmer",
             "cancelText": "Annuler"
         },
+        "copyButton": {
+            "success": "Copié dans le presse-papiers",
+            "fail": "Échec de la copie",
+            "title": "Cliquez pour copier"
+        },
         "chatbox": {
             "loginFirst": "Veuillez vous connecter d'abord",
             "onlineSupport": "Support en ligne",
@@ -191,7 +196,7 @@
             "title": "Mes commandes",
             "tabs": {
                 "all": "Toutes",
-                "waitPay": "En attente de paiement",
+                "waitPay": "Paiement",
                 "paid": "Payées",
                 "refund": "Remboursement"
             },
@@ -455,38 +460,47 @@
         }
     },
     "goods": {
-        "title": "Détails du Produit",
-        "originalLink": "Lien Original",
-        "refresh": "Actualiser",
-        "progressBar": {
-            "step1": "Payer le Produit",
-            "step2": "Soumettre le Colis",
-            "step3": "Colis Reçu",
-            "tipText": "Nous fournissons gratuitement 3 à 7 photos d'inspection qualité haute définition",
-            "fromSellerToBBD": "Du Vendeur à BBD",
-            "fromBBDToYou": "De BBD à Vous"
+        "details": {
+            "title": "Détails du Produit",
+            "originalLink": "Lien Original",
+            "refresh": "Actualiser",
+            "progressBar": {
+                "step1": "Payer le Produit",
+                "step2": "Soumettre le Colis",
+                "step3": "Colis Reçu",
+                "tipText": "Nous fournissons gratuitement 3 à 7 photos d'inspection qualité haute définition",
+                "fromSellerToBBD": "Du Vendeur à BBD",
+                "fromBBDToYou": "De BBD à Vous"
+            },
+            "disclaimerDrawer": {
+                "title": "Avertissement Légal",
+                "buttonLabel": "Avertissement Légal",
+                "content": "Tous les produits d'achat représenté affichés sur BBDbuy proviennent de plateformes d'achat tierces et ne sont pas vendus directement par BBDbuy. Par conséquent, BBDbuy n'assume aucune responsabilité ni obligation légale pour les problèmes découlant de la violation de la propriété intellectuelle et des droits d'auteur des marchandises. En utilisant le service d'achat représenté de BBDbuy, vous reconnaissez et acceptez les risques mentionnés ci-dessus."
+            },
+            "quantity": "Quantité",
+            "remark": "Remarques",
+            "enterDescription": "Veuillez saisir des remarques",
+            "buyNow": "Acheter",
+            "addToCart": "Ajouter au Panier",
+            "riskNotice": "Avis de Risque",
+            "continueShopping": "Continuer les Achats",
+            "riskMessage": "Le produit que vous avez soumis peut présenter certains risques d'expédition. Pour la sécurité de vos fonds, nous sommes temporairement incapables de fournir des services de commande en ligne. Pour plus d'informations, veuillez contacter le service client en ligne !",
+            "productDescription": "Description du Produit",
+            "stock": "Stock :",
+            "shippingFee": "Frais d'Expédition :",
+            "singleItemSalesTitle": "Ventes à l'Unité",
+            "avgArrivalTime": "Temps Moyen d'Arrivée",
+            "salesVolume": "Volume des Ventes",
+            "weightWithUnit": "Poids (g)",
+            "volumeWithUnit": "Volume (cm)"
         },
-        "disclaimerDrawer": {
-            "title": "Avertissement Légal",
-            "buttonLabel": "Avertissement Légal",
-            "content": "Tous les produits d'achat représenté affichés sur BBDbuy proviennent de plateformes d'achat tierces et ne sont pas vendus directement par BBDbuy. Par conséquent, BBDbuy n'assume aucune responsabilité ni obligation légale pour les problèmes découlant de la violation de la propriété intellectuelle et des droits d'auteur des marchandises. En utilisant le service d'achat représenté de BBDbuy, vous reconnaissez et acceptez les risques mentionnés ci-dessus."
-        },
-        "quantity": "Quantité",
-        "remark": "Remarques",
-        "enterDescription": "Veuillez saisir des remarques",
-        "buyNow": "Acheter Maintenant",
-        "addToCart": "Ajouter au Panier",
-        "riskNotice": "Avis de Risque",
-        "continueShopping": "Continuer les Achats",
-        "riskMessage": "Le produit que vous avez soumis peut présenter certains risques d'expédition. Pour la sécurité de vos fonds, nous sommes temporairement incapables de fournir des services de commande en ligne. Pour plus d'informations, veuillez contacter le service client en ligne !",
-        "productDescription": "Description du Produit",
-        "stock": "Stock :",
-        "shippingFee": "Frais d'Expédition :",
-        "singleItemSalesTitle": "Ventes à l'Unité",
-        "avgArrivalTime": "Temps Moyen d'Arrivée",
-        "salesVolume": "Volume des Ventes",
-        "weightWithUnit": "Poids (g)",
-        "volumeWithUnit": "Volume (cm)"
+        "search": {
+            "searchPlaceholder": "Rechercher...",
+            "uploadFailed": "Échec du téléchargement, veuillez réessayer",
+            "invalidUrl": "Veuillez saisir une URL valide",
+            "searchButton": "Rechercher",
+            "historyTitle": "Historique"
+        }
     },
     "submit": {
         "order": {
@@ -690,5 +704,23 @@
         "delete": "Supprimer",
         "save": "Enregistrer",
         "confirm": "Confirmer"
+    },
+    "history": {
+        "title": "Historique",
+        "manage": "Gérer",
+        "cancel": "Annuler",
+        "selectAll": "Tout sélectionner",
+        "delete": "Supprimer",
+        "deleteConfirmTitle": "Supprimer le panier",
+        "deleteConfirmContent": "Êtes-vous sûr de vouloir supprimer ce produit ?"
+    },
+    "favorite": {
+        "title": "Mes favoris",
+        "manage": "Gérer",
+        "cancel": "Annuler",
+        "selectAll": "Tout sélectionner",
+        "delete": "Supprimer",
+        "deleteConfirmTitle": "Supprimer le favori",
+        "deleteConfirmContent": "Êtes-vous sûr de vouloir supprimer ce produit ?"
     }
 }

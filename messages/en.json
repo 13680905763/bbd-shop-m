@@ -25,6 +25,11 @@
             "confirmText": "Confirm",
             "cancelText": "Cancel"
         },
+        "copyButton": {
+            "success": "Copied to clipboard",
+            "fail": "Copy failed",
+            "title": "Click to copy"
+        },
         "chatbox": {
             "loginFirst": "Please login first",
             "onlineSupport": "Online Support",
@@ -455,38 +460,47 @@
         }
     },
     "goods": {
-        "title": "Product Details",
-        "originalLink": "Original Link",
-        "refresh": "Refresh",
-        "progressBar": {
-            "step1": "Pay for Product",
-            "step2": "Submit Package",
-            "step3": "Package Received",
-            "tipText": "We provide 3-7 high-definition quality inspection photos for free",
-            "fromSellerToBBD": "From Seller to BBD",
-            "fromBBDToYou": "From BBD to You"
+        "details": {
+            "title": "Product Details",
+            "originalLink": "Original Link",
+            "refresh": "Refresh",
+            "progressBar": {
+                "step1": "Pay for Product",
+                "step2": "Submit Package",
+                "step3": "Package Received",
+                "tipText": "We provide 3-7 high-definition quality inspection photos for free",
+                "fromSellerToBBD": "From Seller to BBD",
+                "fromBBDToYou": "From BBD to You"
+            },
+            "disclaimerDrawer": {
+                "title": "Disclaimer",
+                "buttonLabel": "Disclaimer",
+                "content": "All purchasing agent products displayed on BBDbuy are sourced from third-party purchasing platforms and are not directly sold by BBDbuy. Therefore, BBDbuy assumes no responsibility or legal liability for issues arising from intellectual property infringement and copyright infringement of goods. By using BBDbuy's purchasing agent service, you acknowledge and accept the aforementioned risks."
+            },
+            "quantity": "Quantity",
+            "remark": "Remarks",
+            "enterDescription": "Please enter remarks",
+            "buyNow": "Buy Now",
+            "addToCart": "Add to Cart",
+            "riskNotice": "Risk Notice",
+            "continueShopping": "Continue Shopping",
+            "riskMessage": "The product you submitted may have certain delivery risks. For the security of your funds, we are temporarily unable to provide online ordering services. For more information, please contact online customer service!",
+            "productDescription": "Product Description",
+            "stock": "Stock:",
+            "shippingFee": "Shipping Fee:",
+            "singleItemSalesTitle": "Single Item Sales",
+            "avgArrivalTime": "Avg Arrival Time",
+            "salesVolume": "Sales Volume",
+            "weightWithUnit": "Weight (g)",
+            "volumeWithUnit": "Volume (cm)"
         },
-        "disclaimerDrawer": {
-            "title": "Disclaimer",
-            "buttonLabel": "Disclaimer",
-            "content": "All purchasing agent products displayed on BBDbuy are sourced from third-party purchasing platforms and are not directly sold by BBDbuy. Therefore, BBDbuy assumes no responsibility or legal liability for issues arising from intellectual property infringement and copyright infringement of goods. By using BBDbuy's purchasing agent service, you acknowledge and accept the aforementioned risks."
-        },
-        "quantity": "Quantity",
-        "remark": "Remarks",
-        "enterDescription": "Please enter remarks",
-        "buyNow": "Buy Now",
-        "addToCart": "Add to Cart",
-        "riskNotice": "Risk Notice",
-        "continueShopping": "Continue Shopping",
-        "riskMessage": "The product you submitted may have certain delivery risks. For the security of your funds, we are temporarily unable to provide online ordering services. For more information, please contact online customer service!",
-        "productDescription": "Product Description",
-        "stock": "Stock:",
-        "shippingFee": "Shipping Fee:",
-        "singleItemSalesTitle": "Single Item Sales",
-        "avgArrivalTime": "Avg Arrival Time",
-        "salesVolume": "Sales Volume",
-        "weightWithUnit": "Weight (g)",
-        "volumeWithUnit": "Volume (cm)"
+        "search": {
+            "searchPlaceholder": "Search...",
+            "uploadFailed": "Upload failed, please try again",
+            "invalidUrl": "Please enter a valid URL",
+            "searchButton": "Search",
+            "historyTitle": "History"
+        }
     },
     "submit": {
         "order": {
@@ -690,5 +704,23 @@
         "delete": "Delete",
         "save": "Save",
         "confirm": "Confirm"
+    },
+    "history": {
+        "title": "History",
+        "manage": "Manage",
+        "cancel": "Cancel",
+        "selectAll": "Select All",
+        "delete": "Delete",
+        "deleteConfirmTitle": "Delete Cart",
+        "deleteConfirmContent": "Are you sure you want to delete this product?"
+    },
+    "favorite": {
+        "title": "My Favorites",
+        "manage": "Manage",
+        "cancel": "Cancel",
+        "selectAll": "Select All",
+        "delete": "Delete",
+        "deleteConfirmTitle": "Delete Favorite",
+        "deleteConfirmContent": "Are you sure you want to delete this product?"
     }
 }

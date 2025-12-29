@@ -71,13 +71,14 @@ const FormModal = ({
     <Modal
       isDismissable={false}
       isOpen={isOpen}
-      placement="center"
+      placement="top-center"
+      scrollBehavior="normal"
       onOpenChange={onOpenChange}
     >
       <ModalContent>
         <>
           <ModalHeader>{title}</ModalHeader>
-          <ModalBody className="max-h-[70vh] overflow-y-auto">
+          <ModalBody className="min-h-[300px]">
             <FormItemRenderer
               fields={fields}
               formData={formData}

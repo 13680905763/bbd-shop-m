@@ -289,7 +289,7 @@ export default function Estimation() {
                     {/* 价格规则 */}
                     <div className="rounded-lg border border-gray-100 bg-white p-3 shadow-sm">
                       <p className="mb-2 text-sm font-semibold">
-                        {t("pricingStandard")}
+                        {t("pricingStandard")}({route.firstWeight}g)
                       </p>
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div className="flex flex-col gap-1">

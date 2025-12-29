@@ -1,13 +1,7 @@
 import { Checkbox, Image } from "@heroui/react";
 import { useRouter } from "next/navigation";
 
-import { Product } from "./page";
-
-type ProductItemProps = {
-  product: Product;
-};
-
-export default function ProductItem({ product }: ProductItemProps) {
+export default function ProductItem({ product }: any) {
   const router = useRouter();
 
   return (

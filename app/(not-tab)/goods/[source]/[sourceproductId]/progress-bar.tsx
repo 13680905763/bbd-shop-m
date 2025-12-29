@@ -7,7 +7,7 @@ interface ProgressBarProps {
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = () => {
-  const t = useTranslations("goods.progressBar");
+  const t = useTranslations("goods.details.progressBar");
   const steps = [t("step1"), t("step2"), t("step3")];
 
   return (

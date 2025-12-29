@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 
 import { useGlobalStore } from "@/store";
 import SourceIcon from "@/components/common/source-icon";
+import CopyButton from "@/components/common/copy-button";
 
 export default function OrderItem({
   order,
@@ -112,9 +113,12 @@ export default function OrderItem({
             />
           )}
           <SourceIcon source={order.source} />
-          <div className="font-semibold">
-            {order?.orderCode}
-            <div className="text-xs text-gray-500">{order?.createTime}</div>
+          <div className="font-semibold flex justify-center flex-col">
+            <div className="flex">
+              {order?.orderCode}
+              <CopyButton text={order?.orderCode} size={12} />
+            </div>
+            <div className="text-xs text-gray-500 ">{order?.createTime}</div>
           </div>
         </div>
         <div className="self-start text-right text-sm font-bold text-[#f0700c]">

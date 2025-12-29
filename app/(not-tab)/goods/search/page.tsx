@@ -4,11 +4,14 @@ import React, { useRef, useState } from "react";
 import { IoChevronBack } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import { FaRegImage } from "react-icons/fa";
+import { useTranslations } from "next-intl";
 
 import { getGoodsId, getGoodsImageId } from "@/services";
 import { SearchIcon } from "@/components/icons";
 
 export default function Searchpage() {
+  const t = useTranslations("goods.search");
+
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [uploading, setUploading] = useState(false); // 新增上传中状态
@@ -41,7 +44,7 @@ export default function Searchpage() {
     } catch (error) {
       console.error("上传图片失败", error);
       addToast({
-        title: "上传失败，请重试",
+        title: t("uploadFailed"), // 使用翻译
         timeout: 1000,
         color: "danger",
       });
@@ -66,7 +69,7 @@ export default function Searchpage() {
       url = new URL(data.url);
     } catch (err) {
       addToast({
-        title: "请输入有效的 URL",
+        title: t("invalidUrl"), // 使用翻译
         timeout: 1000,
         color: "danger",
       });
@@ -93,29 +96,30 @@ export default function Searchpage() {
               input: "text-base",
             }}
             endContent={
-              <div className="flex items-center gap-2">
+              <div className="flex flex-1 items-center gap-1">
                 {uploading ? (
                   <Spinner color="primary" size="sm" />
                 ) : (
                   <FaRegImage
-                    className="cursor-pointer text-xl"
+                    className="cursor-pointer text-2xl"
                     onClick={triggerUpload}
                   />
                 )}
                 <Button
                   isIconOnly
+                  className="w-full"
                   color="primary"
                   size="sm"
                   type="submit"
                   variant="light"
                 >
-                  搜索
+                  {t("searchButton")} {/* 使用翻译 */}
                 </Button>
               </div>
             }
             labelPlacement="outside"
             name="url"
-            placeholder="Search..."
+            placeholder={t("searchPlaceholder")} // 使用翻译
             startContent={
               <SearchIcon className="pointer-events-none flex-shrink-0 text-base text-default-400" />
             }
@@ -132,16 +136,16 @@ export default function Searchpage() {
       </div>
 
       <div className="flex-1 bg-white p-4">
-        <div className="font-bold">历史记录</div>
+        <div className="font-bold">{t("historyTitle")}</div> {/* 使用翻译 */}
         <Divider className="my-2" />
-        <div className="flex flex-wrap gap-2 p-2">
+        {/* <div className="flex flex-wrap gap-2 p-2">
           <div className="bg-[#f8f8f8] p-2">123</div>
           <div className="bg-[#f8f8f8] p-2">jfaljgf;ljsa;gjs</div>
           <div className="bg-[#f8f8f8] p-2">agsahhdsfhfdh</div>
           <div className="line-clamp-1 overflow-hidden text-ellipsis text-nowrap bg-[#f8f8f8] p-2">
             https://item.taobao.com/item.htm?id=775526482716&pisk=gv1sHpjcscm62vdxld4e...
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

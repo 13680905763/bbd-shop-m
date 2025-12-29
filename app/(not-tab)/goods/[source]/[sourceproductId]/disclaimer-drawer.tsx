@@ -12,7 +12,7 @@ import { useTranslations } from "next-intl";
 import { IoBagCheck, IoChevronForwardSharp } from "react-icons/io5";
 
 export default function DisclaimerDrawer() {
-  const t = useTranslations("goods.disclaimerDrawer");
+  const t = useTranslations("goods.details.disclaimerDrawer");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
