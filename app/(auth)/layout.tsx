@@ -2,12 +2,15 @@
 import { IoChevronBack } from "react-icons/io5";
 import React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Divider } from "@heroui/react";
-import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import { Divider, Button } from "@heroui/react";
+import { useGoogleLogin } from "@react-oauth/google";
 import { useTranslations } from "next-intl";
+import { FaGoogle } from "react-icons/fa";
 
 import { Logo } from "@/components/icons";
-import { loginWithGoogle } from "@/services";
+import { loginWithGoogleNew } from "@/services";
+import { useUserStore } from "@/store";
+
 export default function AuthLayout({
   children,
 }: {
@@ -17,19 +20,19 @@ export default function AuthLayout({
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/"; // 默认为首页
-  const handleLoginWithGoogle = async (
-    credentialResponse: CredentialResponse,
-  ) => {
-    const credential = credentialResponse.credential;
+  // const fetchUserInfo = useUserStore((state) => state.fetchUserInfo);
 
-    try {
-      const res = await loginWithGoogle(credential as string);
-
-      router.push(redirect);
-    } catch (err) {
-      // 同样的错误处理
-    }
-  };
+  const handleGoogleLogin = useGoogleLogin({
+    flow: "auth-code",
+    scope: "email profile openid",
+    onSuccess: async (codeResponse) => {
+      try {
+        await loginWithGoogleNew(codeResponse.code);
+        // await fetchUserInfo();
+        router.push(redirect);
+      } catch {}
+    },
+  });
 
   return (
     <div className="bg h-[100dvh] p-2">
@@ -45,7 +48,15 @@ export default function AuthLayout({
         {children}
       </div>
       <Divider className="my-8" />
-      <GoogleLogin onSuccess={handleLoginWithGoogle} />
+      <div className="flex justify-center">
+        <Button
+          className="w-full bg-white border border-gray-300 font-semibold"
+          startContent={<FaGoogle />}
+          onPress={() => handleGoogleLogin()}
+        >
+          Sign in with Google
+        </Button>
+      </div>
     </div>
   );
 }

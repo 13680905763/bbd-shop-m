@@ -181,6 +181,11 @@
         "remark": {
             "title": "Remarque",
             "placeholder": "Entrez une remarque"
+        },
+        "empty": {
+            "title": "Votre panier est vide",
+            "desc": "Allez choisir vos articles préférés !",
+            "goShopping": "Aller faire du shopping"
         }
     },
     "profile": {
@@ -221,7 +226,12 @@
             "refundReason": "Motif du remboursement",
             "reviewReason": "Motif de l'examen",
             "refundAmount": "Montant du remboursement",
-            "reviewTime": "Heure de l'examen"
+            "reviewTime": "Heure de l'examen",
+            "promptCard": {
+                "title": "CQ des commandes et gestion des colis",
+                "description": "Veuillez vous rendre sur la page de l'entrepôt pour voir les photos de CQ et soumettre les colis",
+                "button": "Aller à l'entrepôt"
+            }
         },
         "warehouse": {
             "title": "Entrepôt",

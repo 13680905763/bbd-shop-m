@@ -178,6 +178,21 @@ export default function Cart() {
         </div>
       </div>
       <div className="flex-1 overflow-auto px-3">
+        {flatList.length === 0 && !isLoading && (
+          <div className="flex h-full flex-col items-center justify-center text-center">
+            <div className="text-lg font-semibold text-gray-900">
+              {t("empty.title")}
+            </div>
+            <div className="mt-2 text-sm text-gray-500">{t("empty.desc")}</div>
+            <Button
+              className="mt-6 px-8"
+              color="primary"
+              onPress={() => router.push("/goods/search")}
+            >
+              {t("empty.goShopping")}
+            </Button>
+          </div>
+        )}
         {data?.map((c) => (
           <CartItem
             key={c.shopId}

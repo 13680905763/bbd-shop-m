@@ -48,6 +48,16 @@ export const loginWithGoogle = (idToken: string): Promise<string> => {
     { showToast: true }, // 登录成功/失败都会弹 toast
   );
 };
+export const loginWithGoogleNew = (authorizationCode: string): Promise<string> => {
+  return requestWithOption<string>(
+    {
+      url: "/customer/google/code",
+      method: "POST",
+      data: { authorizationCode },
+    },
+    { showToast: true }, // 登录成功/失败都会弹 toast
+  );
+};
 
 /** 退出登录 */
 export const logoutCustomer = (): Promise<void> => {

@@ -32,6 +32,7 @@ import CommonModal from "@/components/modal/common-modal";
 import { useGlobalStore } from "@/store";
 import { useSelection } from "@/hook/useSelection";
 import { useOrderRefundList } from "@/hook/order/useOrderRefundList";
+import OrderPromptCard from "@/components/order/order-prompt-card";
 const tabKeyToStatusCode: Record<string, string> = {
   all: "",
   waitPay: "201",
@@ -275,12 +276,15 @@ export default function Settingpage() {
         // onSelectionChange={(key) => setActiveTab(String(key))}
       >
         <Tab key="all" className="" title={t("tabs.all")}>
+          <OrderPromptCard />
           <OrderTabContent orders={orders} />
         </Tab>
         <Tab key="waitPay" title={t("tabs.waitPay")}>
+          <OrderPromptCard />
           <OrderTabContent orders={orders} />
         </Tab>
         <Tab key="paid" title={t("tabs.paid")}>
+          <OrderPromptCard />
           <OrderTabContent orders={orders} />
         </Tab>
         <Tab key="refund" title={t("tabs.refund")}>

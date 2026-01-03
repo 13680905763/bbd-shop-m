@@ -181,6 +181,11 @@
         "remark": {
             "title": "备注",
             "placeholder": "输入备注"
+        },
+        "empty": {
+            "title": "您的购物车是空的",
+            "desc": "去挑选您喜欢的商品吧！",
+            "goShopping": "去购物"
         }
     },
     "profile": {
@@ -221,7 +226,12 @@
             "refundReason": "退款原因",
             "reviewReason": "审核原因",
             "refundAmount": "退款金额",
-            "reviewTime": "审核时间"
+            "reviewTime": "审核时间",
+            "promptCard": {
+                "title": "订单QC与包裹管理",
+                "description": "请前往仓库页面查看质检照片和提交包裹",
+                "button": "前往仓库"
+            }
         },
         "warehouse": {
             "title": "仓库",
