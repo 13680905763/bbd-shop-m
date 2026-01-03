@@ -1,12 +1,10 @@
 "use client";
 import { Avatar } from "@heroui/react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { IoChevronForwardSharp, IoSettings } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
-import { getUserInfo } from "@/services";
-import { getWalletInfo } from "@/services/wallet";
 import { useGlobalStore, useUserStore, useWalletStore } from "@/store";
 import { useUserInfo } from "@/hook/user/useUserInfo";
 import { useWalletInfo } from "@/hook/wallet/useWalletInfo";
@@ -91,7 +89,7 @@ export default function DashBoard() {
   // ✅ 页面加载状态
 
   return (
-    <div className="flex flex-1 flex-col overflow-auto pb-[env(safe-area-inset-bottom)]">
+    <div className="flex-1 space-y-4 overflow-auto p-2">
       {/* 顶部用户信息 */}
       <div className="flex items-center justify-between py-2">
         <div role="button" onClick={() => router.push("/profile")}>

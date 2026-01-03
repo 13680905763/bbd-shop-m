@@ -153,8 +153,10 @@ export default function Estimation() {
   return (
     <>
       {isLoading && <FullscreenLoader />}
-      <NavBar onBack={() => router.push("/")}>{t("title")}</NavBar>
-      <div className="flex-1 overflow-y-auto">
+      <NavBar onBack={() => router.push("/")}>
+        <span className="text-lg font-bold text-gray-900">{t("title")}</span>
+      </NavBar>
+      <div className="flex-1 overflow-y-auto bg-[#f5f5f5]">
         <div className="bg-[url('/images/estimation/bg.webp')] bg-center pt-[30%]" />
         <div className="bg-[#fff] p-5">
           <Form onSubmit={onSubmit}>
@@ -289,7 +291,7 @@ export default function Estimation() {
                       {/* 价格规则 */}
                       <div className="rounded-lg border border-gray-100 bg-white p-3 shadow-sm">
                         <p className="mb-2 text-sm font-semibold">
-                          {t("pricingStandard")}
+                          {t("pricingStandard")}({route.firstWeight}g)
                         </p>
                         <div className="grid grid-cols-2 gap-4 text-sm">
                           <div className="flex flex-col gap-1">

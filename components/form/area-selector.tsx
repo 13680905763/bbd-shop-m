@@ -43,10 +43,27 @@ export default function AreaSelector({ value, onChange }: Props) {
       {opt.name}
     </AutocompleteItem>
   );
+  const renderItemCity = (opt: Option) => (
+    <AutocompleteItem
+      key={opt.name}
+      startContent={
+        opt.nationalFlag ? (
+          <Avatar alt={opt.name} className="h-6 w-6" src={opt.nationalFlag} />
+        ) : null
+      }
+    >
+      {opt.name}
+    </AutocompleteItem>
+  );
 
   return (
     <div className="flex flex-col gap-4">
       <Autocomplete
+        inputProps={{
+          classNames: {
+            input: "text-base",
+          },
+        }}
         isRequired={true}
         label={t("components.areaSelector.country.label")}
         placeholder={t("components.areaSelector.country.placeholder")}
@@ -64,6 +81,11 @@ export default function AreaSelector({ value, onChange }: Props) {
       </Autocomplete>
 
       <Autocomplete
+        inputProps={{
+          classNames: {
+            input: "text-base",
+          },
+        }}
         isRequired={true}
         label={t("components.areaSelector.state.label")}
         placeholder={t("components.areaSelector.state.placeholder")}
@@ -82,6 +104,11 @@ export default function AreaSelector({ value, onChange }: Props) {
 
       {cities.length > 0 ? (
         <Autocomplete
+          inputProps={{
+            classNames: {
+              input: "text-base",
+            },
+          }}
           isRequired={true}
           label={t("components.areaSelector.city.label")}
           placeholder={t("components.areaSelector.city.placeholder")}
@@ -94,7 +121,7 @@ export default function AreaSelector({ value, onChange }: Props) {
             })
           }
         >
-          {cities.map(renderItem)}
+          {cities.map(renderItemCity)}
         </Autocomplete>
       ) : null}
     </div>

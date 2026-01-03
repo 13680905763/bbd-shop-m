@@ -7,3 +7,4 @@ export * from "./pay";
 export * from "./warehouse";
 export * from "./package";
 export * from "./config";
+export * from "./chat";

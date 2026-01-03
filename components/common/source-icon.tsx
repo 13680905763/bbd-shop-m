@@ -23,7 +23,7 @@ const SourceIcon: React.FC<SourceIconProps> = ({
     case "TAOBAO":
       return (
         <div className="relative h-[22px] w-[22px]">
-          <FaCircle className="h-full w-full bg-[#ff5000] text-[#ff5000]" />
+          <FaCircle className="h-full w-full rounded-md bg-[#ff5000] text-[#ff5000]" />
           <span className="absolute inset-0 flex items-center justify-center font-bold text-white">
             淘
           </span>
@@ -32,7 +32,7 @@ const SourceIcon: React.FC<SourceIconProps> = ({
     case "TMALL":
       return (
         <div className="relative h-[22px] w-[22px]">
-          <FaCircle className="h-full w-full bg-[#ff5000] text-[#ff5000]" />
+          <FaCircle className="h-full w-full rounded-md bg-[#ff5000] text-[#ff5000]" />
           <span className="absolute inset-0 flex items-center justify-center font-bold text-white">
             淘
           </span>
@@ -41,14 +41,14 @@ const SourceIcon: React.FC<SourceIconProps> = ({
     case "1688":
       return (
         <AiOutlineAlibaba
-          className={`text-white ${className} bg-[#ff5000]`}
+          className={`text-white ${className} rounded-md bg-[#ff5000]`}
           size={size}
         />
       );
     case "WEIDIAN":
       return (
         <div className="relative h-[22px] w-[22px]">
-          <FaCircle className="h-full w-full bg-[#cf011a] text-[#cf011a]" />
+          <FaCircle className="h-full w-full rounded-md bg-[#cf011a] text-[#cf011a]" />
           <span className="absolute inset-0 flex items-center justify-center font-bold text-white">
             店
           </span>

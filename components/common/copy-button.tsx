@@ -1,0 +1,72 @@
+"use client";
+
+import { FaCopy } from "react-icons/fa";
+import { addToast } from "@heroui/react";
+import { useTranslation } from "react-i18next";
+
+interface CopyButtonProps {
+  text: string;
+  size?: number;
+  className?: string;
+  color?: string;
+}
+
+export default function CopyButton({
+  text,
+  size = 14,
+  className = "",
+  color = "text-gray-400",
+}: CopyButtonProps) {
+  const { t } = useTranslation("translation", {
+    keyPrefix: "components.copyButton",
+  });
+
+  const handleCopy = async () => {
+    if (!text) return;
+
+    try {
+      await navigator.clipboard.writeText(text);
+      addToast({
+        title: t("success"),
+        timeout: 1500,
+        color: "success",
+      });
+    } catch (err) {
+      console.error("Failed to copy:", err);
+      // Fallback for older browsers or if navigator.clipboard fails
+      const textArea = document.createElement("textarea");
+
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand("copy");
+        addToast({
+          title: t("success"),
+          timeout: 1500,
+          color: "success",
+        });
+      } catch (err) {
+        addToast({
+          title: t("fail"),
+          timeout: 1500,
+          color: "danger",
+        });
+      }
+      document.body.removeChild(textArea);
+    }
+  };
+
+  return (
+    <button
+      className={`ml-1 transition-all hover:opacity-70 active:scale-95 ${className} `}
+      title={t("title")}
+      onClick={(e) => {
+        e.stopPropagation();
+        handleCopy();
+      }}
+    >
+      <FaCopy className={color} size={size} />
+    </button>
+  );
+}

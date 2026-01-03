@@ -18,6 +18,7 @@ import { useTranslation } from "react-i18next";
 
 import OrderItem from "./order-item";
 import OrderRefundItem from "./order-refund-item";
+import OrderPromptCard from "./component/order-prompt-card";
 
 import { useOrderList } from "@/hook";
 import ConfirmModal from "@/components/modal/confirm-modal";
@@ -277,12 +278,15 @@ export default function Settingpage() {
         // onSelectionChange={(key) => setActiveTab(String(key))}
       >
         <Tab key="all" className="" title={t("tabs.all")}>
+          <OrderPromptCard />
           <OrderTabContent orders={orders} />
         </Tab>
         <Tab key="waitPay" title={t("tabs.waitPay")}>
+          <OrderPromptCard />
           <OrderTabContent orders={orders} />
         </Tab>
         <Tab key="paid" title={t("tabs.paid")}>
+          <OrderPromptCard />
           <OrderTabContent orders={orders} />
         </Tab>
         <Tab key="refund" title={t("tabs.refund")}>

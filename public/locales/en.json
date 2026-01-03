@@ -1,5 +1,18 @@
 {
     "components": {
+        "copyButton": {
+            "success": "Copied to clipboard",
+            "fail": "Copy failed",
+            "title": "Click to copy"
+        },
+        "chatbox": {
+            "loginFirst": "Please login first",
+            "onlineSupport": "Online Support",
+            "inputPlaceholder": "Please enter message...",
+            "send": "Send",
+            "connectionLost": "Connection lost, please try again later",
+            "imageSendFail": "Failed to send image"
+        },
         "form": {
             "confirm": "Confirm",
             "cancel": "Cancel",
@@ -114,6 +127,11 @@
         "remark": {
             "title": "Remark",
             "placeholder": "Enter remark"
+        },
+        "empty": {
+            "title": "Your cart is empty",
+            "desc": "Go pick your favorite items!",
+            "goShopping": "Go Shopping"
         }
     },
     "profile": {
@@ -154,7 +172,12 @@
             "refundReason": "Refund Reason",
             "reviewReason": "Review Reason",
             "refundAmount": "Refund Amount",
-            "reviewTime": "Review Time"
+            "reviewTime": "Review Time",
+            "promptCard": {
+                "title": "Order QC & Package Management",
+                "description": "Please go to the warehouse page to view QC photos and submit packages",
+                "button": "Go to Warehouse"
+            }
         },
         "warehouse": {
             "title": "Warehouse",

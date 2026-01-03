@@ -87,8 +87,7 @@ export default function Promotion() {
           </div>
           <div className="text-sm text-[#999]">{t("totalReward.label")}</div>
           {/* <div className="flex justify-center border-b border-[#eeeeee] px-[10px] py-[15px]"> */}
-          <div className="flex justify-center  px-[10px] py-[15px]">
-
+          <div className="flex justify-center px-[10px] py-[15px]">
             <button className="flex-1 rounded-full border border-[#ccc] py-2 text-sm">
               {t("totalReward.recordButton")}
             </button>
@@ -140,7 +139,7 @@ export default function Promotion() {
                   <div className="text-base font-bold text-[#f0700c]">
                     {(Number(item.configValue) * 100).toFixed(2)}%
                   </div>
-                  <div className="text-xs text-gray-400">
+                  <div className="text-center text-xs text-gray-400">
                     {item.rangeMin} ~ {item.rangeMax}{" "}
                     {t("promotionConfig.experienceLabel")}
                   </div>

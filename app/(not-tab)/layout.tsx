@@ -6,7 +6,7 @@ export default function NotTabLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="flex h-[100vh] flex-col justify-between bg-white pt-[env(safe-area-inset-top)]">
+    <section className="flex h-[100dvh] flex-col justify-between bg-white pt-[env(safe-area-inset-top)]">
       {children}
     </section>
   );

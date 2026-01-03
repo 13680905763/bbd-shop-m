@@ -39,6 +39,7 @@ export default function RootLayout({
           themeProps={{ attribute: "class", defaultTheme: "light" }}
         >
           <Suspense>{children}</Suspense>
+          {/* <ChatBox /> */}
         </Providers>
       </body>
     </html>

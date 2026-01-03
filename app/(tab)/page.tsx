@@ -1,7 +1,6 @@
 "use client";
 import {
   IoLanguageSharp,
-  IoPeopleCircle,
   IoLogoUsd,
   IoSearch,
   IoChevronForwardSharp,
@@ -57,12 +56,12 @@ export default function Home() {
     {
       image: "/images/home/Guide.png",
       title: t("toolList.guide"),
+      to: "/help/guide",
     },
     {
       image: "/images/home/Community.png",
       title: t("toolList.community"),
-
-      // to: "/pages/member/promotion/index",
+      to: "/promotion",
     },
     {
       image: "/images/home/Forwarding.png",
@@ -122,19 +121,13 @@ export default function Home() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <>
       {/* 顶部固定区域：Logo、图标、搜索栏 */}
-      <header
-        className={`sticky top-0 z-30 -mx-3 px-3 pb-2 transition-all duration-300 ${
-          isScrolled
-            ? "bg-[url('/images/bg.png')] pt-[env(safe-area-inset-top)]"
-            : "bg-transparent"
-        }`}
-      >
+      <header className="p-2">
         <div className="mb-2 flex items-center justify-between">
           <Logo height={21} width={100} />
-          <div className="flex items-center gap-3">
-            <IoPeopleCircle className="h-[24px] w-[24px] text-[#ea8407]" />
+          <div className="flex items-center">
+            {/* <IoPeopleCircle className="h-[24px] w-[24px] text-[#ea8407]" /> */}
             <div role="button" onClick={() => router.push("/setting/language")}>
               <IoLanguageSharp className="h-[22px] w-[22px] text-[#ea8407]" />
             </div>
@@ -176,7 +169,7 @@ export default function Home() {
       </header>
 
       {/* 可滚动内容区域 */}
-      <main className="flex-1 space-y-4 pb-[calc(env(safe-area-inset-bottom)+90px)]">
+      <main className="flex-1 space-y-4 overflow-auto p-2">
         {/* 轮播图 */}
         <div className="overflow-hidden rounded-xl">
           <Swiper autoplay loop>
@@ -255,6 +248,6 @@ export default function Home() {
           ))}
         </div>
       </main>
-    </div>
+    </>
   );
 }

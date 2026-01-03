@@ -2,8 +2,11 @@
 import { Checkbox, Image, Input } from "@heroui/react";
 import { FaEdit } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 import { useGlobalStore } from "@/store";
+import Stepper from "@/components/stepper";
+import SourceIcon from "@/components/common/source-icon";
 
 function ProductItem({
   product,
@@ -12,6 +15,8 @@ function ProductItem({
   handleProductQuantity,
   openRemarkModal,
 }: any) {
+  const { t } = useTranslation("translation", { keyPrefix: "cart" });
+
   const { currency } = useGlobalStore();
   const router = useRouter();
 
@@ -57,21 +62,12 @@ function ProductItem({
             </div>
 
             <div className="flex items-center gap-1">
-              {/* {isEdit ? (
-                <button
-                  className="h-6 w-6"
-                  onClick={() => handleProductDelete(product.id)}
-                >
-                  <FaTrashAlt />
-                </button>
-              ) : (
-                <Stepper
-                  value={product.quantity}
-                  onChange={(quantity) =>
-                    handleProductQuantity(product.id, quantity)
-                  }
-                />
-              )} */}
+              <Stepper
+                value={product.quantity}
+                onChange={(quantity) =>
+                  handleProductQuantity(product.id, quantity)
+                }
+              />
             </div>
           </div>
         </div>
@@ -84,7 +80,7 @@ function ProductItem({
             <FaEdit className="h-6 w-6" />
           </button>
         }
-        placeholder={"remark.placeholder"}
+        placeholder={t("remark.placeholder")}
         size="sm"
         value={product.remark}
       />
@@ -113,6 +109,7 @@ export default function ShopCard({
           size="sm"
           onChange={toggleGroup}
         />
+        <SourceIcon source={shop.cartList[0]?.source} />
         <div className="text-title">{shop?.shopName}</div>
       </div>
 

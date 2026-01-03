@@ -1,5 +1,5 @@
 "use client";
-import { Button, Checkbox } from "@heroui/react";
+import { Button, Checkbox, Textarea } from "@heroui/react";
 import React, { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
@@ -14,6 +14,8 @@ import { useSelection } from "@/hook/useSelection";
 import { debounce } from "@/lib/debounce";
 import { createOrderPreviewKeyByCart } from "@/services";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
+import CommonModal from "@/components/modal/common-modal";
+import ConfirmModal from "@/components/modal/confirm-modal";
 
 type ModalType = "delete" | "remark" | null;
 interface ModalState {
@@ -26,7 +28,7 @@ export default function Cart() {
 
   const { currency } = useGlobalStore();
   const queryClient = useQueryClient();
-  const { data, isLoading } = useCartList();
+  const { data, isLoading, isFetching } = useCartList();
 
   const router = useRouter();
   const [isEdit, setIsEdit] = useState(false);
@@ -129,29 +131,42 @@ export default function Cart() {
 
   const togglePrice = useMemo(() => {
     const allItems = data?.flatMap((shop) => shop.cartList) ?? [];
-
     const selectedItems = allItems.filter((item) =>
       selectedIds.includes(item.id),
     );
 
-    const total = selectedItems.reduce((sum, item) => {
-      // 保证 fee 是数字
-      const fee =
-        Number(item.totalFee ?? item.unitPrice ?? 0) *
-        Number(item.quantity ?? 1);
+    // 转换为分（cents）计算，避免小数
+    const totalInCents = selectedItems.reduce((sumInCents, item) => {
+      let itemTotalInCents = 0;
 
-      return sum + fee;
-    }, 0); // 初始值必须是数字 0
+      // 情况1: totalFee 是总价
+      if (item.totalFee !== undefined && item.totalFee !== null) {
+        itemTotalInCents = Math.round(Number(item.totalFee) * 100);
+      }
+      // 情况2: 单价 × 数量
+      else if (item.unitPrice !== undefined && item.quantity !== undefined) {
+        // 单价转换为分，乘以数量
+        const unitPriceInCents = Math.round(Number(item.unitPrice) * 100);
+        const quantity = Number(item.quantity);
 
-    return total.toFixed(2); // total 一定是数字，toFixed 安全
+        itemTotalInCents = Math.round(unitPriceInCents * quantity);
+      }
+
+      return sumInCents + itemTotalInCents;
+    }, 0);
+
+    // 转换回元，并格式化为2位小数
+    const total = totalInCents / 100;
+
+    return total.toFixed(2);
   }, [data, selectedIds]);
 
   return (
-    <div className="flex h-[100vh] flex-col p-2">
+    <>
       {isLoading && <FullscreenLoader />}
 
       {/* 顶部导航 */}
-      <div className="sticky top-0 z-30 flex items-center justify-between">
+      <div className="flex items-center justify-between p-2">
         <div>
           <span className="text-lg font-bold text-gray-900">
             {t("title")}
@@ -161,15 +176,30 @@ export default function Cart() {
           </span>
         </div>
         <button
-          className="text-sm font-medium text-gray-600 active:opacity-70"
+          className="text-sm font-semibold text-gray-600 active:opacity-70"
           onClick={() => setIsEdit(!isEdit)}
         >
-          {isEdit ? "完成" : "管理"}
+          {isEdit ? t("cancel") : t("manage")}
         </button>
       </div>
 
       {/* 购物车列表 - 增加底部 padding 防止被底部栏遮挡 */}
-      <div className="flex-1 space-y-3 overflow-y-auto">
+      <div className="flex-1 space-y-3 overflow-y-auto p-2">
+        {flatList.length === 0 && !isLoading && (
+          <div className="flex h-full flex-col items-center justify-center text-center">
+            <div className="text-lg font-semibold text-gray-900">
+              {t("empty.title")}
+            </div>
+            <div className="mt-2 text-sm text-gray-500">{t("empty.desc")}</div>
+            <Button
+              className="mt-6 px-8"
+              color="primary"
+              onPress={() => router.push("/goods/search")}
+            >
+              {t("empty.goShopping")}
+            </Button>
+          </div>
+        )}
         {data?.map((c) => (
           <div
             key={c.shopId}
@@ -189,9 +219,13 @@ export default function Cart() {
           </div>
         ))}
       </div>
-
+      {isFetching && !isLoading && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/50">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-orange-500" />
+        </div>
+      )}
       {/* 底部结算栏 - 固定在 TabBar 之上 */}
-      <div className="fixed bottom-[calc(env(safe-area-inset-bottom)+45px)] left-0 right-0 z-30 border-t border-gray-100 bg-white px-4 py-3 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+      <div className="border-gray-100 bg-white px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Checkbox
@@ -199,7 +233,7 @@ export default function Cart() {
               isSelected={isAllSelected}
               onChange={toggleSelectAll}
             >
-              {"全选"}
+              {t("selectAll")}
             </Checkbox>
           </div>
 
@@ -207,30 +241,54 @@ export default function Cart() {
             {!isEdit && (
               <div className="text-right">
                 <p className="text-lg font-bold text-[#f0700c]">
-                  <span className="mr-0.5 text-sm">{currency.symbol}</span>
+                  <span className="mr-0.5">{currency.symbol}</span>
                   {togglePrice}
                 </p>
               </div>
             )}
 
             <Button
-              className={`h-10 min-w-[100px] rounded-full px-6 font-medium text-white shadow-md ${
-                isEdit
-                  ? "bg-red-500 shadow-red-500/20"
-                  : "bg-[#f0700c] shadow-orange-500/20"
-              }`}
+              className={`h-10 min-w-[100px] rounded-full px-6 font-medium text-white shadow-md`}
+              color="primary"
               isDisabled={!hasSelected}
               isLoading={isSubmitting}
               size="md"
               onPress={submitCart}
             >
-              {isEdit
-                ? `删除 (${selectedIds.length})`
-                : `结算 (${selectedIds.length})`}
+              {isEdit ? t("delete") : t("checkout")}({selectedIds.length})
             </Button>
           </div>
         </div>
       </div>
-    </div>
+
+      {modal.type === "delete" && (
+        <ConfirmModal
+          isOpen
+          content={t("deleteContent")}
+          title={t("deleteTitle")}
+          onConfirm={modal.confirm as () => Promise<void>}
+          onOpenChange={() => setModal({ type: null })}
+        />
+      )}
+      {modal.type === "remark" && (
+        <CommonModal
+          isOpen
+          title={t("remark.title")}
+          onConfirm={async () => {
+            if (modal?.confirm) await modal?.confirm(remark);
+          }}
+          onOpenChange={() => setModal({ type: null })}
+        >
+          <Textarea
+            classNames={{
+              input: "text-base",
+            }}
+            placeholder={t("remark.placeholder")}
+            value={remark}
+            onChange={(e) => setRemark(e.target.value)}
+          />
+        </CommonModal>
+      )}
+    </>
   );
 }

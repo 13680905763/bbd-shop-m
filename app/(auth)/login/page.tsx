@@ -26,7 +26,7 @@ export default function LoginPage() {
       startContent: <IoPerson />,
     },
     {
-      type: "input",
+      type: "password",
       name: "password",
       key: "password",
       placeholder: t("auth.login.passwordPlaceholder"),

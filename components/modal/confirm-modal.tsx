@@ -35,7 +35,7 @@ const ConfirmModal = ({
   showConfirm = true, // 默认显示
 }: ConfirmModalProps) => {
   const { t } = useTranslation("translation", {
-    keyPrefix: "components.confirmModal.message",
+    keyPrefix: "components.confirmModal",
   });
 
   const [loading, setLoading] = useState(false);

@@ -83,8 +83,8 @@ export default function ForwardingPage() {
           };
         }),
       receiver: "Bryant-4-Bryant",
-      receivePhone: "13602579223",
-      receiveAddress: "中国广东省惠州市水口街道荔城工业园胜豪科技大厦8A-801",
+      receivePhone: "15916408071",
+      receiveAddress: "广东省惠州市惠城区水口荔枝城青创产业园9楼901",
     };
 
     try {
@@ -94,7 +94,7 @@ export default function ForwardingPage() {
       if (bizCode) {
         router.push(`/payment?bizCode=${bizCode}`);
       } else {
-        router.push("/dashboard/order");
+        router.push("/profile/order");
       }
     } catch (err) {
       console.error("创建失败:", err);
@@ -104,8 +104,6 @@ export default function ForwardingPage() {
   };
   // 保存服务详情备注
   const saveServiceDetail = () => {
-    console.log("currentService", currentService);
-
     // 如果是基础拍照（id === 1），直接关掉弹窗，不修改 localServices
     if (currentService.id == 1) {
       setIsServiceDetailOpen(false);
@@ -179,58 +177,53 @@ export default function ForwardingPage() {
                 <span className="font-medium text-gray-900">
                   Bryant-4-Bryant
                 </span>
-                <span>13602579223</span>
-                <span>
-                  中国广东省惠州市水口街道荔城工业园胜豪科技大厦8A-801
-                </span>
+                <span>15916408071</span>
+                <span>广东省惠州市惠城区水口荔枝城青创产业园9楼901</span>
               </div>
             </Snippet>
           </div>
 
           {/* 包裹信息 */}
-          <div className="space-y-2 rounded-xl bg-white p-4">
-            <span className="text-base font-bold text-gray-900">
+          <div className="w-full space-y-8 rounded-xl bg-white p-4">
+            <div className="text-base font-bold text-gray-900">
               {t("forwardingPackage")}
-            </span>
-            <div className="flex flex-col gap-4 p-4">
-              <Input
-                isRequired
-                classNames={{
-                  label: "text-sm font-medium text-gray-700",
-                  input: "text-base",
-                  inputWrapper:
-                    "bg-gray-50 border-gray-200 hover:border-gray-300 focus-within:!bg-white",
-                }}
-                errorMessage={t("errorTrackingNo")}
-                label={t("trackingNo")}
-                labelPlacement="outside"
-                name="logisticsCode"
-                placeholder={t("trackingNoPlaceholder")}
-                type="text"
-                variant="bordered"
-              />
-
-              <Input
-                isRequired
-                classNames={{
-                  label: "text-sm font-medium text-gray-700",
-                  input: "text-base",
-                  inputWrapper:
-                    "bg-gray-50 border-gray-200 hover:border-gray-300 focus-within:!bg-white",
-                }}
-                errorMessage={t("errorPackageName")}
-                label={t("packageName")}
-                labelPlacement="outside"
-                name="packageItemName"
-                placeholder={t("packageNamePlaceholder")}
-                type="text"
-                variant="bordered"
-              />
             </div>
+            <Input
+              isRequired
+              classNames={{
+                label: "text-sm font-medium text-gray-700",
+                input: "text-base",
+                inputWrapper:
+                  "bg-gray-50 border-gray-200 hover:border-gray-300 focus-within:!bg-white",
+              }}
+              errorMessage={t("errorTrackingNo")}
+              label={t("trackingNo")}
+              labelPlacement="outside"
+              name="logisticsCode"
+              placeholder={t("trackingNoPlaceholder")}
+              type="text"
+              variant="bordered"
+            />
+            <Input
+              isRequired
+              classNames={{
+                label: "text-sm font-medium text-gray-700",
+                input: "text-base",
+                inputWrapper:
+                  "bg-gray-50 border-gray-200 hover:border-gray-300 focus-within:!bg-white",
+              }}
+              errorMessage={t("errorPackageName")}
+              label={t("packageName")}
+              labelPlacement="outside"
+              name="packageItemName"
+              placeholder={t("packageNamePlaceholder")}
+              type="text"
+              variant="bordered"
+            />
           </div>
 
           {/* 服务 */}
-          <div className="overflow-hidden rounded-xl bg-white shadow-sm">
+          <div className="w-full overflow-hidden rounded-xl bg-white shadow-sm">
             <div className="border-b border-gray-50 px-4 py-3">
               <span className="text-base font-bold text-gray-900">
                 {t("extraServices")}
@@ -270,7 +263,7 @@ export default function ForwardingPage() {
                         type="button"
                         onPress={() => openServiceDetail(service.id)}
                       >
-                        {service.isCheck ? t("edit") : t("add")}
+                        {t("add")}
                       </Button>
                     )}
                   </div>
@@ -324,7 +317,7 @@ export default function ForwardingPage() {
       </div>
 
       {/* 底部吸底按钮 - 增加阴影和层级 */}
-      <div className="flex flex-col gap-3 border-t border-gray-100 bg-white px-4 py-3">
+      <div className="flex flex-col gap-3 px-4 py-3 pb-[env(safe-area-inset-bottom)]">
         <Checkbox
           classNames={{
             label: "text-sm text-gray-600",
@@ -350,6 +343,7 @@ export default function ForwardingPage() {
       {/* 服务详情弹窗 */}
       {currentService && (
         <CommonModal
+          footer={visible && <div />}
           isDismissable={false}
           isOpen={isServiceDetailOpen}
           showCancel={currentService.id != 1}
