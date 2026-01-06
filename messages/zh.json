@@ -509,7 +509,10 @@
             "uploadFailed": "上传失败，请重试",
             "invalidUrl": "请输入有效的 URL",
             "searchButton": "搜索",
-            "historyTitle": "历史记录"
+            "historyTitle": "历史记录",
+            "noResult": "暂无匹配结果",
+            "taobao": "淘宝",
+            "1688": "1688"
         }
     },
     "submit": {

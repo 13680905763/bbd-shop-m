@@ -509,7 +509,10 @@
             "uploadFailed": "Upload failed, please try again",
             "invalidUrl": "Please enter a valid URL",
             "searchButton": "Search",
-            "historyTitle": "History"
+            "historyTitle": "History",
+            "noResult": "No matching results",
+            "taobao": "Taobao",
+            "1688": "1688"
         }
     },
     "submit": {

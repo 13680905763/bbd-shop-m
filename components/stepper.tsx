@@ -34,7 +34,7 @@ export default function Stepper({
         –
       </button>
       <input
-        className="w-10 flex-1 bg-[#f8f8f8] text-center outline-none"
+        className="w-10 flex-1 bg-[#f8f8f8] text-center text-base outline-none"
         disabled={disabled}
         max={max}
         min={min}

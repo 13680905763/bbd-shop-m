@@ -12,6 +12,7 @@ import {
   CardBody,
   CardFooter,
 } from "@heroui/react";
+import { useTranslations } from "next-intl";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { IoChevronBack } from "react-icons/io5";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -21,6 +22,7 @@ import { getGoodsId, getGoodsImageId, getGoodsList } from "@/services";
 import { SearchIcon } from "@/components/icons";
 
 export default function Searchpage() {
+  const t = useTranslations("goods.search");
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const searchParams = useSearchParams();
@@ -125,7 +127,7 @@ export default function Searchpage() {
     } catch (error) {
       console.error("上传图片失败", error);
       addToast({
-        title: "上传失败，请重试",
+        title: t("uploadFailed"),
         timeout: 1000,
         color: "danger",
       });
@@ -142,32 +144,11 @@ export default function Searchpage() {
     e.preventDefault();
     const data: any = Object.fromEntries(new FormData(e.currentTarget));
 
-    let url: URL;
-
-    try {
-      url = new URL(data.url);
-    } catch (err) {
-      // 可选：展示错误提示
-      addToast({
-        title: "请输入有效的 URL",
-        timeout: 1000,
-        color: "danger",
-      });
-
-      return; // 终止后续逻辑
-    }
-    const res: any = await getGoodsId({ url });
+    const res: any = await getGoodsId({ url: data.url });
 
     router.push(
       `/goods/${res.source}/${res.sourceProductId}`, // 目标路由
     );
-    // setIsLoading(true);
-
-    // const data = Object.fromEntries(new FormData(e.currentTarget));
-    // const result = await callServer(data);
-
-    // setErrors(result.errors);
-    // setIsLoading(false);
   };
 
   return (
@@ -200,13 +181,13 @@ export default function Searchpage() {
                   type="submit"
                   variant="light"
                 >
-                  搜索
+                  {t("searchButton")}
                 </Button>
               </div>
             }
             labelPlacement="outside"
             name="url"
-            placeholder="Search..."
+            placeholder={t("searchPlaceholder")}
             startContent={
               <SearchIcon className="pointer-events-none flex-shrink-0 text-lg" />
             }
@@ -247,8 +228,8 @@ export default function Searchpage() {
           variant="underlined"
           onSelectionChange={(key) => setSelectedTab(key as "TAOBAO" | "1688")}
         >
-          <Tab key="TAOBAO" title="淘宝" />
-          <Tab key="1688" title="1688" />
+          <Tab key="TAOBAO" title={t("taobao")} />
+          <Tab key="1688" title={t("1688")} />
         </Tabs>
         {/* 商品列表 */}
         <div className="flex-1 overflow-auto">
@@ -300,7 +281,7 @@ export default function Searchpage() {
           )}
 
           {!loading && list.length === 0 && (
-            <div className="py-10 text-center text-gray-500">暂无匹配结果</div>
+            <div className="py-10 text-center text-gray-500">{t("noResult")}</div>
           )}
         </div>
       </div>

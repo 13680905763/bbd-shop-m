@@ -63,21 +63,7 @@ export default function Searchpage() {
     e.preventDefault();
     const data: any = Object.fromEntries(new FormData(e.currentTarget));
 
-    let url: URL;
-
-    try {
-      url = new URL(data.url);
-    } catch (err) {
-      addToast({
-        title: t("invalidUrl"), // 使用翻译
-        timeout: 1000,
-        color: "danger",
-      });
-
-      return;
-    }
-
-    const res: any = await getGoodsId({ url });
+    const res: any = await getGoodsId({ url: data.url });
 
     router.push(`/goods/${res.source}/${res.sourceProductId}`);
   };

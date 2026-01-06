@@ -19,9 +19,9 @@ const CustomRadio = (props: any) => {
       {...otherProps}
       classNames={{
         base: cn(
-          "inline-flex m-0 bg-content1 hover:bg-content2 items-center justify-between",
-          "flex-row-reverse max-w-[100%] cursor-pointer rounded-lg p-3 border-2 border-transparent",
-          "data-[selected=true]:border-primary",
+          "inline-flex m-0 bg-transparent items-center justify-between",
+          "flex-row-reverse max-w-[100%] cursor-pointer rounded-lg p-3 ",
+          "data-[selected=true]:bg-gray-50",
         ),
       }}
     >
@@ -52,13 +52,13 @@ export default function Settingpage() {
   };
 
   return (
-    <div className="h-screen bg-[#f7f8f9]">
+    <div className="h-screen bg-[#f5f5f5]">
       <NavBar className="bg-white" onBack={() => router.back()}>
         {t("title")} {/* 语言 */}
       </NavBar>
-      <div className="flex flex-col gap-4 p-2">
+      <div className="flex flex-col gap-4 p-2 bg-[#f5f5f5] rounded-lg">
         <RadioGroup
-          className="w-full"
+          className="w-full bg-white"
           value={tempLanguage}
           onValueChange={(val) => setTempLanguage(val as string)}
         >

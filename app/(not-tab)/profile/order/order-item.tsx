@@ -48,7 +48,7 @@ export default function OrderItem({
             {product.productTitle}
           </div>
           <div className="line-clamp-2 text-xs text-gray-500">
-            {product.sku?.propName_valueName}
+            {product.propAndValue?.propName_valueName}
           </div>
         </div>
 
@@ -113,12 +113,12 @@ export default function OrderItem({
             />
           )}
           <SourceIcon source={order.source} />
-          <div className="font-semibold flex justify-center flex-col">
+          <div className="flex flex-col justify-center font-semibold">
             <div className="flex">
               {order?.orderCode}
-              <CopyButton text={order?.orderCode} size={12} />
+              <CopyButton size={12} text={order?.orderCode} />
             </div>
-            <div className="text-xs text-gray-500 ">{order?.createTime}</div>
+            <div className="text-xs text-gray-500">{order?.createTime}</div>
           </div>
         </div>
         <div className="self-start text-right text-sm font-bold text-[#f0700c]">

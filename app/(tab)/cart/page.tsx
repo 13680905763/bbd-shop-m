@@ -218,7 +218,6 @@ export default function Cart() {
           <Checkbox isSelected={isAllSelected} onChange={toggleSelectAll}>
             {t("selectAll")}
           </Checkbox>
-          <span className="text-price-lg">{selectedIds.length}</span>
         </div>
         <div className="flex items-center gap-2">
           <p className="text-price-lg">
@@ -231,7 +230,7 @@ export default function Cart() {
             isLoading={isSubmitting}
             onPress={submitCart}
           >
-            {isEdit ? t("delete") : t("checkout")}
+            {isEdit ? t("delete") : t("checkout")}({selectedIds.length})
           </Button>
         </div>
       </div>

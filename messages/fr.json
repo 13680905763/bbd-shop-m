@@ -509,7 +509,10 @@
             "uploadFailed": "Échec du téléchargement, veuillez réessayer",
             "invalidUrl": "Veuillez saisir une URL valide",
             "searchButton": "Rechercher",
-            "historyTitle": "Historique"
+            "historyTitle": "Historique",
+            "noResult": "Aucun résultat correspondant",
+            "taobao": "Taobao",
+            "1688": "1688"
         }
     },
     "submit": {
