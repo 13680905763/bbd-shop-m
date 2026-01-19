@@ -252,9 +252,9 @@ export default function Settingpage() {
   };
 
   return (
-    <div className="flex h-screen flex-col justify-between bg-[#f7f8f9]">
+    <>
       <NavBar className="flex-[0_0_45px] bg-white" onBack={() => router.back()}>
-        {t("title")}
+        <span className="navbar-title">{t("title")}</span>
       </NavBar>
       <Tabs
         aria-label="Options"
@@ -504,6 +504,6 @@ export default function Settingpage() {
           </div>
         </CommonModal>
       )}
-    </div>
+    </>
   );
 }

@@ -52,11 +52,11 @@ export default function Settingpage() {
   };
 
   return (
-    <div className="h-screen bg-[#f5f5f5]">
+    <>
       <NavBar className="bg-white" onBack={() => router.back()}>
-        {t("title")} {/* 语言 */}
+        <span className="navbar-title">{t("title")}</span>
       </NavBar>
-      <div className="flex flex-col gap-4 p-2 bg-[#f5f5f5] rounded-lg">
+      <div className="flex-1 space-y-2 p-2">
         <RadioGroup
           className="w-full bg-white"
           value={tempLanguage}
@@ -75,9 +75,9 @@ export default function Settingpage() {
           isLoading={loading}
           onPress={handleSubmit}
         >
-          {t("save")} {/* 保存 */}
+          {t("save")}
         </Button>
       </div>
-    </div>
+    </>
   );
 }

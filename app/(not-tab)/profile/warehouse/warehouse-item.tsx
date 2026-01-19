@@ -59,7 +59,7 @@ export default function WarehouseItem({
             {product.productTitle}
           </div>
           <div className="line-clamp-1 text-xs text-gray-500">
-            {product.sku?.propName_valueName}
+            {product.propAndValue?.propName_valueName}
           </div>
 
           {/* 重量 尺寸 */}

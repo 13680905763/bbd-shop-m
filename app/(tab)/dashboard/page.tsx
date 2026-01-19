@@ -1,85 +1,121 @@
 "use client";
 import { Avatar } from "@heroui/react";
-import React, { useEffect, useState } from "react";
 import { IoChevronForwardSharp, IoSettings } from "react-icons/io5";
-import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-import { getUserInfo } from "@/services";
-import { getWalletInfo } from "@/services/wallet";
+import { useGlobalStore } from "@/store";
+import { useUserInfo, useWalletInfo } from "@/hook";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
-import { useGlobalStore, useUserStore } from "@/store";
 
 export default function DashBoard() {
   const t = useTranslations("dashboard");
   const router = useRouter();
   const { currency } = useGlobalStore();
 
-  // ✅ 页面加载状态
-  // const [user, setUser] = useState<any>(null);
-  const [wallet, setWallet] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const { user, setUser } = useUserStore();
+  const { data: user, isLoading, error } = useUserInfo();
+  const {
+    data: wallet,
+    isLoading: walletLoading,
+    error: walletError,
+  } = useWalletInfo();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [userRes, walletRes]: any = await Promise.all([
-          getUserInfo(),
-          getWalletInfo(),
-        ]);
+  // 静态数据配置
+  const menuItems = [
+    {
+      title: t("menuOrder"),
+      src: "/m/images/dashboard/order.png",
+      to: "/profile/order",
+    },
+    {
+      title: t("menuWarehouse"),
+      src: "/m/images/dashboard/warehouse.png",
+      to: "/profile/warehouse",
+    },
+    {
+      title: t("menuPackage"),
+      src: "/m/images/dashboard/package.png",
+      to: "/profile/package",
+    },
+  ];
+  const inviteStats = [
+    {
+      title: t("inviteTotalReward"),
+      value: "0",
+      to: "/pages/member/account/index",
+    },
+    {
+      title: t("inviteAffiliateBalance"),
+      value: "0",
+      to: "/pages/member/points/index",
+    },
+    {
+      title: t("inviteWithdrawnAmount"),
+      value: "0",
+      to: "/pages/member/points/index",
+    },
+  ];
+  const serviceItems = [
+    {
+      title: t("servicesMessage"),
+      src: "/m/images/dashboard/message.png",
+      to: "/profile/message",
+    },
+    {
+      title: t("servicesFavorite"),
+      src: "/m/images/dashboard/favorite.png",
+      to: "/profile/favorite",
+    },
+    {
+      title: t("servicesAddress"),
+      src: "/m/images/dashboard/address.png",
+      to: "/profile/address",
+    },
+    {
+      title: t("servicesBillingAddress"),
+      src: "/m/images/dashboard/address.png",
+      to: "/profile/billing-address",
+    },
+    {
+      title: t("servicesHistory"),
+      src: "/m/images/dashboard/history.png",
+      to: "/profile/history",
+    },
+  ];
 
-        setUser(userRes);
-        setWallet(walletRes);
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  if (isLoading || walletLoading) return <FullscreenLoader />;
+  if (error || walletError) return <FullscreenLoader />;
 
   return (
-    <div className="flex flex-1 flex-col overflow-auto p-3 scrollbar-hide">
-      {loading && <FullscreenLoader />}
+    <div className="space-y-4 p-3">
       <div className="flex justify-between px-4">
-        <NextLink href="/profile">
+        <button onClick={() => router.push("/profile")}>
           <div className="flex items-center gap-2 text-black">
             <Avatar className="h-[80px] w-[80px]" src={user?.avatarUrl} />
             <span className="text-lg font-bold">{user?.nickName}</span>
           </div>
-        </NextLink>
+        </button>
         <div className="flex items-center">
-          <NextLink href="/setting">
+          <button onClick={() => router.push("/setting")}>
             <IoSettings className="h-[25px] w-[25px] text-black" />
-          </NextLink>
+          </button>
         </div>
       </div>
-
-      <div className="flex px-2 py-4">
-        <NextLink
-          className="flex flex-1 flex-col items-center justify-center"
-          href="/wallet"
-        >
-          <div className="text-title-xl">
+      <div className="grid grid-cols-2">
+        <button onClick={() => router.push("/wallet")}>
+          <div className="text-xl font-bold">
             {currency.symbol}
             {wallet?.availabalBalance}
           </div>
           <div>{t("balance")}</div>
-        </NextLink>
-        <NextLink
-          className="flex flex-1 flex-col items-center justify-center"
-          href="/wallet/points"
-        >
-          <div className="text-title-xl"> {user?.myPoints}</div>
+        </button>
+        <button onClick={() => router.push("/wallet/points")}>
+          <div className="text-xl font-bold"> {user?.myPoints}</div>
           <div>{t("points")}</div>
-        </NextLink>
+        </button>
       </div>
 
-      <div className="box-card !mt-0 flex justify-between bg-[url('/m/images/coupon.png')] bg-cover bg-no-repeat py-2 pl-6 pr-2 text-white">
+      <div className="home-card flex justify-between bg-[url('/m/images/coupon.png')] bg-cover bg-no-repeat py-2 pl-6 pr-2 text-white">
         <div className="items-center">
           <div className="my-1 text-sm font-bold">{t("coupon.title")}</div>
           <div className="text-xs">{t("coupon.available")}</div>
@@ -90,65 +126,47 @@ export default function DashBoard() {
         </div>
       </div>
 
-      <div className="box-card flex py-3">
-        {t.raw("menu").map((item: any) => (
-          <button
-            key={item.title}
-            className="flex flex-1 flex-col items-center justify-center text-center"
-            onClick={() => router.push(item.to)}
-          >
-            <div>
-              <Avatar radius="md" size="sm" src={item.src} />
+      <div className="home-card grid grid-cols-3">
+        {menuItems.map((item: any) => (
+          <button key={item.title} onClick={() => router.push(item.to)}>
+            <div className="flex flex-col items-center gap-2">
+              <Avatar src={item.src} />
+              <span>{item.title}</span>
             </div>
-            <p className="mt-3">{item.title}</p>
           </button>
         ))}
       </div>
 
-      <div className="box-card bg-[linear-gradient(89deg,_#ffe3df,_#e7f0f0)] p-2">
-        <div className="flex justify-between pl-6 pr-2">
-          <div className="items-center">
-            <div className="my-1 text-sm font-bold">{t("invite.title")}</div>
-            <div className="text-xs">{t("invite.status")}</div>
+      <div className="home-card space-y-3 bg-[linear-gradient(89deg,_#ffe3df,_#e7f0f0)] px-2">
+        <div className="flex items-center justify-between px-4">
+          <div>
+            <div className="font-bold">{t("inviteTitle")}</div>
+            <div className="text-sm text-gray-400">{t("inviteStatus")}</div>
           </div>
-          <div className="flex items-center gap-2">
-            <button onClick={() => router.push("/promotion")}>
-              <IoChevronForwardSharp />
-            </button>
-          </div>
+          <button onClick={() => router.push("/promotion")}>
+            <IoChevronForwardSharp />
+          </button>
         </div>
-        <div className="box-card flex bg-white/50 px-2 py-4">
-          {t.raw("invite.stats").map((item: any) => (
-            <div
-              key={item.title}
-              className="flex flex-1 flex-col items-center justify-center"
-            >
-              <div className="text-title-xl">{item.value}</div>
+        <div className="home-card grid grid-cols-3">
+          {inviteStats.map((item: any) => (
+            <div key={item.title} className="text-center">
+              <div className="text-xl font-bold">{item.value}</div>
               <div>{item.title}</div>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="box-card p-3">
-        <div className="my-1 pl-3 text-sm font-bold">{t("services.title")}</div>
+      <div className="home-card space-y-2">
+        <div className="px-4 font-bold">{t("servicesTitle")}</div>
 
-        <div className="mt-4 grid grid-cols-3 gap-4">
-          {t.raw("services.items").map((item: any) => (
-            <button
-              key={item.title}
-              className="flex flex-1 flex-col items-center justify-center text-center"
-              onClick={() => router.push(item.to)}
-            >
-              <div>
-                <Avatar
-                  className="bg-white"
-                  radius="md"
-                  size="sm"
-                  src={item.src}
-                />
+        <div className="grid grid-cols-3 gap-2">
+          {serviceItems.map((item: any) => (
+            <button key={item.title} onClick={() => router.push(item.to)}>
+              <div className="flex flex-col items-center gap-2">
+                <Avatar className="bg-white" radius="md" src={item.src} />
+                <span>{item.title}</span>
               </div>
-              <p className="mt-3">{item.title}</p>
             </button>
           ))}
         </div>

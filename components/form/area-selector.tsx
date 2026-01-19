@@ -31,38 +31,39 @@ export default function AreaSelector({ value, onChange }: Props) {
   const { data: states = [] } = useProvinces(value.countryId);
   const { data: cities = [] } = useCities(value.stateId);
 
-  const renderItem = (opt: Option) => (
-    <AutocompleteItem
-      key={String(opt.id)}
-      startContent={
-        opt.nationalFlag ? (
-          <Avatar alt={opt.name} className="h-6 w-6" src={opt.nationalFlag} />
-        ) : null
-      }
-    >
-      {opt.name}
-    </AutocompleteItem>
-  );
-  const renderItemCity = (opt: Option) => (
-    <AutocompleteItem
-      key={opt.name}
-      startContent={
-        opt.nationalFlag ? (
-          <Avatar alt={opt.name} className="h-6 w-6" src={opt.nationalFlag} />
-        ) : null
-      }
-    >
-      {opt.name}
-    </AutocompleteItem>
-  );
+  const renderItem =
+    (key: keyof Option = "id") =>
+    // eslint-disable-next-line react/display-name
+    (opt: Option) => (
+      <AutocompleteItem
+        key={String(opt[key])}
+        startContent={
+          opt.nationalFlag ? (
+            <Avatar alt={opt.name} className="h-6 w-6" src={opt.nationalFlag} />
+          ) : null
+        }
+      >
+        {opt.name}
+      </AutocompleteItem>
+    );
 
   return (
     <div className="flex flex-col gap-4">
       <Autocomplete
+        // 输入框配置（特别针对 iOS）
+        errorMessage={t("country.errorMessage")}
         inputProps={{
           classNames: {
             input: "text-base",
           },
+          // 这些属性在 iOS 上特别重要
+          enterKeyHint: "done",
+          inputMode: "search", // iOS 上使用搜索模式
+          // 防止 iOS 自动修正和自动大写
+          autoCapitalize: "none",
+          autoComplete: "off",
+          autoCorrect: "off",
+          spellCheck: "false",
         }}
         isRequired={true}
         label={t("country.label")}
@@ -77,16 +78,25 @@ export default function AreaSelector({ value, onChange }: Props) {
           })
         }
       >
-        {countries.map(renderItem)}
+        {countries.map(renderItem())}
       </Autocomplete>
 
       <Autocomplete
-        isRequired={true}
+        errorMessage={t("state.errorMessage")}
         inputProps={{
           classNames: {
             input: "text-base",
           },
+          // 这些属性在 iOS 上特别重要
+          enterKeyHint: "done",
+          inputMode: "search", // iOS 上使用搜索模式
+          // 防止 iOS 自动修正和自动大写
+          autoCapitalize: "none",
+          autoComplete: "off",
+          autoCorrect: "off",
+          spellCheck: "false",
         }}
+        isRequired={true}
         label={t("state.label")}
         placeholder={t("state.placeholder")}
         selectedKey={String(value.stateId) || null}
@@ -99,18 +109,27 @@ export default function AreaSelector({ value, onChange }: Props) {
           });
         }}
       >
-        {states.map(renderItem)}
+        {states.map(renderItem())}
       </Autocomplete>
 
       {cities.length > 0 ? (
         <Autocomplete
-          isRequired={true}
-          label={t("city.label")}
+          errorMessage={t("city.errorMessage")}
           inputProps={{
             classNames: {
               input: "text-base",
             },
+            // 这些属性在 iOS 上特别重要
+            enterKeyHint: "done",
+            inputMode: "search", // iOS 上使用搜索模式
+            // 防止 iOS 自动修正和自动大写
+            autoCapitalize: "none",
+            autoComplete: "off",
+            autoCorrect: "off",
+            spellCheck: "false",
           }}
+          isRequired={true}
+          label={t("city.label")}
           placeholder={t("city.placeholder")}
           selectedKey={String(value.city) || null}
           variant="bordered"
@@ -121,7 +140,7 @@ export default function AreaSelector({ value, onChange }: Props) {
             })
           }
         >
-          {cities.map(renderItemCity)}
+          {cities.map(renderItem("name"))}
         </Autocomplete>
       ) : null}
     </div>

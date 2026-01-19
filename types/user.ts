@@ -28,6 +28,7 @@ export interface UserInfo {
   urlExpirationAt: string; // 过期时间，格式 "YYYY-MM-DD HH:mm:ss"
   status: number; // 用户状态，具体含义看后台文档
   myPoints: number; // 用户积分
+  inviteCode: string; // 邀请码
 }
 export interface UserState {
   user: UserInfo | null;

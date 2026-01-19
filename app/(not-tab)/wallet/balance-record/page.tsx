@@ -76,14 +76,14 @@ export default function BalanceRecord() {
   };
 
   return (
-    <div className="flex h-screen flex-col justify-between bg-[#f7f8f9]">
+    <>
       <NavBar className="bg-white" onBack={() => router.back()}>
-        {t("title")}
+        <span className="navbar-title">{t("title")}</span>
       </NavBar>
 
       <div className="flex-1 overflow-auto p-2">
         <BalanceRecordContent records={records} />
       </div>
-    </div>
+    </>
   );
 }

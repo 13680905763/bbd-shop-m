@@ -1,5 +1,5 @@
 import "@/styles/globals.css";
-import { Metadata, Viewport } from "next";
+import { Metadata } from "next";
 import { Suspense } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
@@ -7,7 +7,6 @@ import { getLocale, getMessages } from "next-intl/server";
 import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
-import { ViewportFixer } from "@/components/viewport-fixer";
 import { getUserCurrency } from "@/i18n/service";
 import ChatBox from "@/components/common/chatbox";
 
@@ -22,12 +21,12 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
-  ],
-};
+// export const viewport: Viewport = {
+//   themeColor: [
+//     { media: "(prefers-color-scheme: light)", color: "white" },
+//     { media: "(prefers-color-scheme: dark)", color: "black" },
+//   ],
+// };
 
 export default async function RootLayout({
   children,
@@ -44,15 +43,15 @@ export default async function RootLayout({
   return (
     <html suppressHydrationWarning lang={initialLocale}>
       <head />
-      <body className="bg-[#f5f5f5]">
-        <ViewportFixer />
+      <body>
+        {/* <ViewportFixer /> */}
         <NextIntlClientProvider messages={messages}>
           <Providers
             initialCurrency={initialCurrency}
             initialLocale={initialLocale}
             themeProps={{ attribute: "class", defaultTheme: "light" }}
           >
-            {/* <Suspense fallback={<FullscreenLoader />}>{children}</Suspense> */}
+            {/* <Suspense fallback={<FullscreenLoader />}>{children}  <ChatBox /></Suspense> */}
             <Suspense>
               {children}
               <ChatBox />

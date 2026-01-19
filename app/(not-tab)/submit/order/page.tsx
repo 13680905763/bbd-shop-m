@@ -223,10 +223,10 @@ export default function SubmitOrder() {
   if (isError) return <div>出错了</div>;
 
   return (
-    <div className="flex h-screen flex-col bg-[#f7f8f9]">
+    <>
       {/* 顶部导航 */}
       <NavBar className="bg-white" onBack={() => router.back()}>
-        {t("title")}
+        <span className="navbar-title">{t("title")}</span>
       </NavBar>
       {isLoading && <FullscreenLoader />}
       {/* 中间可滚动商品列表 */}
@@ -432,6 +432,6 @@ export default function SubmitOrder() {
           </div>
         </CommonModal>
       )}
-    </div>
+    </>
   );
 }

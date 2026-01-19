@@ -249,9 +249,9 @@ export default function Settingpage() {
   };
 
   return (
-    <div className="flex h-screen flex-col bg-[#f7f8f9]">
+    <>
       <NavBar className="flex-[0_0_45px] bg-white" onBack={() => router.back()}>
-        {t("title")}
+        <span className="navbar-title">{t("title")}</span>
       </NavBar>
 
       <Tabs
@@ -262,7 +262,7 @@ export default function Settingpage() {
           tab: " px-0 h-12 flex-1",
           cursor: "h-0",
           tabContent: "group-data-[selected=true]:text-[#f0700c] font-bold",
-          panel: "bg-[#f7f8f9] px-2 flex-1",
+          panel: "bg-[#f7f8f9] px-2 flex-1  overflow-auto ",
         }}
         variant="underlined"
         onSelectionChange={(key) => setActiveTab(String(key))}
@@ -570,6 +570,6 @@ export default function Settingpage() {
           </div>
         </CommonModal>
       )}
-    </div>
+    </>
   );
 }

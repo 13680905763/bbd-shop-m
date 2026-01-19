@@ -16,12 +16,12 @@ import Picker from "@emoji-mart/react";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 
-import { useUserStore } from "@/store";
 import { useChat } from "@/hook/chat/useChat";
+import { useUserInfo } from "@/hook";
 
 export default function ChatBox() {
   const t = useTranslations("components.chatbox");
-  const user = useUserStore((state) => state.user);
+  const { data: user, isLoading, error } = useUserInfo();
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);

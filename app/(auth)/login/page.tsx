@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { IoLockClosed, IoPerson } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { Button } from "@heroui/react";
 
 import { LoginFormData } from "@/types";
 import { loginCustomer } from "@/services";
@@ -21,15 +22,17 @@ export default function LoginPage() {
     {
       type: "input",
       name: "email",
-      key: "email",
-      placeholder: t("emailPlaceholder"),
+      required: true,
+      errorMessage: t("fields.email.errorMessage"),
+      placeholder: t("fields.email.placeholder"),
       startContent: <IoPerson />,
     },
     {
       type: "password",
       name: "password",
-      key: "password",
-      placeholder: t("passwordPlaceholder"),
+      required: true,
+      placeholder: t("fields.password.placeholder"),
+      errorMessage: t("fields.password.errorMessage"),
       startContent: <IoLockClosed />,
     },
   ];
@@ -45,14 +48,19 @@ export default function LoginPage() {
   return (
     <div>
       <CommonForm
-        cancelText={t("registerButton")}
         confirmText={t("loginButton")}
         fields={loginFormFields}
         formData={formData}
-        onCancel={() => router.push("/register")}
         onChange={setFormData}
         onSubmit={handleSubmit}
-      />
+      >
+        <Button
+          className="button-default"
+          onPress={() => router.push("/register")}
+        >
+          {t("registerButton")}
+        </Button>
+      </CommonForm>
     </div>
   );
 }

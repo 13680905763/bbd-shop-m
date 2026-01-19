@@ -9,7 +9,6 @@ import { FaGoogle } from "react-icons/fa";
 
 import { Logo } from "@/components/icons";
 import { loginWithGoogleNew } from "@/services";
-import { useUserStore } from "@/store";
 
 export default function AuthLayout({
   children,
@@ -20,17 +19,15 @@ export default function AuthLayout({
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/"; // 默认为首页
-  // const fetchUserInfo = useUserStore((state) => state.fetchUserInfo);
 
   const handleGoogleLogin = useGoogleLogin({
     flow: "auth-code",
     scope: "email profile openid",
     onSuccess: async (codeResponse) => {
       try {
-        await loginWithGoogleNew(codeResponse.code);
-        // await fetchUserInfo();
+        await loginWithGoogleNew({ authorizationCode: codeResponse.code, inviteCode: searchParams.get("inviteCode") || "", });
         router.push(redirect);
-      } catch {}
+      } catch { }
     },
   });
 
@@ -50,7 +47,7 @@ export default function AuthLayout({
       <Divider className="my-8" />
       <div className="flex justify-center">
         <Button
-          className="w-full bg-white border border-gray-300 font-semibold"
+          className="w-full border border-gray-300 bg-white font-semibold"
           startContent={<FaGoogle />}
           onPress={() => handleGoogleLogin()}
         >

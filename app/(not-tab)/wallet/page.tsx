@@ -3,53 +3,44 @@
 import { Button, NumberInput } from "@heroui/react";
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { IoWallet } from "react-icons/io5";
 import { useTranslations } from "next-intl";
 
 import { createOrderByRecharge } from "@/services";
-import { getWalletInfo } from "@/services/wallet";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
 import { useGlobalStore } from "@/store";
+import { useWalletInfo } from "@/hook";
 
 export default function WalletRechargePage() {
   const t = useTranslations("wallet.page"); // ✅ 命名空间
   const { currency } = useGlobalStore();
 
-  const [loading, setLoading] = useState(true);
-
-  const [currentPrice, setCurrentPrice] = useState<number>(0);
-  const [wallet, setWallet] = useState<any>(null);
+  const { data: wallet, isLoading, error } = useWalletInfo();
+  const [rechargeLoading, setRechargeLoading] = useState(false);
+  const [currentPrice, setCurrentPrice] = useState<number>(1);
 
   const priceList = [50, 100, 200, 500, 1000, 5000];
   const router = useRouter();
-  // 获取钱包信息
-  const fetchWallet = async () => {
-    try {
-      const res = await getWalletInfo();
 
-      setWallet(res);
-    } finally {
-      setLoading(false);
+  const handleRecharge = async () => {
+    try {
+      setRechargeLoading(true);
+      const bizCode: any = await createOrderByRecharge({
+        currencyAmount: currentPrice,
+        currencyCode: currency.value,
+      });
+
+      router.push("/payment/" + bizCode);
+    } catch (error) {
+      setRechargeLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchWallet();
-  }, []);
-
-  const handleRecharge = async () => {
-    const bizCode: any = await createOrderByRecharge({
-      currencyAmount: currentPrice,
-      currencyCode: currency.value,
-    });
-
-    router.push("/payment/" + bizCode);
-  };
+  if (isLoading) return <FullscreenLoader />;
 
   return (
-    <div className="h-screen bg-[#f7f8f9]">
-      {loading && <FullscreenLoader />}
+    <>
       <NavBar
         className="bg-white"
         right={
@@ -59,26 +50,26 @@ export default function WalletRechargePage() {
         }
         onBack={() => router.back()}
       >
-        {t("title")}
+        <span className="navbar-title">{t("title")}</span>
       </NavBar>
 
-      <div className="px-2">
+      <div className="flex-1 space-y-4 px-2">
         {/* 余额展示区域 */}
-        <div className="box-card p-2 text-center">
-          <div className="my-[10px] text-[24px] font-bold text-[#f3643a]">
+        <div className="home-card mt-2 space-y-2 px-2 text-center">
+          <div className="text-sm tracking-wide text-gray-500">
+            {t("totalBalance")}
+          </div>
+          <div className="text-balance">
             {currency.symbol}
             {wallet?.availabalBalance}
           </div>
-          <div className="text-sm text-[#999]">{t("totalBalance")}</div>
-          <div className="flex justify-center px-[10px] py-[15px]">
-            <Button
-              className="w-full rounded-full border-1 bg-white"
-              variant="bordered"
-              // onPress={() => router.push("/wallet/withdrawal")}
-            >
-              {t("withdraw")}
-            </Button>
-          </div>
+          <Button
+            className="w-full button-default"
+            isDisabled
+            // onPress={() => router.push("/wallet/withdrawal")}
+          >
+            {t("withdraw")}
+          </Button>
         </div>
 
         {/* 快捷金额选择区域 */}
@@ -88,7 +79,7 @@ export default function WalletRechargePage() {
             {priceList.map((item) => (
               <button
                 key={item}
-                className={`flex cursor-pointer items-center justify-center rounded-[10px] bg-white py-3 ${
+                className={`flex items-center justify-center rounded-lg bg-white py-3 ${
                   Number(currentPrice) === item
                     ? "border border-orange-500 font-semibold text-orange-600"
                     : ""
@@ -119,12 +110,13 @@ export default function WalletRechargePage() {
             className="w-full"
             color="primary"
             isDisabled={!currentPrice}
+            isLoading={rechargeLoading}
             onPress={handleRecharge}
           >
             {t("recharge")}
           </Button>
         </div>
       </div>
-    </div>
+    </>
   );
 }

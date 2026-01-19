@@ -8,7 +8,7 @@ import {
   IoPeopleSharp,
   IoPerson,
 } from "react-icons/io5";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { activateEmail, signUpCustomer } from "@/services";
@@ -18,48 +18,48 @@ import { SignUpFormData } from "@/types";
 
 export default function RegisterPage() {
   const t = useTranslations("auth.register");
+  const searchParams = useSearchParams();
   const router = useRouter();
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [formData, setFormData] = useState<SignUpFormData>({
     email: "",
     password: "",
-    inviteCode: "",
+    inviteCode: searchParams.get("inviteCode") || "",
     agreeToTerms: false,
   });
-  // 表单字段配置（动态国际化）
   const registerFormFields: FieldConfig[] = [
     {
       type: "input",
       name: "email",
-      key: "email",
       required: true,
-      placeholder: t("emailPlaceholder"),
+      errorMessage: t("fields.email.errorMessage"),
+      placeholder: t("fields.email.placeholder"),
       startContent: <IoPerson />,
     },
     {
-      type: "input",
+      type: "password",
       name: "password",
-      key: "password",
       required: true,
-      placeholder: t("passwordPlaceholder"),
+      placeholder: t("fields.password.placeholder"),
+      errorMessage: t("fields.password.errorMessage"),
       startContent: <IoLockClosed />,
     },
     {
       type: "input",
       name: "inviteCode",
       key: "inviteCode",
-      placeholder: t("inviteCodePlaceholder"),
+      placeholder: t("fields.inviteCode.placeholder"),
       startContent: <IoPeopleSharp />,
+      isDisabled: searchParams.get("inviteCode") ? true : false,
     },
     {
       type: "checkbox",
       key: "agreeToTerms",
       name: "agreeToTerms",
-      label: t("agreeToTerms"),
+      label: t("fields.isChecked.label"),
       size: "sm",
     },
   ];
-
   const handleSubmit = async (formData: SignUpFormData) => {
     const { agreeToTerms, ...data } = formData;
 
@@ -71,7 +71,7 @@ export default function RegisterPage() {
     try {
       await signUpCustomer(data);
       setIsEmailVerified(true);
-    } catch {}
+    } catch { }
   };
   const handleInviteCode = async (code: string) => {
     if (code.length === 6) {
@@ -81,10 +81,7 @@ export default function RegisterPage() {
           activationCode: code,
         });
         router.push("/dashboard");
-
-        // 成功逻辑，如跳转到首页
-        // await handleAuthSuccess("/dashboard", res, router);
-      } catch {}
+      } catch { }
     }
   };
 
@@ -96,14 +93,13 @@ export default function RegisterPage() {
             confirmText={t("registerButton")}
             fields={registerFormFields}
             formData={formData}
-            showCancelButton={false}
             onChange={setFormData}
             onSubmit={handleSubmit}
           />
-          <div className="my-4 text-center text-sm">
+          <div className="mt-2 text-center text-sm">
             <span>{t("loginHint")} </span>
             <button
-              className="text-[#f0700c] hover:underline"
+              className="text-[#f0700c]"
               onClick={() => router.push("/login")}
             >
               {t("goLogin")}
@@ -117,12 +113,10 @@ export default function RegisterPage() {
               className="cursor-pointer text-lg"
               onClick={() => setIsEmailVerified(false)}
             />
-            <p className="text-xl font-semibold">{t("verifyTitle")}</p>
+            <p className="font-semibold">{t("verifyTitle")}</p>
           </div>
           <div className="my-4 text-sm">
-            <span>{t("verifyInstruction1")} </span>
-            <span className="font-bold">{formData.email}</span>
-            <span>{t("verifyInstruction2")}</span>
+            {t("otpDescription", { email: formData.email })}
           </div>
           <InputOtp
             className="m-auto"

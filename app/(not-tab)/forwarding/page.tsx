@@ -146,242 +146,246 @@ export default function ForwardingPage() {
   };
 
   return (
-    <div className="relative pb-[100px]">
+    <>
       {isLoading && <FullscreenLoader />}
       <NavBar className="bg-white" onBack={() => router.push("/")}>
-        {t("title")}
+        <span className="navbar-title">{t("title")}</span>
       </NavBar>
-      {/* 顶部移动端 Banner */}
-      <div className="h-[120px] bg-[url('https://hoobuy.com/_nuxt/estimation_bg.BPnQS2i-.webp')] bg-cover bg-no-repeat" />
-      <Form
-        className="flex flex-col gap-4 p-4"
-        id="form"
-        onSubmit={handleSubmit}
-      >
-        {/* 整体内容竖向排版 */}
-        {/* 地址块 */}
-        <div className="w-full rounded-lg bg-white p-4">
-          <p className="mb-3 text-lg font-semibold">{t("warehouseAddress")}</p>
-          <Snippet
-            classNames={{
-              pre: "break-words whitespace-pre-line text-base text-gray-700",
-            }}
-            symbol=""
-          >
-            <span>Bryant-4-Bryant</span>
-            <span>15916408071</span>
-            <span>广东省惠州市惠城区水口荔枝城青创产业园9楼901</span>
-          </Snippet>
-        </div>
-
-        {/* 包裹信息 */}
-        <div className="w-full rounded-lg bg-white p-4">
-          <p className="mb-3 text-lg font-semibold">{t("forwardingPackage")}</p>
-
-          <div className="flex flex-col gap-4">
-            <Input
-              isRequired
+      <div className="flex-1 overflow-auto">
+        <div className="h-[120px] bg-[url('https://hoobuy.com/_nuxt/estimation_bg.BPnQS2i-.webp')] bg-cover bg-no-repeat" />
+        <Form
+          className="flex flex-col gap-4 p-4"
+          id="form"
+          onSubmit={handleSubmit}
+        >
+          {/* 地址块 */}
+          <div className="w-full rounded-lg bg-white p-4">
+            <p className="mb-3 text-lg font-semibold">
+              {t("warehouseAddress")}
+            </p>
+            <Snippet
               classNames={{
-                input: "text-base",
+                pre: "break-words whitespace-pre-line text-base text-gray-700",
               }}
-              errorMessage={t("errorTrackingNo")}
-              label={t("trackingNo")}
-              labelPlacement="outside"
-              name="logisticsCode"
-              placeholder={t("trackingNoPlaceholder")}
-              type="text"
-            />
-
-            <Input
-              isRequired
-              classNames={{
-                input: "text-base",
-              }}
-              errorMessage={t("errorPackageName")}
-              label={t("packageName")}
-              labelPlacement="outside"
-              name="packageItemName"
-              placeholder={t("packageNamePlaceholder")}
-              type="text"
-            />
-          </div>
-        </div>
-
-        {/* 服务 */}
-        <div className="flex w-full flex-col gap-2 rounded-lg bg-white p-4">
-          <p className="mb-3 text-lg font-semibold">{t("extraServices")}</p>
-          {servicesList.map((service: any) => (
-            <div
-              key={service.id}
-              className="items-center rounded-lg border p-2"
+              symbol=""
             >
-              <div className="flex items-center justify-between">
-                <div className="font-medium">{service.serviceName}</div>
-                {service.id == 1 ? (
-                  // 免费的 icon
-                  <button
-                    className="flex h-8 w-16 items-center justify-center gap-1 text-sm text-green-500"
-                    type="button" // ✅ 关键点
-                    onClick={() => openServiceDetail(service.id)}
-                  >
-                    <FaCamera />
-                    {t("free")}
-                  </button>
-                ) : (
-                  <Button
-                    className="button-white"
-                    size="sm"
-                    type="button" // ✅ 关键点
-                    onPress={() => openServiceDetail(service.id)}
-                  >
-                    {t("add")}
-                  </Button>
+              <span>Bryant-4-Bryant</span>
+              <span>15916408071</span>
+              <span>广东省惠州市惠城区水口荔枝城青创产业园9楼901</span>
+            </Snippet>
+          </div>
+
+          {/* 包裹信息 */}
+          <div className="w-full rounded-lg bg-white p-4">
+            <p className="mb-3 text-lg font-semibold">
+              {t("forwardingPackage")}
+            </p>
+
+            <div className="flex flex-col gap-4">
+              <Input
+                isRequired
+                classNames={{
+                  input: "text-base",
+                }}
+                errorMessage={t("errorTrackingNo")}
+                label={t("trackingNo")}
+                labelPlacement="outside"
+                name="logisticsCode"
+                placeholder={t("trackingNoPlaceholder")}
+                type="text"
+              />
+
+              <Input
+                isRequired
+                classNames={{
+                  input: "text-base",
+                }}
+                errorMessage={t("errorPackageName")}
+                label={t("packageName")}
+                labelPlacement="outside"
+                name="packageItemName"
+                placeholder={t("packageNamePlaceholder")}
+                type="text"
+              />
+            </div>
+          </div>
+
+          {/* 服务 */}
+          <div className="flex w-full flex-col gap-2 rounded-lg bg-white p-4">
+            <p className="mb-3 text-lg font-semibold">{t("extraServices")}</p>
+            {servicesList.map((service: any) => (
+              <div
+                key={service.id}
+                className="items-center rounded-lg border p-2"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="font-medium">{service.serviceName}</div>
+                  {service.id == 1 ? (
+                    // 免费的 icon
+                    <button
+                      className="flex h-8 w-16 items-center justify-center gap-1 text-sm text-green-500"
+                      type="button" // ✅ 关键点
+                      onClick={() => openServiceDetail(service.id)}
+                    >
+                      <FaCamera />
+                      {t("free")}
+                    </button>
+                  ) : (
+                    <Button
+                      className="button-white"
+                      size="sm"
+                      type="button" // ✅ 关键点
+                      onPress={() => openServiceDetail(service.id)}
+                    >
+                      {t("add")}
+                    </Button>
+                  )}
+                </div>
+
+                {service.isCheck && service.id != 1 && (
+                  <div className="mt-2 flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 py-2">
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium text-gray-800">
+                        {t("serviceItem")}
+                      </span>
+                      {service.remark && (
+                        <span className="mt-0.5 truncate text-[11px] text-gray-400">
+                          {t("remark")}: {service.remark}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[12px] text-gray-500">
+                        x{service.quantity}
+                      </span>
+                      <span className="text-sm font-semibold text-red-500">
+                        {currency.symbol}
+                        {service.price}
+                      </span>
+                      <Button
+                        className="h-6 px-2 text-[11px]"
+                        color="danger"
+                        size="sm"
+                        variant="light"
+                        onPress={() => removeService(service.id)}
+                      >
+                        {t("delete")}
+                      </Button>
+                    </div>
+                  </div>
                 )}
               </div>
+            ))}
+          </div>
 
-              {service.isCheck && service.id != 1 && (
-                <div className="mt-2 flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 py-2">
-                  <div className="flex flex-col">
-                    <span className="text-sm font-medium text-gray-800">
-                      {t("serviceItem")}
-                    </span>
-                    {service.remark && (
-                      <span className="mt-0.5 truncate text-[11px] text-gray-400">
-                        {t("remark")}: {service.remark}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[12px] text-gray-500">
-                      x{service.quantity}
-                    </span>
-                    <span className="text-sm font-semibold text-red-500">
-                      {currency.symbol}
-                      {service.price}
-                    </span>
-                    <Button
-                      className="h-6 px-2 text-[11px]"
-                      color="danger"
-                      size="sm"
-                      variant="light"
-                      onPress={() => removeService(service.id)}
-                    >
-                      {t("delete")}
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* 服务详情弹窗 */}
-        {currentService && (
-          <CommonModal
-            isDismissable={false}
-            isOpen={isServiceDetailOpen}
-            showCancel={currentService.id != 1}
-            title={currentService.serviceName}
-            onConfirm={saveServiceDetail}
-            onOpenChange={setIsServiceDetailOpen}
-          >
-            <div className="space-y-5">
-              {/* 服务介绍 */}
-              <div className="space-y-4 rounded-lg bg-[#f8f8f8] p-4">
-                <div className="space-y-2">
-                  <h3 className="text-sm font-medium text-gray-900">
-                    {t("serviceIntro")}
-                  </h3>
-                  <p className="text-sm leading-relaxed text-gray-600">
-                    {currentService.introduction || t("noIntro")}
-                  </p>
-                </div>
-
-                {/* 示例（id != 1 时才展示） */}
-                {currentService.sample.length > 0 && (
+          {/* 服务详情弹窗 */}
+          {currentService && (
+            <CommonModal
+              isDismissable={false}
+              isOpen={isServiceDetailOpen}
+              showCancel={currentService.id != 1}
+              title={currentService.serviceName}
+              onConfirm={saveServiceDetail}
+              onOpenChange={setIsServiceDetailOpen}
+            >
+              <div className="space-y-5">
+                {/* 服务介绍 */}
+                <div className="space-y-4 rounded-lg bg-[#f8f8f8] p-4">
                   <div className="space-y-2">
                     <h3 className="text-sm font-medium text-gray-900">
-                      {t("sample")}
+                      {t("serviceIntro")}
                     </h3>
-                    <div className="grid grid-cols-4 gap-2">
-                      {currentService.sample.map((url: string, index: any) => (
-                        <Image
-                          key={url}
-                          className="h-full w-full object-cover"
-                          radius="none"
-                          src={url}
-                          onClick={() => {
-                            setStartIndex(index); // 点击哪张图片就从哪张开始预览
-                            setVisible(true);
+                    <p className="text-sm leading-relaxed text-gray-600">
+                      {currentService.introduction || t("noIntro")}
+                    </p>
+                  </div>
+
+                  {/* 示例（id != 1 时才展示） */}
+                  {currentService.sample.length > 0 && (
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-medium text-gray-900">
+                        {t("sample")}
+                      </h3>
+                      <div className="grid grid-cols-4 gap-2">
+                        {currentService.sample.map(
+                          (url: string, index: any) => (
+                            <Image
+                              key={url}
+                              className="h-full w-full object-cover"
+                              radius="none"
+                              src={url}
+                              onClick={() => {
+                                setStartIndex(index); // 点击哪张图片就从哪张开始预览
+                                setVisible(true);
+                              }}
+                            />
+                          ),
+                        )}
+                      </div>
+                      <ImageViewer.Multi
+                        key={startIndex} // ★ 让组件强制重新创建
+                        defaultIndex={startIndex} // 从点击的那张开始
+                        images={currentService.sample}
+                        visible={visible}
+                        onClose={() => setVisible(false)}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* 服务费（id != 1 时才展示） */}
+                {currentService.id != 1 && (
+                  <div className="flex items-center justify-between border-t pt-3">
+                    <span className="text-sm text-gray-700">
+                      {t("serviceFee")}
+                    </span>
+                    <div className="flex gap-2">
+                      <span className="text-lg font-semibold text-rose-600">
+                        {currency.symbol}
+                        {currentService.price}
+                      </span>
+                      {currentService?.stacked == 1 ? (
+                        <Stepper
+                          value={currentService?.quantity}
+                          onChange={(quantity) => {
+                            setCurrentService({
+                              ...currentService,
+                              quantity: quantity,
+                            });
                           }}
                         />
-                      ))}
+                      ) : null}
                     </div>
-                    <ImageViewer.Multi
-                      key={startIndex} // ★ 让组件强制重新创建
-                      defaultIndex={startIndex} // 从点击的那张开始
-                      images={currentService.sample}
-                      visible={visible}
-                      onClose={() => setVisible(false)}
-                    />
                   </div>
                 )}
+
+                {/* 备注输入框（id != 1 时才展示） */}
+                {currentService.id != 1 && (
+                  <Textarea
+                    className="mt-2 w-full"
+                    classNames={{
+                      input: "text-base",
+                    }}
+                    minRows={3}
+                    placeholder={t("remarkPlaceholder")}
+                    value={currentService.remark}
+                    onChange={(e) =>
+                      setCurrentService({
+                        ...currentService,
+                        remark: e.target.value,
+                      })
+                    }
+                  />
+                )}
               </div>
-
-              {/* 服务费（id != 1 时才展示） */}
-              {currentService.id != 1 && (
-                <div className="flex items-center justify-between border-t pt-3">
-                  <span className="text-sm text-gray-700">
-                    {t("serviceFee")}
-                  </span>
-                  <div className="flex gap-2">
-                    <span className="text-lg font-semibold text-rose-600">
-                      {currency.symbol}
-                      {currentService.price}
-                    </span>
-                    {currentService?.stacked == 1 ? (
-                      <Stepper
-                        value={currentService?.quantity}
-                        onChange={(quantity) => {
-                          setCurrentService({
-                            ...currentService,
-                            quantity: quantity,
-                          });
-                        }}
-                      />
-                    ) : null}
-                  </div>
-                </div>
-              )}
-
-              {/* 备注输入框（id != 1 时才展示） */}
-              {currentService.id != 1 && (
-                <Textarea
-                  className="mt-2 w-full"
-                  classNames={{
-                    input: "text-base",
-                  }}
-                  minRows={3}
-                  placeholder={t("remarkPlaceholder")}
-                  value={currentService.remark}
-                  onChange={(e) =>
-                    setCurrentService({
-                      ...currentService,
-                      remark: e.target.value,
-                    })
-                  }
-                />
-              )}
-            </div>
-          </CommonModal>
-        )}
-      </Form>
-      {/* 占位避免提交按钮挡内容 */}
-      <div className="h-[50px]" />
-      {/* 底部吸底按钮 */}
-      <div className="fixed bottom-0 left-0 right-0 flex flex-col gap-3 border-t bg-white p-4">
+            </CommonModal>
+          )}
+        </Form>
+      </div>
+      <div className="flex flex-col gap-3 border-t bg-white p-4">
         <Button
-          className="w-full bg-[#f0700c] py-6 text-lg text-white"
+          className="w-full"
+          color="primary"
           form="form"
           isDisabled={!acceptAgreement || loading}
           isLoading={loading}
@@ -393,11 +397,12 @@ export default function ForwardingPage() {
         <Checkbox
           className="text-base"
           isSelected={acceptAgreement}
+          size="sm"
           onValueChange={setAcceptAgreement}
         >
           {t("acceptAgreement")}
         </Checkbox>
       </div>
-    </div>
+    </>
   );
 }

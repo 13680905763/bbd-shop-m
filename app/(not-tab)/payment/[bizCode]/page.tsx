@@ -16,13 +16,17 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { IoWallet } from "react-icons/io5";
 
-import BillingAddress from "./billing-address";
-
-import { useBillingAddressList, usePaymentMethodList } from "@/hook";
+import {
+  useBillingAddress,
+  useBillingAddressActions,
+  usePaymentMethodList,
+  useWalletInfo,
+} from "@/hook";
 import { createPayOrder } from "@/services";
 import { useGlobalStore } from "@/store";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
-import { getWalletInfo } from "@/services/wallet";
+import BillingAddress from "@/components/block/billing-address";
+import BillingAddressModal from "@/components/modal/billing-address-modal";
 // 自定义 Radio 组件
 const CustomRadio = (props: RadioProps) => {
   const {
@@ -112,33 +116,26 @@ export default function PayOrder() {
   const router = useRouter();
   const params = useParams<{ bizCode: string }>();
   const [submitting, setSubmitting] = useState<boolean>(false);
-  const { data: billingAddress } = useBillingAddressList();
+  const { data: billingAddress } = useBillingAddress();
 
   const { data, isLoading, isError } = usePaymentMethodList(params.bizCode);
-  const [loading, setLoading] = useState(true);
 
-  const [wallet, setWallet] = useState<any>(null);
+  const {
+    data: wallet,
+    isLoading: walletLoading,
+    error: walletError,
+  } = useWalletInfo();
+
   const [paymentId, setPaymentId] = useState("");
 
-  // 获取钱包信息
-  const fetchWallet = async () => {
-    try {
-      const res = await getWalletInfo();
+  const { modalState, handleOpenChange, handleAddClick, handleEditClick } =
+    useBillingAddressActions();
 
-      setWallet(res);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchWallet();
-  }, []);
   const hanldeCreatePayOrder = async () => {
     if (submitting) return;
     setSubmitting(true);
 
-    if (paymentId !== "1" && !billingAddress[0]?.id) {
+    if (paymentId !== "1" && !billingAddress?.id) {
       addToast({
         title: "Please add billing address",
         timeout: 1000,
@@ -153,7 +150,7 @@ export default function PayOrder() {
       const res = await createPayOrder({
         bizCode: params.bizCode,
         paymentId,
-        addressId: billingAddress[0]?.id as string,
+        addressId: billingAddress?.id as string,
       });
 
       if (typeof res === "string") {
@@ -199,18 +196,19 @@ export default function PayOrder() {
     }
   }, [data]);
 
+  if (isLoading) return <FullscreenLoader />;
+
   return (
-    <div className="h-[calc(var(--vh)_*_100)] overflow-x-hidden bg-[#f7f8f9]">
+    <>
       <NavBar className="bg-white" onBack={() => router.back()}>
         {t("title")}
       </NavBar>
-      {(isLoading || loading) && <FullscreenLoader />}
-      <div className="px-2">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden px-2">
         <div className="box-card space-y-2 p-3 text-center">
           <div className="text-sm tracking-wide text-gray-500">
             {t("total")}
           </div>
-          <div className="text-3xl font-extrabold leading-tight text-[#f0700c]">
+          <div className="text-balance">
             {currency.symbol}
             {currentPayMethod?.payAmount}
           </div>
@@ -227,7 +225,13 @@ export default function PayOrder() {
           {paymentId !== "1" ? (
             <div className="bg-white p-4">
               <p className="text-title mb-2">{t("billingAddress")}</p>
-              <BillingAddress billingAddress={billingAddress} />
+              <BillingAddress
+                key={billingAddress.id}
+                addressDetail={billingAddress}
+                showDeleteButton={false}
+                onAdd={handleAddClick}
+                onEdit={handleEditClick}
+              />
             </div>
           ) : null}
           <div className="flex w-full flex-col gap-1">
@@ -276,6 +280,14 @@ export default function PayOrder() {
           {t("submit")}
         </Button>
       </div>
-    </div>
+      <BillingAddressModal
+        defaultData={
+          modalState.type === "edit" ? modalState.address : undefined
+        }
+        isOpen={modalState.type === "add" || modalState.type === "edit"}
+        type={modalState.type === "add" ? "add" : "edit"}
+        onOpenChange={handleOpenChange}
+      />
+    </>
   );
 }

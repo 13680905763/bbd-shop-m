@@ -12,13 +12,13 @@ export const getWarehousePreview = (key: string): Promise<any> =>
   request.get("/waybill/preview/key?key=" + key);
 
 /** 获取增值服务列表 */
-export const getWarehouseServicesList = (): Promise<any> =>
+export const getWarehouseServices = (): Promise<any> =>
   request.get("/services/query?serviceLevel=2");
 /** 获取运费模板 */
 export const getWarehouseRoutesList = (): Promise<any> =>
   request.get("/shipping-line-template/all");
 /** 获取运费模板 根据货物类别跟国家*/
-export const getWarehouseRoutesListByCC = (data: any): Promise<any> => {
+export const getRoutesByQuery = (data: any): Promise<any> => {
   return requestWithOption(
     { url: "/shipping-line-template/query", method: "POST", data },
     { showToast: true, isSuccess: false },

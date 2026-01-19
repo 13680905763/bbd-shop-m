@@ -9,6 +9,7 @@ export * from "./user";
 export * from "./wallet";
 export * from "./pay";
 export * from "./address";
+export * from "./goods";
 
 export interface ApiResponse<T> {
   code: number;

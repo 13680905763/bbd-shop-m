@@ -161,9 +161,9 @@ export default function BeginnerGuide() {
   return (
     <>
       <NavBar className="bg-white" onBack={() => router.push("/")}>
-        How to Purchase via bbdbuy
+        <span className="navbar-title">How to Purchase via bbdbuy</span>
       </NavBar>
-      <div className="mx-auto max-w-[420px] px-4 py-6">
+      <div className="flex-1 overflow-auto p-2">
         <div className="flex flex-col gap-4">
           {steps.map((step, index) => (
             <div

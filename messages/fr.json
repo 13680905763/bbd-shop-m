@@ -1,22 +1,126 @@
 {
     "components": {
+        "ui": {
+            "copy": {
+                "success": "Copy success",
+                "fail": "Copy fail"
+            },
+            "empty": {
+                "desc": "No data available"
+            }
+        },
         "form": {
-            "confirm": "Confirmer",
+            "save": "Confirmer",
             "cancel": "Annuler",
             "missingFieldsTitle": "Veuillez remplir : {fields}"
+        },
+        "modal": {
+            "confirm": "Confirmer",
+            "cancel": "Annuler",
+            "confirmModalTitle": "Confirmer l'Action",
+            "address": {
+                "addTitle": "Ajouter une Adresse",
+                "editTitle": "Modifier l'Adresse",
+                "fields": {
+                    "recipient": {
+                        "label": "Destinataire",
+                        "placeholder": "Entrez le nom du destinataire",
+                        "errorMessage": "Le destinataire ne peut pas être vide"
+                    },
+                    "phone": {
+                        "label": "Téléphone",
+                        "placeholder": "Entrez le numéro de téléphone",
+                        "errorMessage": "Le téléphone ne peut pas être vide"
+                    },
+                    "area": {
+                        "label": "Région",
+                        "placeholder": "Sélectionnez la région",
+                        "errorMessage": "La région ne peut pas être vide"
+                    },
+                    "address": {
+                        "label": "Adresse",
+                        "placeholder": "Entrez l'adresse complète",
+                        "errorMessage": "L'adresse ne peut pas être vide"
+                    },
+                    "doorNo": {
+                        "label": "Numéro de Porte",
+                        "placeholder": "Entrez le numéro de porte",
+                        "errorMessage": "Le numéro de porte ne peut pas être vide"
+                    },
+                    "postcode": {
+                        "label": "Code Postal",
+                        "placeholder": "Entrez le code postal",
+                        "errorMessage": "Le code postal ne peut pas être vide"
+                    },
+                    "defaultAddress": {
+                        "label": "Définir comme adresse par défaut"
+                    }
+                }
+            },
+            "billingAddress": {
+                "addTitle": "Ajouter une Adresse de Facturation",
+                "editTitle": "Modifier l'Adresse de Facturation",
+                "fields": {
+                    "familyName": {
+                        "label": "Nom de Famille",
+                        "placeholder": "Entrez le nom de famille",
+                        "errorMessage": "Le nom de famille ne peut pas être vide"
+                    },
+                    "givenName": {
+                        "label": "Prénom",
+                        "placeholder": "Entrez le prénom",
+                        "errorMessage": "Le prénom ne peut pas être vide"
+                    },
+                    "phone": {
+                        "label": "Téléphone",
+                        "placeholder": "Entrez le numéro de téléphone",
+                        "errorMessage": "Le téléphone ne peut pas être vide"
+                    },
+                    "area": {
+                        "label": "Région",
+                        "placeholder": "Sélectionnez la région",
+                        "errorMessage": "La région ne peut pas être vide"
+                    },
+                    "address": {
+                        "label": "Adresse",
+                        "placeholder": "Entrez l'adresse complète",
+                        "errorMessage": "L'adresse ne peut pas être vide"
+                    },
+                    "doorNo": {
+                        "label": "Numéro de Porte",
+                        "placeholder": "Entrez le numéro de porte",
+                        "errorMessage": "Le numéro de porte ne peut pas être vide"
+                    },
+                    "postcode": {
+                        "label": "Code Postal",
+                        "placeholder": "Entrez le code postal",
+                        "errorMessage": "Le code postal ne peut pas être vide"
+                    },
+                    "defaultAddress": {
+                        "label": "Définir comme adresse par défaut"
+                    }
+                }
+            },
+            "recharge": {
+                "title": "Recharger",
+                "placeholder": "Veuillez saisir le montant"
+            }
         },
         "areaSelector": {
             "country": {
                 "label": "Pays",
-                "placeholder": "Sélectionner un pays"
+                "placeholder": "Sélectionner un pays",
+                "errorMessage": "Veuillez sélectionner un pays"
             },
             "state": {
                 "label": "État / Province",
-                "placeholder": "Sélectionner un état"
+                "placeholder": "Sélectionner un état",
+                "errorMessage": "Veuillez sélectionner un état"
             },
             "city": {
                 "label": "Ville",
-                "placeholder": "Sélectionner une ville"
+                "placeholder": "Sélectionner une ville",
+                "errorMessage": "Veuillez sélectionner une ville"
             }
         },
         "confirmModal": {
@@ -37,34 +141,58 @@
             "send": "Envoyer",
             "connectionLost": "Connexion perdue, veuillez réessayer plus tard",
             "imageSendFail": "Échec de l'envoi de l'image"
+        },
+        "addressItem": {
+            "edit": "Modifier",
+            "delete": "Supprimer",
+            "default": "Par défaut"
+        },
+        "billingAddress": {
+            "edit": "Modifier",
+            "delete": "Supprimer"
         }
     },
     "auth": {
         "sloganTitle": "Service Tout-en-Un",
         "sloganDesc": "Achetez en Chine Facilement, Expédiez dans le Monde Entier Professionnellement",
         "login": {
-            "title": "Connexion Utilisateur",
-            "emailLabel": "E-mail",
-            "emailPlaceholder": "Veuillez saisir votre adresse e-mail",
-            "passwordPlaceholder": "Veuillez saisir votre mot de passe",
             "loginButton": "Se connecter",
             "registerButton": "S'inscrire",
-            "loginSuccess": "Connexion réussie",
-            "loginFailed": "Échec de la connexion, veuillez vérifier votre compte ou mot de passe"
+            "fields": {
+                "email": {
+                    "errorMessage": "L'email ne peut pas être vide",
+                    "placeholder": "Veuillez saisir votre email"
+                },
+                "password": {
+                    "errorMessage": "Le mot de passe ne peut pas être vide",
+                    "placeholder": "Veuillez saisir votre mot de passe"
+                }
+            }
         },
         "register": {
-            "title": "Inscription Utilisateur",
-            "emailPlaceholder": "Veuillez saisir votre adresse e-mail",
-            "passwordPlaceholder": "Veuillez saisir votre mot de passe",
-            "inviteCodePlaceholder": "Veuillez saisir le code d'invitation (laissez vide si aucun)",
-            "agreeToTerms": "J'ai lu et j'accepte les conditions générales du site",
             "registerButton": "S'inscrire",
             "loginHint": "Vous avez déjà un compte ?",
             "goLogin": "Se connecter",
             "mustAgree": "Veuillez d'abord accepter les conditions du site",
-            "verifyTitle": "Vérifiez votre e-mail (veuillez rester sur cette page)",
-            "verifyInstruction1": "Nous avons envoyé un code de vérification à",
-            "verifyInstruction2": ". Veuillez saisir le code ci-dessous pour vérifier"
+            "verifyTitle": "Vérifiez votre email (Ne quittez pas cette page)",
+            "otpTitle": "Vérifiez votre email",
+            "otpDescription": "Nous avons envoyé un code de vérification à {email}. Veuillez saisir le code pour finaliser la vérification.",
+            "fields": {
+                "email": {
+                    "errorMessage": "L'email ne peut pas être vide",
+                    "placeholder": "Saisissez votre email"
+                },
+                "password": {
+                    "errorMessage": "Le mot de passe ne peut pas être vide",
+                    "placeholder": "Veuillez saisir votre mot de passe"
+                },
+                "inviteCode": {
+                    "placeholder": "Saisissez le code d'invitation (laissez vide si aucun)"
+                },
+                "isChecked": {
+                    "label": "J'ai lu et j'accepte les conditions générales du site"
+                }
+            }
         }
     },
     "home": {
@@ -91,84 +219,30 @@
         "balance": "Solde",
         "points": "Points",
         "coupon": {
-            "title": "Mes Coupons",
+            "title": "Mes coupons",
             "available": "0 coupons disponibles",
-            "viewAll": "Voir Tout"
+            "viewAll": "Voir tout"
         },
-        "menu": [
-            {
-                "title": "Commandes",
-                "src": "/m/images/dashboard/order.png",
-                "to": "/profile/order"
-            },
-            {
-                "title": "Entrepôt",
-                "src": "/m/images/dashboard/warehouse.png",
-                "to": "/profile/warehouse"
-            },
-            {
-                "title": "Colis",
-                "src": "/m/images/dashboard/package.png",
-                "to": "/profile/package"
-            }
-        ],
-        "invite": {
-            "title": "Invitation d'Affiliation",
-            "status": "Invités : 0 | Activés : 0",
-            "stats": [
-                {
-                    "title": "Utilisateurs Invités",
-                    "value": "0",
-                    "to": "/pages/member/account/index"
-                },
-                {
-                    "title": "Retraits",
-                    "value": "0",
-                    "to": "/pages/member/points/index"
-                },
-                {
-                    "title": "Gagné",
-                    "value": "0",
-                    "to": "/pages/member/points/index"
-                }
-            ]
-        },
-        "services": {
-            "title": "Plus de Services",
-            "items": [
-                {
-                    "title": "Messages",
-                    "src": "/m/images/dashboard/message.png",
-                    "to": "/profile/message"
-                },
-                {
-                    "title": "Favoris",
-                    "src": "/m/images/dashboard/favorite.png",
-                    "to": "/profile/favorite"
-                },
-                {
-                    "title": "Adresse",
-                    "src": "/m/images/dashboard/address.png",
-                    "to": "/profile/address"
-                },
-                {
-                    "title": "Adresse de Facturation",
-                    "src": "/m/images/dashboard/address.png",
-                    "to": "/profile/billing-address"
-                },
-                {
-                    "title": "Historique",
-                    "src": "/m/images/dashboard/history.png",
-                    "to": "/profile/history"
-                }
-            ]
-        }
+        "menuOrder": "Commandes",
+        "menuWarehouse": "Entrepôt",
+        "menuPackage": "Colis",
+        "inviteTitle": "Invitation affiliée",
+        "inviteStatus": "Invités : 0 | Activés : 0",
+        "inviteTotalReward": "Récompenses totales",
+        "inviteAffiliateBalance": "Solde affilié",
+        "inviteWithdrawnAmount": "Montant retiré",
+        "servicesTitle": "Plus de services",
+        "servicesMessage": "Messages",
+        "servicesFavorite": "Favoris",
+        "servicesAddress": "Adresse",
+        "servicesBillingAddress": "Adresse de facturation",
+        "servicesHistory": "Historique"
     },
     "cart": {
         "title": "Panier",
         "manage": "Gérer",
         "cancel": "Annuler",
-        "selectAll": "Tout sélectionner",
+        "selectAll": "Tout  ",
         "delete": "Supprimer",
         "checkout": "Commander",
         "loading": "Chargement...",
@@ -307,90 +381,12 @@
         "address": {
             "title": "Adresse",
             "addButton": "Ajouter",
-            "formModal": {
-                "addTitle": "Ajouter une adresse",
-                "editTitle": "Modifier l'adresse",
-                "fields": {
-                    "recipient": {
-                        "label": "Destinataire",
-                        "placeholder": "Entrez le nom du destinataire"
-                    },
-                    "phone": {
-                        "label": "Téléphone",
-                        "placeholder": "Entrez le numéro de téléphone"
-                    },
-                    "area": {
-                        "label": "Région",
-                        "placeholder": "Sélectionnez la région"
-                    },
-                    "address": {
-                        "label": "Adresse",
-                        "placeholder": "Entrez l'adresse complète"
-                    },
-                    "doorNo": {
-                        "label": "Numéro de porte",
-                        "placeholder": "Entrez le numéro de porte"
-                    },
-                    "postcode": {
-                        "label": "Code postal",
-                        "placeholder": "Entrez le code postal"
-                    },
-                    "defaultAddress": {
-                        "label": "Définir comme adresse par défaut"
-                    }
-                }
-            },
-            "confirmDelete": {
-                "content": "Êtes-vous sûr de vouloir supprimer cette adresse ?",
-                "confirmText": "Confirmer",
-                "cancelText": "Annuler"
-            },
-            "defaultAddress": "Adresse par défaut"
+            "deleteContent": "Confirmer la suppression de cette adresse ?"
         },
         "billingAddress": {
             "title": "Adresse de facturation",
             "addButton": "Ajouter",
-            "addButton1": "Ajouter une adresse de facturation",
-            "edit": "Modifier",
-            "formModal": {
-                "addTitle": "Ajouter une adresse",
-                "editTitle": "Modifier l'adresse",
-                "fields": {
-                    "familyName": {
-                        "label": "Nom de famille",
-                        "placeholder": "Entrez le nom de famille"
-                    },
-                    "givenName": {
-                        "label": "Prénom",
-                        "placeholder": "Entrez le prénom"
-                    },
-                    "phone": {
-                        "label": "Téléphone",
-                        "placeholder": "Entrez le numéro de téléphone"
-                    },
-                    "area": {
-                        "label": "Région",
-                        "placeholder": "Sélectionnez la région"
-                    },
-                    "address": {
-                        "label": "Adresse détaillée",
-                        "placeholder": "Entrez l'adresse complète"
-                    },
-                    "doorNo": {
-                        "label": "Numéro de porte",
-                        "placeholder": "Entrez le numéro de porte"
-                    },
-                    "postcode": {
-                        "label": "Code postal",
-                        "placeholder": "Entrez le code postal"
-                    }
-                }
-            },
-            "confirmDelete": {
-                "content": "Êtes-vous sûr de vouloir supprimer cette adresse ?",
-                "confirmText": "Confirmer",
-                "cancelText": "Annuler"
-            }
+            "deleteContent": "Confirmer la suppression de cette adresse ?"
         },
         "message": {
             "title": "Messages",
@@ -430,9 +426,7 @@
             "save": "Enregistrer"
         },
         "changePassword": {
-            "navBar": {
-                "title": "Changer le mot de passe"
-            },
+            "title": "Changer le mot de passe",
             "form": {
                 "oldPassword": "Ancien mot de passe",
                 "newPassword": "Nouveau mot de passe",
@@ -538,9 +532,11 @@
         "warehouse": {
             "title": "Soumission de Colis",
             "shippingAddress": "Adresse de Livraison",
+            "addAddress": "Ajouter une Adresse",
             "commodityList": "Liste des Marchandises",
             "packagingMethod": "Méthode d'Emballage",
             "deliveryRoute": "Itinéraire de Livraison",
+            "routesMessage": "Veuillez sélectionner un itinéraire de livraison",
             "textareaPlaceholder": "Si vous avez des exigences particulières, veuillez laisser une note ici",
             "agreement": "J'ai lu et j'accepte la Convention d'Expédition de Colis bbdbuy",
             "submitPackage": "Soumettre le Colis",
@@ -722,18 +718,20 @@
         "title": "Historique",
         "manage": "Gérer",
         "cancel": "Annuler",
-        "selectAll": "Tout sélectionner",
+        "selectAll": "Tout",
         "delete": "Supprimer",
-        "deleteConfirmTitle": "Supprimer le panier",
-        "deleteConfirmContent": "Êtes-vous sûr de vouloir supprimer ce produit ?"
+        "deleteConfirmTitle": "Supprimer l'historique",
+        "deleteConfirmContent": "Êtes-vous sûr de vouloir supprimer les éléments sélectionnés de l'historique ?",
+        "empty": "Aucun historique de navigation"
     },
     "favorite": {
-        "title": "Mes favoris",
+        "title": "Favoris",
         "manage": "Gérer",
         "cancel": "Annuler",
         "selectAll": "Tout sélectionner",
         "delete": "Supprimer",
-        "deleteConfirmTitle": "Supprimer le favori",
-        "deleteConfirmContent": "Êtes-vous sûr de vouloir supprimer ce produit ?"
+        "deleteConfirmTitle": "Supprimer des favoris",
+        "deleteConfirmContent": "Êtes-vous sûr de vouloir supprimer ce produit des favoris ?",
+        "empty": "Aucun produit favori"
     }
 }

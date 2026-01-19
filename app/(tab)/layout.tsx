@@ -1,79 +1,63 @@
 "use client";
+
 import { TabBar } from "antd-mobile";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export default function AboutLayout({
-  children,
+const TAB_ITEMS = [
+  {
+    key: "/",
+    title: "首页",
+    iconPath: "/m/images/home.png",
+  },
+  {
+    key: "/cart",
+    title: "购物车",
+    iconPath: "/m/images/cart.png",
+  },
+  {
+    key: "/dashboard",
+    title: "我的",
+    iconPath: "/m/images/user.png",
+  },
+];
+
+const TabIcon = ({
+  active,
+  path,
+  alt,
 }: {
-  children: React.ReactNode;
-}) {
+  active: boolean;
+  path: string;
+  alt: string;
+}) => (
+  <div className="relative flex flex-col items-center justify-center">
+    <Image priority alt={alt} height={24} src={path} width={24} />
+    {active && (
+      <div className="absolute -bottom-2 h-1 w-6 rounded-full bg-[#f0700c]" />
+    )}
+  </div>
+);
+
+export default function TabLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [activeKey, setActiveKey] = useState("/");
 
-  // 监听路由变化，更新选中的tab
   useEffect(() => {
-    setActiveKey(pathname || "/");
-  }, [pathname]);
-  const tabs = [
-    {
-      key: "/",
-      title: "首页",
-      icon: (active: boolean) => (
-        <div className="flex flex-col items-center justify-center relative">
-          <Image
-            priority
-            alt="home"
-            height={24}
-            src={"/m/images/home.png"}
-            width={24}
-          />
-          {active && (
-            <div className="absolute -bottom-2 h-1 w-6 rounded-full bg-[#f0700c]" />
-          )}
-        </div>
-      ),
-    },
+    if (pathname) {
+      // 简单的路由匹配逻辑，确保嵌套路由也能高亮对应的 tab
+      const matchedTab = TAB_ITEMS.find(
+        (tab) =>
+          pathname === tab.key ||
+          (tab.key !== "/" && pathname.startsWith(tab.key)),
+      );
 
-    {
-      key: "/cart",
-      title: "购物车",
-      icon: (active: boolean) => (
-        <div className="flex flex-col items-center justify-center relative">
-          <Image
-            priority
-            alt="cart"
-            height={24}
-            src={"/m/images/cart.png"}
-            width={24}
-          />
-          {active && (
-            <div className="absolute -bottom-2 h-1 w-6 rounded-full bg-[#f0700c]" />
-          )}
-        </div>
-      ),
-    },
-    {
-      key: "/dashboard",
-      title: "我的",
-      icon: (active: boolean) => (
-        <div className="flex flex-col items-center justify-center relative">
-          <Image
-            priority
-            alt="user"
-            height={24}
-            src={"/m/images/user.png"}
-            width={24}
-          />
-          {active && (
-            <div className="absolute -bottom-2 h-1 w-6 rounded-full bg-[#f0700c]" />
-          )}
-        </div>
-      ),
-    },
-  ];
+      setActiveKey(matchedTab ? matchedTab.key : pathname);
+    }
+  }, [pathname]);
+
   const handleTabClick = (key: string) => {
     if (key !== pathname) {
       router.push(key);
@@ -81,17 +65,21 @@ export default function AboutLayout({
   };
 
   return (
-    <section className="bg flex h-[calc(var(--vh)_*_100)] flex-col justify-between">
-      {children}
+    <section className="bg flex h-[100dvh] flex-col overflow-hidden">
+      <div className="flex flex-1 flex-col overflow-y-auto overflow-x-hidden scrollbar-hide">
+        {children}
+      </div>
       <TabBar
         activeKey={activeKey}
-        className="bg-white"
+        className="border-t border-gray-100 bg-white pb-[env(safe-area-inset-bottom)]"
         onChange={handleTabClick}
       >
-        {tabs.map((item) => (
+        {TAB_ITEMS.map((item) => (
           <TabBar.Item
             key={item.key}
-            icon={item.icon(activeKey === item.key)}
+            icon={(active) => (
+              <TabIcon active={active} alt={item.title} path={item.iconPath} />
+            )}
           />
         ))}
       </TabBar>

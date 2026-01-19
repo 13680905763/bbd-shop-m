@@ -1,3 +1,5 @@
+// 暂时用于地址跟账单地址表单
+
 import {
   Modal,
   ModalContent,
@@ -5,7 +7,7 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  addToast,
+  Form,
 } from "@heroui/react";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
@@ -19,8 +21,7 @@ interface FormModalProps {
   fields: FieldConfig[];
   formData: Record<string, any>;
   onChange: (data: Record<string, any>) => void;
-  // ✅ onSave 可以返回 boolean（true 表示关闭）
-  onSave: (
+  onSubmit: (
     data: Record<string, any>,
   ) => Promise<boolean | void> | boolean | void;
   confirmText?: string;
@@ -34,36 +35,20 @@ const FormModal = ({
   fields,
   formData,
   onChange,
-  onSave,
+  onSubmit,
   confirmText,
   cancelText,
 }: FormModalProps) => {
-  const [loading, setLoading] = useState(false);
-  const t = useTranslations("components.form");
-  const handleSave = async () => {
-    const missingFields = fields
-      .filter((f) => f.required && !formData[f.name])
-      .map((f) => f.label || f.name);
+  const [isLoading, setIsLoading] = useState(false);
 
-    if (missingFields.length > 0) {
-      addToast({
-        title: `Please fill in：${missingFields.join("、")}`,
-        timeout: 1000,
-        color: "danger",
-      });
-
-      return;
-    }
+  const t = useTranslations("components.modal");
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
-      setLoading(true);
-      const result = await onSave(formData);
-
-      if (result) return;
-      onOpenChange(false);
-    } catch (e) {
-      console.error("保存失败:", e);
+      setIsLoading(true);
+      await onSubmit?.(formData);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -75,28 +60,40 @@ const FormModal = ({
       scrollBehavior="normal"
       onOpenChange={onOpenChange}
     >
-      <ModalContent>
+      <ModalContent className="">
         <>
-          <ModalHeader>{title}</ModalHeader>
-          <ModalBody className="min-h-[300px]">
-            <FormItemRenderer
-              fields={fields}
-              formData={formData}
-              onChange={onChange}
-            />
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              isDisabled={loading}
-              variant="flat"
-              onPress={() => onOpenChange(false)}
-            >
-              {cancelText ?? t("cancel")}
-            </Button>
-            <Button color="primary" isLoading={loading} onPress={handleSave}>
-              {confirmText ?? t("confirm")}
-            </Button>
-          </ModalFooter>
+          <Form className="min-h-[300px] w-full" onSubmit={handleSubmit}>
+            <ModalHeader>{title}</ModalHeader>
+            <ModalBody className="w-full">
+              {/* <div
+                className="h-full space-y-4 overflow-y-auto"
+                // 明确告诉 iOS 这是主滚动容器
+                style={{
+                  WebkitOverflowScrolling: "touch",
+                  // 创建独立的滚动上下文
+                  transform: "translateZ(0)",
+                }}
+              > */}
+              <FormItemRenderer
+                fields={fields}
+                formData={formData}
+                onChange={onChange}
+              />
+              {/* </div> */}
+            </ModalBody>
+            <ModalFooter className="w-full">
+              <Button
+                isDisabled={isLoading}
+                variant="flat"
+                onPress={() => onOpenChange(false)}
+              >
+                {cancelText ?? t("cancel")}
+              </Button>
+              <Button color="primary" isLoading={isLoading} type="submit">
+                {confirmText ?? t("confirm")}
+              </Button>
+            </ModalFooter>
+          </Form>
         </>
       </ModalContent>
     </Modal>

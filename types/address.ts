@@ -1,26 +1,86 @@
-export interface AddressItem {
-  id: string; // 地址 ID，注意是字符串类型
-  createTime: string; // 创建时间（格式为 yyyy-MM-dd HH:mm:ss）
-  updateTime: string; // 更新时间
-  customerId: number; // 用户 ID
-  recipient: string; // 收件人姓名
-  phone: string; // 联系电话
-  countryId: number; // 国家 ID
-  country: string; // 国家名称
-  countryIso2: string; // 国家简码（ISO 2位）
-  countryIso3: string; // 国家简码（ISO 3位）
-  stateId: number; // 省份 ID
-  state: string; // 省份名称
-  stateIso2: string; // 省份简码
-  city: string; // 城市，注意这里是 string 类型的城市 ID（可能是枚举或代码）
-  address: string; // 详细地址
-  postcode: string; // 邮编
-  addressType: number; // 地址类型（可能是 1：收货地址，2：账单地址等）
-  defaultAddress: number; // 是否默认地址（0 否，1 是）
+/**
+ * 地址类型
+ * 1: 收货地址
+ * 2: 账单地址
+ */
+export type AddressType = 1 | 2;
+
+/**
+ * 默认地址标记
+ * 0: 非默认地址
+ * 1: 默认地址
+ */
+export type DefaultAddress = 0 | 1;
+
+/**
+ * 地址信息接口
+ */
+export interface Address {
+  /** 地址ID */
+  id: string;
+
+  /** 详细地址 */
+  address: string;
+
+  /** 地址类型 */
+  addressType: AddressType;
+
+  /** 城市 */
+  city: string;
+
+  /** 国家名称 */
+  country: string;
+
+  /** 国家ID */
+  countryId: number;
+
+  /** 国家ISO2代码 */
+  countryIso2: string;
+
+  /** 国家ISO3代码 */
+  countryIso3: string;
+
+  /** 创建时间 */
+  createTime: string;
+
+  /** 客户ID */
+  customerId: string;
+
+  /** 是否为默认地址 */
+  defaultAddress: DefaultAddress;
+
+  /** 门牌号 */
+  doorNo: string;
+
+  /** 手机号 */
+  phone: string;
+
+  /** 邮编 */
+  postcode: string;
+
+  /** 收件人 */
+  recipient: string;
+
+  /** 州/省 */
+  state: string;
+
+  /** 州/省ID */
+  stateId: number;
+
+  /** 州/省ISO2代码 */
+  stateIso2: string;
+
+  /** 更新时间 */
+  updateTime: string;
 }
+export type AddressModalState =
+  | { type: null }
+  | { type: "add" }
+  | { type: "edit"; address: Address }
+  | { type: "delete"; address: Address };
 
 export interface BillingAddressState {
-  billingAddress: AddressItem | null;
-  setBillingAddress: (billingAddress: AddressItem | null) => void;
+  billingAddress: Address | null;
+  setBillingAddress: (billingAddress: Address | null) => void;
   clearBillingAddress: () => void;
 }

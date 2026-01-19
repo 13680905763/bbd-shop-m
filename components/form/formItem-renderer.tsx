@@ -18,7 +18,7 @@ export interface FieldOption {
 }
 
 export interface FieldConfig {
-  key: string; // 用于 React 元素 key
+  key?: string; // 用于 React 元素 key
   type: "input" | "password" | "select" | "checkbox" | "date" | "area";
   name: string; // 用于 formData
   label?: string;
@@ -27,6 +27,8 @@ export interface FieldConfig {
   required?: boolean;
   options?: FieldOption[];
   startContent?: React.ReactNode;
+  errorMessage?: string;
+  isDisabled?: boolean;
 }
 
 interface DynamicFormProps<T extends Record<string, any>> {
@@ -44,15 +46,12 @@ export default function FormItemRenderer<T extends Record<string, any>>({
     onChange({ ...formData, [key]: value });
   };
   const [isVisible, setIsVisible] = useState(false);
-
   const toggleVisibility = () => setIsVisible(!isVisible);
-  // console.log("formData", formData);
 
   return (
     <>
       {fields.map((field) => {
         const {
-          key,
           type,
           name,
           label,
@@ -61,6 +60,8 @@ export default function FormItemRenderer<T extends Record<string, any>>({
           size = "md",
           startContent = "",
           required = false,
+          errorMessage = "",
+          isDisabled = false,
         } = field; // 默认 md
         const value = formData[name] ?? "";
 
@@ -68,11 +69,12 @@ export default function FormItemRenderer<T extends Record<string, any>>({
           case "input":
             return (
               <Input
-                key={key}
+                key={name}
                 classNames={{
                   input: "text-base",
                   inputWrapper: "bg-white",
                 }}
+                errorMessage={errorMessage}
                 isRequired={required}
                 label={label}
                 placeholder={placeholder}
@@ -80,13 +82,14 @@ export default function FormItemRenderer<T extends Record<string, any>>({
                 startContent={startContent}
                 value={value}
                 variant="bordered"
+                isDisabled={isDisabled}
                 onValueChange={(val) => handleChange(name, val)}
               />
             );
           case "password":
             return (
               <Input
-                key={key} // 用 key
+                key={name} // 用 name 作为 key
                 classNames={{
                   input: "text-base",
                   inputWrapper: "bg-white",
@@ -105,6 +108,7 @@ export default function FormItemRenderer<T extends Record<string, any>>({
                     )}
                   </button>
                 }
+                errorMessage={errorMessage}
                 isRequired={required}
                 label={label}
                 placeholder={placeholder}

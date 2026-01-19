@@ -53,7 +53,7 @@ export function Providers({
 
     init();
   }, []);
-  if (!ready) return <FullscreenLoader />; // or loader
+  if (!ready) return <FullscreenLoader />;
 
   return (
     <GoogleOAuthProvider clientId="545953191162-n0elu4ilreo1hdlptkgublu7bjegpp0u.apps.googleusercontent.com">

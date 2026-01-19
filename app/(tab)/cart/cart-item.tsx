@@ -29,11 +29,7 @@ function ProductItem({
           size="sm"
           onChange={toggle}
         />
-        <button
-          onClick={() =>
-            router.push(`/goods/${product.source}/${product?.sourceProductId}`)
-          }
-        >
+        <button>
           <Image
             alt="商品图"
             className="rounded-md object-cover"
@@ -45,16 +41,27 @@ function ProductItem({
           />
         </button>
         <div className="flex-1">
-          <div className="text-title line-clamp-1">{product.productTitle}</div>
-          <div className="text-light-gray line-clamp-2">
-            {product.sku.propName_valueName}
+          <div
+            role="button"
+            onClick={() =>
+              router.push(
+                `/goods/${product.source}/${product?.sourceProductId}`,
+              )
+            }
+          >
+            <div className="text-title line-clamp-1">
+              {product.productTitle}
+            </div>
+            <div className="text-light-gray line-clamp-2">
+              {product?.propAndValue?.propName_valueName}
+            </div>
           </div>
 
           <div className="mt-5 flex items-center justify-between gap-2">
             <div className="flex flex-1 flex-col">
               <span className="text-price-base">
                 {currency.symbol}
-                {product?.unitPrice}
+                {product?.price}
               </span>
             </div>
 

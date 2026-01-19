@@ -1,22 +1,126 @@
 {
     "components": {
+        "ui": {
+            "copy": {
+                "success": "Copy success",
+                "fail": "Copy fail"
+            },
+            "empty": {
+                "desc": "No data available"
+            }
+        },
         "form": {
-            "confirm": "Confirm",
+            "save": "Confirm",
             "cancel": "Cancel",
             "missingFieldsTitle": "Please fill in: {fields}"
+        },
+        "modal": {
+            "confirm": "Confirm",
+            "cancel": "Cancel",
+            "confirmModalTitle": "Confirm Action",
+            "address": {
+                "addTitle": "Add Address",
+                "editTitle": "Edit Address",
+                "fields": {
+                    "recipient": {
+                        "label": "Recipient",
+                        "placeholder": "Enter recipient name",
+                        "errorMessage": "Recipient cannot be empty"
+                    },
+                    "phone": {
+                        "label": "Phone",
+                        "placeholder": "Enter phone number",
+                        "errorMessage": "Phone cannot be empty"
+                    },
+                    "area": {
+                        "label": "Region",
+                        "placeholder": "Select region",
+                        "errorMessage": "Region cannot be empty"
+                    },
+                    "address": {
+                        "label": "Address",
+                        "placeholder": "Enter full address",
+                        "errorMessage": "Address cannot be empty"
+                    },
+                    "doorNo": {
+                        "label": "Door Number",
+                        "placeholder": "Enter door number",
+                        "errorMessage": "Door number cannot be empty"
+                    },
+                    "postcode": {
+                        "label": "Postcode",
+                        "placeholder": "Enter postal code",
+                        "errorMessage": "Postcode cannot be empty"
+                    },
+                    "defaultAddress": {
+                        "label": "Set as default address"
+                    }
+                }
+            },
+            "billingAddress": {
+                "addTitle": "Add Billing Address",
+                "editTitle": "Edit Billing Address",
+                "fields": {
+                    "familyName": {
+                        "label": "Last Name",
+                        "placeholder": "Enter last name",
+                        "errorMessage": "Last name cannot be empty"
+                    },
+                    "givenName": {
+                        "label": "First Name",
+                        "placeholder": "Enter first name",
+                        "errorMessage": "First name cannot be empty"
+                    },
+                    "phone": {
+                        "label": "Phone",
+                        "placeholder": "Enter phone number",
+                        "errorMessage": "Phone cannot be empty"
+                    },
+                    "area": {
+                        "label": "Region",
+                        "placeholder": "Select region",
+                        "errorMessage": "Region cannot be empty"
+                    },
+                    "address": {
+                        "label": "Address",
+                        "placeholder": "Enter full address",
+                        "errorMessage": "Address cannot be empty"
+                    },
+                    "doorNo": {
+                        "label": "Door Number",
+                        "placeholder": "Enter door number",
+                        "errorMessage": "Door number cannot be empty"
+                    },
+                    "postcode": {
+                        "label": "Postal Code",
+                        "placeholder": "Enter postal code",
+                        "errorMessage": "Postal code cannot be empty"
+                    },
+                    "defaultAddress": {
+                        "label": "Set as default address"
+                    }
+                }
+            },
+            "recharge": {
+                "title": "Top Up",
+                "placeholder": "Please enter amount"
+            }
         },
         "areaSelector": {
             "country": {
                 "label": "Country",
-                "placeholder": "Select a country"
+                "placeholder": "Select a country",
+                "errorMessage": "Please select a country"
             },
             "state": {
                 "label": "State / Province",
-                "placeholder": "Select a state"
+                "placeholder": "Select a state",
+                "errorMessage": "Please select a state"
             },
             "city": {
                 "label": "City",
-                "placeholder": "Select a city"
+                "placeholder": "Select a city",
+                "errorMessage": "Please select a city"
             }
         },
         "confirmModal": {
@@ -37,34 +141,58 @@
             "send": "Send",
             "connectionLost": "Connection lost, please try again later",
             "imageSendFail": "Image send failed"
+        },
+        "addressItem": {
+            "edit": "Edit",
+            "delete": "Delete",
+            "default": "Default"
+        },
+        "billingAddress": {
+            "edit": "Edit",
+            "delete": "Delete"
         }
     },
     "auth": {
         "sloganTitle": "One-Stop Service",
         "sloganDesc": "Shop from China with Ease, Ship Worldwide Professionally",
         "login": {
-            "title": "User Login",
-            "emailLabel": "Email",
-            "emailPlaceholder": "Please enter email address",
-            "passwordPlaceholder": "Please enter password",
             "loginButton": "Login",
             "registerButton": "Register",
-            "loginSuccess": "Login successful",
-            "loginFailed": "Login failed, please check your account or password"
+            "fields": {
+                "email": {
+                    "errorMessage": "Email cannot be empty",
+                    "placeholder": "Please enter your email"
+                },
+                "password": {
+                    "errorMessage": "Password cannot be empty",
+                    "placeholder": "Please enter your password"
+                }
+            }
         },
         "register": {
-            "title": "User Registration",
-            "emailPlaceholder": "Please enter email address",
-            "passwordPlaceholder": "Please enter password",
-            "inviteCodePlaceholder": "Please enter invitation code (leave blank if none)",
-            "agreeToTerms": "I have read and agree to the website terms and conditions",
             "registerButton": "Register",
             "loginHint": "Already have an account?",
-            "goLogin": "Go to login",
+            "goLogin": "Go to Login",
             "mustAgree": "Please agree to the website terms first",
-            "verifyTitle": "Verify your email (please stay on this page)",
-            "verifyInstruction1": "We have sent a verification code to",
-            "verifyInstruction2": ". Please enter the code below to verify"
+            "verifyTitle": "Verify your email (Do not leave this page)",
+            "otpTitle": "Verify your email",
+            "otpDescription": "We have sent a verification code to {email}. Please enter the code to complete verification.",
+            "fields": {
+                "email": {
+                    "errorMessage": "Email cannot be empty",
+                    "placeholder": "Enter your email"
+                },
+                "password": {
+                    "errorMessage": "Password cannot be empty",
+                    "placeholder": "Please enter your password"
+                },
+                "inviteCode": {
+                    "placeholder": "Enter invite code (leave blank if none)"
+                },
+                "isChecked": {
+                    "label": "I have read and agree to the website terms and conditions"
+                }
+            }
         }
     },
     "home": {
@@ -95,74 +223,20 @@
             "available": "0 coupons available",
             "viewAll": "View All"
         },
-        "menu": [
-            {
-                "title": "Orders",
-                "src": "/m/images/dashboard/order.png",
-                "to": "/profile/order"
-            },
-            {
-                "title": "Warehouse",
-                "src": "/m/images/dashboard/warehouse.png",
-                "to": "/profile/warehouse"
-            },
-            {
-                "title": "Packages",
-                "src": "/m/images/dashboard/package.png",
-                "to": "/profile/package"
-            }
-        ],
-        "invite": {
-            "title": "Affiliate Invitation",
-            "status": "Invited: 0 | Activated: 0",
-            "stats": [
-                {
-                    "title": "Invited Users",
-                    "value": "0",
-                    "to": "/pages/member/account/index"
-                },
-                {
-                    "title": "Withdrawals",
-                    "value": "0",
-                    "to": "/pages/member/points/index"
-                },
-                {
-                    "title": "Earned",
-                    "value": "0",
-                    "to": "/pages/member/points/index"
-                }
-            ]
-        },
-        "services": {
-            "title": "More Services",
-            "items": [
-                {
-                    "title": "Messages",
-                    "src": "/m/images/dashboard/message.png",
-                    "to": "/profile/message"
-                },
-                {
-                    "title": "Favorites",
-                    "src": "/m/images/dashboard/favorite.png",
-                    "to": "/profile/favorite"
-                },
-                {
-                    "title": "Address",
-                    "src": "/m/images/dashboard/address.png",
-                    "to": "/profile/address"
-                },
-                {
-                    "title": "Billing Address",
-                    "src": "/m/images/dashboard/address.png",
-                    "to": "/profile/billing-address"
-                },
-                {
-                    "title": "History",
-                    "src": "/m/images/dashboard/history.png",
-                    "to": "/profile/history"
-                }
-            ]
-        }
+        "menuOrder": "Purchase Orders",
+        "menuWarehouse": "My Warehouse",
+        "menuPackage": "My Packages",
+        "inviteTitle": "Affiliate Invitation",
+        "inviteStatus": "Invited: 0 | Activated: 0",
+        "inviteTotalReward": "Total Rewards",
+        "inviteAffiliateBalance": "Affiliate Balance",
+        "inviteWithdrawnAmount": "Withdrawn Amount",
+        "servicesTitle": "More Services",
+        "servicesMessage": "Message Notifications",
+        "servicesFavorite": "My Favorites",
+        "servicesAddress": "Shipping Address",
+        "servicesBillingAddress": "Billing Address",
+        "servicesHistory": "Browsing History"
     },
     "cart": {
         "title": "Cart",
@@ -307,90 +381,12 @@
         "address": {
             "title": "Address",
             "addButton": "Add",
-            "formModal": {
-                "addTitle": "Add Address",
-                "editTitle": "Edit Address",
-                "fields": {
-                    "recipient": {
-                        "label": "Recipient",
-                        "placeholder": "Enter recipient name"
-                    },
-                    "phone": {
-                        "label": "Phone",
-                        "placeholder": "Enter phone number"
-                    },
-                    "area": {
-                        "label": "Area",
-                        "placeholder": "Select area"
-                    },
-                    "address": {
-                        "label": "Address",
-                        "placeholder": "Enter full address"
-                    },
-                    "doorNo": {
-                        "label": "Door No.",
-                        "placeholder": "Enter door number"
-                    },
-                    "postcode": {
-                        "label": "Postcode",
-                        "placeholder": "Enter postcode"
-                    },
-                    "defaultAddress": {
-                        "label": "Set as default address"
-                    }
-                }
-            },
-            "confirmDelete": {
-                "content": "Are you sure you want to delete this address?",
-                "confirmText": "Confirm",
-                "cancelText": "Cancel"
-            },
-            "defaultAddress": "default Address"
+            "deleteContent": "Are you sure you want to delete this address?"
         },
         "billingAddress": {
             "title": "Billing Address",
             "addButton": "Add",
-            "addButton1": "Add Billing Address",
-            "edit": "Edit",
-            "formModal": {
-                "addTitle": "Add Address",
-                "editTitle": "Edit Address",
-                "fields": {
-                    "familyName": {
-                        "label": "Last Name",
-                        "placeholder": "Enter last name"
-                    },
-                    "givenName": {
-                        "label": "First Name",
-                        "placeholder": "Enter first name"
-                    },
-                    "phone": {
-                        "label": "Phone",
-                        "placeholder": "Enter phone number"
-                    },
-                    "area": {
-                        "label": "Area",
-                        "placeholder": "Select area"
-                    },
-                    "address": {
-                        "label": "Detailed Address",
-                        "placeholder": "Enter full address"
-                    },
-                    "doorNo": {
-                        "label": "Door No.",
-                        "placeholder": "Enter door number"
-                    },
-                    "postcode": {
-                        "label": "Postal Code",
-                        "placeholder": "Enter postal code"
-                    }
-                }
-            },
-            "confirmDelete": {
-                "content": "Are you sure you want to delete this address?",
-                "confirmText": "Confirm",
-                "cancelText": "Cancel"
-            }
+            "deleteContent": "Are you sure you want to delete this address?"
         },
         "message": {
             "title": "Messages",
@@ -430,9 +426,7 @@
             "save": "Save"
         },
         "changePassword": {
-            "navBar": {
-                "title": "Change Password"
-            },
+            "title": "Change Password",
             "form": {
                 "oldPassword": "Old Password",
                 "newPassword": "New Password",
@@ -538,9 +532,11 @@
         "warehouse": {
             "title": "Package Submit",
             "shippingAddress": "Shipping Address",
+            "addAddress": "Add Address",
             "commodityList": "Commodity List",
             "packagingMethod": "Packaging Method",
             "deliveryRoute": "Delivery Route",
+            "routesMessage": "Please select a delivery route",
             "textareaPlaceholder": "If you have any special requirements, please leave a note here",
             "agreement": "I have read and agreed to the bbdbuy Package Shipping Agreement",
             "submitPackage": "Submit Package",
@@ -724,16 +720,18 @@
         "cancel": "Cancel",
         "selectAll": "Select All",
         "delete": "Delete",
-        "deleteConfirmTitle": "Delete Cart",
-        "deleteConfirmContent": "Are you sure you want to delete this product?"
+        "deleteConfirmTitle": "Delete History",
+        "deleteConfirmContent": "Are you sure you want to delete this history?",
+        "empty": "No browsing history"
     },
     "favorite": {
-        "title": "My Favorites",
+        "title": "Favorite",
         "manage": "Manage",
         "cancel": "Cancel",
         "selectAll": "Select All",
         "delete": "Delete",
         "deleteConfirmTitle": "Delete Favorite",
-        "deleteConfirmContent": "Are you sure you want to delete this product?"
+        "deleteConfirmContent": "Are you sure you want to delete this product?",
+        "empty": "No favorite products"
     }
 }

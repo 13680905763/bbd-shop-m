@@ -11,7 +11,6 @@ import {
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  Skeleton,
   Textarea,
   useDisclosure,
 } from "@heroui/react";
@@ -25,11 +24,12 @@ import DisclaimerDrawer from "./disclaimer-drawer";
 
 import Stepper from "@/components/stepper";
 import { addCart } from "@/services/cart";
-import { getGoodsInfo } from "@/services/goods";
+import { favoriteProduct, getGoodsInfo } from "@/services/goods";
 import { createOrderPreviewKeyByProduct } from "@/services";
 import { source } from "@/types";
 import CommonModal from "@/components/modal/common-modal";
 import { useGlobalStore } from "@/store";
+import { GoodsSkeleton } from "@/components/ui";
 interface Sku {
   skuID: string;
   stock: number;
@@ -119,12 +119,13 @@ function getAllCombinations(
 
   return combinations;
 }
-export default function GoodsPage() {
+export default function GoodsDetails() {
   const t = useTranslations("goods.details");
   const { currency } = useGlobalStore();
 
   const params = useParams();
   const router = useRouter();
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [remark, setRemark] = useState<string>();
   const [quantity, setQuantity] = useState<number>(1);
 
@@ -143,16 +144,7 @@ export default function GoodsPage() {
   const queryClient = useQueryClient();
   const handleBuyNow = async () => {
     if (issub) return;
-    // console.log("currentSku", currentSku);
-    if (!currentSku) {
-      addToast({
-        title: "请选择商品规格",
-        timeout: 1000,
-        color: "danger",
-      });
 
-      return;
-    }
     setissub(true);
 
     try {
@@ -173,17 +165,19 @@ export default function GoodsPage() {
       setissub(false);
     }
   };
+  const handleFavorite = async () => {
+    try {
+      await favoriteProduct(
+        params.source as source,
+        params.sourceProductId as string,
+        isFavorite ? 0 : 1,
+      );
+      setIsFavorite(!isFavorite);
+    } catch (e) {}
+  };
   const add = async () => {
     if (issub) return;
-    if (!currentSku) {
-      addToast({
-        title: "请选择商品规格",
-        color: "danger",
-        timeout: 1000,
-      });
 
-      return;
-    }
     setissub(true);
 
     const data = {
@@ -229,7 +223,6 @@ export default function GoodsPage() {
         });
       }
     });
-    // console.log("cloned", cloned);
 
     // setGoodsInfo(cloned);
 
@@ -340,6 +333,9 @@ export default function GoodsPage() {
     getGoodsInfo({ ...params })
       .then((data: any) => {
         // 数据初始化
+        console.log("data", data);
+
+        setIsFavorite(data.collection);
         const cloned = structuredClone(data);
         let pathMap = generateDynamicSkuPathDict(cloned.productInfo);
 
@@ -365,40 +361,13 @@ export default function GoodsPage() {
   }, []);
 
   return (
-    <div className="flex h-[calc(var(--vh)_*_100)] flex-col justify-between">
+    <>
       <NavBar className="bg-white" onBack={() => router.back()}>
-        {t("title")}
+        <span className="navbar-title">{t("title")}</span>
       </NavBar>
 
       {isLoading ? (
-        <div className="flex flex-1 flex-col gap-4 p-4">
-          {/* 商品主图占位 */}
-          <Skeleton className="w-full rounded-lg">
-            <div className="h-[250px] w-full rounded-lg bg-default-300" />
-          </Skeleton>
-
-          {/* 商品标题占位 */}
-          <Skeleton className="w-full">
-            <div className="h-6 w-3/4 rounded-lg bg-default-300" />
-          </Skeleton>
-
-          {/* 商品价格占位 */}
-          <Skeleton className="w-full">
-            <div className="h-6 w-1/4 rounded-lg bg-default-300" />
-          </Skeleton>
-
-          {/* 商品描述占位，多行 */}
-          <Skeleton className="w-full space-y-2">
-            <div className="h-3 w-full rounded-lg bg-default-300" />
-            <div className="h-3 w-5/6 rounded-lg bg-default-300" />
-            <div className="h-3 w-4/6 rounded-lg bg-default-300" />
-          </Skeleton>
-
-          {/* 购买按钮占位 */}
-          <Skeleton className="w-full">
-            <div className="h-12 w-full rounded-lg bg-default-300" />
-          </Skeleton>
-        </div>
+        <GoodsSkeleton />
       ) : (
         <>
           <div className="flex-1 overflow-y-auto overflow-x-hidden">
@@ -406,7 +375,6 @@ export default function GoodsPage() {
               {goodsInfo?.productInfo.imgList.map((item: any) => (
                 <Swiper.Item key={item}>
                   <Image
-                    className="rounded-lg"
                     fit="contain"
                     height={375}
                     referrerPolicy="no-referrer"
@@ -536,9 +504,11 @@ export default function GoodsPage() {
                 </button>
               </div>
               <div className="flex flex-col items-center justify-center">
-                <div>
-                  <IoStar className="h-[30px] w-[30px]" />
-                </div>
+                <button onClick={handleFavorite}>
+                  <IoStar
+                    className={`h-[30px] w-[30px] ${isFavorite ? "text-[#f0700c]" : ""}`}
+                  />
+                </button>
               </div>
             </div>
             <div className="flex flex-1 gap-2">
@@ -730,6 +700,6 @@ export default function GoodsPage() {
           </div>
         </div>
       </CommonModal>
-    </div>
+    </>
   );
 }

@@ -66,21 +66,22 @@ export default function Settingpage() {
   };
 
   return (
-    <div className="h-screen bg-[#f7f8f9]">
+    <>
       <NavBar className="bg-white" onBack={() => router.back()}>
-        {t("navBar.title")}
+        <span className="navbar-title">{t("title")}</span>
       </NavBar>
 
-      <div className="m-2">
-        <CommonForm
-          confirmText={t("form.submit")}
-          fields={registerFormFields}
-          formData={formData}
-          showCancelButton={false}
-          onChange={setFormData}
-          onSubmit={handleSubmit}
-        />
+      <div className="flex-1 p-2">
+        <div className="overflow-hidden rounded-xl bg-white p-2 shadow-sm">
+          <CommonForm
+            confirmText={t("form.submit")}
+            fields={registerFormFields}
+            formData={formData}
+            onChange={setFormData}
+            onSubmit={handleSubmit}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 }

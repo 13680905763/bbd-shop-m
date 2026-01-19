@@ -53,7 +53,7 @@ export default function CommonModal({
   isDismissable = true,
   isKeyboardDismissDisabled = false,
 }: CommonModalProps) {
-  const t = useTranslations("components.confirmModal"); // Common 是语言包的 namespace
+  const t = useTranslations("components.confirmModal");
 
   const [loading, setLoading] = useState(false);
 

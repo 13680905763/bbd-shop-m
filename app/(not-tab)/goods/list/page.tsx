@@ -20,9 +20,11 @@ import { FaRegImage } from "react-icons/fa";
 
 import { getGoodsId, getGoodsImageId, getGoodsList } from "@/services";
 import { SearchIcon } from "@/components/icons";
+import { useGlobalStore } from "@/store";
 
 export default function Searchpage() {
   const t = useTranslations("goods.search");
+  const { currency } = useGlobalStore();
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const searchParams = useSearchParams();
@@ -265,7 +267,7 @@ export default function Searchpage() {
                     <div className="text-left">
                       <b className="line-clamp-2">{item.title}</b>
                       <p className="font-semibold text-orange-500">
-                        {item.price}
+                        {currency.symbol} {item.price}
                       </p>
                     </div>
                   </CardFooter>
@@ -281,7 +283,9 @@ export default function Searchpage() {
           )}
 
           {!loading && list.length === 0 && (
-            <div className="py-10 text-center text-gray-500">{t("noResult")}</div>
+            <div className="py-10 text-center text-gray-500">
+              {t("noResult")}
+            </div>
           )}
         </div>
       </div>

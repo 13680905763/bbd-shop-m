@@ -120,7 +120,7 @@ export default function MessagePage() {
   };
 
   return (
-    <div className="flex h-screen flex-col justify-between bg-[#f7f8f9]">
+    <>
       <NavBar
         className="bg-white"
         right={
@@ -130,7 +130,7 @@ export default function MessagePage() {
         }
         onBack={() => router.back()}
       >
-        {t("title")}
+        <span className="navbar-title">{t("title")}</span>
       </NavBar>
 
       <Tabs
@@ -194,6 +194,6 @@ export default function MessagePage() {
           onOpenChange={() => setModal({ type: null })}
         />
       )}
-    </div>
+    </>
   );
 }

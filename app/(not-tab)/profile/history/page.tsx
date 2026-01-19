@@ -2,124 +2,98 @@
 import { Button, Checkbox, useDisclosure } from "@heroui/react";
 import React, { useState } from "react";
 import { useTranslations } from "next-intl";
-
-// import ShopCard from "./shop-card";
-
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 
-const a = [
-  {
-    createTime: "2025-06-04 18:39:55",
-    customerId: "1",
-    id: "48",
-    picUrl:
-      "https://img.alicdn.com/bao/uploaded/i3/2376087644/O1CN01PGccxl26L0XTI5AvF_!!2376087644.jpg",
-    postFee: 0,
-    price: 5000,
-    productId: "9",
-    productSkuId: "31",
-    productTitle:
-      "海外订单尾货~剪标撤回外贸潮流痞帅短袖T恤男女同款百搭宽松上衣",
-    productUrl: "https://item.taobao.com/item.htm?id=855863456744",
-    quantity: 1,
-    remark: "demoData",
-    shopId: "116636910",
-    shopName: "VSFRR SKY IDCCO",
-    sku: {
-      propId_valueId: "1627207:380850593",
-      propName_valueName: "颜色分类:白色XXL",
-    },
-    skuPicUrl:
-      "https://img.alicdn.com/bao/uploaded/i2/2376087644/O1CN01vMge8x26L0XSEtPMe_!!2376087644.jpg",
-    source: "TAOBAO",
-    sourceMpId: "4096257174111208",
-    sourceMpSkuId: "23990356503528",
-    sourceProductId: "855863456744",
-    sourceSkuId: "5828221219298",
-    status: 1,
-    totalPrice: 5000,
-    updateTime: "2025-06-04 18:39:55",
-  },
-  {
-    createTime: "2025-06-04 19:20:05",
-    customerId: "1",
-    id: "51",
-    picUrl:
-      "https://img.alicdn.com/bao/uploaded/i3/2376087644/O1CN01PGccxl26L0XTI5AvF_!!2376087644.jpg",
-    postFee: 0,
-    price: 5000,
-    productId: "9",
-    productSkuId: "34",
-    productTitle:
-      "海外订单尾货~剪标撤回外贸潮流痞帅短袖T恤男女同款百搭宽松上衣",
-    productUrl: "https://item.taobao.com/item.htm?id=855863456744",
-    quantity: 1,
-    shopId: "116636910",
-    shopName: "VSFRR SKY IDCCO",
-    sku: {
-      propId_valueId: "1627207:35962878",
-      propName_valueName: "颜色分类:白色L",
-    },
-    skuPicUrl:
-      "https://img.alicdn.com/bao/uploaded/i2/2376087644/O1CN01vMge8x26L0XSEtPMe_!!2376087644.jpg",
-    source: "TAOBAO",
-    sourceMpId: "4096257174111208",
-    sourceMpSkuId: "23990356501480",
-    sourceProductId: "855863456744",
-    sourceSkuId: "5828221219296",
-    status: 1,
-    totalPrice: 5000,
-    updateTime: "2025-06-04 19:20:05",
-  },
-];
+import ProductItem from "./product-item";
 
-export default function HistoryPage() {
+import { useHistory, useSelection } from "@/hook";
+import { HistoryProduct } from "@/types";
+import ConfirmModal from "@/components/confirm-modal";
+import { delHistory } from "@/services";
+import FullscreenLoader from "@/components/common/fullscreen-loader";
+import { queryClient } from "@/lib/react-query";
+
+export default function History() {
   const t = useTranslations("history");
   const router = useRouter();
   const [isEdit, setIsEdit] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [selected, setSelected] = useState<{
-    [shopId: string]: { [productId: string]: boolean };
-  }>({});
+
+  const { data, isLoading } = useHistory();
+  const historyList = (data as unknown as HistoryProduct[]) || [];
+
+  const {
+    selectedIds,
+    isSelected,
+    toggle,
+    hasSelected,
+    isAllSelected,
+    toggleSelectAll,
+    unselectAll,
+  } = useSelection(historyList, { idKey: "id" });
+
+  const handleDelete = async () => {
+    await delHistory(selectedIds as string[]);
+    await queryClient.invalidateQueries({ queryKey: ["history"] }); // 手动刷新
+    unselectAll();
+    onOpenChange();
+  };
 
   return (
-    <div className="flex h-[calc(var(--vh)_*_100)] flex-col justify-between overflow-hidden">
+    <>
       <NavBar
         className="bg-white"
         right={
-          <button onClick={() => setIsEdit(!isEdit)}>
+          <div
+            className="px-2 text-sm"
+            role="button"
+            onClick={() => setIsEdit(!isEdit)}
+          >
             {isEdit ? t("cancel") : t("manage")}
-          </button>
+          </div>
         }
         onBack={() => router.back()}
       >
-        {t("title")}
+        <span className="navbar-title">{t("title")}</span>
       </NavBar>
-
-      <div className="flex-1 overflow-auto px-3">
-        {/* {a.map((product: Product) => (
-          <ProductItem key={product.id} product={product} />
-        ))} */}
+      {isLoading && <FullscreenLoader />}
+      <div className="no-scrollbar flex-1 space-y-2 overflow-auto p-2">
+        {historyList.length === 0 ? (
+          <div className="flex h-full flex-col items-center justify-center text-sm text-gray-400">
+            {t("empty")}
+          </div>
+        ) : (
+          historyList.map((product) => (
+            <ProductItem
+              key={product.id}
+              isEdit={isEdit}
+              isSelected={isSelected(product.id)}
+              product={product}
+              onToggle={() => toggle(product.id)}
+            />
+          ))
+        )}
       </div>
-      {isEdit ? (
-        <div className="flex items-center justify-between border-b border-[#f5f5f5] bg-white px-3 py-2">
-          <div>
-            <Checkbox>{t("selectAll")}</Checkbox>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button color="primary">{t("delete")}</Button>
-          </div>
+      {isEdit && historyList.length > 0 ? (
+        <div className="bottom-settle">
+          <Checkbox isSelected={isAllSelected} onValueChange={toggleSelectAll}>
+            {t("selectAll")}
+          </Checkbox>
+          <Button color="primary" isDisabled={!hasSelected} onPress={onOpen}>
+            {t("delete")}{" "}
+            {selectedIds.length > 0 ? `(${selectedIds.length})` : ""}
+          </Button>
         </div>
       ) : null}
 
-      {/* 
       <ConfirmModal
         content={t("deleteConfirmContent")}
         isOpen={isOpen}
         title={t("deleteConfirmTitle")}
+        onConfirm={handleDelete}
         onOpenChange={onOpenChange}
-      /> */}
-    </div>
+      />
+    </>
   );
 }

@@ -9,21 +9,23 @@ import {
   Button,
 } from "@heroui/react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useState, ReactNode, useCallback } from "react";
 
 interface ConfirmModalProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
-  title?: string;
-  content?: string;
+  title?: ReactNode;
+  content?: ReactNode;
   confirmText?: string;
   cancelText?: string;
-  onConfirm: () => void | Promise<void>;
+  onConfirm: () => Promise<unknown>;
   showCancel?: boolean; // ✅ 是否显示取消按钮
   showConfirm?: boolean; // ✅ 是否显示确认按钮
+  // 新增：是否在成功后自动关闭
+  closeOnSuccess?: boolean;
 }
 
-const ConfirmModal = ({
+export default function ConfirmModal({
   isOpen,
   onOpenChange,
   title,
@@ -31,20 +33,27 @@ const ConfirmModal = ({
   confirmText,
   cancelText,
   onConfirm,
-  showCancel = true, // 默认显示
-  showConfirm = true, // 默认显示
-}: ConfirmModalProps) => {
+  showCancel = true,
+  showConfirm = true,
+  closeOnSuccess = true,
+}: ConfirmModalProps) {
   const t = useTranslations("components.confirmModal");
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleConfirm = async () => {
-    setLoading(true);
+  const handleConfirm = useCallback(async () => {
+    setIsLoading(true);
     try {
       await onConfirm();
+      if (closeOnSuccess) {
+        onOpenChange(false);
+      }
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
-  };
+  }, [onConfirm, closeOnSuccess, onOpenChange]);
+  const handleCancel = useCallback(() => {
+    onOpenChange(false);
+  }, [onOpenChange]);
 
   return (
     <Modal
@@ -56,48 +65,42 @@ const ConfirmModal = ({
       onOpenChange={onOpenChange}
     >
       <ModalContent>
-        {(onClose) => (
-          <>
-            <ModalHeader className="flex flex-col gap-1">
-              {title || t("title")}
-            </ModalHeader>
-
-            <ModalBody className="max-h-[60vh] overflow-y-auto">
-              <p className="whitespace-pre-line break-words">
-                {content || t("content")}
-              </p>
-            </ModalBody>
-
-            {(showCancel || showConfirm) && (
-              <ModalFooter className="flex gap-2">
-                {showCancel && (
-                  <Button
-                    className="button-default flex-1"
-                    disabled={loading}
-                    variant="light"
-                    onPress={onClose}
-                  >
-                    {cancelText || t("cancelText")}
-                  </Button>
-                )}
-
-                {showConfirm && (
-                  <Button
-                    className="flex-1"
-                    color="primary"
-                    isLoading={loading}
-                    onPress={() => handleConfirm()}
-                  >
-                    {confirmText || t("confirmText")}
-                  </Button>
-                )}
-              </ModalFooter>
+        <ModalHeader className="flex flex-col gap-1">
+          {title || t("title")}
+        </ModalHeader>
+        <ModalBody className="max-h-[60vh] overflow-y-auto">
+          <p className="whitespace-pre-line break-words">
+            {content || t("content")}
+          </p>
+        </ModalBody>
+        {(showCancel || showConfirm) && (
+          <ModalFooter>
+            {showCancel && (
+              <Button
+                aria-label={cancelText || t("cancelText")}
+                className="button-default flex-1"
+                disabled={isLoading}
+                variant="light"
+                onPress={handleCancel}
+              >
+                {cancelText || t("cancelText")}
+              </Button>
             )}
-          </>
+            {showConfirm && (
+              <Button
+                aria-label={confirmText || t("confirmText")}
+                className="flex-1"
+                color="primary"
+                disabled={isLoading}
+                isLoading={isLoading}
+                onPress={handleConfirm}
+              >
+                {!isLoading && (confirmText || t("confirmText"))}
+              </Button>
+            )}
+          </ModalFooter>
         )}
       </ModalContent>
     </Modal>
   );
-};
-
-export default ConfirmModal;
+}

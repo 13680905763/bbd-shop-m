@@ -6,12 +6,16 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { getExperience, getPromotionConfig } from "@/services";
+import { IoCopyOutline } from "react-icons/io5";
+import { CopyText } from "@/components/ui";
+import { useUserInfo } from "@/hook";
 
 export default function Promotion() {
   const t = useTranslations("promotion"); // ✅ 使用命名空间
   const router = useRouter();
   const [experience, setExperience] = useState<any>(null);
   const [promotionConfig, setPromotionConfig] = useState([]);
+  const { data: user, isLoading, error } = useUserInfo();
 
   const fetchExperience = async () => {
     try {
@@ -30,12 +34,12 @@ export default function Promotion() {
   }, []);
 
   return (
-    <div className="bg-[#f7f8f9]">
+    <>
       <NavBar className="bg-white" onBack={() => router.back()}>
-        {t("title")}
+        <span className="navbar-title">{t("title")}</span>
       </NavBar>
 
-      <div>
+      <div className="flex-1 overflow-auto scrollbar-hide">
         <Image alt={t("promotionImageAlt")} src="/m/images/promotion.png" />
 
         {/* 步骤条 */}
@@ -55,7 +59,7 @@ export default function Promotion() {
             {["step1", "step2", "step3"].map((key) => (
               <div
                 key={key}
-                className="flex h-16 w-[7.5rem] justify-center text-wrap text-center text-[0.6875rem] text-xs font-normal text-[#333]"
+                className="flex h-20 w-[7.5rem] justify-center text-wrap text-center text-[0.6875rem] text-xs font-normal text-[#333]"
               >
                 {t(`steps.${key}`)}
               </div>
@@ -64,12 +68,20 @@ export default function Promotion() {
 
           {/* 推荐链接 */}
           <div className="box-card flex flex-col items-center gap-2 p-2">
-            <div className="w-full bg-[#f5f5f5] p-2">
-              https://bbdbuy.com/register/?ref=3582377
+
+            <div className="w-full py-2.5 px-4 bg-[#f4f4f5] rounded-xl text-[#11181C] flex items-center justify-between cursor-pointer hover:bg-[#e4e4e7] transition-colors">
+              <span className="font-mono text-sm break-all">
+                {`https://www.bbdbuy1.com/register?inviteCode=${user?.inviteCode || ""}`}
+              </span>
             </div>
-            <Button className="w-full" color="primary">
-              {t("referralLink.copyButton")}
-            </Button>
+            <CopyText
+              className="w-full"
+              text={`https://www.bbdbuy1.com/register?inviteCode=${user?.inviteCode || ""}`}
+            >
+              <button className="w-full py-2.5 rounded-lg text-sm font-medium text-white bg-[#f0700c]" >
+                {t("referralLink.copyButton")}
+              </button>
+            </CopyText>
             <div className="text-xs font-normal leading-[1.125rem] text-[#999999]">
               {t("referralLink.desc")}
             </div>
@@ -120,9 +132,8 @@ export default function Promotion() {
               {promotionConfig.map((item: any, index) => (
                 <div
                   key={item.id}
-                  className={`flex flex-1 flex-col items-center justify-center border-l border-[#eeeeee] first:border-l-0 ${
-                    index === 0 ? "bg-[#ffeee1]" : "bg-white"
-                  }`}
+                  className={`flex flex-1 flex-col items-center justify-center border-l border-[#eeeeee] first:border-l-0 ${index === 0 ? "bg-[#ffeee1]" : "bg-white"
+                    }`}
                 >
                   <div className="py-4 text-center text-lg font-semibold text-[#f0700c]">
                     {item.rangeCode}
@@ -161,6 +172,6 @@ export default function Promotion() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

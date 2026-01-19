@@ -18,6 +18,8 @@ export default function ShippingRouteCard({
     logoUrl = "",
     firstWeightFee = 0,
     shippingLine,
+    disable = false,
+    prompt = "",
   } = route;
   const { description, minDays, maxDays } = shippingLine;
   const name = templateName || methodName;
@@ -26,12 +28,15 @@ export default function ShippingRouteCard({
 
   return (
     <Card
-      isPressable
-      className={`!box-border border-2 p-3 ${
-        isSelected ? "border-primary" : "border-gray-200"
-      } rounded-lg bg-white transition hover:shadow-sm`}
+      className={`!box-border border-2 p-3 ${isSelected ? "border-primary" : "border-gray-200"
+        } rounded-lg bg-white transition hover:shadow-sm`}
       shadow="none"
-      onPress={() => onSelect?.(id)}
+      isDisabled={disable}
+      isPressable={!disable}
+      onPress={() => {
+        if (disable) return
+        onSelect?.(id)
+      }}
     >
       <div className="flex w-full gap-2">
         {/* 左侧：logo + 名称 + 价格 + 时间 */}
@@ -57,6 +62,11 @@ export default function ShippingRouteCard({
           {description}
         </div>
       </div>
+      {disable && prompt && (
+        <div className="mt-2 p-2 bg-red-50 text-red-500 text-sm rounded-lg">
+          {prompt}
+        </div>
+      )}
     </Card>
   );
 }

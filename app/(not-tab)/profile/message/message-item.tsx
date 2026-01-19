@@ -21,7 +21,7 @@ export default function MessageItem({
       onClick={() => !isEdit && onView?.(message)}
     >
       <div className="flex-1">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             {/* 编辑模式勾选框 */}
             {isEdit && (
@@ -43,7 +43,7 @@ export default function MessageItem({
           </div>
 
           <span
-            className={`text-xs font-medium ${
+            className={`min-w-[40px] text-right text-xs font-medium ${
               isUnread ? "text-orange-500" : "text-gray-400"
             }`}
           >

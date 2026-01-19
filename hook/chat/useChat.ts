@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { fetchChatHistory, uploadChatImage } from "@/services";
 import { addToast } from "@heroui/react";
 import { useTranslations } from "next-intl";
+
+import { fetchChatHistory, uploadChatImage } from "@/services";
 
 export interface Message {
   id: number | string;
@@ -36,6 +37,7 @@ export function useChat(user: any, isOpen: boolean) {
         socketRef.current.close();
         socketRef.current = null;
       }
+
       return;
     }
 
@@ -50,8 +52,10 @@ export function useChat(user: any, isOpen: boolean) {
       if (!allowReconnect) return;
 
       const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
+
       if (!apiBase) {
         console.error("❌ 缺少 NEXT_PUBLIC_API_BASE_URL");
+
         return;
       }
 
@@ -77,6 +81,7 @@ export function useChat(user: any, isOpen: boolean) {
       socket.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
+
           if (data.sender === "SERVER" && !receiverIdRef.current) {
             receiverIdRef.current = data.receiverId;
             setReceiverId(data.receiverId);
@@ -125,53 +130,57 @@ export function useChat(user: any, isOpen: boolean) {
   }, [user?.id, isOpen]);
 
   // Load History
-  const loadHistory = useCallback(async (initialLoad = false) => {
-    if (loadingRef.current) return;
-    // If not initial load and no more history, stop
-    if (!initialLoad && !hasMoreHistory) return;
+  const loadHistory = useCallback(
+    async (initialLoad = false) => {
+      if (loadingRef.current) return;
+      // If not initial load and no more history, stop
+      if (!initialLoad && !hasMoreHistory) return;
 
-    loadingRef.current = true;
-    setIsLoadingHistory(true);
+      loadingRef.current = true;
+      setIsLoadingHistory(true);
 
-    try {
-      // If initial load, use page 1, else use current page
-      const currentPage = initialLoad ? 1 : page;
-      const res: any = await fetchChatHistory(user!.id, currentPage);
-      const records: any = res.records || [];
-      const lastPage: number = res.pages ?? 1;
+      try {
+        // If initial load, use page 1, else use current page
+        const currentPage = initialLoad ? 1 : page;
+        const res: any = await fetchChatHistory(user!.id, currentPage);
+        const records: any = res.records || [];
+        const lastPage: number = res.pages ?? 1;
 
-      const newMessages = records.reverse().map((msg: any) => ({
-        id: msg?.id ?? `srv-${Date.now()}-${Math.random()}`,
-        sender: msg.sender === "CUSTOMER" ? "user" : "bot",
-        type: msg.contentType,
-        text: msg.content,
-      }));
+        const newMessages = records.reverse().map((msg: any) => ({
+          id: msg?.id ?? `srv-${Date.now()}-${Math.random()}`,
+          sender: msg.sender === "CUSTOMER" ? "user" : "bot",
+          type: msg.contentType,
+          text: msg.content,
+        }));
 
-      if (initialLoad) {
-        setMessages(newMessages);
-        setPage(2); // Next page is 2
-        setHasMoreHistory(1 < lastPage);
-        shouldScrollRef.current = true;
+        if (initialLoad) {
+          setMessages(newMessages);
+          setPage(2); // Next page is 2
+          setHasMoreHistory(1 < lastPage);
+          shouldScrollRef.current = true;
 
-        // Check for agent
-        const hisM = records.filter((item: any) => item.sender === "SERVER");
-        if (hisM.length) {
-          receiverIdRef.current = hisM[0].userId;
-          setReceiverId(hisM[0].userId);
+          // Check for agent
+          const hisM = records.filter((item: any) => item.sender === "SERVER");
+
+          if (hisM.length) {
+            receiverIdRef.current = hisM[0].userId;
+            setReceiverId(hisM[0].userId);
+          }
+        } else {
+          setMessages((prev) => [...newMessages, ...prev]);
+          setPage((prev) => prev + 1);
+          setHasMoreHistory(currentPage < lastPage);
+          shouldScrollRef.current = false; // Don't scroll to bottom on history load
         }
-      } else {
-        setMessages((prev) => [...newMessages, ...prev]);
-        setPage((prev) => prev + 1);
-        setHasMoreHistory(currentPage < lastPage);
-        shouldScrollRef.current = false; // Don't scroll to bottom on history load
+      } catch (err) {
+        console.error("获取历史消息失败", err);
+      } finally {
+        loadingRef.current = false;
+        setIsLoadingHistory(false);
       }
-    } catch (err) {
-      console.error("获取历史消息失败", err);
-    } finally {
-      loadingRef.current = false;
-      setIsLoadingHistory(false);
-    }
-  }, [user?.id, page, hasMoreHistory]);
+    },
+    [user?.id, page, hasMoreHistory],
+  );
 
   // Initial Load Effect
   useEffect(() => {
@@ -188,84 +197,96 @@ export function useChat(user: any, isOpen: boolean) {
   }, [isOpen, user?.id]); // Removed loadHistory dependency to avoid loops if loadHistory isn't memoized correctly, but I memoized it.
 
   // Send Message
-  const sendMessage = useCallback((msgText: string, type: Message["type"] = "TEXT") => {
-    const socket = socketRef.current;
-    if (!socket || socket.readyState !== WebSocket.OPEN) {
+  const sendMessage = useCallback(
+    (msgText: string, type: Message["type"] = "TEXT") => {
+      const socket = socketRef.current;
+
+      if (!socket || socket.readyState !== WebSocket.OPEN) {
         addToast({ title: t("connectionLost"), color: "danger" });
+
         return;
-    }
+      }
 
-    const payload: any = {
-      sender: "CUSTOMER",
-      type,
-      content: msgText,
-      sendTime: new Date().toISOString(),
-      receiverId,
-    };
+      const payload: any = {
+        sender: "CUSTOMER",
+        type,
+        content: msgText,
+        sendTime: new Date().toISOString(),
+        receiverId,
+      };
 
-    if (receiverIdRef.current) payload.receiverId = receiverIdRef.current;
-    socket.send(JSON.stringify(payload));
+      if (receiverIdRef.current) payload.receiverId = receiverIdRef.current;
+      socket.send(JSON.stringify(payload));
 
-    setMessages((prev) => [
-      ...prev,
-      { id: Date.now(), sender: "user", text: msgText, type },
-    ]);
-    shouldScrollRef.current = true;
-  }, [receiverId, t]);
+      setMessages((prev) => [
+        ...prev,
+        { id: Date.now(), sender: "user", text: msgText, type },
+      ]);
+      shouldScrollRef.current = true;
+    },
+    [receiverId, t],
+  );
 
   // Upload Image
-  const sendImage = useCallback(async (file: File) => {
-     if (!user?.id) return;
-     
-     const tempId = Date.now();
-     const tempUrl = URL.createObjectURL(file);
+  const sendImage = useCallback(
+    async (file: File) => {
+      if (!user?.id) return;
 
-     // Add temporary message
-     setMessages((prev) => [
-       ...prev,
-       {
-         id: tempId,
-         sender: "user",
-         type: "IMAGE",
-         sending: true,
-         text: tempUrl,
-       },
-     ]);
-     shouldScrollRef.current = true;
+      const tempId = Date.now();
+      const tempUrl = URL.createObjectURL(file);
 
-     try {
-       const url: any = await uploadChatImage(file);
-       if (url) {
-         const socket = socketRef.current;
-         if (socket && socket.readyState === WebSocket.OPEN) {
-           const payload: any = {
-             sender: "CUSTOMER",
-             type: "IMAGE",
-             content: url,
-             sendTime: new Date().toISOString(),
-           };
-           if (receiverIdRef.current) payload.receiverId = receiverIdRef.current;
-           socket.send(JSON.stringify(payload));
-         }
+      // Add temporary message
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: tempId,
+          sender: "user",
+          type: "IMAGE",
+          sending: true,
+          text: tempUrl,
+        },
+      ]);
+      shouldScrollRef.current = true;
 
-         setMessages((prev) =>
-           prev.map((msg) =>
-             msg.id === tempId ? { ...msg, sending: false, text: url } : msg
-           )
-         );
-       }
-     } catch (err) {
-       setMessages((prev) =>
-         prev.map((msg) =>
-           msg.id === tempId
-             ? { ...msg, sending: false, text: t("imageSendFail") }
-             : msg
-         )
-       );
-     } finally {
-       URL.revokeObjectURL(tempUrl);
-     }
-  }, [user?.id, receiverId, t]);
+      try {
+        const url: any = await uploadChatImage(file);
+
+        if (url) {
+          const socket = socketRef.current;
+
+          if (socket && socket.readyState === WebSocket.OPEN) {
+            const payload: any = {
+              sender: "CUSTOMER",
+              type: "IMAGE",
+              content: url,
+              sendTime: new Date().toISOString(),
+            };
+
+            if (receiverIdRef.current)
+              payload.receiverId = receiverIdRef.current;
+            socket.send(JSON.stringify(payload));
+          }
+
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === tempId ? { ...msg, sending: false, text: url } : msg,
+            ),
+          );
+        }
+      } catch (err) {
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === tempId
+              ? { ...msg, sending: false, text: t("imageSendFail") }
+              : msg,
+          ),
+        );
+      } finally {
+        URL.revokeObjectURL(tempUrl);
+      }
+    },
+    [user?.id, receiverId, t],
+  );
 
   return {
     messages,
@@ -276,6 +297,6 @@ export function useChat(user: any, isOpen: boolean) {
     firstLoading,
     hasMoreHistory,
     shouldScrollRef,
-    hasAgent
+    hasAgent,
   };
 }

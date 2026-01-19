@@ -30,13 +30,13 @@ export default function Settingpage() {
   };
 
   return (
-    <div className="h-screen bg-[#f7f8f9]">
+    <>
       <NavBar className="bg-white" onBack={() => router.push("/dashboard")}>
-        {t("title")}
+        <span className="navbar-title">{t("title")}</span>
       </NavBar>
-      <div className="p-2">
+      <div className="flex-1 space-y-2 p-2">
         <Listbox
-          aria-label="User Menu"
+          aria-label="Menu"
           className="gap-0 divide-y divide-default-300/50 overflow-visible rounded-medium bg-content1 p-0 dark:divide-default-100/80"
           itemClasses={{
             base: "px-3 first:rounded-t-medium  last:rounded-b-medium rounded-none gap-3 h-12 data-[hover=true]:bg-default-100/80",
@@ -55,13 +55,13 @@ export default function Settingpage() {
         </Listbox>
 
         <Button
-          className="mt-2 w-full"
+          className="w-full"
           color="primary"
           onPress={handleLogoutCustomer}
         >
           {t("logout")}
         </Button>
       </div>
-    </div>
+    </>
   );
 }

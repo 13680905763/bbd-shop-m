@@ -14,7 +14,7 @@ export default function OrderPromptCard() {
         <h3 className="mb-1 text-sm font-bold text-gray-900">
           {t("promptCard.title")}
         </h3>
-        <p className="text-xs text-gray-500 line-clamp-1">
+        <p className="line-clamp-1 text-xs text-gray-500">
           {t("promptCard.description")}
         </p>
       </div>

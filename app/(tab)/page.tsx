@@ -5,22 +5,17 @@ import {
   IoSearch,
   IoChevronForwardSharp,
 } from "react-icons/io5";
-import { addToast, Button, Input, Spinner } from "@heroui/react"; // 加了 Spinner
-import { Swiper, Image, Avatar } from "antd-mobile";
+import { Button, Input, Avatar } from "@heroui/react";
+import { Swiper, Image } from "antd-mobile";
 import { useRouter } from "next/navigation";
 import { FaRegImage } from "react-icons/fa";
-import { useRef, useState } from "react"; // 加了 useState
 import { useTranslations } from "next-intl";
 
 import { Logo } from "@/components/icons";
-import { getGoodsImageId } from "@/services";
-import FullscreenLoader from "@/components/common/fullscreen-loader";
 
 export default function Home() {
   const t = useTranslations("home");
   const router = useRouter();
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [uploading, setUploading] = useState(false); // 上传中状态
   const toolTab = [
     {
       image: "/m/images/home/tab1.png",
@@ -28,15 +23,15 @@ export default function Home() {
     },
     {
       image: "/m/images/home/tab2.png",
-      href: "/m/dashboard",
+      href: "/dashboard",
     },
     {
       image: "/m/images/home/tab3.png",
-      href: "/m/estimation",
+      href: "/estimation",
     },
     {
       image: "/m/images/home/tab4.png",
-      href: "/m/register",
+      href: "/register",
     },
   ];
   const toolList = [
@@ -47,9 +42,8 @@ export default function Home() {
     },
     {
       image: "/m/images/home/Community.png",
-      title: t("toolList.community"),
-      to: "/promotion",
-      // to: "/pages/member/promotion/index",
+      title: "Telegram",
+      to: "https://t.me/bbdbuyofficial",
     },
     {
       image: "/m/images/home/Forwarding.png",
@@ -61,62 +55,13 @@ export default function Home() {
       title: t("toolList.fillBuy"),
     },
   ];
-  const handleImageUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const file = event.target.files?.[0];
-
-    if (!file) return;
-
-    try {
-      setUploading(true); // 开始上传
-      const res: any = await getGoodsImageId(file);
-
-      if (res && res.length > 0) {
-        const taobaoImageId = res.find(
-          (item: any) => item.source === "TAOBAO",
-        )?.imageId;
-        const alibabaImageId = res.find(
-          (item: any) => item.source === "1688",
-        )?.imageId;
-
-        if (taobaoImageId && alibabaImageId) {
-          router.push(
-            `/goods/list?TAOBAO=${taobaoImageId}&1688=${alibabaImageId}`,
-          );
-        }
-      }
-    } catch (error) {
-      console.error("上传图片失败", error);
-      addToast({
-        title: t("toast.uploadFail"),
-        timeout: 1000,
-        color: "danger",
-      });
-    } finally {
-      setUploading(false); // 上传结束
-      if (fileInputRef.current) fileInputRef.current.value = "";
-    }
-  };
-
-  const triggerUpload = (e: any) => {
-    e.stopPropagation(); // 阻止冒泡
-    fileInputRef.current?.click();
-  };
-
-  {
-    uploading && <FullscreenLoader />;
-  }
 
   return (
-    <section className="hide-scrollbar flex flex-1 flex-col overflow-auto p-3 pb-0">
-      <div>
-        <div className="mt-2 flex justify-between">
-          <div>
-            <Logo height={21} width={100} />
-          </div>
+    <>
+      <div className="mt-2 space-y-2 p-3">
+        <div className="flex justify-between">
+          <Logo height={21} width={100} />
           <div className="flex items-center">
-            {/* <IoPeopleCircle className="h-[20px] w-[20px] text-[#ea8407]" /> */}
             <IoLanguageSharp
               className="h-[20px] w-[20px] text-[#ea8407]"
               onClick={() => router.push("/setting/language")}
@@ -127,34 +72,20 @@ export default function Home() {
             />
           </div>
         </div>
-        <div className="my-4">
-          <Button
-            className="w-full justify-between bg-white"
-            endContent={
-              uploading ? (
-                <Spinner color="primary" size="sm" /> // 上传中圈圈
-              ) : (
-                <FaRegImage className="text-xl" onClick={triggerUpload} />
-              )
-            }
-            startContent={
-              <div className="flex items-center gap-2 bg-white text-base">
-                <IoSearch className="text-xl" />
-                {t("search.placeholder")}
-              </div>
-            }
-            onPress={() => router.push("/goods/search")}
-          />
-          <input
-            ref={fileInputRef}
-            hidden
-            accept="image/*"
-            type="file"
-            onChange={handleImageUpload}
-          />
-        </div>
+        <Button
+          className="w-full justify-between bg-white px-2"
+          endContent={<FaRegImage className="text-xl" />}
+          radius="sm"
+          startContent={
+            <div className="flex items-center gap-2 bg-white">
+              <IoSearch className="text-xl" />
+              {t("search.placeholder")}
+            </div>
+          }
+          onPress={() => router.push("/goods/search")}
+        />
       </div>
-      <div className="flex-1 overflow-auto scrollbar-hide">
+      <div className="flex-1 space-y-2 overflow-auto p-3 pt-0 scrollbar-hide">
         <Swiper>
           <Swiper.Item>
             <Image
@@ -164,30 +95,27 @@ export default function Home() {
             />
           </Swiper.Item>
         </Swiper>
-        <div className="box-card flex py-3">
-          {toolList.map((item, index) => {
+        <div className="home-card grid grid-cols-4">
+          {toolList.map((item) => {
             return (
-              <div
+              <button
                 key={item.title}
-                className="flex flex-1 flex-col items-center justify-center text-center"
-                role="button"
                 onClick={() => router.push(item?.to || "")}
               >
-                <div>
-                  <Avatar src={item.image} />
+                <div className="flex flex-col items-center gap-2">
+                  <Avatar radius="md" src={item.image} />
+                  <span>{item.title}</span>
                 </div>
-                <p className="mt-3 text-sm">{item.title}</p>
-              </div>
+              </button>
             );
           })}
         </div>
-
         <div
-          className="box-card py-2"
+          className="home-card space-y-2 px-4"
           role="button"
           onClick={() => router.push("/estimation")}
         >
-          <div className="flex items-center justify-between px-4 py-2">
+          <div className="flex justify-between">
             <div className="flex-1 text-sm font-bold">
               {t("shipping.title")}
             </div>
@@ -197,7 +125,6 @@ export default function Home() {
                 aria-label="Search"
                 classNames={{
                   inputWrapper: "bg-[#f7f8f9]",
-                  input: "text-sm",
                 }}
                 endContent={<IoSearch className="text-[#f0700c]" />}
                 labelPlacement="outside"
@@ -207,10 +134,10 @@ export default function Home() {
               />
             </div>
           </div>
-          <div className="flex items-center justify-between px-4 py-2 pt-0">
+          <div className="flex justify-between">
             <div className="flex items-center">
               <div className="mr-[5px] h-[6px] w-[6px] rounded-full bg-orange-500" />
-              <span className="text-sm">{t("shipping.lineFast")}</span>
+              <span className="font-semibold">{t("shipping.lineFast")}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-[#f0700c]">71</span>
@@ -218,24 +145,21 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <Image
-          className="mt-5 h-auto w-full rounded-lg object-cover"
-          src={"/m/images/home/footer.jpg"}
-        />
-        <div className="my-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          {toolTab.map((item, index) => {
+        <Image className="rounded-lg" src={"/m/images/home/footer.jpg"} />
+        <div className="grid grid-cols-2 gap-2">
+          {toolTab.map((item) => {
             return (
-              <a key={index} href={item.href}>
-                <Image
-                  className="h-auto w-full rounded-lg object-cover"
-                  height={100}
-                  src={item.image}
-                />
-              </a>
+              <Image
+                key={item.href}
+                className="w-full rounded-lg"
+                height={95}
+                src={item.image}
+                onClick={() => router.push(item.href)}
+              />
             );
           })}
         </div>
       </div>
-    </section>
+    </>
   );
 }

@@ -24,12 +24,15 @@ body {
 a {
   @apply !text-black;
 }
+
 .text-price-base {
   @apply text-base font-bold text-[#f0700c] md:text-lg lg:text-xl;
 }
+
 .text-price-lg {
   @apply text-lg font-bold text-[#f0700c] md:text-xl lg:text-2xl;
 }
+
 .text-money-lg {
   @apply text-lg font-bold text-[#f0700c];
 }
@@ -41,14 +44,12 @@ a {
 .text-money-3xl {
   @apply text-3xl font-bold text-[#f0700c];
 }
+
 /* 购物车 店铺名 商品名  */
 .text-title {
   @apply text-sm font-bold md:text-base lg:text-lg;
 }
 
-.text-title-xl {
-  @apply text-xl font-bold text-[#000];
-}
 
 .text-title-2xl {
   @apply text-2xl font-bold text-[#000];
@@ -67,12 +68,15 @@ a {
 .button-default {
   @apply border bg-white text-black;
 }
+
 .button-white {
   @apply border border-[#ccc] bg-[#fff] text-[#000];
 }
+
 .box-card {
   @apply my-3 rounded-xl bg-white;
 }
+
 /* 购物车卡片 */
 .rounded-box {
   @apply rounded-lg bg-white;
@@ -86,7 +90,24 @@ a {
   @apply !text-[#f0700c];
 }
 
-.group[data-focus="true"]
-  .group-data-\[focus\=true\]\:border-default-foreground {
+.group[data-focus="true"] .group-data-\[focus\=true\]\:border-default-foreground {
   border-color: #f0700c !important;
+}
+
+.navbar-title {
+  @apply text-lg font-semibold text-gray-900;
+}
+
+/* 首页卡片 */
+.home-card {
+  @apply rounded-lg bg-white py-2;
+}
+
+/* 底部结算 */
+.bottom-settle {
+  @apply flex items-center justify-between px-3 py-2 bg-white;
+}
+/* 大号余额 */
+.text-balance {
+  @apply text-3xl font-extrabold leading-tight text-[#f0700c];
 }

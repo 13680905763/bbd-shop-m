@@ -16,6 +16,7 @@ import FullscreenLoader from "@/components/common/fullscreen-loader";
 import { useSelection } from "@/hook/useSelection";
 import { debounce } from "@/lib/debounce";
 import { createOrderPreviewKeyByCart } from "@/services";
+import { calculateTotal } from "@/lib/utils";
 
 type ModalType = "delete" | "remark" | null;
 interface ModalState {
@@ -51,6 +52,7 @@ export default function Cart() {
     hasSelected,
     isGroupAllSelected,
     toggleGroup,
+    unselectAll,
   } = useSelection(flatList, {
     idKey: "id",
     groupKey: "shopId",
@@ -63,6 +65,7 @@ export default function Cart() {
       confirm: async () => {
         await deleteCart({ idList: selectedIds });
         await queryClient.invalidateQueries({ queryKey: ["cartList"] }); // 手动刷新
+        unselectAll();
         setModal({ type: null });
       },
     });
@@ -124,61 +127,33 @@ export default function Cart() {
     }
   };
 
+  // 总价
   const togglePrice = useMemo(() => {
-    const allItems = data?.flatMap((shop) => shop.cartList) ?? [];
-    const selectedItems = allItems.filter((item) =>
-      selectedIds.includes(item.id),
-    );
+    const ids = selectedIds as string[];
+    const selectedPrices = flatList
+      .filter((item) => ids.includes(item.id))
+      .map((item) => item.totalFee || 0);
 
-    // 转换为分（cents）计算，避免小数
-    const totalInCents = selectedItems.reduce((sumInCents, item) => {
-      let itemTotalInCents = 0;
+    return calculateTotal(selectedPrices);
+  }, [selectedIds, flatList]);
 
-      // 情况1: totalFee 是总价
-      if (item.totalFee !== undefined && item.totalFee !== null) {
-        itemTotalInCents = Math.round(Number(item.totalFee) * 100);
-      }
-      // 情况2: 单价 × 数量
-      else if (item.unitPrice !== undefined && item.quantity !== undefined) {
-        // 单价转换为分，乘以数量
-        const unitPriceInCents = Math.round(Number(item.unitPrice) * 100);
-        const quantity = Number(item.quantity);
-
-        itemTotalInCents = Math.round(unitPriceInCents * quantity);
-      }
-
-      return sumInCents + itemTotalInCents;
-    }, 0);
-
-    // 转换回元，并格式化为2位小数
-    const total = totalInCents / 100;
-
-    return total.toFixed(2);
-  }, [data, selectedIds]);
-
-  if (isError) return <div>出错了</div>;
+  if (isLoading) return <FullscreenLoader />;
 
   return (
-    <div className="relative flex h-[100%] flex-col justify-between overflow-hidden">
-      {isLoading && <FullscreenLoader />}
-
+    <>
       <div className="flex justify-between p-2">
-        <div>
-          <span className="text-lg font-bold">
-            {t("title")}({data?.flatMap((shop) => shop.cartList).length})
-          </span>
-        </div>
-        <div className="flex items-center">
-          <button
-            className="text-sm font-semibold"
-            onClick={() => setIsEdit(!isEdit)}
-          >
-            {isEdit ? t("cancel") : t("manage")}
-          </button>
-        </div>
+        <span className="text-lg font-bold">
+          {t("title")}({flatList?.length})
+        </span>
+        <button
+          className="text-sm font-semibold"
+          onClick={() => setIsEdit(!isEdit)}
+        >
+          {isEdit ? t("cancel") : t("manage")}
+        </button>
       </div>
-      <div className="flex-1 overflow-auto px-3">
-        {flatList.length === 0 && !isLoading && (
+      <div className="flex-1 overflow-auto px-2">
+        {flatList.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center text-center">
             <div className="text-lg font-semibold text-gray-900">
               {t("empty.title")}
@@ -192,33 +167,33 @@ export default function Cart() {
               {t("empty.goShopping")}
             </Button>
           </div>
+        ) : (
+          data?.map((c) => (
+            <CartItem
+              key={c.shopId}
+              handleProductQuantity={handleProductQuantity}
+              isGroupAllSelected={isGroupAllSelected(c.shopId)} //  店铺selected
+              isSelected={isSelected}
+              openRemarkModal={(productId: any, productRemark: any) =>
+                openRemarkModal(productId, productRemark)
+              }
+              shop={c}
+              toggle={toggle}
+              toggleGroup={() => toggleGroup(c.shopId)} // 店铺onChange
+            />
+          ))
         )}
-        {data?.map((c) => (
-          <CartItem
-            key={c.shopId}
-            handleProductQuantity={handleProductQuantity}
-            isGroupAllSelected={isGroupAllSelected(c.shopId)} //  店铺selected
-            isSelected={isSelected}
-            openRemarkModal={(productId: any, productRemark: any) =>
-              openRemarkModal(productId, productRemark)
-            }
-            shop={c}
-            toggle={toggle}
-            toggleGroup={() => toggleGroup(c.shopId)} // 店铺onChange
-          />
-        ))}
+        {isFetching && !isLoading && (
+          <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/50">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-orange-500" />
+          </div>
+        )}
       </div>
-      {isFetching && !isLoading && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/50">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-orange-500" />
-        </div>
-      )}
-      <div className="flex items-center justify-between border-b border-[#f5f5f5] bg-white px-3 py-2">
-        <div className="flex gap-2">
-          <Checkbox isSelected={isAllSelected} onChange={toggleSelectAll}>
-            {t("selectAll")}
-          </Checkbox>
-        </div>
+
+      <div className="bottom-settle">
+        <Checkbox isSelected={isAllSelected} onChange={toggleSelectAll}>
+          {t("selectAll")}
+        </Checkbox>
         <div className="flex items-center gap-2">
           <p className="text-price-lg">
             {currency.symbol}
@@ -230,7 +205,8 @@ export default function Cart() {
             isLoading={isSubmitting}
             onPress={submitCart}
           >
-            {isEdit ? t("delete") : t("checkout")}({selectedIds.length})
+            {isEdit ? t("delete") : t("checkout")}{" "}
+            {selectedIds.length > 0 ? `(${selectedIds.length})` : ""}
           </Button>
         </div>
       </div>
@@ -263,6 +239,6 @@ export default function Cart() {
           />
         </CommonModal>
       )}
-    </div>
+    </>
   );
 }

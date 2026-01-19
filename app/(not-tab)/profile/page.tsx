@@ -7,38 +7,25 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import CommonForm from "@/components/form/common-form";
-import { getUserInfo, updateUserInfo, uploadAvatar } from "@/services"; // ✅ uploadAvatar 是上传接口
+import { updateUserInfo, uploadAvatar } from "@/services"; // ✅ uploadAvatar 是上传接口
 import { FieldConfig } from "@/components/form/formItem-renderer";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
+import { useUserInfo } from "@/hook";
+import { queryClient } from "@/lib/react-query";
 
 export default function Settingpage() {
   const t = useTranslations("profile.profilePage");
   const router = useRouter();
-
+  const { data: user, isLoading, error } = useUserInfo();
   // --- 状态管理 ---
-  const [user, setUser] = useState<any>(null);
   const [formData, setFormData] = useState({
     id: "",
     nickName: "",
     mobile: "",
   });
-  const [loading, setLoading] = useState(true);
   const [avatarLoading, setAvatarLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  // 获取用户信息
-  const fetchUser = async () => {
-    try {
-      const res = await getUserInfo();
 
-      setUser(res);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
   const fields: FieldConfig[] = [
     {
       type: "input",
@@ -58,8 +45,7 @@ export default function Settingpage() {
 
   const handleSubmit = async (data: any) => {
     await updateUserInfo(data);
-    // 更新最新用户信息
-    await fetchUser();
+    await queryClient.invalidateQueries({ queryKey: ["userInfo"] });
   };
 
   // 点击头像触发文件选择
@@ -72,34 +58,32 @@ export default function Settingpage() {
     const file = e.target.files?.[0];
 
     if (!file) return;
-
     setAvatarLoading(true);
     try {
       await uploadAvatar(file);
-      await fetchUser();
+      await queryClient.invalidateQueries({ queryKey: ["userInfo"] });
     } finally {
       setAvatarLoading(false);
     }
   };
 
   useEffect(() => {
-    setFormData({
-      id: user?.id,
-      nickName: user?.nickName || "",
-      mobile: user?.mobile || "",
-    });
+    if (user)
+      setFormData({
+        id: user?.id,
+        nickName: user?.nickName || "",
+        mobile: user?.mobile || "",
+      });
   }, [user]);
 
-  // if (loading) return <FullscreenLoader />;
+  if (isLoading) return <FullscreenLoader />;
 
   return (
-    <div className="h-screen bg-[#f7f8f9]">
-      {loading && <FullscreenLoader />}
-
+    <>
       <NavBar className="bg-white" onBack={() => router.back()}>
-        {t("title")}
+        <span className="navbar-title">{t("title")}</span>
       </NavBar>
-      <div className="px-2">
+      <div className="flex-1 px-2">
         <div className="box-card flex flex-col items-center justify-center p-2">
           <button
             className="relative cursor-pointer"
@@ -108,11 +92,16 @@ export default function Settingpage() {
             {avatarLoading ? (
               <Spinner size="lg" />
             ) : (
-              <Avatar className="h-16 w-16 text-large" src={user?.avatarUrl} />
+              <>
+                <Avatar
+                  className="h-16 w-16 text-large"
+                  src={user?.avatarUrl}
+                />
+                <span className="absolute bottom-0 left-0 rounded bg-black/50 px-1 text-xs text-white">
+                  {t("edit")}
+                </span>
+              </>
             )}
-            <span className="absolute bottom-0 left-0 rounded bg-black/50 px-1 text-xs text-white">
-              {t("edit")}
-            </span>
           </button>
           <input
             ref={fileInputRef}
@@ -121,19 +110,16 @@ export default function Settingpage() {
             type="file"
             onChange={handleFileChange}
           />
-          <div className="text-lg font-bold">{user?.name}</div>
+          <div className="text-lg font-bold">{user?.nickName}</div>
         </div>
-        <div className="h-full p-2">
-          <CommonForm
-            confirmText={t("saveButton")}
-            fields={fields}
-            formData={formData}
-            showCancelButton={false}
-            onChange={setFormData}
-            onSubmit={handleSubmit}
-          />
-        </div>
+        <CommonForm
+          confirmText={t("saveButton")}
+          fields={fields}
+          formData={formData}
+          onChange={setFormData}
+          onSubmit={handleSubmit}
+        />
       </div>
-    </div>
+    </>
   );
 }
