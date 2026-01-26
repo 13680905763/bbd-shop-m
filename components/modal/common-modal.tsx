@@ -23,16 +23,16 @@ interface CommonModalProps {
   confirmText?: string;
   cancelText?: string;
   size?:
-    | "xs"
-    | "sm"
-    | "md"
-    | "lg"
-    | "xl"
-    | "2xl"
-    | "3xl"
-    | "4xl"
-    | "5xl"
-    | "full";
+  | "xs"
+  | "sm"
+  | "md"
+  | "lg"
+  | "xl"
+  | "2xl"
+  | "3xl"
+  | "4xl"
+  | "5xl"
+  | "full";
   isDismissable?: boolean;
   isKeyboardDismissDisabled?: boolean;
 }
@@ -52,6 +52,7 @@ export default function CommonModal({
   size = "md",
   isDismissable = true,
   isKeyboardDismissDisabled = false,
+
 }: CommonModalProps) {
   const t = useTranslations("components.confirmModal");
 

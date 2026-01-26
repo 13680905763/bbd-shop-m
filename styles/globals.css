@@ -25,6 +25,10 @@ a {
   @apply !text-black;
 }
 
+.subtitle {
+  @apply text-[#000] text-sm font-semibold;
+}
+
 .text-price-base {
   @apply text-base font-bold text-[#f0700c] md:text-lg lg:text-xl;
 }
@@ -107,6 +111,7 @@ a {
 .bottom-settle {
   @apply flex items-center justify-between px-3 py-2 bg-white;
 }
+
 /* 大号余额 */
 .text-balance {
   @apply text-3xl font-extrabold leading-tight text-[#f0700c];

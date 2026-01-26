@@ -15,6 +15,7 @@ import { useEffect } from "react";
 import { queryClient } from "@/lib/react-query";
 import { useGlobalStore } from "@/store";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
+import { ConfirmProvider } from "@/components/common";
 export interface ProvidersProps {
   children: React.ReactNode;
   themeProps?: ThemeProviderProps;
@@ -65,7 +66,9 @@ export function Providers({
               timeout: 1000,
             }}
           />
-          <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
+          <ConfirmProvider>
+            <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
+          </ConfirmProvider>
         </HeroUIProvider>
       </QueryClientProvider>
     </GoogleOAuthProvider>

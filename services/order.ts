@@ -5,7 +5,6 @@ import {
   CreateOrderPreviewKeyByCartParams,
   createOrderPreviewKeyByProductParams,
   createPayOrderParams,
-  GetOrderListParams,
   OrderListResponse,
   OrderPreviewByCart,
   OrderPreviewByProduct,
@@ -81,7 +80,7 @@ export const getPayOrderStatus = (bizCode: string): Promise<number> =>
 
 /** 订单列表 */
 export const getOrderList = (
-  data: GetOrderListParams,
+  data: any,
 ): Promise<OrderListResponse> => request.post("/orders/page", data);
 /** 获取增值服务列表 */
 export const getServicesList = (): Promise<any> => {

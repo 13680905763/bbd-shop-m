@@ -13,10 +13,11 @@ export interface OrderListResponse {
   pages?: any;
 }
 
-export interface GetOrderListParams {
+export interface OrderListParams {
   current: number;
   size: number;
-  customerPayStatusCode?: string; // ✅ 可选，用于筛选订单状态
+  customerPayStatusCode?: string;
+  statusCode?: string;
 }
 export type source = "1688" | "TAOBAO";
 export interface createOrderPreviewKeyByProductParams {
@@ -92,4 +93,82 @@ export interface ServicesState {
   services: any;
   setServices: (services: any | null) => void;
   clearServices: () => void;
+}
+
+// 新
+/** 增值服务关联文件 */
+export interface OrderServiceFile {
+  id: string;
+  /** 文件地址 */
+  url?: string;
+  /** 文件名 */
+  fileName?: string;
+  /** 文件类型 */
+  fileType?: string;
+  /** 时间 */
+  createTime: string;
+  updateTime: string;
+}
+/** 订单商品增值服务（实例） */
+export interface OrderServiceItem {
+  /** 主键 */
+  id: string;
+  /** 服务定义 */
+  serviceId: string;
+  serviceCode: string;
+  serviceName?: string;
+  /** 价格 & 数量 */
+  price: string; // ⚠️ 后端字符串
+  quantity: number;
+  /** 备注 */
+  remark?: string;
+  /** 关联文件 */
+  fileList?: OrderServiceFile[];
+  /** 时间 */
+  createTime?: string;
+  updateTime?: string;
+}
+export interface ProductSkuSpec {
+  propId_valueId: string;
+  propName_valueName: string;
+}
+
+/** 订单商品 */
+export interface OrderProduct {
+  /** 主键 */
+  id: string;
+  /** 商品 */
+  productId: string;
+  productCode: string;
+  productTitle: string;
+  /** SKU */
+  productSkuId: string;
+  productSkuCode: string;
+  /** 商品图 */
+  picUrl: string;
+  skuPicUrl: string;
+  /** 店铺 */
+  shopId: string;
+  shopName: string;
+  /** 数量 */
+  quantity: number;
+  purchaseQuantity: number;
+  /** 价格（⚠️ 后端字符串） */
+  price: string;
+  /** SKU 规格 */
+  propAndValue: ProductSkuSpec;
+  /** 备注 */
+  remark?: string;
+  /** 增值服务 */
+  orderServiceList: OrderServiceItem[];
+  /** 来源 */
+  source: string;
+  sourceProductId: string;
+  sourceSkuId: string;
+  sourceMpId?: string;
+  sourceMpSkuId?: string;
+  /** 退款相关 */
+  withdrawRefundFlag: boolean;
+  /** 时间 */
+  updateTime: string;
 }

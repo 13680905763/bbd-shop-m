@@ -12,7 +12,6 @@ import {
 } from "@heroui/react";
 import { useTranslations } from "next-intl";
 
-import ServiceCard from "./service-card";
 import ShippingRouteCard from "./shipping-route-card";
 
 import {
@@ -25,9 +24,15 @@ import AddressModal from "@/components/modal/address-modal";
 import { Address, AddressModalState } from "@/types";
 import WarehouseProductItem from "@/components/block/warehouse-product-item";
 import AddressItem from "@/components/block/address-item";
+import { useWarehouseServicesList, useWaybillFeeEstimate } from "@/hook/api";
+import { useEnhancedSelection } from "@/hook/common";
+import WarehouseServiceCard from "./werahouse-service-card";
+import { useGlobalStore } from "@/store";
 
 export default function SubmitWarehouse() {
   const t = useTranslations("submit.warehouse");
+  const { currency } = useGlobalStore();
+
   const searchParam = useSearchParams();
   const router = useRouter();
   const key = searchParam.get("key") as string;
@@ -39,7 +44,7 @@ export default function SubmitWarehouse() {
   const [loadingRoute, setLoadingRoute] = useState(true);
   const [routesList, setRoutesList] = useState<any[]>([]);
   const [routesMessage, setRoutesMessage] = useState<string>(
-    t("routesMessage"),
+    t("defaultMessage"),
   );
 
   const [submitting, setSubmitting] = useState(false);
@@ -47,31 +52,51 @@ export default function SubmitWarehouse() {
 
   const { data, isLoading: productLoading, isError } = useWarehousePreview(key);
   const { data: addressData, isLoading: addressLoading } = useAddressList();
-  const { data: services, isLoading: servicesLoading } = useWarehouseServices();
+  const { data: serviceList } = useWarehouseServicesList();
+  const {
+    items: services, // 渲染数据（包含 isSelected 和 quantity）
+    toggleSelection, // 切换选中状态
+    updateQuantity, // 更新数量
+    getSelectedItems, // 获取选中结果
+  } = useEnhancedSelection(serviceList);
+  const getSelectedServices = useCallback(() => {
+    return getSelectedItems().map((item) => ({
+      serviceId: item.id,
+      quantity: item.quantity,
+      remark: item.remark,
+    }));
+  }, [getSelectedItems]);
+
+
 
   // 都用 string 类型 id 进行比较
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(
     null,
   );
-  const [selectedServices, setSelectedServices] = useState<
-    { id: string; quantity: number }[]
-  >([]);
+
   const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
   const [remark, setRemark] = useState("");
 
-  // 默认选中默认地址
+
+  const estimatePayload = useMemo(() => {
+    if (!selectedRouteId || !selectedAddressId || !data?.param) return null;
+
+    return {
+      serviceList: getSelectedServices(),
+      templateId: selectedRouteId,
+      addressId: selectedAddressId,
+      ...data.param,
+    };
+  }, [selectedRouteId, selectedAddressId, getSelectedServices, services]);
+
+  const { data: feeEstimate, isFetching: isEstimating } =
+    useWaybillFeeEstimate(estimatePayload);
+
   useEffect(() => {
-    if (addressData?.length && !selectedAddressId) {
-      const defaultAddr = addressData.find(
-        (addr: any) => addr.defaultAddress === 1,
-      );
-
-      if (defaultAddr) {
-        setSelectedAddressId(defaultAddr.id);
-      }
+    if (estimatePayload && feeEstimate) {
+      console.log("Fee Estimating:", feeEstimate);
     }
-  }, [addressData, selectedAddressId]);
-
+  }, [estimatePayload]);
   // 地址相关
   const handleAddClick = useCallback(() => {
     setModalState({ type: "add" });
@@ -95,6 +120,8 @@ export default function SubmitWarehouse() {
     getRoutesByQuery({
       categoryIds: data?.packageItemList.map((item: any) => item?.categoryId),
       countryId,
+      weight: data?.outbound?.estimateTotalWeight,
+      volume: data?.outbound?.estimateTotalVolume,
     })
       .then((res) => {
         if (typeof res != "string" && res?.length) {
@@ -110,27 +137,7 @@ export default function SubmitWarehouse() {
       });
   }, [countryId]);
 
-  // 切换服务选择
-  const toggleService = (id: string) => {
-    setSelectedServices((prev) => {
-      const exists = prev.find((item) => item.id === id);
 
-      if (exists) {
-        // 取消选择
-        return prev.filter((item) => item.id !== id);
-      }
-
-      // 新增：默认数量 1
-      return [...prev, { id, quantity: 1 }];
-    });
-  };
-  const handleCountChange = (id: string, nextCount: number) => {
-    setSelectedServices((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: nextCount } : item,
-      ),
-    );
-  };
   const handleSubmit = async () => {
     if (!isCheck) {
       return addToast({
@@ -159,11 +166,7 @@ export default function SubmitWarehouse() {
 
     try {
       const payload = {
-        serviceList: selectedServices.map((sid) => ({
-          serviceId: sid?.id,
-          quantity: sid?.quantity,
-          remark: "",
-        })),
+        serviceList: getSelectedServices(),
         templateId: selectedRouteId,
         addressId: selectedAddressId,
         remark,
@@ -190,7 +193,7 @@ export default function SubmitWarehouse() {
       </NavBar>
 
       {/* 内容区滚动 */}
-      <div className="flex-1 space-y-2 overflow-y-auto px-2 py-3">
+      <div className="flex-1 space-y-2 overflow-y-auto px-2 py-3 overflow-x-hidden">
         {/* 商品列表 */}
         <>
           <div className="text-base font-semibold">{t("commodityList")}</div>
@@ -210,36 +213,77 @@ export default function SubmitWarehouse() {
             )}
           </div>
         </>
+        <div className="flex flex-wrap gap-4 p-4 bg-gray-100 rounded-xl mt-4 bg-white">
+          <div className="flex-1 min-w-[140px]">
+            <div className="flex items-center gap-2 mb-1">
+              <div className="w-6 h-6 rounded-md bg-orange-100 flex items-center justify-center">
+                <svg
+                  className="w-3 h-3 text-orange-600"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    clipRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                    fillRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <span className="text-sm font-medium text-gray-600">
+                {t("totalWeight")}
+              </span>
+            </div>
+            <p className="text-2xl font-bold text-gray-800">
+              {data?.outbound?.estimateTotalWeight || 0}
+              <span className="text-base font-normal text-gray-500 ml-1">
+                g
+              </span>
+            </p>
+          </div>
 
+          <div className="flex-1 min-w-[140px]">
+            <div className="flex items-center gap-2 mb-1">
+              <div className="w-6 h-6 rounded-md bg-indigo-100 flex items-center justify-center">
+                <svg
+                  className="w-3 h-3 text-indigo-600"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    clipRule="evenodd"
+                    d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
+                    fillRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <span className="text-sm font-medium text-gray-600">
+                {t("totalVolume")}
+              </span>
+            </div>
+            <p className="text-2xl font-bold text-gray-800">
+              {data?.outbound?.estimateTotalVolume || 0}
+              <span className="text-base font-normal text-gray-500 ml-1">
+                cm³
+              </span>
+            </p>
+          </div>
+        </div>
         {/* 服务多选 */}
         <div>
           <div className="text-base font-semibold">{t("packagingMethod")}</div>
           <div className="space-y-1">
-            {servicesLoading ? (
-              <div className="space-y-2">
-                <Skeleton className="h-20 rounded-lg" />
-              </div>
-            ) : (
-              services?.map((service: any) => {
-                const selectedItem = selectedServices.find(
-                  (item) => item.id === String(service.id),
-                );
-
+            <div className="grid grid-cols-1 gap-2">
+              {services?.map((service: any) => {
                 return (
-                  <ServiceCard
+                  <WarehouseServiceCard
                     key={service.id}
-                    {...service}
-                    isSelected={!!selectedItem}
-                    quantity={
-                      selectedServices.find((s) => s.id === service.id)
-                        ?.quantity || 1
-                    }
-                    onCountChange={handleCountChange}
-                    onSelect={() => toggleService(String(service.id))}
+                    service={service}
+                    onSelect={toggleSelection}
+                    onUpdateQuantity={updateQuantity}
                   />
                 );
-              })
-            )}
+              })}
+            </div>
           </div>
         </div>
         {/* 地址 */}
@@ -276,11 +320,7 @@ export default function SubmitWarehouse() {
           </div>
 
           {/* 如果在加载，优先显示 loading */}
-          {loadingRoute ? (
-            <div className="flex h-[20vh] items-center justify-center">
-              <Spinner />
-            </div>
-          ) : (
+   
             <div className="flex flex-col gap-3">
               {routesList?.map((route) => (
                 <ShippingRouteCard
@@ -297,7 +337,6 @@ export default function SubmitWarehouse() {
                 </div>
               )}
             </div>
-          )}
         </div>
 
         <Textarea
@@ -318,12 +357,46 @@ export default function SubmitWarehouse() {
 
       {/* 底部提交 */}
       <div className="border-t bg-white px-4 py-3">
-        {/* <p>
-          总重量： {data?.outbound?.estimateTotalWeight || 0} g
-        </p>
-        <p>
-          总体积： {data?.outbound?.estimateTotalVolume || 0}  cm³
-        </p> */}
+        <div>
+
+          {isEstimating ? (
+            <div className="mt-2 p-4   text-sm rounded-lg text-center flex items-center justify-center">
+              <div>{t("estimating")}</div>
+              <Spinner className=" ml-2" />
+            </div>
+          ) : (
+            feeEstimate?.outbound && (
+              <div className="mb-2 p-4  bg-gray-100 rounded-xl space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-500">{t("estimatedShipping")}</span>
+                  <span className="font-medium">
+                    {currency.symbol}
+                    {feeEstimate?.outbound.estimateShippingFee}
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-500">{t("estimatedService")}</span>
+                  <span className="font-medium">
+                    {currency.symbol}
+                    {feeEstimate.outbound.serviceFee}
+                  </span>
+                </div>
+                <div className="pt-2 mt-2 border-t border-gray-200 flex justify-between items-center">
+                  <span className="text-gray-900 font-semibold">
+                    {t("estimatedTotal")}
+                  </span>
+                  <span className="text-xl font-bold text-primary">
+                    {currency.symbol}
+                    {feeEstimate.outbound.totalFee}
+                  </span>
+                </div>
+                <div className="text-sm text-gray-500 text-left">
+                  {t("estimatedTip")}
+                </div>
+              </div>
+            )
+          )}
+        </div>
         <Button
           className="w-full"
           color="primary"

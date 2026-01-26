@@ -1,11 +1,11 @@
 "use client";
 
-import { Button, Image } from "@heroui/react";
+import { Button } from "@heroui/react";
 import { useTranslations } from "next-intl";
 
-import Stepper from "@/components/stepper";
 import SourceIcon from "@/components/common/source-icon";
 import { useGlobalStore } from "@/store";
+import { ProductItem } from "@/components/common";
 
 export default function OrderItem({ order, openServiceModal }: any) {
   const t = useTranslations("submit.order");
@@ -13,58 +13,14 @@ export default function OrderItem({ order, openServiceModal }: any) {
   const { currency } = useGlobalStore();
 
   return (
-    <div className="rounded-box mb-3 px-2 py-3">
-      {/* 店铺信息 */}
+    <div className="rounded-lg bg-white px-2 py-3 space-y-2">
       <div className="flex items-center gap-2">
         <SourceIcon source={order?.source} />
         <div className="text-title">{order?.shopName}</div>
       </div>
-
-      {/* 商品列表 */}
       {order.products.map((product: any) => (
-        <div key={product?.propAndValue?.propName_valueName}>
-          {/* 商品内容 */}
-          <div className="my-3 flex gap-2">
-            {/* 左侧图片 */}
-
-            <Image
-              alt="商品图"
-              className="rounded-md object-cover"
-              classNames={{
-                wrapper: "self-start",
-              }}
-              height={93}
-              referrerPolicy="no-referrer"
-              src={product.skuPicUrl}
-              width={93}
-            />
-
-            {/* 右侧信息 */}
-            <div className="flex-1">
-              <div className="text-title line-clamp-1 !text-base">
-                {product.productTitle}
-              </div>
-              <div className="text-light-gray line-clamp-2">
-                {product.propAndValue.propName_valueName}
-              </div>
-              <div className="line-clamp-1 !text-sm">
-                {t("remark")}
-                {product.remark}
-              </div>
-
-              <div className="mt-0 flex items-center justify-between gap-2">
-                <div className="flex flex-1 flex-col">
-                  <span className="text-price-base">
-                    {currency.symbol}
-                    {product.price}
-                  </span>
-                </div>
-                <Stepper disabled value={product.quantity} />
-              </div>
-            </div>
-          </div>
-
-          {/* 增值服务 */}
+        <div key={product?.cartId}>
+          <ProductItem product={product} />
           <div className="rounded-lg bg-[#f8f8f8] p-2">
             <div className="flex items-center justify-between">
               <div className="flex flex-wrap items-center gap-2">
@@ -105,14 +61,13 @@ export default function OrderItem({ order, openServiceModal }: any) {
         </div>
       ))}
 
-      {/* 底部合计 */}
       <div className="mt-2 text-right">
         <div>
           {t("shippingFee")}
           {currency.symbol}
           {order?.postFee}
         </div>
-        <div>
+        <div>wwwwwwwwww
           {t("serviceFee")}
           {currency.symbol}
           {order?.serviceFee}

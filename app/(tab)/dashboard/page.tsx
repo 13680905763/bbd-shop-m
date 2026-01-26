@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { useGlobalStore } from "@/store";
 import { useUserInfo, useWalletInfo } from "@/hook";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
+import { useUserExperience } from "@/hook/api";
 
 export default function DashBoard() {
   const t = useTranslations("dashboard");
@@ -14,6 +15,8 @@ export default function DashBoard() {
   const { currency } = useGlobalStore();
 
   const { data: user, isLoading, error } = useUserInfo();
+  const { data: experience, isLoading: isLoadingExperience } = useUserExperience();
+
   const {
     data: wallet,
     isLoading: walletLoading,
@@ -40,19 +43,19 @@ export default function DashBoard() {
   ];
   const inviteStats = [
     {
-      title: t("inviteTotalReward"),
-      value: "0",
-      to: "/pages/member/account/index",
+      title: t("TotalReward"),
+      value: user?.myBonus || "0",
+      to: "/promotion/bonus",
     },
     {
-      title: t("inviteAffiliateBalance"),
-      value: "0",
-      to: "/pages/member/points/index",
+      title: t("inviteCount"),
+      value: user?.inviteCount || "0",
+      to: "/promotion/invitedUser",
     },
     {
-      title: t("inviteWithdrawnAmount"),
-      value: "0",
-      to: "/pages/member/points/index",
+      title: t("myExperience"),
+      value: experience?.myPoints || "0",
+      to: "/promotion/experience",
     },
   ];
   const serviceItems = [
@@ -141,7 +144,6 @@ export default function DashBoard() {
         <div className="flex items-center justify-between px-4">
           <div>
             <div className="font-bold">{t("inviteTitle")}</div>
-            <div className="text-sm text-gray-400">{t("inviteStatus")}</div>
           </div>
           <button onClick={() => router.push("/promotion")}>
             <IoChevronForwardSharp />
@@ -149,10 +151,10 @@ export default function DashBoard() {
         </div>
         <div className="home-card grid grid-cols-3">
           {inviteStats.map((item: any) => (
-            <div key={item.title} className="text-center">
+            <button  key={item.title} onClick={() => router.push(item.to)}>
               <div className="text-xl font-bold">{item.value}</div>
               <div>{item.title}</div>
-            </div>
+            </button>
           ))}
         </div>
       </div>

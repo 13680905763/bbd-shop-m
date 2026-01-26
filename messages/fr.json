@@ -14,6 +14,18 @@
             "cancel": "Annuler",
             "missingFieldsTitle": "Veuillez remplir : {fields}"
         },
+        "common": {
+            "confirmModal": {
+                "title": "Confirmation de l'opération",
+                "confirm": "Confirmer",
+                "cancel": "Annuler"
+            },
+            "productItem": {
+                "remark": "Remarques produit",
+                "placeholder": "Saisir des remarques sur le produit",
+                "noRemark": "Aucune remarque"
+            }
+        },
         "modal": {
             "confirm": "Confirmer",
             "cancel": "Annuler",
@@ -227,10 +239,9 @@
         "menuWarehouse": "Entrepôt",
         "menuPackage": "Colis",
         "inviteTitle": "Invitation affiliée",
-        "inviteStatus": "Invités : 0 | Activés : 0",
-        "inviteTotalReward": "Récompenses totales",
-        "inviteAffiliateBalance": "Solde affilié",
-        "inviteWithdrawnAmount": "Montant retiré",
+        "TotalReward": "Récompenses totales",
+        "inviteCount": "Compte d'invitation",
+        "myExperience": "Mon expérience",
         "servicesTitle": "Plus de services",
         "servicesMessage": "Messages",
         "servicesFavorite": "Favoris",
@@ -242,25 +253,20 @@
         "title": "Panier",
         "manage": "Gérer",
         "cancel": "Annuler",
-        "selectAll": "Tout  ",
+        "selectAll": "Tout sélectionner",
         "delete": "Supprimer",
         "checkout": "Commander",
         "loading": "Chargement...",
-        "error": "Quelque chose s'est mal passé",
+        "error": "Erreur",
         "toast": {
-            "noSelect": "Veuillez d'abord sélectionner un produit"
+            "noSelect": "Veuillez d'abord sélectionner des articles"
         },
         "deleteTitle": "Supprimer du panier",
-        "deleteContent": "Êtes-vous sûr de vouloir supprimer les articles sélectionnés ?",
-        "remark": {
-            "title": "Remarque",
-            "placeholder": "Entrez une remarque"
-        },
-        "empty": {
-            "title": "Votre panier est vide",
-            "desc": "Allez choisir vos articles préférés !",
-            "goShopping": "Aller faire du shopping"
-        }
+        "deleteContent": "Êtes-vous sûr de vouloir supprimer les articles sélectionnés?",
+        "remarkTitle": "Remarques",
+        "remarkPlaceholder": "Saisir des remarques",
+        "emptyTitle": "Votre panier est vide",
+        "emptyDesc": "Allez trouver vos articles préférés!"
     },
     "profile": {
         "profilePage": {
@@ -272,12 +278,12 @@
             "uploading": "Téléchargement de l'avatar..."
         },
         "order": {
-            "title": "Mes commandes",
+            "title": "Mes Commandes",
             "tabs": {
                 "all": "Toutes",
-                "waitPay": "Paiement",
+                "waitPay": "En attente de paiement",
                 "paid": "Payées",
-                "refund": "Remboursement"
+                "refund": "Remboursements"
             },
             "buttons": {
                 "pay": "Payer",
@@ -287,23 +293,23 @@
                 "refund": "Demander un remboursement"
             },
             "cancelTitle": "Annuler la commande",
-            "cancelContent": "Êtes-vous sûr de vouloir annuler cette commande ?",
+            "cancelContent": "Êtes-vous sûr de vouloir annuler cette commande?",
             "withdrawTitle": "Retirer la demande",
-            "withdrawContent": "Êtes-vous sûr de vouloir retirer cette demande ?",
+            "withdrawContent": "Êtes-vous sûr de vouloir retirer cette demande?",
             "refundTitle": "Demander un remboursement",
-            "remarkPlaceholder": "Veuillez saisir des remarques (facultatif)",
+            "remarkPlaceholder": "Veuillez saisir des remarques (optionnel)",
             "refundable": "Remboursable",
             "unrefundable": "Non remboursable",
             "noOrders": "Aucune commande",
             "selectAll": "Tout sélectionner",
-            "noMoreRecords": "Plus d'enregistrements",
+            "noMoreRecords": "Aucun autre enregistrement",
             "refundReason": "Motif du remboursement",
-            "reviewReason": "Motif de l'examen",
+            "reviewReason": "Motif de la vérification",
             "refundAmount": "Montant du remboursement",
-            "reviewTime": "Heure de l'examen",
+            "reviewTime": "Date de vérification",
             "promptCard": {
-                "title": "CQ des commandes et gestion des colis",
-                "description": "Veuillez vous rendre sur la page de l'entrepôt pour voir les photos de CQ et soumettre les colis",
+                "title": "Contrôle QC & Gestion des colis",
+                "description": "Veuillez accéder à la page entrepôt pour voir les photos de contrôle et soumettre les colis",
                 "button": "Aller à l'entrepôt"
             }
         },
@@ -540,6 +546,14 @@
             "textareaPlaceholder": "Si vous avez des exigences particulières, veuillez laisser une note ici",
             "agreement": "J'ai lu et j'accepte la Convention d'Expédition de Colis bbdbuy",
             "submitPackage": "Soumettre le Colis",
+            "defaultMessage": "Veuillez sélectionner une adresse pour voir les itinéraires de livraison",
+            "totalWeight": "Poids total",
+            "totalVolume": "Volume total",
+            "estimating": "Estimation des frais en cours...",
+            "estimatedShipping": "Frais d'expédition estimés",
+            "estimatedService": "Frais de service estimés",
+            "estimatedTotal": "Total estimé",
+            "estimatedTip": "Le coût final sera affiché après l'emballage des colis",
             "toast": {
                 "checkAgreement": "Veuillez accepter l'avertissement légal",
                 "selectAddress": "Veuillez sélectionner une adresse de livraison",
@@ -605,60 +619,49 @@
         }
     },
     "promotion": {
-        "title": "Membre affilié",
-        "promotionImageAlt": "Image de promotion d'affiliation",
-        "steps": {
-            "step1": "Partagez votre code d'affiliation",
-            "step2": "Une fois que votre ami confirme, vous recevrez une commission d'affiliation",
-            "step3": "Recevez votre commission d'affiliation"
-        },
-        "referralLink": {
-            "label": "Lien de parrainage",
-            "copyButton": "Copier le lien",
-            "desc": "Copiez ce lien et utilisez-le pour rediriger les utilisateurs vers notre page d'accueil avec votre ID d'affiliation."
-        },
-        "totalReward": {
-            "label": "Récompense totale",
-            "amount": "CAD 0.00",
-            "recordButton": "Historique",
-            "withdrawButton": "Retirer"
-        },
-        "moneyList": {
-            "inviteUser": {
-                "title": "Utilisateurs invités",
-                "value": "$888"
-            },
-            "withdrawable": {
-                "title": "Retirable",
-                "value": "88"
-            },
-            "earned": {
-                "title": "Gagné",
-                "value": "88"
+        "title": "Programme de Parrainage",
+        "process1": "Partagez votre code de parrainage",
+        "process2": "Votre ami invité confirme avoir reçu votre code",
+        "process3": "Recevez votre commission de parrainage",
+        "copy": "Copier",
+        "processTip": "Copiez cette URL et utilisez-la pour rediriger les utilisateurs vers votre page de parrainage",
+        "title1": "Mon Parrainage",
+        "totalReward": "Récompenses Totales",
+        "inviteUsers": "Utilisateurs Invités",
+        "experience": "Mon Expérience",
+        "title2": "Mon Niveau",
+        "bonusRate": "Taux de Bonus",
+        "experienceRange": "Expérience",
+        "title3": "FAQ sur les Avantages",
+        "question1": "Qu'est-ce que le programme d'adhésion de parrainage?",
+        "answer1": "Le programme d'adhésion de parrainage est un modèle de marketing partenarial. Lorsque vous recommandez à de nouveaux utilisateurs de s'inscrire et d'utiliser nos services via votre lien d'invitation exclusif ou votre code de parrainage, vous pouvez gagner des commissions correspondantes. Cela équivaut à devenir notre partenaire de promotion de marque et à gagner un revenu supplémentaire en partageant nos services.",
+        "question2": "Comment mon bonus est-il calculé?",
+        "answer2": "Votre bonus est principalement calculé sur la base du montant des dépenses des utilisateurs que vous invitez, comprenant spécifiquement les aspects suivants : 1. Récompense d'invitation directe : Lorsque les utilisateurs que vous invitez directement effectuent leur premier achat, vous recevez un pourcentage fixe du montant de la commande comme récompense. 2. Récompense d'invitation indirecte : Lorsque les utilisateurs que vous invitez invitent d'autres personnes à faire des achats, vous pouvez également recevoir un certain pourcentage comme récompense secondaire. 3. Bonus progressifs : À mesure que le nombre de personnes que vous invitez augmente, votre pourcentage de bonus augmente en conséquence. 4. Récompenses de réussite supplémentaires : Atteignez des objectifs de promotion spécifiques pour gagner des bonus supplémentaires.",
+        "question3": "Comment promouvoir gratuitement?",
+        "answer3": "Vous pouvez promouvoir gratuitement par les méthodes suivantes : 1. Partage sur les réseaux sociaux : Partagez votre lien d'invitation exclusif sur des plateformes comme WeChat Moments, Weibo, Xiaohongshu, etc. 2. Création de contenu : Partagez vos expériences d'utilisation en écrivant des articles d'évaluation, en réalisant des vidéos tutoriels, etc. 3. Recommandations de bouche à oreille : Recommandez directement à des amis, à la famille ou à des collègues, en partageant votre code d'invitation. 4. Participation communautaire : Partagez du contenu précieux dans des forums et communautés pertinents avec vos informations d'invitation jointes. 5. Réseau personnel : Faites la promotion en utilisant vos cercles professionnels, groupes d'intérêt et autres réseaux sociaux.",
+        "invitedUser": {
+            "title": "Utilisateurs Invités",
+            "tableColumns": {
+                "name": "Utilisateur Invité",
+                "email": "Email de l'Utilisateur Invité",
+                "createTime": "Date"
             }
         },
-        "myLevel": {
-            "label": "Mon niveau",
-            "points": "Points : 0"
+        "experiencePage": {
+            "title": "Détails d'Expérience",
+            "currentExperience": "Expérience Actuelle",
+            "createTime": "Date",
+            "noData": "Aucun détail d'expérience pour le moment"
         },
-        "promotionConfig": {
-            "bonusLabel": "Ratio de bonus",
-            "experienceLabel": "Expérience"
-        },
-        "faq": {
-            "title": "FAQ des avantages",
-            "item1": {
-                "question": "Qu'est-ce que le programme de membership d'affiliation ?",
-                "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        "bonus": {
+            "title": "Détails des Bonus",
+            "tableColumns": {
+                "bizType": "Source",
+                "amount": "Montant",
+                "currentBalance": "Bonus Disponible",
+                "createTime": "Date"
             },
-            "item2": {
-                "question": "Comment mon bonus est-il calculé ?",
-                "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-            },
-            "item3": {
-                "question": "Comment promouvoir gratuitement ?",
-                "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-            }
+            "noData": "Aucun détail de bonus pour le moment"
         }
     },
     "estimation": {

@@ -14,6 +14,18 @@
             "cancel": "取消",
             "missingFieldsTitle": "请填写：{fields}"
         },
+        "common": {
+            "confirmModal": {
+                "title": "操作确认",
+                "confirm": "确认",
+                "cancel": "取消"
+            },
+            "productItem": {
+                "remark": "商品备注",
+                "placeholder": "输入商品备注",
+                "noRemark": "暂无备注"
+            }
+        },
         "modal": {
             "confirm": "确认",
             "cancel": "取消",
@@ -227,10 +239,9 @@
         "menuWarehouse": "我的仓库",
         "menuPackage": "我的包裹",
         "inviteTitle": "联盟邀请",
-        "inviteStatus": "已邀请: 0 | 已激活: 0",
-        "inviteTotalReward": "总奖励",
-        "inviteAffiliateBalance": "联盟余额",
-        "inviteWithdrawnAmount": "已提现金额",
+        "TotalReward": "总奖励",
+        "inviteCount": "邀请人数",
+        "myExperience": "我的经验",
         "servicesTitle": "更多服务",
         "servicesMessage": "消息通知",
         "servicesFavorite": "我的收藏",
@@ -252,15 +263,10 @@
         },
         "deleteTitle": "从购物车删除",
         "deleteContent": "确定要删除选中的商品吗？",
-        "remark": {
-            "title": "备注",
-            "placeholder": "输入备注"
-        },
-        "empty": {
-            "title": "您的购物车是空的",
-            "desc": "去挑选您喜欢的商品吧！",
-            "goShopping": "去购物"
-        }
+        "remarkTitle": "备注",
+        "remarkPlaceholder": "输入备注",
+        "emptyTitle": "您的购物车是空的",
+        "emptyDesc": "去挑选您喜欢的商品吧！"
     },
     "profile": {
         "profilePage": {
@@ -540,6 +546,14 @@
             "textareaPlaceholder": "如有特殊要求请在此备注",
             "agreement": "我已阅读并同意 bbdbuy 包裹寄送协议",
             "submitPackage": "提交包裹",
+            "defaultMessage": "请选择地址后查看运输路线",
+            "totalWeight": "总重量",
+            "totalVolume": "总体积",
+            "estimating": "费用估算中",
+            "estimatedShipping": "预估运费",
+            "estimatedService": "预估服务费",
+            "estimatedTotal": "预估总计",
+            "estimatedTip": "具体费用将在包裹完成打包之后展示",
             "toast": {
                 "checkAgreement": "请勾选免责声明",
                 "selectAddress": "请选择收货地址",
@@ -605,60 +619,49 @@
         }
     },
     "promotion": {
-        "title": "联盟会员",
-        "promotionImageAlt": "联盟推广图片",
-        "steps": {
-            "step1": "分享您的联盟代码",
-            "step2": "您邀请的朋友确认后，您将收到联盟佣金",
-            "step3": "收到您的联盟佣金"
-        },
-        "referralLink": {
-            "label": "推荐链接",
-            "copyButton": "一键复制",
-            "desc": "复制这个链接，并使用它将用户重定向到我们的主页，同时带有您的联盟ID。"
-        },
-        "totalReward": {
-            "label": "总奖励",
-            "amount": "CAD 0.00",
-            "recordButton": "记录",
-            "withdrawButton": "提现"
-        },
-        "moneyList": {
-            "inviteUser": {
-                "title": "邀请的用户",
-                "value": "$888"
-            },
-            "withdrawable": {
-                "title": "可提现",
-                "value": "88"
-            },
-            "earned": {
-                "title": "已赚取",
-                "value": "88"
+        "title": "邀请联盟",
+        "process1": "分享您的联盟代码",
+        "process2": "您邀请的朋友确认收到您的联盟代码",
+        "process3": "收到您的联盟佣金",
+        "copy": "复制",
+        "processTip": "复制此 URL 并使用它将用户重定向到您的联盟 lD 的主页",
+        "title1": "我的联盟",
+        "totalReward": "总奖励",
+        "inviteUsers": "邀请用户",
+        "experience": "我的经验",
+        "title2": "我的等级",
+        "bonusRate": "奖金比例",
+        "experienceRange": "经验",
+        "title3": "权益FAQ",
+        "question1": "什么是联盟会员计划？",
+        "answer1": "联盟会员计划是一种合作伙伴营销模式。当您通过您的专属邀请链接或邀请码推荐新用户注册并使用我们的服务时，您可以获得相应的佣金奖励。这相当于成为我们的品牌推广伙伴，通过分享我们的服务来获得额外收入。",
+        "question2": "我的奖金是如何计算的？",
+        "answer2": "您的奖金主要基于您邀请的用户消费金额计算，具体包含以下几个方面： 1. 直接邀请奖励：您直接邀请的用户完成首单消费，您将获得订单金额的固定比例作为奖励 2. 间接邀请奖励：您邀请的用户再邀请其他人消费，您也可以获得一定比例的二级奖励 3. 阶梯式奖金：随着您邀请人数的增加，您的奖金比例会相应提高 4. 额外成就奖励：完成特定推广目标可获得额外奖金",
+        "question3": "如何免费推广？",
+        "answer3": "您可以通过以下方式进行免费推广： 1. 社交媒体分享：在朋友圈、微博、小红书等平台分享您的专属邀请链接 2. 内容创作：通过写评测文章、制作使用教程视频等方式分享使用体验 3. 口碑推荐：向朋友、家人或同事直接推荐，分享您的邀请码 4. 社区参与：在相关论坛、社群中分享有价值的内容并附带您的邀请信息 5. 个人网络：利用您的职业圈、兴趣团体等社交网络进行推广",
+        "invitedUser": {
+            "title": "被邀请用户",
+            "tableColumns": {
+                "name": "被邀请人",
+                "email": "被邀请人邮箱",
+                "createTime": "时间"
             }
         },
-        "myLevel": {
-            "label": "我的等级",
-            "points": "积分: 0"
+        "experiencePage": {
+            "title": "经验明细",
+            "currentExperience": "当前经验",
+            "createTime": "时间",
+            "noData": "暂无经验明细"
         },
-        "promotionConfig": {
-            "bonusLabel": "奖金比例",
-            "experienceLabel": "经验"
-        },
-        "faq": {
-            "title": "权益FAQ",
-            "item1": {
-                "question": "什么是联盟会员计划？",
-                "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        "bonus": {
+            "title": "奖金明细",
+            "tableColumns": {
+                "bizType": "来源",
+                "amount": "数量",
+                "currentBalance": "可用奖金",
+                "createTime": "时间"
             },
-            "item2": {
-                "question": "我的奖金是如何计算的？",
-                "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-            },
-            "item3": {
-                "question": "如何免费推广？",
-                "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-            }
+            "noData": "暂无奖金明细"
         }
     },
     "estimation": {

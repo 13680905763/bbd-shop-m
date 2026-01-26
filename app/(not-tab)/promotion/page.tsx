@@ -1,74 +1,73 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { NavBar, Image } from "antd-mobile";
-import { Accordion, AccordionItem, Button } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-import { getExperience, getPromotionConfig } from "@/services";
-import { IoCopyOutline } from "react-icons/io5";
 import { CopyText } from "@/components/ui";
-import { useUserInfo } from "@/hook";
+import { useBonusConfig, useUserExperience, useUserInfo } from "@/hook/api";
+import { useGlobalStore } from "@/store";
+import { Accordion, AccordionItem } from "@heroui/react";
 
 export default function Promotion() {
-  const t = useTranslations("promotion"); // ✅ 使用命名空间
+  const t = useTranslations("promotion");
   const router = useRouter();
-  const [experience, setExperience] = useState<any>(null);
-  const [promotionConfig, setPromotionConfig] = useState([]);
+  const { currency } = useGlobalStore();
+
   const { data: user, isLoading, error } = useUserInfo();
+  const { data: experience, isLoading: isLoadingExperience } = useUserExperience();
+  const { data: bonusConfig, isLoading: isLoadingBonusConfig } = useBonusConfig();
 
-  const fetchExperience = async () => {
-    try {
-      const res = await getExperience();
-      const res1 = await getPromotionConfig();
-
-      setPromotionConfig(res1);
-      setExperience(res || null);
-    } catch {
-      // handle error
-    }
-  };
-
-  useEffect(() => {
-    fetchExperience();
-  }, []);
+  const process = [
+    t("process1"),
+    t("process2"),
+    t("process3"),
+  ]
+  const faq = [
+    {
+      question: t("question1"),
+      answer: t("answer1"),
+    },
+    {
+      question: t("question2"),
+      answer: t("answer2"),
+    },
+    {
+      question: t("question3"),
+      answer: t("answer3"),
+    },
+  ]
 
   return (
     <>
       <NavBar className="bg-white" onBack={() => router.back()}>
         <span className="navbar-title">{t("title")}</span>
       </NavBar>
-
       <div className="flex-1 overflow-auto scrollbar-hide">
-        <Image alt={t("promotionImageAlt")} src="/m/images/promotion.png" />
-
-        {/* 步骤条 */}
-        <div className="p-2">
+        <Image src="/m/images/promotion.png" />
+        <div className="p-2 space-y-2">
           <div className="relative mx-auto mb-[0.625rem] flex w-[16.25rem] items-center justify-between after:absolute after:z-[1] after:w-full after:border-b after:border-dashed after:border-[#c92910] after:content-['']">
-            {["step1", "step2", "step3"].map((key, idx) => (
+            {process.map((item, idx) => (
               <div
-                key={key}
+                key={item}
                 className="relative z-[2] flex h-5 w-5 items-center justify-center rounded-full bg-white text-xs font-bold text-[#c92910]"
               >
                 {idx + 1}
               </div>
             ))}
           </div>
-
           <div className="mx-auto flex w-[22.1875rem] items-center">
-            {["step1", "step2", "step3"].map((key) => (
+            {process.map((item, idx) => (
               <div
-                key={key}
+                key={item}
                 className="flex h-20 w-[7.5rem] justify-center text-wrap text-center text-[0.6875rem] text-xs font-normal text-[#333]"
               >
-                {t(`steps.${key}`)}
+                {item}
               </div>
             ))}
           </div>
 
-          {/* 推荐链接 */}
-          <div className="box-card flex flex-col items-center gap-2 p-2">
-
+          <div className="rounded-xl bg-white flex flex-col items-center gap-2 p-2">
             <div className="w-full py-2.5 px-4 bg-[#f4f4f5] rounded-xl text-[#11181C] flex items-center justify-between cursor-pointer hover:bg-[#e4e4e7] transition-colors">
               <span className="font-mono text-sm break-all">
                 {`https://www.bbdbuy1.com/register?inviteCode=${user?.inviteCode || ""}`}
@@ -79,57 +78,42 @@ export default function Promotion() {
               text={`https://www.bbdbuy1.com/register?inviteCode=${user?.inviteCode || ""}`}
             >
               <button className="w-full py-2.5 rounded-lg text-sm font-medium text-white bg-[#f0700c]" >
-                {t("referralLink.copyButton")}
+                {t("copy")}
               </button>
             </CopyText>
-            <div className="text-xs font-normal leading-[1.125rem] text-[#999999]">
-              {t("referralLink.desc")}
-            </div>
+            <span className="text-xs font-normal leading-[1.125rem] text-[#999999]">
+              {t("processTip")}
+            </span>
           </div>
 
-          {/* 总奖励 */}
-          <div className="box-card p-2 text-center">
-            <div className="my-[10px] text-[24px] font-bold text-[#f3643a]">
-              {t("totalReward.amount")}
-            </div>
-            <div className="text-sm text-[#999]">{t("totalReward.label")}</div>
-            {/* <div className="flex justify-center border-b border-[#eeeeee] px-[10px] py-[15px]"> */}
-            <div className="flex justify-center px-[10px] py-[15px]">
-              <button className="flex-1 rounded-full border border-[#ccc] py-2 text-sm">
-                {t("totalReward.recordButton")}
-              </button>
-              <div className="w-[20px]" />
-              <button className="flex-1 rounded-full bg-[#f0700c] py-2 text-sm text-white">
-                {t("totalReward.withdrawButton")}
-              </button>
-            </div>
-
-            {/* <div className="my-4 grid grid-cols-3">
-              {["inviteUser", "withdrawable", "earned"].map((key) => (
-                <div key={key} className="flex flex-col items-center">
-                  <div className="mb-1 text-base font-bold">
-                    {t(`moneyList.${key}.value`)}
-                  </div>
-                  <div className="text-sm text-[#999]">
-                    {t(`moneyList.${key}.title`)}
-                  </div>
-                </div>
-              ))}
-            </div> */}
-          </div>
-
-          {/* 我的等级 */}
-          <div className="box-card p-2 px-4 pt-4">
-            <div className="flex justify-between pb-0 text-base font-medium">
-              <div>{t("myLevel.label")}</div>
-              <div className="flex items-center gap-1 text-sm text-[#999]">
-                {t("myLevel.points")}
+          <div className="rounded-xl bg-white p-2 text-center">
+            <div className='font-bold text-3xl text-[#f0700c]'>{currency.symbol}{user?.myBonus}</div>
+            <div>{t("totalReward")}</div>
+            <div className="col-span-2 grid grid-cols-2 ">
+              <div className="text-center">
+                <div>{user?.inviteCount}</div>
+                <button className="hover:text-[#f0700c]"
+                onClick={() => router.push("/promotion/invitedUser")}
+                >
+                  {t("inviteUsers")}
+                </button>
+              </div>
+              <div className="text-center">
+                <div>{experience?.experience || 0}</div>
+                <button className="hover:text-[#f0700c]"
+                onClick={() => router.push("/promotion/experience")}
+                >
+                  {t("experience")}
+                </button>
               </div>
             </div>
+          </div>
 
-            {/* 奖金配置 */}
+          <div className="rounded-xl bg-white p-2 px-4 space-y-2">
+            <div className='subtitle'>{t("title2")}</div>
+
             <div className="flex overflow-hidden rounded-lg border border-[#eeeeee] bg-[#f7f8f9]">
-              {promotionConfig.map((item: any, index) => (
+              {bonusConfig?.map((item: any, index: any) => (
                 <div
                   key={item.id}
                   className={`flex flex-1 flex-col items-center justify-center border-l border-[#eeeeee] first:border-l-0 ${index === 0 ? "bg-[#ffeee1]" : "bg-white"
@@ -140,14 +124,14 @@ export default function Promotion() {
                   </div>
                   <div className="flex flex-col items-center gap-1 py-4 text-center">
                     <div className="text-sm text-gray-500">
-                      {t("promotionConfig.bonusLabel")}
+                      {t("bonusRate")}
                     </div>
                     <div className="text-base font-bold text-[#f0700c]">
                       {(Number(item.configValue) * 100).toFixed(2)}%
                     </div>
                     <div className="text-xs text-gray-400">
                       {item.rangeMin} ~ {item.rangeMax}{" "}
-                      {t("promotionConfig.experienceLabel")}
+                      {t("experienceRange")}
                     </div>
                   </div>
                 </div>
@@ -155,17 +139,16 @@ export default function Promotion() {
             </div>
           </div>
 
-          {/* FAQ */}
           <div className="box-card p-2">
-            <div className="p-4 font-bold">{t("faq.title")}</div>
+            <div className="p-4 font-bold">{t("title3")}</div>
             <Accordion className="!border-1" variant="bordered">
-              {["item1", "item2", "item3"].map((key) => (
+              {faq.map((item) => (
                 <AccordionItem
-                  key={key}
-                  aria-label={t(`faq.${key}.question`)}
-                  title={t(`faq.${key}.question`)}
+                  key={item.question}
+                  aria-label={item.question}
+                  title={item.question}
                 >
-                  {t(`faq.${key}.answer`)}
+                  {item.answer}
                 </AccordionItem>
               ))}
             </Accordion>

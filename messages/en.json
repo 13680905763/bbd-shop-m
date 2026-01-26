@@ -14,6 +14,18 @@
             "cancel": "Cancel",
             "missingFieldsTitle": "Please fill in: {fields}"
         },
+        "common": {
+            "confirmModal": {
+                "title": "Operation Confirmation",
+                "confirm": "Confirm",
+                "cancel": "Cancel"
+            },
+            "productItem": {
+                "remark": "Product Remarks",
+                "placeholder": "Enter product remarks",
+                "noRemark": "No remarks"
+            }
+        },
         "modal": {
             "confirm": "Confirm",
             "cancel": "Cancel",
@@ -227,10 +239,9 @@
         "menuWarehouse": "My Warehouse",
         "menuPackage": "My Packages",
         "inviteTitle": "Affiliate Invitation",
-        "inviteStatus": "Invited: 0 | Activated: 0",
-        "inviteTotalReward": "Total Rewards",
-        "inviteAffiliateBalance": "Affiliate Balance",
-        "inviteWithdrawnAmount": "Withdrawn Amount",
+        "TotalReward": "Total Rewards",
+        "inviteCount": "Invite Count",
+        "myExperience": "My Experience",
         "servicesTitle": "More Services",
         "servicesMessage": "Message Notifications",
         "servicesFavorite": "My Favorites",
@@ -239,28 +250,23 @@
         "servicesHistory": "Browsing History"
     },
     "cart": {
-        "title": "Cart",
+        "title": "Shopping Cart",
         "manage": "Manage",
         "cancel": "Cancel",
         "selectAll": "Select All",
         "delete": "Delete",
         "checkout": "Checkout",
         "loading": "Loading...",
-        "error": "Something went wrong",
+        "error": "Error",
         "toast": {
-            "noSelect": "Please select a product first"
+            "noSelect": "Please select items first"
         },
         "deleteTitle": "Delete from Cart",
         "deleteContent": "Are you sure you want to delete the selected items?",
-        "remark": {
-            "title": "Remark",
-            "placeholder": "Enter remark"
-        },
-        "empty": {
-            "title": "Your cart is empty",
-            "desc": "Go pick your favorite items!",
-            "goShopping": "Go Shopping"
-        }
+        "remarkTitle": "Remarks",
+        "remarkPlaceholder": "Enter remarks",
+        "emptyTitle": "Your cart is empty",
+        "emptyDesc": "Go find your favorite items!"
     },
     "profile": {
         "profilePage": {
@@ -277,19 +283,19 @@
                 "all": "All",
                 "waitPay": "Pending Payment",
                 "paid": "Paid",
-                "refund": "Refund"
+                "refund": "Refunds"
             },
             "buttons": {
                 "pay": "Pay",
                 "cancel": "Cancel Order",
-                "batchPay": "Batch Pay",
-                "withdraw": "Withdraw Application",
+                "batchPay": "Batch Payment",
+                "withdraw": "Withdraw Request",
                 "refund": "Request Refund"
             },
             "cancelTitle": "Cancel Order",
             "cancelContent": "Are you sure you want to cancel this order?",
-            "withdrawTitle": "Withdraw Application",
-            "withdrawContent": "Are you sure you want to withdraw this application?",
+            "withdrawTitle": "Withdraw Request",
+            "withdrawContent": "Are you sure you want to withdraw this request?",
             "refundTitle": "Request Refund",
             "remarkPlaceholder": "Please enter remarks (optional)",
             "refundable": "Refundable",
@@ -303,7 +309,7 @@
             "reviewTime": "Review Time",
             "promptCard": {
                 "title": "Order QC & Package Management",
-                "description": "Please go to the warehouse page to view QC photos and submit packages",
+                "description": "Please go to warehouse page to view QC photos and submit packages",
                 "button": "Go to Warehouse"
             }
         },
@@ -540,6 +546,14 @@
             "textareaPlaceholder": "If you have any special requirements, please leave a note here",
             "agreement": "I have read and agreed to the bbdbuy Package Shipping Agreement",
             "submitPackage": "Submit Package",
+            "defaultMessage": "Please select an address to view shipping routes",
+            "totalWeight": "Total Weight",
+            "totalVolume": "Total Volume",
+            "estimating": "Estimating fee...",
+            "estimatedShipping": "Estimated Shipping",
+            "estimatedService": "Estimated Service Fee",
+            "estimatedTotal": "Estimated Total",
+            "estimatedTip": "Final cost will be displayed after packages are packed",
             "toast": {
                 "checkAgreement": "Please check the disclaimer",
                 "selectAddress": "Please select a shipping address",
@@ -605,60 +619,49 @@
         }
     },
     "promotion": {
-        "title": "Affiliate Member",
-        "promotionImageAlt": "Affiliate Promotion Image",
-        "steps": {
-            "step1": "Share your affiliate code",
-            "step2": "Once your friend confirms, you'll receive affiliate commission",
-            "step3": "Receive your affiliate commission"
-        },
-        "referralLink": {
-            "label": "Referral Link",
-            "copyButton": "Copy Link",
-            "desc": "Copy this link and use it to redirect users to our homepage with your affiliate ID."
-        },
-        "totalReward": {
-            "label": "Total Reward",
-            "amount": "CAD 0.00",
-            "recordButton": "Record",
-            "withdrawButton": "Withdraw"
-        },
-        "moneyList": {
-            "inviteUser": {
-                "title": "Invited Users",
-                "value": "$888"
-            },
-            "withdrawable": {
-                "title": "Withdrawable",
-                "value": "88"
-            },
-            "earned": {
-                "title": "Earned",
-                "value": "88"
+        "title": "Referral Program",
+        "process1": "Share your referral code",
+        "process2": "Your invited friend confirms receiving your code",
+        "process3": "Receive your referral commission",
+        "copy": "Copy",
+        "processTip": "Copy this URL and use it to redirect users to your referral homepage",
+        "title1": "My Referral",
+        "totalReward": "Total Rewards",
+        "inviteUsers": "Invited Users",
+        "experience": "My Experience",
+        "title2": "My Level",
+        "bonusRate": "Bonus Rate",
+        "experienceRange": "Experience",
+        "title3": "Benefits FAQ",
+        "question1": "What is the referral membership program?",
+        "answer1": "The referral membership program is a partnership marketing model. When you recommend new users to register and use our services through your exclusive invitation link or referral code, you can earn corresponding commission rewards. This is equivalent to becoming our brand promotion partner and earning additional income by sharing our services.",
+        "question2": "How is my bonus calculated?",
+        "answer2": "Your bonus is mainly calculated based on the consumption amount of users you invite, specifically including the following aspects: 1. Direct invitation reward: When users you directly invite complete their first purchase, you will receive a fixed percentage of the order amount as a reward. 2. Indirect invitation reward: When users you invite then invite others to make purchases, you can also receive a certain percentage as a secondary reward. 3. Tiered bonuses: As the number of people you invite increases, your bonus percentage will increase accordingly. 4. Additional achievement rewards: Complete specific promotion goals to earn extra bonuses.",
+        "question3": "How to promote for free?",
+        "answer3": "You can promote for free through the following methods: 1. Social media sharing: Share your exclusive invitation link on platforms like WeChat Moments, Weibo, Xiaohongshu, etc. 2. Content creation: Share usage experiences by writing review articles, making tutorial videos, etc. 3. Word-of-mouth recommendations: Directly recommend to friends, family, or colleagues, sharing your invitation code. 4. Community participation: Share valuable content in relevant forums and communities with your invitation information attached. 5. Personal network: Promote using your professional circles, interest groups, and other social networks.",
+        "invitedUser": {
+            "title": "Invited Users",
+            "tableColumns": {
+                "name": "Invited User",
+                "email": "Invited User Email",
+                "createTime": "Time"
             }
         },
-        "myLevel": {
-            "label": "My Level",
-            "points": "Points: 0"
+        "experiencePage": {
+            "title": "Experience Details",
+            "currentExperience": "Current Experience",
+            "createTime": "Time",
+            "noData": "No experience details yet"
         },
-        "promotionConfig": {
-            "bonusLabel": "Bonus Ratio",
-            "experienceLabel": "Experience"
-        },
-        "faq": {
-            "title": "Benefits FAQ",
-            "item1": {
-                "question": "What is the Affiliate Membership Program?",
-                "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        "bonus": {
+            "title": "Bonus Details",
+            "tableColumns": {
+                "bizType": "Source",
+                "amount": "Amount",
+                "currentBalance": "Available Bonus",
+                "createTime": "Time"
             },
-            "item2": {
-                "question": "How is my bonus calculated?",
-                "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-            },
-            "item3": {
-                "question": "How to promote for free?",
-                "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-            }
+            "noData": "No bonus details yet"
         }
     },
     "estimation": {

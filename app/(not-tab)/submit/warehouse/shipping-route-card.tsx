@@ -20,10 +20,10 @@ export default function ShippingRouteCard({
     shippingLine,
     disable = false,
     prompt = "",
+    shippingFee = 0,
   } = route;
   const { description, minDays, maxDays } = shippingLine;
   const name = templateName || methodName;
-  const price = `${currency.symbol} ${firstWeightFee}`;
   const time = `${minDays}-${maxDays} days`;
 
   return (
@@ -50,7 +50,8 @@ export default function ShippingRouteCard({
             {name}
           </p>
           <p className="text-center text-sm font-bold leading-snug text-orange-500">
-            {price}
+            {currency.symbol}
+            {shippingFee}
           </p>
           <p className="text-center text-xs leading-snug text-gray-500">
             {time}

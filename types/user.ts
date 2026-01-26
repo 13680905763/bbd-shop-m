@@ -29,6 +29,8 @@ export interface UserInfo {
   status: number; // 用户状态，具体含义看后台文档
   myPoints: number; // 用户积分
   inviteCode: string; // 邀请码
+  inviteCount: number; // 邀请人数
+  myBonus: number; // 邀请奖励
 }
 export interface UserState {
   user: UserInfo | null;

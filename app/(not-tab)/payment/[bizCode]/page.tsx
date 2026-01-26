@@ -203,7 +203,7 @@ export default function PayOrder() {
       <NavBar className="bg-white" onBack={() => router.back()}>
         {t("title")}
       </NavBar>
-      <div className="flex-1 overflow-y-auto overflow-x-hidden px-2">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden px-2 scrollbar-hide">
         <div className="box-card space-y-2 p-3 text-center">
           <div className="text-sm tracking-wide text-gray-500">
             {t("total")}
