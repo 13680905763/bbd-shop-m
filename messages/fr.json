@@ -645,7 +645,8 @@
                 "name": "Utilisateur Invité",
                 "email": "Email de l'Utilisateur Invité",
                 "createTime": "Date"
-            }
+            },
+            "noData": "Aucun utilisateur invité pour le moment"
         },
         "experiencePage": {
             "title": "Détails d'Expérience",

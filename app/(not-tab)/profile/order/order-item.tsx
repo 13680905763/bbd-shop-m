@@ -7,6 +7,7 @@ import { useGlobalStore } from "@/store";
 import SourceIcon from "@/components/common/source-icon";
 import CopyButton from "@/components/common/copy-button";
 import { ProductItem } from "@/components/common";
+import React from "react";
 
 export default function OrderItem({
   order,
@@ -128,10 +129,10 @@ export default function OrderItem({
 
       {/* 商品列表 */}
       {order?.products.map((product: any) => (
-        <>
-          <ProductItem product={product} key={product?.id} />
+        <React.Fragment key={product?.id} >
+          <ProductItem product={product} />
           {product?.orderServiceList?.length > 0 && (
-            <div className="rounded-lg bg-[#fafafa] px-3 py-2">
+            <div className="rounded-lg bg-[#fafafa] px-3 py-2" >
               <div className="flex flex-wrap items-center gap-2">
                 {product.orderServiceList.map((service: any) => (
                   <span
@@ -159,10 +160,10 @@ export default function OrderItem({
               </Button>
             </div >
           )}
-        </>
+        </React.Fragment>
       ))
       }
-      < div className="text-right">
+      <div className="text-right">
         <p className="text-sm text-gray-700">
           <span className="text-base font-bold">
             {currency.symbol}

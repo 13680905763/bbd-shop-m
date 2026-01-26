@@ -645,7 +645,8 @@
                 "name": "被邀请人",
                 "email": "被邀请人邮箱",
                 "createTime": "时间"
-            }
+            },
+            "noData": "暂无被邀请用户"
         },
         "experiencePage": {
             "title": "经验明细",

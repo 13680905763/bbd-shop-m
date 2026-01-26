@@ -171,10 +171,10 @@ export default function Settingpage() {
     );
   };
   const renderOrderContent = () => {
-    if (!orders?.length) return <EmptyState />;
+    if (!orders?.length && !isFetching) return <EmptyState />;
     return (
       <>
-        {(isFetching) && <BlockSpinner />}
+        {(isFetching || isLoading) && <BlockSpinner />}
         <div className="space-y-2 scrollbar-hide min-h-[60vh]">
           {
             orders.map((order: any) => (
@@ -206,7 +206,6 @@ export default function Settingpage() {
       </>
     );
   };
-  if (isLoading) return <FullscreenLoader />;
 
   return (
     <>
@@ -233,25 +232,18 @@ export default function Settingpage() {
       // onSelectionChange={(key) => setActiveTab(String(key))}
       >
         <Tab key="all" className="" title={t("tabs.all")}>
-          <div />
-
           <OrderPromptCard />
           {renderOrderContent()}
         </Tab>
         <Tab key="waitPay" title={t("tabs.waitPay")}>
-          <div />
           <OrderPromptCard />
           {renderOrderContent()}
         </Tab>
         <Tab key="paid" title={t("tabs.paid")}>
-          <div />
-
           <OrderPromptCard />
           {renderOrderContent()}
         </Tab>
         <Tab key="refund" title={t("tabs.refund")}>
-          <div />
-
           <OrderRefundTabContent orders={orderRefunds} />
         </Tab>
       </Tabs>

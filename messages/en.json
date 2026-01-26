@@ -645,7 +645,8 @@
                 "name": "Invited User",
                 "email": "Invited User Email",
                 "createTime": "Time"
-            }
+            },
+            "noData": "No invited users yet"
         },
         "experiencePage": {
             "title": "Experience Details",
