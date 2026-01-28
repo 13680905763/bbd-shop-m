@@ -193,7 +193,7 @@ export default function SubmitWarehouse() {
       </NavBar>
 
       {/* 内容区滚动 */}
-      <div className="flex-1 space-y-2 overflow-y-auto px-2 py-3 overflow-x-hidden">
+      <div className="flex-1 space-y-2 overflow-y-auto px-2 py-3 overflow-x-hidden scrollbar-hide">
         {/* 商品列表 */}
         <>
           <div className="text-base font-semibold">{t("commodityList")}</div>

@@ -15,6 +15,10 @@
             "missingFieldsTitle": "请填写：{fields}"
         },
         "common": {
+            "bottomAction": {
+                "selectAll": "全选",
+                "submit": "提交"
+            },
             "confirmModal": {
                 "title": "操作确认",
                 "confirm": "确认",
@@ -24,6 +28,12 @@
                 "remark": "商品备注",
                 "placeholder": "输入商品备注",
                 "noRemark": "暂无备注"
+            }
+        },
+        "block": {
+            "warehouseProductItem": {
+                "weight": "重量",
+                "size": "尺寸"
             }
         },
         "modal": {
@@ -296,13 +306,12 @@
             "cancelContent": "确定要取消此订单吗？",
             "withdrawTitle": "撤回申请",
             "withdrawContent": "确定要撤回当前申请吗？",
-            "refundTitle": "申请退款",
-            "remarkPlaceholder": "请输入备注（可选）",
-            "refundable": "可退款",
-            "unrefundable": "不可退款",
-            "noOrders": "暂无订单",
-            "selectAll": "全选",
-            "noMoreRecords": "没有更多记录",
+            "refundModal": {
+                "title": "申请退款",
+                "placeholder": "请输入备注（可选）",
+                "refundable": "可退款",
+                "unrefundable": "不可退款"
+            },
             "refundReason": "退款原因",
             "reviewReason": "审核原因",
             "refundAmount": "退款金额",
@@ -319,13 +328,7 @@
                 "all": "全部",
                 "submit": "可提交"
             },
-            "selectAll": "全选",
-            "submitPackages": "提交包裹",
-            "weight": "重量",
-            "size": "尺寸",
-            "valueAddedServices": "增值服务",
-            "noMoreRecords": "没有更多记录",
-            "noOrders": "暂无订单"
+            "sumbit": "提交包裹"
         },
         "package": {
             "title": "包裹",

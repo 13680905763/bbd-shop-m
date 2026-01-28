@@ -5,17 +5,17 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 export default function OrderPromptCard() {
-  const t = useTranslations("profile.order");
+  const t = useTranslations("profile.order.promptCard");
   const router = useRouter();
 
   return (
     <div className="mb-2 flex items-center justify-between rounded-lg bg-white p-3 shadow-sm">
       <div className="flex-1">
         <h3 className="mb-1 text-sm font-bold text-gray-900">
-          {t("promptCard.title")}
+          {t("title")}
         </h3>
         <p className="line-clamp-1 text-xs text-gray-500">
-          {t("promptCard.description")}
+          {t("description")}
         </p>
       </div>
       <Button
@@ -24,7 +24,7 @@ export default function OrderPromptCard() {
         size="sm"
         onPress={() => router.push("/profile/warehouse")}
       >
-        {t("promptCard.button")}
+        {t("button")}
       </Button>
     </div>
   );

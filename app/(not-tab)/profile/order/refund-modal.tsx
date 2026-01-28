@@ -14,7 +14,7 @@ export default function RefundModal({
   onCancel,
   isDisabled = false,
 }: any) {
-  const t = useTranslations("profile.order");
+  const t = useTranslations("profile.order.refundModal");
   const { currency } = useGlobalStore();
 
   return (
@@ -22,7 +22,7 @@ export default function RefundModal({
       isOpen
       isDismissable={true}
       isDisabledConfirm={isDisabled}
-      title={t("refundTitle")}
+      title={t("title")}
       onConfirm={async () => onSubmit()}
       onOpenChange={onCancel}
     >
@@ -119,7 +119,7 @@ export default function RefundModal({
                     input: "text-sm text-gray-800 placeholder:text-gray-400",
                   }}
                   minRows={2}
-                  placeholder={t("remarkPlaceholder")}
+                  placeholder={t("placeholder")}
                   value={product.remark || ""}
                   onChange={(e) => onRemarkChange(product.id, e.target.value)}
                 />

@@ -1,25 +1,47 @@
 import {
   keepPreviousData,
+  useInfiniteQuery,
   useMutation,
-  useQuery,
 } from "@tanstack/react-query";
 import { OrderApi } from "@/services/orderApi";
 import { queryClient } from "@/lib/react-query";
 
 export function useOrderList(params: any) {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: ["orderList", params],
-    queryFn: () => OrderApi.listOrder(params),
-    placeholderData: keepPreviousData,
-    refetchOnWindowFocus: false, // ⚠️ 禁止切回 Tab 时自动请求
+    queryFn: ({ pageParam = 1 }) => {
+      const { enabled, ...restParams } = params;
+      return OrderApi.listOrder({
+        ...restParams,
+        current: pageParam,
+      });
+    },
+    getNextPageParam: (lastPage: any) => {
+      const loaded = lastPage.current * (params.size || 10);
+      return loaded < lastPage.total ? lastPage.current + 1 : undefined;
+    },
+    initialPageParam: 1,
+    refetchOnWindowFocus: false,
+    enabled: params.enabled !== false,
   });
 }
 export function useRefundOrderList(params: any) {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: ["refundOrderList", params],
-    queryFn: () => OrderApi.listRefundOrder(params),
-    placeholderData: keepPreviousData,
+    queryFn: ({ pageParam = 1 }) => {
+      const { enabled, ...restParams } = params;
+      return OrderApi.listRefundOrder({
+        ...restParams,
+        current: pageParam,
+      });
+    },
+    getNextPageParam: (lastPage: any) => {
+      const loaded = lastPage.current * lastPage.size;
+      return loaded < lastPage.total ? lastPage.current + 1 : undefined;
+    },
+    initialPageParam: 1,
     refetchOnWindowFocus: false, // ⚠️ 禁止切回 Tab 时自动请求
+    enabled: params.enabled !== false,
   });
 }
 export function useCancelOrder() {

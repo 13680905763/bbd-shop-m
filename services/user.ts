@@ -124,8 +124,8 @@ export const getExperience = (): Promise<any> => {
   return request.get(`/customer-experience/myExperience`);
 };
 /** 获取积分列表 */
-export const getPointsList = (current: number, size: number): Promise<any> => {
-  return request.get(`/customer-points-detail?current=${current}&size=${size}`);
+export const getPointsList = (params: any): Promise<any> => {
+  return request.post(`/customer-points-detail`, params);
 };
 /** 获取经验列表 */
 export const getExperienceList = (): Promise<any> => {

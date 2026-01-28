@@ -1,11 +1,10 @@
-import { Image } from "@heroui/react";
 import { useTranslations } from "next-intl";
 
 import { useGlobalStore } from "@/store";
 import SourceIcon from "@/components/common/source-icon";
 import { ProductItem } from "@/components/common";
 
-export default function OrderRefundItem({ order }: any) {
+export default function RefundOrderItem({ order }: any) {
   const t = useTranslations("profile.order"); // ✅ 命名空间
 
   const { currency } = useGlobalStore();
@@ -26,17 +25,17 @@ export default function OrderRefundItem({ order }: any) {
       <ProductItem product={order} key={order?.id} />
 
       {/* 底部信息（退款部分） */}
-      <div className=" space-y-1 border-t pt-3 text-xs text-gray-600">
+      <div className=" space-y-1 text-sm text-gray-600">
         <div className="flex justify-between">
-          <span className="w-[180px]">{t("refundReason")}</span>
+          <span className="w-[200px]">{t("refundReason")}</span>
           <span className="break-words ellipsis line-clamp-2">{order.applyRemark || "--"}</span>
         </div>
         <div className="flex justify-between">
-          <span className="w-[180px]">{t("reviewReason")}</span>
+          <span className="w-[200px]">{t("reviewReason")}</span>
           <span className="break-words ellipsis line-clamp-2">{order.handleRemark || "--"}</span>
         </div>
         <div className="flex justify-between">
-          <span className="w-[180px]">{t("refundAmount")}</span>
+          <span className="w-[200px]">{t("refundAmount")}</span>
           <span>
             {currency.symbol}
             {order.refundAmount || 0}

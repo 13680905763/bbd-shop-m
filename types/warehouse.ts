@@ -1,6 +1,6 @@
 import { OrderProduct } from "./order";
 export interface WarehousePackageListParams {
-  current: number;
+  current?: number;
   size: number;
   statusCode?: string;
 }

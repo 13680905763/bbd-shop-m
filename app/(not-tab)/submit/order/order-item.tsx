@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import SourceIcon from "@/components/common/source-icon";
 import { useGlobalStore } from "@/store";
 import { ProductItem } from "@/components/common";
+import React from "react";
 
 export default function OrderItem({ order, openServiceModal }: any) {
   const t = useTranslations("submit.order");
@@ -19,7 +20,7 @@ export default function OrderItem({ order, openServiceModal }: any) {
         <div className="text-title">{order?.shopName}</div>
       </div>
       {order.products.map((product: any) => (
-        <div key={product?.cartId}>
+        <React.Fragment key={product?.cartId}>
           <ProductItem product={product} />
           <div className="rounded-lg bg-[#f8f8f8] p-2">
             <div className="flex items-center justify-between">
@@ -58,16 +59,16 @@ export default function OrderItem({ order, openServiceModal }: any) {
               </Button>
             </div>
           </div>
-        </div>
+        </React.Fragment>
       ))}
 
-      <div className="mt-2 text-right">
+      <div className=" text-right">
         <div>
           {t("shippingFee")}
           {currency.symbol}
           {order?.postFee}
         </div>
-        <div>wwwwwwwwww
+        <div>
           {t("serviceFee")}
           {currency.symbol}
           {order?.serviceFee}

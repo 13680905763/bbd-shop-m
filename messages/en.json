@@ -15,6 +15,10 @@
             "missingFieldsTitle": "Please fill in: {fields}"
         },
         "common": {
+            "bottomAction": {
+                "selectAll": "Select All",
+                "submit": "Submit"
+            },
             "confirmModal": {
                 "title": "Operation Confirmation",
                 "confirm": "Confirm",
@@ -24,6 +28,12 @@
                 "remark": "Product Remarks",
                 "placeholder": "Enter product remarks",
                 "noRemark": "No remarks"
+            }
+        },
+        "block": {
+            "warehouseProductItem": {
+                "weight": "Poids",
+                "size": "Dimensions"
             }
         },
         "modal": {
@@ -296,13 +306,12 @@
             "cancelContent": "Are you sure you want to cancel this order?",
             "withdrawTitle": "Withdraw Request",
             "withdrawContent": "Are you sure you want to withdraw this request?",
-            "refundTitle": "Request Refund",
-            "remarkPlaceholder": "Please enter remarks (optional)",
-            "refundable": "Refundable",
-            "unrefundable": "Non-refundable",
-            "noOrders": "No Orders",
-            "selectAll": "Select All",
-            "noMoreRecords": "No More Records",
+            "refundModal": {
+                "title": "Request Refund",
+                "placeholder": "Please enter remarks (optional)",
+                "refundable": "Refundable",
+                "unrefundable": "Non-refundable"
+            },
             "refundReason": "Refund Reason",
             "reviewReason": "Review Reason",
             "refundAmount": "Refund Amount",
@@ -314,18 +323,12 @@
             }
         },
         "warehouse": {
-            "title": "Warehouse",
+            "title": "Entrepôt",
             "tabs": {
-                "all": "All",
-                "submit": "Submittable Packages"
+                "all": "Toutes",
+                "submit": "Soumettable"
             },
-            "selectAll": "Select All",
-            "submitPackages": "Submit Packages",
-            "weight": "Weight",
-            "size": "Size",
-            "valueAddedServices": "Value Added Services",
-            "noMoreRecords": "No More Records",
-            "noOrders": "No Orders"
+            "submit": "Soumettre les colis"
         },
         "package": {
             "title": "Packages",

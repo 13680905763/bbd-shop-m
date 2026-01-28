@@ -6,12 +6,10 @@ export * from "./addresses/useAddressList";
 export * from "./addresses/useBillingAddressActions";
 export * from "./addresses/useBillingAddress";
 export * from "./addresses/useAreaSelector";
-export * from "./order/useOrderList";
 export * from "./order/useOrderPreview";
 export * from "./order/useServices";
 
 export * from "./pay/usePaymentMethodList";
-export * from "./warehouse/useWarehouseList";
 export * from "./warehouse/useWarehousePreview";
 export * from "./warehouse/useWarehouseServices";
 

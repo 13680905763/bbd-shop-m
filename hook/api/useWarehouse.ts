@@ -1,14 +1,23 @@
-import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 
 import { warehouseApi } from "@/services/warehouseApi";
 import { WarehousePackageListParams } from "@/types/warehouse";
 import { queryClient } from "@/lib/react-query";
 
 export function useWarehousePackageList(params: WarehousePackageListParams) {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: ["warehousePackageList", params],
-    queryFn: () => warehouseApi.listPackages(params),
-    placeholderData: keepPreviousData, //分页 / 参数变化时，先用“上一次的数据”占位，避免 UI 闪烁
+    queryFn: ({ pageParam = 1 }) => {
+      return warehouseApi.listPackages({
+        ...params,
+        current: pageParam,
+      });
+    },
+    getNextPageParam: (lastPage: any) => {
+      const loaded = lastPage.current * lastPage.size;
+      return loaded < lastPage.total ? lastPage.current + 1 : undefined;
+    },
+    initialPageParam: 1,
     refetchOnWindowFocus: false, //  禁止切回 Tab 时自动请求
   });
 }

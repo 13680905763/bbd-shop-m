@@ -1,12 +1,5 @@
 import { request, requestWithOption } from "./request";
 
-/** 仓库列表 */
-export const getWarehouseList = (data: any) =>
-  request.post("/waybill/package/page", data);
-/** 创建结算包裹预览key */
-export const createWarehousePreviewKeyByCart = (data: any): Promise<string> => {
-  return request.post("/waybill/preview/init", data);
-};
 /** 包裹结算订单预览 */
 export const getWarehousePreview = (key: string): Promise<any> =>
   request.get("/waybill/preview/key?key=" + key);

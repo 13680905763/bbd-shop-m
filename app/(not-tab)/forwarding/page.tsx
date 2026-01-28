@@ -18,12 +18,17 @@ import { useGlobalStore } from "@/store";
 import { createCustomizeOrder, getServicesList } from "@/services";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
 import CommonModal from "@/components/modal/common-modal";
+import { useUserInfo } from "@/hook";
+import { CopyText } from "@/components/ui";
+import { IoCopyOutline } from "react-icons/io5";
 
 export default function ForwardingPage() {
   const t = useTranslations("forwardingPage");
   const [isLoading, setIsLoading] = useState(false);
 
   const { currency } = useGlobalStore();
+  const { data: user, error } = useUserInfo();
+
 
   const [servicesList, setServicesList] = useState([]);
   const [acceptAgreement, setAcceptAgreement] = useState(false);
@@ -81,7 +86,7 @@ export default function ForwardingPage() {
             remark: item.remark,
           };
         }),
-      receiver: "Bryant-4-Bryant",
+      receiver: `代发-${user?.nickName || ""}`,
       receivePhone: "13602579223",
       receiveAddress: "中国广东省惠州市水口街道荔城工业园胜豪科技大厦8A-801",
     };
@@ -93,7 +98,7 @@ export default function ForwardingPage() {
       if (bizCode) {
         router.push("/payment/" + bizCode);
       } else {
-        router.push("/dashboard/order");
+        router.push("/profile/order");
       }
     } catch (err) {
       console.error("创建失败:", err);
@@ -116,11 +121,11 @@ export default function ForwardingPage() {
       prev.map((s: any) =>
         s.id === currentService.id
           ? {
-              ...s,
-              remark: currentService?.remark,
-              isCheck: true,
-              quantity: currentService?.quantity,
-            }
+            ...s,
+            remark: currentService?.remark,
+            isCheck: true,
+            quantity: currentService?.quantity,
+          }
           : s,
       ),
     );
@@ -163,16 +168,20 @@ export default function ForwardingPage() {
             <p className="mb-3 text-lg font-semibold">
               {t("warehouseAddress")}
             </p>
-            <Snippet
-              classNames={{
-                pre: "break-words whitespace-pre-line text-base text-gray-700",
-              }}
-              symbol=""
-            >
-              <span>Bryant-4-Bryant</span>
-              <span>15916408071</span>
-              <span>广东省惠州市惠城区水口荔枝城青创产业园9楼901</span>
-            </Snippet>
+
+            <div className="relative w-full bg-[#f4f4f5] rounded-large p-4 text-sm font-mono text-default-600">
+              <div className="flex flex-col gap-1">
+                <span>{`代发-${user?.nickName || ""}`}</span>
+                <span>15916408071</span>
+                <span>广东省惠州市惠城区水口荔枝城青创产业园9楼901</span>
+              </div>
+              <CopyText
+                className="absolute top-3 right-3 text-default-400 hover:text-default-700 transition-colors p-1 rounded-md hover:bg-default-100"
+                text={`代发-${user?.nickName || ""}\n15916408071\n广东省惠州市惠城区水口荔枝城青创产业园9楼901`}
+              >
+                <IoCopyOutline size={18} />
+              </CopyText>
+            </div>
           </div>
 
           {/* 包裹信息 */}

@@ -14,7 +14,17 @@
             "cancel": "Annuler",
             "missingFieldsTitle": "Veuillez remplir : {fields}"
         },
+        "block": {
+            "warehouseProductItem": {
+                "weight": "Masse",
+                "size": "Dimensions"
+            }
+        },
         "common": {
+            "bottomAction": {
+                "selectAll": "Tout sélectionner",
+                "submit": "Soumettre"
+            },
             "confirmModal": {
                 "title": "Confirmation de l'opération",
                 "confirm": "Confirmer",
@@ -281,51 +291,44 @@
             "title": "Mes Commandes",
             "tabs": {
                 "all": "Toutes",
-                "waitPay": "En attente de paiement",
-                "paid": "Payées",
+                "waitPay": "À payer",
+                "paid": "Payée",
                 "refund": "Remboursements"
             },
             "buttons": {
                 "pay": "Payer",
-                "cancel": "Annuler la commande",
-                "batchPay": "Paiement groupé",
-                "withdraw": "Retirer la demande",
-                "refund": "Demander un remboursement"
+                "cancel": "Annuler",
+                "batchPay": "Payer en lot",
+                "withdraw": "Se rétracter",
+                "refund": "Remboursement"
             },
-            "cancelTitle": "Annuler la commande",
-            "cancelContent": "Êtes-vous sûr de vouloir annuler cette commande?",
-            "withdrawTitle": "Retirer la demande",
-            "withdrawContent": "Êtes-vous sûr de vouloir retirer cette demande?",
-            "refundTitle": "Demander un remboursement",
-            "remarkPlaceholder": "Veuillez saisir des remarques (optionnel)",
-            "refundable": "Remboursable",
-            "unrefundable": "Non remboursable",
-            "noOrders": "Aucune commande",
-            "selectAll": "Tout sélectionner",
-            "noMoreRecords": "Aucun autre enregistrement",
-            "refundReason": "Motif du remboursement",
-            "reviewReason": "Motif de la vérification",
-            "refundAmount": "Montant du remboursement",
-            "reviewTime": "Date de vérification",
+            "cancelTitle": "Annulation commande",
+            "cancelContent": "Confirmez-vous l'annulation?",
+            "withdrawTitle": "Rétractation",
+            "withdrawContent": "Confirmez-vous la rétractation?",
+            "refundModal": {
+                "title": "Demande de remboursement",
+                "placeholder": "Remarques (optionnel)",
+                "refundable": "Remboursable",
+                "unrefundable": "Non remboursable"
+            },
+            "refundReason": "Motif remboursement",
+            "reviewReason": "Motif vérification",
+            "refundAmount": "Montant remboursé",
+            "reviewTime": "Date vérification",
             "promptCard": {
-                "title": "Contrôle QC & Gestion des colis",
-                "description": "Veuillez accéder à la page entrepôt pour voir les photos de contrôle et soumettre les colis",
-                "button": "Aller à l'entrepôt"
+                "title": "QC & Gestion des colis",
+                "description": "Accédez à l'entrepôt pour les photos QC et soumission des colis",
+                "button": "Vers l'entrepôt"
             }
         },
         "warehouse": {
             "title": "Entrepôt",
             "tabs": {
-                "all": "Tous",
-                "submit": "Colis soumissibles"
+                "all": "Tous les colis",
+                "submit": "À soumettre"
             },
-            "selectAll": "Tout sélectionner",
-            "submitPackages": "Soumettre les colis",
-            "weight": "Poids",
-            "size": "Taille",
-            "valueAddedServices": "Services à valeur ajoutée",
-            "noMoreRecords": "Plus d'enregistrements",
-            "noOrders": "Aucune commande"
+            "submit": "Soumettre les colis"
         },
         "package": {
             "title": "Colis",

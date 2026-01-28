@@ -11,18 +11,22 @@ import { useGlobalStore } from "@/store";
 
 export default function PackageItem({
   pack,
-  activeTab,
-  onChange,
-  selected,
-  onCancelPackage,
-  onRevokePackage,
-  onChangePackageLine,
-  onPayPackageRedirect,
-  onLine,
-  onReceiptPackage,
+  showCheckbox,
+  onSelect,
+  isSelected,
+  onCancel,
+  onRevoke,
+  onChangeLine,
+  onPay,
+  onTrack,
+  onReceipt,
 }: any) {
   const t = useTranslations("profile.package");
   const { currency } = useGlobalStore();
+  const [isCancelLoading, setIsCancelLoading] = useState(false);
+  const [isChangeLoading, setIsChangeLoading] = useState(false);
+  const [isTrackLoading, setIsTrackLoading] = useState(false);
+  const [isPayLoading, setIsPayLoading] = useState(false);
   const [startIndex, setStartIndex] = useState(0);
 
   const [visible, setVisible] = useState(false);
@@ -44,18 +48,17 @@ export default function PackageItem({
   console.log("filled", filled);
 
   return (
-    <div className="mb-4 rounded-xl border border-gray-100 bg-white p-3 shadow-sm">
-      {/* 顶部：订单号 + 下单时间 */}
-      <div className="flex items-center justify-between border-gray-100">
+    <div className="rounded-xl  bg-white p-3  space-y-2">
+      <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-sm font-medium text-gray-800">
-          {activeTab === "pay" && (
+          {showCheckbox && (
             <Checkbox
               classNames={{
                 base: "p-0 m-0",
                 wrapper: "m-0",
               }}
-              isSelected={selected}
-              onChange={onChange}
+              isSelected={isSelected(pack?.packingPackageCode)}
+              onChange={() => onSelect(pack?.packingPackageCode)}
             />
           )}
           <div className="font-semibold">
@@ -67,9 +70,8 @@ export default function PackageItem({
           {pack?.status}
         </div>
       </div>
-
       {/* 包裹商品列表 */}
-      <div className="my-3 flex gap-3">
+      <div className="flex gap-3">
         <div
           className={`grid h-[120px] w-[120px] gap-1`}
           role="button"
@@ -119,17 +121,33 @@ export default function PackageItem({
               {pack?.length} × {pack?.width} × {pack?.height} cm
             </div>
             <div className="flex flex-col text-sm text-gray-600">
+              <p>{pack?.shipping?.methodCode}</p>
               <p>{pack?.shipping?.templateName}</p>
-              {/* 物流信息 */}
+              {pack?.shipping?.shippingCode && (
+                <Button
+                  className="text-[#f0700c] border-[#f0700c] border bg-[#fff]"
+                  size="sm"
+                  isLoading={isTrackLoading}
+                  onPress={async () => {
+                    setIsTrackLoading(true);
+                    await onTrack(pack);
+                    setIsTrackLoading(false);
+                  }}
+                >
+                  <FiSearch
+                    size={14}
+                  />
+                  {pack.shipping.shippingCode}
+                </Button>
+              )}
             </div>
-            {pack?.shipping?.shippingCode && (
+            {/* {pack?.shipping?.shippingCode && (
               <button
                 className="inline-flex cursor-pointer items-center gap-1 rounded-lg px-1 py-0.5 text-sm text-gray-600 hover:text-gray-800"
                 onClick={onLine}
               >
                 <FiSearch className="text-gray-500" size={16} />
 
-                {/* 文本两行 */}
                 <div className="flex flex-col text-sm leading-tight">
                   <span className="text-left text-xs text-gray-500">
                     {t("shippingCode")}
@@ -141,27 +159,29 @@ export default function PackageItem({
 
                 <FiChevronRight className="text-gray-400" size={16} />
               </button>
-            )}
+            )} */}
           </div>
         </div>
       </div>
-
       {/* 服务列表 */}
-      <div className="flex flex-col gap-2 rounded-lg bg-[#fafafa] p-2">
-        {pack?.serviceList.map((service: any) => (
-          <div key={service.serviceId} className="flex gap-2">
-            <div className="text-sm text-[#acacac]">{service.serviceName}</div>
-            <MediaPreviewGroup fileList={service.fileList as MediaItem[]} />
+      {
+        pack?.serviceList?.length > 0 && (
+          <div className="flex flex-col gap-2 rounded-lg bg-[#fafafa] p-2">
+            {pack?.serviceList.map((service: any) => (
+              <div key={service.serviceId} className="flex gap-2">
+                <div className="text-sm text-[#acacac]">{service.serviceName}</div>
+                <MediaPreviewGroup fileList={service.fileList as MediaItem[]} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-
+        )
+      }
       {/* 金额 + 按钮 */}
       <div className="text-right text-base font-bold text-gray-700">
         <p>
           {t("serviceFee")}
           {currency.symbol}
-          {pack?.totalServiceFee}
+          {pack?.totalServiceFee || 0}
         </p>
         <p>
           {t("totalFee")}
@@ -169,15 +189,18 @@ export default function PackageItem({
           {pack?.totalFee}
         </p>
       </div>
-
       <div className="flex justify-end gap-1">
-        {/* 状态：申请取消 */}
         {pack?.cancelFlag && (
           <Button
             radius="sm"
             size="sm"
             variant="flat"
-            onPress={onCancelPackage}
+            isLoading={isCancelLoading}
+            onPress={async () => {
+              setIsCancelLoading(true);
+              await onCancel(pack);
+              setIsCancelLoading(false);
+            }}
           >
             {t("buttons.cancel")}
           </Button>
@@ -189,7 +212,7 @@ export default function PackageItem({
             radius="sm"
             size="sm"
             variant="flat"
-            onPress={onRevokePackage}
+            onPress={() => onRevoke(pack?.id)}
           >
             {t("buttons.withdraw")}
           </Button>
@@ -197,11 +220,16 @@ export default function PackageItem({
         {/* 状态：更换路线 */}
         {pack?.changeFlag && (
           <Button
-            color="success"
+            className="text-[#f0700c] border-[#f0700c] border bg-[#fff]"
             radius="sm"
             size="sm"
             variant="flat"
-            onPress={onChangePackageLine}
+            isLoading={isChangeLoading}
+            onPress={async () => {
+              setIsChangeLoading(true);
+              await onChangeLine(pack);
+              setIsChangeLoading(false);
+            }}
           >
             {t("buttons.change")}
           </Button>
@@ -212,9 +240,13 @@ export default function PackageItem({
             color="primary"
             radius="sm"
             size="sm"
-            onPress={onPayPackageRedirect}
+            isLoading={isPayLoading}
+            onPress={async () => {
+              setIsPayLoading(true);
+              await onPay([pack?.packingPackageCode]);
+              setIsPayLoading(false);
+            }}
           >
-            {/* {t("changeBtn")} */}
             {pack?.statusCode == 203
               ? t("buttons.pay")
               : t("buttons.payCancel")}
@@ -226,7 +258,7 @@ export default function PackageItem({
             color="primary"
             radius="sm"
             size="sm"
-            onPress={onReceiptPackage}
+            onPress={() => onReceipt(pack?.id)}
           >
             {t("buttons.receipt")}
           </Button>

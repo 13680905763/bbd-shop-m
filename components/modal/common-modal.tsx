@@ -50,7 +50,7 @@ export default function CommonModal({
   cancelText,
   isDisabledConfirm = false,
   size = "md",
-  isDismissable = true,
+  isDismissable = false,
   isKeyboardDismissDisabled = false,
 
 }: CommonModalProps) {
@@ -87,7 +87,7 @@ export default function CommonModal({
       <ModalContent>
         <>
           {title && <ModalHeader>{title}</ModalHeader>}
-          <ModalBody className="max-h-[70vh] overflow-y-auto">
+          <ModalBody className="max-h-[70vh] overflow-y-auto scrollbar-hide">
             {children}
           </ModalBody>
           <ModalFooter>

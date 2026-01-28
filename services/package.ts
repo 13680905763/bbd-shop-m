@@ -25,15 +25,7 @@ export const refundPayPackage = (id: string): Promise<any> => {
     { showToast: true },
   );
 };
-/** 包裹撤销取消 */
-export const withdrawPayPackage = (id: string): Promise<any> => {
-  return request.put(`/waybill/cancel/withdraw/${id}`);
 
-  // return requestWithOption(
-  //   { url: `/waybill/cancel/withdraw/${id}`, method: "put" },
-  //   { showToast: true },
-  // );
-};
 /** 包裹更换路线预览 */
 
 export const changePrePayPackage = (id: string): Promise<any> => {
