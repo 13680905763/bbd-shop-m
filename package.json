@@ -27,6 +27,7 @@
     "@react-aria/visually-hidden": "3.8.22",
     "@react-oauth/google": "^0.12.2",
     "@tanstack/react-query": "^5.81.5",
+    "ahooks": "^3.9.6",
     "antd-mobile": "^5.39.0",
     "axios": "^1.9.0",
     "clsx": "2.1.1",

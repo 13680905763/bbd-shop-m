@@ -27,6 +27,8 @@ export interface ConfirmOptions {
   type?: "default" | "danger" | "warning"; // 增加类型支持
   onConfirm?: () => Promise<void> | void;
   onCancel?: () => void;
+  showCancel?: boolean; // 新增控制是否显示取消按钮的选项
+  showConfirm?: boolean; // 新增控制是否显示确认按钮的选项
   isLoading?: boolean; // 外部控制 loading
 }
 
@@ -50,6 +52,8 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
   const resolveRef = useRef<(value: boolean) => void>(() => { });
 
   const confirm = useCallback((opts: ConfirmOptions) => {
+    opts.showCancel = opts.showCancel ?? true;
+    opts.showConfirm = opts.showConfirm ?? true;
     setOptions(opts);
     setIsOpen(true);
 
@@ -132,13 +136,17 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
                   >
                     {options.cancelText || t("cancel")}
                   </Button>
-                  <Button
-                    color={getButtonColor(options.type)}
-                    isLoading={loading || options.isLoading}
-                    onPress={handleConfirm}
-                  >
-                    {options.confirmText || t("confirm")}
-                  </Button>
+                  {
+                    options.showConfirm && (
+                      <Button
+                        color={getButtonColor(options.type)}
+                        isLoading={loading || options.isLoading}
+                        onPress={handleConfirm}
+                      >
+                        {options.confirmText || t("confirm")}
+                      </Button>
+                    )
+                  }
                 </ModalFooter>
               </>
             )}

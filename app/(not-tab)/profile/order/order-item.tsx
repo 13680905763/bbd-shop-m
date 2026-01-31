@@ -1,6 +1,4 @@
 import { Button, Checkbox } from "@heroui/react";
-import { useRouter } from "next/navigation";
-import { Image } from "@heroui/react";
 import { useTranslations } from "next-intl";
 
 import { useGlobalStore } from "@/store";
@@ -8,6 +6,7 @@ import SourceIcon from "@/components/common/source-icon";
 import CopyButton from "@/components/common/copy-button";
 import { ProductItem } from "@/components/common";
 import React from "react";
+import RefundCountdown from "@/components/ui/refund-countdown";
 
 export default function OrderItem({
   order,
@@ -123,6 +122,7 @@ export default function OrderItem({
         {order?.canRefundFlag && (
           <Button color="primary" radius="sm" size="sm" onPress={() => onRefund(order)}>
             {t("refund")}
+            {order?.refundTimeStamp && <RefundCountdown timestamp={order?.refundTimeStamp} />}
           </Button>
         )}
       </div>

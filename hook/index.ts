@@ -18,5 +18,4 @@ export * from "./goods/useGoodsSearchList";
 export * from "./goods/useHistory";
 export * from "./goods/useFavorite";
 
-export * from "./message/useMessageList";
 export * from "./useSelection";

@@ -9,4 +9,8 @@ export const configApi = {
     getBonusConfig(): Promise<any> {
         return request.get(`/promotion-config?configType=EXPERIENCE`);
     },
+    /** 获取积分兑换优惠券列表 */
+    listCoupons(): Promise<any[]> {
+        return request.get("/coupon");
+    },
 };

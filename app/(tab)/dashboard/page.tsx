@@ -123,10 +123,10 @@ export default function DashBoard() {
           <div className="my-1 text-sm font-bold">{t("coupon.title")}</div>
           <div className="text-xs">{t("coupon.available")}</div>
         </div>
-        <div className="flex items-center gap-2">
+        <button className="flex items-center gap-2" onClick={() => router.push("/wallet/coupon")}>
           <span>{t("coupon.viewAll")}</span>
           <IoChevronForwardSharp />
-        </div>
+        </button>
       </div>
 
       <div className="home-card grid grid-cols-3">

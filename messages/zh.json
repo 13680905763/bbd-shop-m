@@ -1,9 +1,32 @@
 {
     "components": {
         "ui": {
+            "coupon": {
+                "minSpend": "满{amount}可用",
+                "discount": "优惠",
+                "restriction": "限制",
+                "shippingExcludingCustoms": "运费（不含关税）",
+                "usage": "用途",
+                "internationalPackage": "国际包裹",
+                "countries": "地区",
+                "all": "全部国家",
+                "redeem": "兑换",
+                "type": "类型",
+                "validity": "有效期",
+                "days": "天",
+                "points": "积分",
+                "src": "来源"
+            },
             "copy": {
                 "success": "复制成功",
                 "fail": "复制失败"
+            },
+            "refundCountdown": {
+                "day": "天",
+                "hour": "时",
+                "minute": "分",
+                "second": "秒",
+                "expired": "已过期"
             },
             "empty": {
                 "desc": "暂无数据"
@@ -243,7 +266,13 @@
         "coupon": {
             "title": "我的优惠券",
             "available": "0张可用优惠券",
-            "viewAll": "查看全部"
+            "viewAll": "查看全部",
+            "tabs": {
+                "all": "全部",
+                "unused": "可用",
+                "used": "已用",
+                "expired": "过期"
+            }
         },
         "menuOrder": "购买订单",
         "menuWarehouse": "我的仓库",
@@ -463,13 +492,11 @@
         },
         "points": {
             "title": "积分",
-            "myPoints": "我的积分",
-            "pointsDetail": "积分明细",
-            "pointsExchange": "积分兑换",
-            "bizType": "类型",
-            "createTime": "时间",
-            "amount": "数量",
-            "noMoreRecords": "没有更多记录"
+            "tabs": {
+                "detail": "积分明细",
+                "change": "积分兑换"
+            },
+            "myPoints": "我的积分"
         }
     },
     "goods": {

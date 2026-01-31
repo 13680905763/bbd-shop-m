@@ -1,12 +1,35 @@
 {
     "components": {
         "ui": {
+            "coupon": {
+                "minSpend": "Dépense min. {amount}",
+                "discount": "DE RÉDUCTION",
+                "restriction": "Limite",
+                "shippingExcludingCustoms": "Frais de port (hors douane)",
+                "usage": "Usage",
+                "internationalPackage": "Colis international",
+                "countries": "Région",
+                "all": "Tous les pays",
+                "redeem": "Échanger",
+                "validity": "Validité",
+                "days": "{count} Jours",
+                "points": "Points",
+                "src": "Source",
+                "type": "Type"
+            },
             "copy": {
                 "success": "Copy success",
                 "fail": "Copy fail"
             },
+            "refundCountdown": {
+                "day": "jour",
+                "hour": "h",
+                "minute": "min",
+                "second": "sec",
+                "expired": "Expiré"
+            },
             "empty": {
-                "desc": "No data available"
+                "desc": "Aucune donnée disponible"
             }
         },
         "form": {
@@ -241,9 +264,15 @@
         "balance": "Solde",
         "points": "Points",
         "coupon": {
-            "title": "Mes coupons",
+            "title": "Mes Coupons",
             "available": "0 coupons disponibles",
-            "viewAll": "Voir tout"
+            "viewAll": "Voir tout",
+            "tabs": {
+                "all": "Tous",
+                "unused": "Disponible",
+                "used": "Utilisé",
+                "expired": "Expiré"
+            }
         },
         "menuOrder": "Commandes",
         "menuWarehouse": "Entrepôt",
@@ -463,13 +492,11 @@
         },
         "points": {
             "title": "Points",
-            "myPoints": "Points",
-            "pointsDetail": "Détails des points",
-            "pointsExchange": "Échange de points",
-            "bizType": "Type",
-            "createTime": "Heure",
-            "amount": "Montant",
-            "noMoreRecords": "Plus d'enregistrements"
+            "tabs": {
+                "detail": "Détails des points",
+                "change": "Échange de points"
+            },
+            "myPoints": "Points"
         }
     },
     "goods": {

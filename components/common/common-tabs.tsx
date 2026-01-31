@@ -25,9 +25,9 @@ export default function CommonTabs({
         base: "w-full bg-white p-1 flex-1 max-h-[48px]",
         tabList: "gap-6 w-full relative rounded-none p-0 justify-center",
         tab: "px-0 h-12 flex-1",
-        cursor: "h-0",
+        cursor: "w-full bg-[#f0700c] z-999 ",
         tabContent: "group-data-[selected=true]:text-[#f0700c] font-bold",
-        panel: "bg-[#f7f8f9] px-2 flex-1 overflow-auto scrollbar-hide",
+        panel: "bg-[#f7f8f9] px-2 flex-1 overflow-auto scrollbar-hide mt-2 pt-0",
       }}
       defaultSelectedKey={defaultSelectedKey}
       variant="underlined"

@@ -1,9 +1,32 @@
 {
     "components": {
         "ui": {
+            "coupon": {
+                "minSpend": "Min Spend {amount}",
+                "discount": "OFF",
+                "restriction": "Limit",
+                "shippingExcludingCustoms": "Shipping fee (excl. Customs fee)",
+                "usage": "Usage",
+                "internationalPackage": "International Package",
+                "countries": "Region",
+                "all": "All Countries",
+                "redeem": "Redeem",
+                "validity": "Validity",
+                "days": "{count} Days",
+                "points": "Points",
+                "src": "Source",
+                "type": "Type"
+            },
             "copy": {
                 "success": "Copy success",
                 "fail": "Copy fail"
+            },
+            "refundCountdown": {
+                "day": "d",
+                "hour": "h",
+                "minute": "m",
+                "second": "s",
+                "expired": "Expired"
             },
             "empty": {
                 "desc": "No data available"
@@ -243,7 +266,13 @@
         "coupon": {
             "title": "My Coupons",
             "available": "0 coupons available",
-            "viewAll": "View All"
+            "viewAll": "View All",
+            "tabs": {
+                "all": "All",
+                "unused": "Available",
+                "used": "Used",
+                "expired": "Expired"
+            }
         },
         "menuOrder": "Purchase Orders",
         "menuWarehouse": "My Warehouse",
@@ -463,13 +492,12 @@
         },
         "points": {
             "title": "Points",
-            "myPoints": "Points",
-            "pointsDetail": "Points Details",
-            "pointsExchange": "Points Exchange",
-            "bizType": "Type",
-            "createTime": "Time",
-            "amount": "Amount",
-            "noMoreRecords": "No more records"
+            "tabs": {
+                "detail": "Points Details",
+                "change": "Points Exchange"
+            },
+            "myPoints": "Points"
+       
         }
     },
     "goods": {

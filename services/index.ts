@@ -6,5 +6,6 @@ export * from "./user";
 export * from "./pay";
 export * from "./warehouse";
 export * from "./package";
+export * from "./messageApi";
 export * from "./config";
 export * from "./chat";

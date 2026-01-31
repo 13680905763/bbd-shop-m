@@ -19,3 +19,10 @@ export const useBonusConfig = () => {
         refetchOnReconnect: true, // 网络恢复自动更新
     });
 };
+export const useCouponsConfig = () => {
+    return useQuery({
+        queryKey: ["couponsConfig"],
+        queryFn: () => configApi.listCoupons(),
+        staleTime: 10 * 60 * 100 * 1000, // 10 秒内认为是新鲜的
+    });
+};
