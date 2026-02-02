@@ -1,13 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { NavBar, Image } from "antd-mobile";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { Accordion, AccordionItem } from "@heroui/react";
 
 import { CopyText } from "@/components/ui";
 import { useBonusConfig, useUserExperience, useUserInfo } from "@/hook/api";
 import { useGlobalStore } from "@/store";
-import { Accordion, AccordionItem } from "@heroui/react";
 
 export default function Promotion() {
   const t = useTranslations("promotion");
@@ -15,14 +15,12 @@ export default function Promotion() {
   const { currency } = useGlobalStore();
 
   const { data: user, isLoading, error } = useUserInfo();
-  const { data: experience, isLoading: isLoadingExperience } = useUserExperience();
-  const { data: bonusConfig, isLoading: isLoadingBonusConfig } = useBonusConfig();
+  const { data: experience, isLoading: isLoadingExperience } =
+    useUserExperience();
+  const { data: bonusConfig, isLoading: isLoadingBonusConfig } =
+    useBonusConfig();
 
-  const process = [
-    t("process1"),
-    t("process2"),
-    t("process3"),
-  ]
+  const process = [t("process1"), t("process2"), t("process3")];
   const faq = [
     {
       question: t("question1"),
@@ -36,7 +34,7 @@ export default function Promotion() {
       question: t("question3"),
       answer: t("answer3"),
     },
-  ]
+  ];
 
   return (
     <>
@@ -45,7 +43,7 @@ export default function Promotion() {
       </NavBar>
       <div className="flex-1 overflow-auto scrollbar-hide">
         <Image src="/m/images/promotion.png" />
-        <div className="p-2 space-y-2">
+        <div className="space-y-2 p-2">
           <div className="relative mx-auto mb-[0.625rem] flex w-[16.25rem] items-center justify-between after:absolute after:z-[1] after:w-full after:border-b after:border-dashed after:border-[#c92910] after:content-['']">
             {process.map((item, idx) => (
               <div
@@ -67,9 +65,9 @@ export default function Promotion() {
             ))}
           </div>
 
-          <div className="rounded-xl bg-white flex flex-col items-center gap-2 p-2">
-            <div className="w-full py-2.5 px-4 bg-[#f4f4f5] rounded-xl text-[#11181C] flex items-center justify-between cursor-pointer hover:bg-[#e4e4e7] transition-colors">
-              <span className="font-mono text-sm break-all">
+          <div className="flex flex-col items-center gap-2 rounded-xl bg-white p-2">
+            <div className="flex w-full cursor-pointer items-center justify-between rounded-xl bg-[#f4f4f5] px-4 py-2.5 text-[#11181C] transition-colors hover:bg-[#e4e4e7]">
+              <span className="break-all font-mono text-sm">
                 {`https://www.bbdbuy1.com/register?inviteCode=${user?.inviteCode || ""}`}
               </span>
             </div>
@@ -77,7 +75,7 @@ export default function Promotion() {
               className="w-full"
               text={`https://www.bbdbuy1.com/register?inviteCode=${user?.inviteCode || ""}`}
             >
-              <button className="w-full py-2.5 rounded-lg text-sm font-medium text-white bg-[#f0700c]" >
+              <button className="w-full rounded-lg bg-[#f0700c] py-2.5 text-sm font-medium text-white">
                 {t("copy")}
               </button>
             </CopyText>
@@ -87,21 +85,26 @@ export default function Promotion() {
           </div>
 
           <div className="rounded-xl bg-white p-2 text-center">
-            <div className='font-bold text-3xl text-[#f0700c]'>{currency.symbol}{user?.myBonus}</div>
+            <div className="text-3xl font-bold text-[#f0700c]">
+              {currency.symbol}
+              {user?.myBonus}
+            </div>
             <div>{t("totalReward")}</div>
-            <div className="col-span-2 grid grid-cols-2 ">
+            <div className="col-span-2 grid grid-cols-2">
               <div className="text-center">
                 <div>{user?.inviteCount}</div>
-                <button className="hover:text-[#f0700c]"
-                onClick={() => router.push("/promotion/invitedUser")}
+                <button
+                  className="hover:text-[#f0700c]"
+                  onClick={() => router.push("/promotion/invitedUser")}
                 >
                   {t("inviteUsers")}
                 </button>
               </div>
               <div className="text-center">
                 <div>{experience?.experience || 0}</div>
-                <button className="hover:text-[#f0700c]"
-                onClick={() => router.push("/promotion/experience")}
+                <button
+                  className="hover:text-[#f0700c]"
+                  onClick={() => router.push("/promotion/experience")}
                 >
                   {t("experience")}
                 </button>
@@ -109,15 +112,16 @@ export default function Promotion() {
             </div>
           </div>
 
-          <div className="rounded-xl bg-white p-2 px-4 space-y-2">
-            <div className='subtitle'>{t("title2")}</div>
+          <div className="space-y-2 rounded-xl bg-white p-2 px-4">
+            <div className="subtitle">{t("title2")}</div>
 
             <div className="flex overflow-hidden rounded-lg border border-[#eeeeee] bg-[#f7f8f9]">
               {bonusConfig?.map((item: any, index: any) => (
                 <div
                   key={item.id}
-                  className={`flex flex-1 flex-col items-center justify-center border-l border-[#eeeeee] first:border-l-0 ${index === 0 ? "bg-[#ffeee1]" : "bg-white"
-                    }`}
+                  className={`flex flex-1 flex-col items-center justify-center border-l border-[#eeeeee] first:border-l-0 ${
+                    index === 0 ? "bg-[#ffeee1]" : "bg-white"
+                  }`}
                 >
                   <div className="py-4 text-center text-lg font-semibold text-[#f0700c]">
                     {item.rangeCode}
@@ -130,8 +134,7 @@ export default function Promotion() {
                       {(Number(item.configValue) * 100).toFixed(2)}%
                     </div>
                     <div className="text-xs text-gray-400">
-                      {item.rangeMin} ~ {item.rangeMax}{" "}
-                      {t("experienceRange")}
+                      {item.rangeMin} ~ {item.rangeMax} {t("experienceRange")}
                     </div>
                   </div>
                 </div>

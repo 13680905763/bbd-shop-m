@@ -1,8 +1,5 @@
-import {
-  keepPreviousData,
-  useInfiniteQuery,
-  useMutation,
-} from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
+
 import { OrderApi } from "@/services/orderApi";
 import { queryClient } from "@/lib/react-query";
 
@@ -11,6 +8,7 @@ export function useOrderList(params: any) {
     queryKey: ["orderList", params],
     queryFn: ({ pageParam = 1 }) => {
       const { enabled, ...restParams } = params;
+
       return OrderApi.listOrder({
         ...restParams,
         current: pageParam,
@@ -18,6 +16,7 @@ export function useOrderList(params: any) {
     },
     getNextPageParam: (lastPage: any) => {
       const loaded = lastPage.current * (params.size || 10);
+
       return loaded < lastPage.total ? lastPage.current + 1 : undefined;
     },
     initialPageParam: 1,
@@ -30,6 +29,7 @@ export function useRefundOrderList(params: any) {
     queryKey: ["refundOrderList", params],
     queryFn: ({ pageParam = 1 }) => {
       const { enabled, ...restParams } = params;
+
       return OrderApi.listRefundOrder({
         ...restParams,
         current: pageParam,
@@ -37,6 +37,7 @@ export function useRefundOrderList(params: any) {
     },
     getNextPageParam: (lastPage: any) => {
       const loaded = lastPage.current * lastPage.size;
+
       return loaded < lastPage.total ? lastPage.current + 1 : undefined;
     },
     initialPageParam: 1,
@@ -55,7 +56,7 @@ export function useCancelOrder() {
 export function useBatchPayOrder() {
   return useMutation({
     mutationFn: (data: any) => OrderApi.batchPayOrder(data),
-  })
+  });
 }
 export function useRefundOrder() {
   return useMutation({
@@ -63,7 +64,7 @@ export function useRefundOrder() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orderList"] });
     },
-  })
+  });
 }
 export function useRevokeOrder() {
   return useMutation({

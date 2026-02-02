@@ -15,7 +15,9 @@ export default function LineDetailModal({
   currentWaybill,
 }: LineDetailModalProps) {
   const t = useTranslations("profile.package");
-  console.log('currentWaybill123', currentWaybill);
+
+  console.log("currentWaybill123", currentWaybill);
+
   return (
     <CommonModal
       footer={<div />}
@@ -50,43 +52,49 @@ export default function LineDetailModal({
           <div className="relative pl-6">
             <div className="absolute bottom-0 left-2 top-0 w-[2px] bg-gray-200" />
 
-            {currentWaybill?.trackDetail?.trackItems?.map((item: any, index: number) => (
-              <div key={index} className="relative mb-6 flex items-start">
-                <div className="absolute left-0 mt-1 h-3 w-3 rounded-full bg-[#f0700c] shadow" />
+            {currentWaybill?.trackDetail?.trackItems?.map(
+              (item: any, index: number) => (
+                <div key={index} className="relative mb-6 flex items-start">
+                  <div className="absolute left-0 mt-1 h-3 w-3 rounded-full bg-[#f0700c] shadow" />
 
-                <div className="ml-6">
-                  <p className="text-sm font-medium text-gray-800">
-                    {item.content}
-                  </p>
-
-                  {item.location && (
-                    <p className="mt-1 text-xs text-gray-500">
-                      {t("lineModal.location")}
-                      {item.location}
+                  <div className="ml-6">
+                    <p className="text-sm font-medium text-gray-800">
+                      {item.content}
                     </p>
-                  )}
-                  <p className="mt-1 text-xs text-gray-400">{item.time}</p>
+
+                    {item.location && (
+                      <p className="mt-1 text-xs text-gray-500">
+                        {t("lineModal.location")}
+                        {item.location}
+                      </p>
+                    )}
+                    <p className="mt-1 text-xs text-gray-400">{item.time}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ),
+            )}
           </div>
         </div>
 
         {/* ========== 多个子运单（如果存在） ========== */}
-        {Array.isArray(currentWaybill?.trackDetail?.lineDetails?.subOrderList) &&
+        {Array.isArray(
+          currentWaybill?.trackDetail?.lineDetails?.subOrderList,
+        ) &&
           currentWaybill?.trackDetail?.lineDetails?.subOrderList.length > 0 &&
-          currentWaybill?.trackDetail?.lineDetails?.subOrderList.map((sub: any) => (
-            <div key={sub}>
-              <h3 className="mb-4 text-lg font-semibold">
-                {t("lineModal.subWaybillTitle")}
-                {sub}
-              </h3>
+          currentWaybill?.trackDetail?.lineDetails?.subOrderList.map(
+            (sub: any) => (
+              <div key={sub}>
+                <h3 className="mb-4 text-lg font-semibold">
+                  {t("lineModal.subWaybillTitle")}
+                  {sub}
+                </h3>
 
-              <div className="relative pl-6">
-                <div className="absolute bottom-0 left-2 top-0 w-[2px] bg-gray-200" />
+                <div className="relative pl-6">
+                  <div className="absolute bottom-0 left-2 top-0 w-[2px] bg-gray-200" />
 
-                {currentWaybill?.trackDetail?.lineDetails?.subOrderTrackItems?.[sub]?.map(
-                  (item: any, idx: number) => (
+                  {currentWaybill?.trackDetail?.lineDetails?.subOrderTrackItems?.[
+                    sub
+                  ]?.map((item: any, idx: number) => (
                     <div key={idx} className="relative mb-6 flex items-start">
                       <div className="absolute left-0 mt-1 h-3 w-3 rounded-full bg-green-500 shadow" />
 
@@ -107,11 +115,11 @@ export default function LineDetailModal({
                         </p>
                       </div>
                     </div>
-                  )
-                )}
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ),
+          )}
       </div>
     </CommonModal>
   );

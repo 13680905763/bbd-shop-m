@@ -1,6 +1,5 @@
 import { Card, CardBody, Checkbox, Image, Textarea } from "@heroui/react";
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
 
 import CommonModal from "@/components/modal/common-modal";
 import { useGlobalStore } from "@/store";
@@ -20,8 +19,8 @@ export default function RefundModal({
   return (
     <CommonModal
       isOpen
-      isDismissable={true}
       isDisabledConfirm={isDisabled}
+      isDismissable={true}
       title={t("title")}
       onConfirm={async () => onSubmit()}
       onOpenChange={onCancel}
@@ -30,14 +29,14 @@ export default function RefundModal({
         {products.map((product: any, index: number) => (
           <Card
             key={index}
-            className={`border rounded-lg shadow-sm transition-all duration-150 ${
+            className={`rounded-lg border shadow-sm transition-all duration-150 ${
               product.isSelected
                 ? "border-primary bg-primary/5"
                 : "border-gray-200 bg-white"
             }`}
             isPressable={false}
           >
-            <CardBody className="flex flex-col p-4 gap-3">
+            <CardBody className="flex flex-col gap-3 p-4">
               <div className="flex gap-3">
                 <Checkbox
                   className="mt-1"
@@ -46,12 +45,12 @@ export default function RefundModal({
                   size="sm"
                   onValueChange={() => onSelect(product.id)}
                 />
-                <div className="w-[70px] h-[70px] flex-shrink-0">
+                <div className="h-[70px] w-[70px] flex-shrink-0">
                   <Image
                     alt={product.productTitle}
-                    className="w-full h-full object-cover rounded-md"
-                    referrerPolicy="no-referrer"
+                    className="h-full w-full rounded-md object-cover"
                     height={70}
+                    referrerPolicy="no-referrer"
                     src={
                       product.skuPicUrl || product.picUrl || "/placeholder.png"
                     }
@@ -60,16 +59,16 @@ export default function RefundModal({
                 </div>
 
                 {/* 商品基本信息 */}
-                <div className="flex flex-col flex-1 min-w-0">
-                  <span className="font-medium text-gray-900 text-sm line-clamp-2">
+                <div className="flex min-w-0 flex-1 flex-col">
+                  <span className="line-clamp-2 text-sm font-medium text-gray-900">
                     {product.productTitle}
                   </span>
-                  <span className="text-gray-500 text-xs mt-0.5 line-clamp-2">
+                  <span className="mt-0.5 line-clamp-2 text-xs text-gray-500">
                     {product?.propAndValue?.propName_valueName || "-"}
                   </span>
 
                   {product.canRefundQty === 0 && (
-                    <span className="text-red-400 text-xs mt-0.5">
+                    <span className="mt-0.5 text-xs text-red-400">
                       {t("unrefundable")}
                     </span>
                   )}
@@ -77,17 +76,17 @@ export default function RefundModal({
 
                 {/* 价格 + 数量输入 */}
                 <div className="flex flex-col items-end justify-center gap-1">
-                  <span className="text-gray-900 font-semibold text-sm">
+                  <span className="text-sm font-semibold text-gray-900">
                     {currency.symbol}
                     {product.price}
                   </span>
-                  <span className="text-gray-500 text-xs">
+                  <span className="text-xs text-gray-500">
                     x{product.purchaseQuantity}
                   </span>
 
-                  <div className="flex items-center gap-1 mt-1">
+                  <div className="mt-1 flex items-center gap-1">
                     <input
-                      className="w-16 px-2 py-1 border rounded text-sm text-center focus:outline-none focus:ring-1 focus:ring-primary disabled:bg-gray-100"
+                      className="w-16 rounded border px-2 py-1 text-center text-sm focus:outline-none focus:ring-1 focus:ring-primary disabled:bg-gray-100"
                       disabled={
                         !product.isSelected ||
                         product.isRefunded ||
@@ -101,7 +100,7 @@ export default function RefundModal({
                         onUpdateQuantity(product.id, Number(e.target.value))
                       }
                     />
-                    <span className="text-gray-400 text-xs">
+                    <span className="text-xs text-gray-400">
                       {t("refundable")} {product.canRefundQty}
                     </span>
                   </div>

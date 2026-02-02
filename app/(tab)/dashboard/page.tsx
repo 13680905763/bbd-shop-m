@@ -15,7 +15,8 @@ export default function DashBoard() {
   const { currency } = useGlobalStore();
 
   const { data: user, isLoading, error } = useUserInfo();
-  const { data: experience, isLoading: isLoadingExperience } = useUserExperience();
+  const { data: experience, isLoading: isLoadingExperience } =
+    useUserExperience();
 
   const {
     data: wallet,
@@ -123,7 +124,10 @@ export default function DashBoard() {
           <div className="my-1 text-sm font-bold">{t("coupon.title")}</div>
           <div className="text-xs">{t("coupon.available")}</div>
         </div>
-        <button className="flex items-center gap-2" onClick={() => router.push("/wallet/coupon")}>
+        <button
+          className="flex items-center gap-2"
+          onClick={() => router.push("/wallet/coupon")}
+        >
           <span>{t("coupon.viewAll")}</span>
           <IoChevronForwardSharp />
         </button>
@@ -151,7 +155,7 @@ export default function DashBoard() {
         </div>
         <div className="home-card grid grid-cols-3">
           {inviteStats.map((item: any) => (
-            <button  key={item.title} onClick={() => router.push(item.to)}>
+            <button key={item.title} onClick={() => router.push(item.to)}>
               <div className="text-xl font-bold">{item.value}</div>
               <div>{item.title}</div>
             </button>

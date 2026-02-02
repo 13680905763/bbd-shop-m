@@ -10,8 +10,6 @@ export * from "./order/useOrderPreview";
 export * from "./order/useServices";
 
 export * from "./pay/usePaymentMethodList";
-export * from "./warehouse/useWarehousePreview";
-export * from "./warehouse/useWarehouseServices";
 
 export * from "./package/usePackageList";
 export * from "./goods/useGoodsSearchList";

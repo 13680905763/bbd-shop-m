@@ -29,8 +29,6 @@ export default function CancelModal({
   const t = useTranslations("profile.package");
   const { currency } = useGlobalStore();
 
-
-
   return (
     <CommonModal
       footer={<div />}
@@ -41,8 +39,8 @@ export default function CancelModal({
       <div className="flex justify-center gap-6 py-6">
         <Card
           isPressable
-          isDisabled={isCancelling || isChangingLine}
           className="w-52 rounded-2xl hover:border-red-500 hover:bg-red-50"
+          isDisabled={isCancelling || isChangingLine}
           onPress={() => onConfirm(currentWaybill?.id)}
         >
           <CardBody className="flex flex-col items-center justify-between space-y-3 px-3 py-4 text-center">
@@ -53,18 +51,18 @@ export default function CancelModal({
                 <IoCloseCircleOutline className="h-10 w-10 text-red-500" />
               )}
               <p
-                className={`text-base font-semibold ${isCancelling ? "text-gray-500" : "text-red-600"
-                  }`}
+                className={`text-base font-semibold ${
+                  isCancelling ? "text-gray-500" : "text-red-600"
+                }`}
               >
                 {isCancelling
                   ? t("cancelModal.cancelCard.submittingTitle")
                   : t("cancelModal.cancelCard.title")}
               </p>
-
             </div>
 
             {/* 下半部分：费用明细 */}
-            <div className="w-full rounded-xl  pt-2 text-sm text-gray-700">
+            <div className="w-full rounded-xl pt-2 text-sm text-gray-700">
               <div className="flex justify-between px-2 py-1">
                 <span>{t("cancelModal.cancelCard.serviceFee")}</span>
                 <span>
@@ -94,8 +92,8 @@ export default function CancelModal({
         {currentWaybill?.changeFlag && (
           <Card
             isPressable
+            className="h-auto w-48 hover:border-blue-500 hover:bg-blue-50"
             isDisabled={isCancelling || isChangingLine}
-            className="h-auto w-48  hover:border-blue-500 hover:bg-blue-50"
             onPress={() => onChangeLine(currentWaybill)}
           >
             <CardBody className="flex flex-col items-center justify-center text-center">

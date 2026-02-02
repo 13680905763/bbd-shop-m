@@ -3,18 +3,24 @@ import { InfiniteScroll, NavBar } from "antd-mobile";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDisclosure } from "@heroui/react";
-
 import { useTranslations } from "next-intl";
 
 import OrderItem from "./order-item";
+import RefundModal from "./refund-modal";
+import RefundOrderItem from "./refund-order-item";
+import OrderPromptCard from "./order-prompt-card";
 
 import { useEnhancedSelection, useSelection } from "@/hook/common";
 import { useConfirm, BottomAction, CommonTabs } from "@/components/common";
 import { BlockSpinner, EmptyState } from "@/components/ui";
-import { useBatchPayOrder, useCancelOrder, useRefundOrder, useRevokeOrder, useOrderList, useRefundOrderList } from "@/hook/api";
-import RefundModal from "./refund-modal";
-import RefundOrderItem from "./refund-order-item";
-import OrderPromptCard from "./order-prompt-card";
+import {
+  useBatchPayOrder,
+  useCancelOrder,
+  useRefundOrder,
+  useRevokeOrder,
+  useOrderList,
+  useRefundOrderList,
+} from "@/hook/api";
 const tabKeyToStatusCode: Record<string, string> = {
   all: "",
   waitPay: "201",
@@ -28,16 +34,11 @@ export default function OrderPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [currentItem, setCurrentItem] = useState<any>(null);
   // 订单相关数据
-  const {
-    data,
-    isFetching,
-    fetchNextPage,
-    hasNextPage
-  } = useOrderList({
+  const { data, isFetching, fetchNextPage, hasNextPage } = useOrderList({
     size: 10,
     customerPayStatusCode: tabKeyToStatusCode[activeTab],
-    statusCode: tabKeyToStatusCode[activeTab] === '201' ? '101' : '',
-    enabled: activeTab !== 'refund',
+    statusCode: tabKeyToStatusCode[activeTab] === "201" ? "101" : "",
+    enabled: activeTab !== "refund",
   });
   const orders = data?.pages?.flatMap((page: any) => page.records) ?? [];
   const {
@@ -55,16 +56,17 @@ export default function OrderPage() {
     isFetching: isFetchingRefund,
   } = useRefundOrderList({
     size: 10,
-    enabled: activeTab === 'refund',
+    enabled: activeTab === "refund",
   });
-  const refundOrders = dataRefund?.pages?.flatMap((page: any) => page.records) ?? [];
+  const refundOrders =
+    dataRefund?.pages?.flatMap((page: any) => page.records) ?? [];
 
   const { confirm } = useConfirm();
   const { mutateAsync: cancelOrder } = useCancelOrder();
-  const { mutateAsync: batchPayOrder, isPending: isBatchPay } = useBatchPayOrder();
-  const { mutateAsync: refundOrder, } = useRefundOrder();
-  const { mutateAsync: revokeOrder, } = useRevokeOrder();
-
+  const { mutateAsync: batchPayOrder, isPending: isBatchPay } =
+    useBatchPayOrder();
+  const { mutateAsync: refundOrder } = useRefundOrder();
+  const { mutateAsync: revokeOrder } = useRevokeOrder();
 
   const {
     items,
@@ -101,15 +103,14 @@ export default function OrderPage() {
   const handleRefundSubmit = async () => {
     const param = {
       orderId: currentItem.id,
-      skuList: getSelectedItems().map((p: any) =>
-      ({
+      skuList: getSelectedItems().map((p: any) => ({
         sourceProductId: p?.sourceProductId,
         sourceSkuId: p?.sourceSkuId,
         quantity: p.quantity,
         remark: p.remark || "",
-      })
-      ),
-    }
+      })),
+    };
+
     await refundOrder(param);
     setCurrentItem(null);
     onClose();
@@ -117,13 +118,15 @@ export default function OrderPage() {
   // 批量支付 / 单个支付
   const handleBatchPay = async (orderCodeSet: string[] = []) => {
     const bizCode = await batchPayOrder({ orderCodeSet });
+
     if (bizCode) router.push(`/payment/${bizCode}`);
   };
   const renderRefundOrderContent = () => {
     if (!refundOrders?.length && !isFetchingRefund) return <EmptyState />;
+
     return (
       <>
-        {(isFetchingRefund) && <BlockSpinner />}
+        {isFetchingRefund && <BlockSpinner />}
         <div className="flex flex-col gap-3">
           {refundOrders.map((o: any) => (
             <RefundOrderItem key={o.id} activeTab={activeTab} order={o} />
@@ -133,32 +136,32 @@ export default function OrderPage() {
           hasMore={!!hasNextPageRefund}
           loadMore={(isRetry) => fetchNextPageRefund().then(() => undefined)}
         >
-          {!hasNextPageRefund && (<EmptyState className="!h-auto" />)}
+          {!hasNextPageRefund && <EmptyState className="!h-auto" />}
         </InfiniteScroll>
       </>
     );
-  }
+  };
   const renderOrderContent = () => {
     if (!orders?.length && !isFetching) return <EmptyState />;
+
     return (
       <>
-        {(isFetching) && <BlockSpinner />}
+        {isFetching && <BlockSpinner />}
         <OrderPromptCard />
-        <div className="space-y-2 ">
-          {
-            orders.map((order: any) => (
-              <OrderItem
-                key={order.id}
-                showCheckbox={activeTab === "waitPay"}
-                order={order}
-                isSelected={isSelected}
-                onChange={onSelect}
-                onCancel={onCancel} //取消订单
-                onRefund={handleRefund}
-                onPay={handleBatchPay}
-                onRevoke={onRevoke} //撤销退款订单
-              />
-            ))}
+        <div className="space-y-2">
+          {orders.map((order: any) => (
+            <OrderItem
+              key={order.id}
+              isSelected={isSelected}
+              order={order}
+              showCheckbox={activeTab === "waitPay"}
+              onCancel={onCancel} //取消订单
+              onChange={onSelect}
+              onPay={handleBatchPay}
+              onRefund={handleRefund}
+              onRevoke={onRevoke} //撤销退款订单
+            />
+          ))}
         </div>
         <InfiniteScroll
           hasMore={!!hasNextPage}
@@ -197,7 +200,10 @@ export default function OrderPage() {
       <NavBar className="bg-white" onBack={() => router.back()}>
         <span className="navbar-title">{t("title")}</span>
       </NavBar>
-      <CommonTabs tabs={tabs} onSelectionChange={(key) => setActiveTab(String(key))} />
+      <CommonTabs
+        tabs={tabs}
+        onSelectionChange={(key) => setActiveTab(String(key))}
+      />
       {activeTab == "waitPay" && orders.length > 0 && (
         <BottomAction
           buttonText={t("buttons.batchPay")}
@@ -208,22 +214,20 @@ export default function OrderPage() {
           onToggleSelectAll={onToggleSelectAll}
         />
       )}
-      {
-        isOpen && (
-          <RefundModal
-            products={items}
-            onCancel={() => {
-              setCurrentItem(null);
-              onClose();
-            }}
-            onRemarkChange={updateRemark}
-            onSelect={toggleSelection}
-            onSubmit={handleRefundSubmit}
-            onUpdateQuantity={updateQuantity}
-            isDisabled={getSelectedItems().length === 0}
-          />
-        )
-      }
+      {isOpen && (
+        <RefundModal
+          isDisabled={getSelectedItems().length === 0}
+          products={items}
+          onCancel={() => {
+            setCurrentItem(null);
+            onClose();
+          }}
+          onRemarkChange={updateRemark}
+          onSelect={toggleSelection}
+          onSubmit={handleRefundSubmit}
+          onUpdateQuantity={updateQuantity}
+        />
+      )}
     </>
   );
 }

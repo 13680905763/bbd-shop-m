@@ -63,12 +63,12 @@ export default function Stepper({
 
   return (
     <div
-      className={`flex items-center bg-gray-100 rounded-lg overflow-hidden  border-gray-300 ${className}`}
+      className={`flex items-center overflow-hidden rounded-lg border-gray-300 bg-gray-100 ${className}`}
       role="button"
       onClick={(e) => e.stopPropagation()}
     >
       <button
-        className="w-7 h-7 flex items-center justify-center text-gray-600 hover:bg-gray-200 disabled:opacity-30  text-xl"
+        className="flex h-7 w-7 items-center justify-center text-xl text-gray-600 hover:bg-gray-200 disabled:opacity-30"
         disabled={value <= min}
         type="button"
         onClick={handleDecrement}
@@ -78,7 +78,7 @@ export default function Stepper({
 
       <input
         aria-label="Stepper value"
-        className="w-9 px-1 text-center text-gray-900 text-sm bg-transparent outline-none border-none !text-base"
+        className="w-9 border-none bg-transparent px-1 text-center !text-base text-sm text-gray-900 outline-none"
         type="text"
         value={inputValue}
         onBlur={handleInputBlur}
@@ -87,7 +87,7 @@ export default function Stepper({
       />
 
       <button
-        className="w-7 h-7 flex items-center justify-center text-gray-600 hover:bg-gray-200 text-xl"
+        className="flex h-7 w-7 items-center justify-center text-xl text-gray-600 hover:bg-gray-200"
         type="button"
         onClick={handleIncrement}
       >

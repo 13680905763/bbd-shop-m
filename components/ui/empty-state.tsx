@@ -16,10 +16,10 @@ export default function EmptyState({
 
   return (
     <div
-      className={`flex flex-col items-center justify-center h-[60vh] text-gray-500 space-y-2 ${className}`}
+      className={`flex h-[60vh] flex-col items-center justify-center space-y-2 text-gray-500 ${className}`}
     >
-      <p className="text-lg ">{title}</p>
-      <p className="text-sm ">{desc || t("desc")}</p>
+      <p className="text-lg">{title}</p>
+      <p className="text-sm">{desc || t("desc")}</p>
     </div>
   );
 }

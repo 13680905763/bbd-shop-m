@@ -1,11 +1,11 @@
 import { Button, Checkbox } from "@heroui/react";
 import { useTranslations } from "next-intl";
+import React from "react";
 
 import { useGlobalStore } from "@/store";
 import SourceIcon from "@/components/common/source-icon";
 import CopyButton from "@/components/common/copy-button";
 import { ProductItem } from "@/components/common";
-import React from "react";
 import RefundCountdown from "@/components/ui/refund-countdown";
 
 export default function OrderItem({
@@ -25,8 +25,8 @@ export default function OrderItem({
   const { currency } = useGlobalStore();
 
   return (
-    <div className="rounded-xl bg-white p-3 space-y-3">
-      <div className="flex items-center justify-between ">
+    <div className="space-y-3 rounded-xl bg-white p-3">
+      <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-sm font-medium text-gray-800">
           {showCheckbox && (
             <Checkbox
@@ -53,10 +53,10 @@ export default function OrderItem({
       </div>
 
       {order?.products.map((product: any) => (
-        <React.Fragment key={product?.id} >
+        <React.Fragment key={product?.id}>
           <ProductItem product={product} />
           {product?.orderServiceList?.length > 0 && (
-            <div className="rounded-lg bg-[#fafafa] px-3 py-2" >
+            <div className="rounded-lg bg-[#fafafa] px-3 py-2">
               <div className="flex flex-wrap items-center gap-2">
                 {product.orderServiceList.map((service: any) => (
                   <span
@@ -82,11 +82,10 @@ export default function OrderItem({
               >
                 {t("withdraw")}
               </Button>
-            </div >
+            </div>
           )}
         </React.Fragment>
-      ))
-      }
+      ))}
       <div className="text-right">
         <p className="text-sm text-gray-700">
           <span className="text-base font-bold">
@@ -106,9 +105,9 @@ export default function OrderItem({
             </Button>
             <Button
               color="primary"
+              isLoading={isPaying}
               radius="sm"
               size="sm"
-              isLoading={isPaying}
               onPress={async () => {
                 setIsPaying(true);
                 await onPay([order?.orderCode]);
@@ -120,12 +119,19 @@ export default function OrderItem({
           </div>
         )}
         {order?.canRefundFlag && (
-          <Button color="primary" radius="sm" size="sm" onPress={() => onRefund(order)}>
+          <Button
+            color="primary"
+            radius="sm"
+            size="sm"
+            onPress={() => onRefund(order)}
+          >
             {t("refund")}
-            {order?.refundTimeStamp && <RefundCountdown timestamp={order?.refundTimeStamp} />}
+            {order?.refundTimeStamp && (
+              <RefundCountdown timestamp={order?.refundTimeStamp} />
+            )}
           </Button>
         )}
       </div>
-    </div >
+    </div>
   );
 }

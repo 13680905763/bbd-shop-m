@@ -7,6 +7,7 @@ export default function ShippingRouteCard({
   route,
   isSelected,
   onSelect,
+  size = "md", // 新增 size 属性
 }: any) {
   const { currency } = useGlobalStore();
 
@@ -26,16 +27,42 @@ export default function ShippingRouteCard({
   const name = templateName || methodName;
   const time = `${minDays}-${maxDays} days`;
 
+  // 小尺寸展示（用于页面已选状态）
+  if (size === "sm") {
+    return (
+      <div className="flex w-full items-center gap-3 rounded-lg border border-gray-100 bg-gray-50 p-3">
+        <Avatar
+          className="h-10 w-10 flex-shrink-0 rounded-sm bg-white"
+          radius="none"
+          src={logoUrl}
+        />
+        <div className="flex min-w-0 flex-1 flex-col">
+          <div className="flex items-center justify-between">
+            <span className="truncate pr-2 text-sm font-semibold text-gray-900">
+              {name}
+            </span>
+            <span className="flex-shrink-0 text-sm font-bold text-orange-500">
+              {currency.symbol}
+              {shippingFee}
+            </span>
+          </div>
+          <span className="text-xs text-gray-500">{time}</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Card
-      className={`!box-border border-2 p-3 ${isSelected ? "border-primary" : "border-gray-200"
-        } rounded-lg bg-white transition hover:shadow-sm`}
-      shadow="none"
+      className={`!box-border border-2 p-3 ${
+        isSelected ? "border-primary" : "border-gray-200"
+      } rounded-lg bg-white transition hover:shadow-sm`}
       isDisabled={disable}
       isPressable={!disable}
+      shadow="none"
       onPress={() => {
-        if (disable) return
-        onSelect?.(id)
+        if (disable) return;
+        onSelect?.(id);
       }}
     >
       <div className="flex w-full gap-2">
@@ -64,7 +91,7 @@ export default function ShippingRouteCard({
         </div>
       </div>
       {disable && prompt && (
-        <div className="mt-2 p-2 bg-red-50 text-red-500 text-sm rounded-lg">
+        <div className="mt-2 rounded-lg bg-red-50 p-2 text-sm text-red-500">
           {prompt}
         </div>
       )}

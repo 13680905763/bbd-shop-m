@@ -1,18 +1,11 @@
 "use client";
-import {
-  Button,
-  Checkbox,
-  Form,
-  Input,
-  Snippet,
-  Textarea,
-  Image,
-} from "@heroui/react";
+import { Button, Checkbox, Form, Input, Textarea, Image } from "@heroui/react";
 import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { FaCamera } from "react-icons/fa";
 import { ImageViewer, NavBar, Stepper } from "antd-mobile";
+import { IoCopyOutline } from "react-icons/io5";
 
 import { useGlobalStore } from "@/store";
 import { createCustomizeOrder, getServicesList } from "@/services";
@@ -20,7 +13,6 @@ import FullscreenLoader from "@/components/common/fullscreen-loader";
 import CommonModal from "@/components/modal/common-modal";
 import { useUserInfo } from "@/hook";
 import { CopyText } from "@/components/ui";
-import { IoCopyOutline } from "react-icons/io5";
 
 export default function ForwardingPage() {
   const t = useTranslations("forwardingPage");
@@ -28,7 +20,6 @@ export default function ForwardingPage() {
 
   const { currency } = useGlobalStore();
   const { data: user, error } = useUserInfo();
-
 
   const [servicesList, setServicesList] = useState([]);
   const [acceptAgreement, setAcceptAgreement] = useState(false);
@@ -121,11 +112,11 @@ export default function ForwardingPage() {
       prev.map((s: any) =>
         s.id === currentService.id
           ? {
-            ...s,
-            remark: currentService?.remark,
-            isCheck: true,
-            quantity: currentService?.quantity,
-          }
+              ...s,
+              remark: currentService?.remark,
+              isCheck: true,
+              quantity: currentService?.quantity,
+            }
           : s,
       ),
     );
@@ -169,14 +160,14 @@ export default function ForwardingPage() {
               {t("warehouseAddress")}
             </p>
 
-            <div className="relative w-full bg-[#f4f4f5] rounded-large p-4 text-sm font-mono text-default-600">
+            <div className="relative w-full rounded-large bg-[#f4f4f5] p-4 font-mono text-sm text-default-600">
               <div className="flex flex-col gap-1">
                 <span>{`代发-${user?.nickName || ""}`}</span>
                 <span>15916408071</span>
                 <span>广东省惠州市惠城区水口荔枝城青创产业园9楼901</span>
               </div>
               <CopyText
-                className="absolute top-3 right-3 text-default-400 hover:text-default-700 transition-colors p-1 rounded-md hover:bg-default-100"
+                className="absolute right-3 top-3 rounded-md p-1 text-default-400 transition-colors hover:bg-default-100 hover:text-default-700"
                 text={`代发-${user?.nickName || ""}\n15916408071\n广东省惠州市惠城区水口荔枝城青创产业园9楼901`}
               >
                 <IoCopyOutline size={18} />

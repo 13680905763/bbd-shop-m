@@ -57,6 +57,10 @@
                 "remark": "Remarques produit",
                 "placeholder": "Saisir des remarques sur le produit",
                 "noRemark": "Aucune remarque"
+            },
+            "expandableList": {
+                "expand": "Étendre",
+                "collapse": "Réduire"
             }
         },
         "modal": {
@@ -576,7 +580,16 @@
             "textareaPlaceholder": "Si vous avez des exigences particulières, veuillez laisser une note ici",
             "agreement": "J'ai lu et j'accepte la Convention d'Expédition de Colis bbdbuy",
             "submitPackage": "Soumettre le Colis",
-            "defaultMessage": "Veuillez sélectionner une adresse pour voir les itinéraires de livraison",
+            "defaultMessage": "Veuillez d'abord sélectionner une adresse",
+            "selectService": "Sélectionner un service",
+            "select": "Sélectionner",
+            "noServiceSelected": "Aucun service sélectionné, cliquez pour sélectionner",
+            "noServices": "Aucun service disponible",
+            "noAddressSelected": "Aucune adresse sélectionnée, cliquez pour sélectionner",
+            "noAddress": "Aucune adresse disponible",
+            "noRouteSelected": "Aucun itinéraire sélectionné, cliquez pour sélectionner",
+            "noRoutes": "Aucun itinéraire disponible",
+            "confirm": "Confirmer",
             "totalWeight": "Poids total",
             "totalVolume": "Volume total",
             "estimating": "Estimation des frais en cours...",

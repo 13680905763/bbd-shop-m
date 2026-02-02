@@ -19,18 +19,14 @@ export default function Warehouse() {
   const t = useTranslations("profile.warehouse"); // ✅ 命名空间
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("all");
-  const {
-    data,
-    isLoading,
-    fetchNextPage,
-    hasNextPage,
-    isFetching,
-  } = useWarehousePackageList({
-    statusCode: tabKeyToStatusCode[activeTab],
-    size: 10,
-  });
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetching } =
+    useWarehousePackageList({
+      statusCode: tabKeyToStatusCode[activeTab],
+      size: 10,
+    });
   const warehouse = data?.pages?.flatMap((page: any) => page.records) ?? [];
-  const { mutateAsync: createPreview, isPending: isSubmitting } = useCreateWaybillPreview();
+  const { mutateAsync: createPreview, isPending: isSubmitting } =
+    useCreateWaybillPreview();
   const {
     selectedIds,
     isSelected,
@@ -42,21 +38,22 @@ export default function Warehouse() {
   const handleWarehouseSubmit = async () => {
     try {
       const key = await createPreview(selectedIds);
+
       router.push(`/submit/warehouse?key=${key}`);
-    } catch {
-    }
+    } catch {}
   };
   const renderWarehouseContent = () => {
     if (!warehouse?.length && !isFetching) return <EmptyState />;
+
     return (
       <>
-        {(isFetching) && <BlockSpinner />}
+        {isFetching && <BlockSpinner />}
         <div className="space-y-2">
           {warehouse.map((w: any) => (
             <WarehouseItem
               key={w.id}
-              showCheckbox={activeTab == "submit"}
               isSelected={isSelected}
+              showCheckbox={activeTab == "submit"}
               warehouse={w}
               onChange={onSelect}
             />
@@ -82,13 +79,17 @@ export default function Warehouse() {
       title: t("tabs.submit"),
       content: renderWarehouseContent(),
     },
-  ]
+  ];
+
   return (
     <>
       <NavBar className="flex-[0_0_45px] bg-white" onBack={() => router.back()}>
         <span className="navbar-title">{t("title")}</span>
       </NavBar>
-      <CommonTabs tabs={tabs} onSelectionChange={(key) => setActiveTab(String(key))} />
+      <CommonTabs
+        tabs={tabs}
+        onSelectionChange={(key) => setActiveTab(String(key))}
+      />
       {activeTab == "submit" && warehouse.length > 0 && (
         <BottomAction
           buttonText={t("sumbit")}

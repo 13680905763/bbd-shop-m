@@ -11,47 +11,40 @@ import {
   Textarea,
 } from "@heroui/react";
 import { useTranslations } from "next-intl";
+import { IoChevronForward } from "react-icons/io5";
 
 import ShippingRouteCard from "./shipping-route-card";
+import WarehouseServiceCard from "./werahouse-service-card";
+import TotalStatsCard from "./total-stats-card";
 
-import {
-  useAddressList,
-  useWarehousePreview,
-  useWarehouseServices,
-} from "@/hook";
-import { createWaybill, getRoutesByQuery } from "@/services";
-import AddressModal from "@/components/modal/address-modal";
-import { Address, AddressModalState } from "@/types";
 import WarehouseProductItem from "@/components/block/warehouse-product-item";
 import AddressItem from "@/components/block/address-item";
-import { useWarehouseServicesList, useWaybillFeeEstimate } from "@/hook/api";
+import {
+  useWarehouseServicesList,
+  useWaybillFeeEstimate,
+  useWaybillPreview,
+  useAddressList,
+  useLineByWaybill,
+  useCreateWaybill,
+} from "@/hook/api";
 import { useEnhancedSelection } from "@/hook/common";
-import WarehouseServiceCard from "./werahouse-service-card";
 import { useGlobalStore } from "@/store";
+import ServiceSelectionModal from "@/components/modal/service-selection-modal";
+import AddressSelectionModal from "@/components/modal/address-selection-modal";
+import RouteSelectionModal from "@/components/modal/route-selection-modal";
+import ExpandableList from "@/components/common/expandable-list";
 
 export default function SubmitWarehouse() {
   const t = useTranslations("submit.warehouse");
   const { currency } = useGlobalStore();
-
   const searchParam = useSearchParams();
   const router = useRouter();
   const key = searchParam.get("key") as string;
-  const [modalState, setModalState] = useState<AddressModalState>({
-    type: null,
-  });
+  const { data, isLoading: productLoading, isError } = useWaybillPreview(key);
+  const { packageItemList = [], param = {}, outbound = {} } = data || {};
+  const { estimateTotalWeight = 0, estimateTotalVolume = 0 } = outbound || {};
 
-  // 路由路线相关
-  const [loadingRoute, setLoadingRoute] = useState(true);
-  const [routesList, setRoutesList] = useState<any[]>([]);
-  const [routesMessage, setRoutesMessage] = useState<string>(
-    t("defaultMessage"),
-  );
-
-  const [submitting, setSubmitting] = useState(false);
-  const [isCheck, setIsCheck] = useState(false);
-
-  const { data, isLoading: productLoading, isError } = useWarehousePreview(key);
-  const { data: addressData, isLoading: addressLoading } = useAddressList();
+  // 附加服务相关
   const { data: serviceList } = useWarehouseServicesList();
   const {
     items: services, // 渲染数据（包含 isSelected 和 quantity）
@@ -66,28 +59,83 @@ export default function SubmitWarehouse() {
       remark: item.remark,
     }));
   }, [getSelectedItems]);
+  const [showServiceModal, setShowServiceModal] = useState(false);
 
-
-
-  // 都用 string 类型 id 进行比较
+  // 地址相关
+  const { data: addressData, isLoading: addressLoading } = useAddressList();
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(
     null,
   );
+  const [showAddressModal, setShowAddressModal] = useState(false);
+
+  // 默认选中默认地址
+  useEffect(() => {
+    if (addressData?.length && !selectedAddressId) {
+      const defaultAddr = addressData.find(
+        (addr: any) => addr.defaultAddress === 1,
+      );
+
+      if (defaultAddr) setSelectedAddressId(defaultAddr.id);
+    }
+  }, [addressData, selectedAddressId]);
+  // 选中地址国家id
+  const countryId = useMemo(() => {
+    return addressData?.find((item: any) => item.id == selectedAddressId)
+      ?.countryId;
+  }, [selectedAddressId, addressData]);
+
+  const {
+    data: lineData,
+    isLoading: lineLoading,
+    isError: lineError,
+  } = useLineByWaybill(
+    countryId
+      ? {
+          categoryIds: packageItemList.map((item: any) => item?.categoryId),
+          countryId,
+          weight: estimateTotalWeight,
+          volume: estimateTotalVolume,
+        }
+      : null,
+  );
+
+  console.log("lineData:", lineData);
+  console.log("lineError:", lineError);
+
+  const [showRouteModal, setShowRouteModal] = useState(false);
+
+  useEffect(() => {
+    if (!Array.isArray(lineData)) {
+      setSelectedRouteId(null);
+    }
+  }, [lineData]);
+
+  const [isCheck, setIsCheck] = useState(false);
+
+  const { mutateAsync: createWaybill, isPending: isSubmitting } =
+    useCreateWaybill();
+
+  // 都用 string 类型 id 进行比较
 
   const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
   const [remark, setRemark] = useState("");
 
-
   const estimatePayload = useMemo(() => {
-    if (!selectedRouteId || !selectedAddressId || !data?.param) return null;
+    if (!selectedRouteId || !selectedAddressId || !param) return null;
 
     return {
       serviceList: getSelectedServices(),
       templateId: selectedRouteId,
       addressId: selectedAddressId,
-      ...data.param,
+      ...param,
     };
-  }, [selectedRouteId, selectedAddressId, getSelectedServices, services]);
+  }, [
+    selectedRouteId,
+    selectedAddressId,
+    getSelectedServices,
+    services,
+    param,
+  ]);
 
   const { data: feeEstimate, isFetching: isEstimating } =
     useWaybillFeeEstimate(estimatePayload);
@@ -97,46 +145,8 @@ export default function SubmitWarehouse() {
       console.log("Fee Estimating:", feeEstimate);
     }
   }, [estimatePayload]);
+
   // 地址相关
-  const handleAddClick = useCallback(() => {
-    setModalState({ type: "add" });
-  }, []);
-  const handleEditClick = useCallback((address: Address) => {
-    setModalState({ type: "edit", address });
-  }, []);
-  const handleOpenChange = useCallback((open: boolean) => {
-    if (!open) setModalState({ type: null });
-  }, []);
-
-  // 选中地址国家id
-  const countryId = useMemo(() => {
-    return addressData?.find((item: any) => item.id == selectedAddressId)
-      ?.countryId;
-  }, [selectedAddressId, addressData]);
-
-  useEffect(() => {
-    if (!countryId) return;
-    setLoadingRoute(true);
-    getRoutesByQuery({
-      categoryIds: data?.packageItemList.map((item: any) => item?.categoryId),
-      countryId,
-      weight: data?.outbound?.estimateTotalWeight,
-      volume: data?.outbound?.estimateTotalVolume,
-    })
-      .then((res) => {
-        if (typeof res != "string" && res?.length) {
-          setRoutesList(res || []);
-        } else {
-          setSelectedRouteId("");
-          setRoutesList([]);
-          setRoutesMessage(res);
-        }
-      })
-      .finally(() => {
-        setLoadingRoute(false);
-      });
-  }, [countryId]);
-
 
   const handleSubmit = async () => {
     if (!isCheck) {
@@ -161,8 +171,7 @@ export default function SubmitWarehouse() {
       });
     }
 
-    if (submitting) return;
-    setSubmitting(true);
+    if (isSubmitting) return;
 
     try {
       const payload = {
@@ -170,7 +179,7 @@ export default function SubmitWarehouse() {
         templateId: selectedRouteId,
         addressId: selectedAddressId,
         remark,
-        ...data.param,
+        ...param,
       };
 
       console.log("提交数据", payload);
@@ -179,196 +188,209 @@ export default function SubmitWarehouse() {
       await createWaybill(payload);
 
       router.push(`/profile/package`);
-    } catch {
-    } finally {
-      setSubmitting(false);
-    }
+    } catch {}
   };
 
   return (
     <>
-      {/* 顶部导航 */}
       <NavBar className="bg-white" onBack={() => router.back()}>
         <span className="navbar-title">{t("title")}</span>
       </NavBar>
 
-      {/* 内容区滚动 */}
-      <div className="flex-1 space-y-2 overflow-y-auto px-2 py-3 overflow-x-hidden scrollbar-hide">
-        {/* 商品列表 */}
-        <>
-          <div className="text-base font-semibold">{t("commodityList")}</div>
+      <div className="flex-1 space-y-2 overflow-y-auto overflow-x-hidden px-2 py-3 scrollbar-hide">
+        <div className="rounded-lg bg-white p-3">
+          <div className="mb-2 flex items-center justify-between">
+            <div className="text-base font-semibold">
+              {t("commodityList")}
+              {productLoading ? "" : `(${packageItemList.length})`}
+            </div>
+          </div>
           <div className="space-y-1">
             {productLoading ? (
-              <div className="space-y-2">
-                <Skeleton className="h-20 rounded-lg" />
-              </div>
+              <Skeleton className="h-20 rounded-lg" />
             ) : (
-              data?.packageItemList?.map((warehouse: any) => (
-                <WarehouseProductItem
-                  key={warehouse?.id}
-                  product={warehouse?.orderProduct}
-                  warehouse={warehouse}
-                />
-              ))
+              <ExpandableList
+                items={packageItemList}
+                renderItem={(warehouse: any) => (
+                  <WarehouseProductItem
+                    product={warehouse?.orderProduct}
+                    warehouse={warehouse}
+                  />
+                )}
+              />
             )}
           </div>
-        </>
-        <div className="flex flex-wrap gap-4 p-4 bg-gray-100 rounded-xl mt-4 bg-white">
-          <div className="flex-1 min-w-[140px]">
-            <div className="flex items-center gap-2 mb-1">
-              <div className="w-6 h-6 rounded-md bg-orange-100 flex items-center justify-center">
-                <svg
-                  className="w-3 h-3 text-orange-600"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    clipRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-                    fillRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <span className="text-sm font-medium text-gray-600">
-                {t("totalWeight")}
-              </span>
-            </div>
-            <p className="text-2xl font-bold text-gray-800">
-              {data?.outbound?.estimateTotalWeight || 0}
-              <span className="text-base font-normal text-gray-500 ml-1">
-                g
-              </span>
-            </p>
-          </div>
-
-          <div className="flex-1 min-w-[140px]">
-            <div className="flex items-center gap-2 mb-1">
-              <div className="w-6 h-6 rounded-md bg-indigo-100 flex items-center justify-center">
-                <svg
-                  className="w-3 h-3 text-indigo-600"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    clipRule="evenodd"
-                    d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
-                    fillRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <span className="text-sm font-medium text-gray-600">
-                {t("totalVolume")}
-              </span>
-            </div>
-            <p className="text-2xl font-bold text-gray-800">
-              {data?.outbound?.estimateTotalVolume || 0}
-              <span className="text-base font-normal text-gray-500 ml-1">
-                cm³
-              </span>
-            </p>
-          </div>
         </div>
-        {/* 服务多选 */}
-        <div>
-          <div className="text-base font-semibold">{t("packagingMethod")}</div>
+        <div className="rounded-lg bg-white p-3">
+          <div
+            className="mb-2 flex cursor-pointer items-center justify-between"
+            role="button"
+            onClick={() => setShowServiceModal(true)}
+          >
+            <div className="text-base font-semibold">
+              {t("packagingMethod")}
+            </div>
+            <div className="flex items-center text-sm text-gray-500">
+              <span>{t("select")}</span>
+              <IoChevronForward size={16} />
+            </div>
+          </div>
           <div className="space-y-1">
-            <div className="grid grid-cols-1 gap-2">
-              {services?.map((service: any) => {
-                return (
+            {getSelectedServices().length === 0 ? (
+              <div
+                className="cursor-pointer rounded-lg border border-dashed border-gray-200 bg-gray-50 p-3 text-center text-sm text-gray-400"
+                role="button"
+                onClick={() => setShowServiceModal(true)}
+              >
+                {t("noServiceSelected")}
+              </div>
+            ) : (
+              <ExpandableList
+                items={services.filter((s) => s.isSelected)}
+                renderItem={(service: any) => (
                   <WarehouseServiceCard
                     key={service.id}
                     service={service}
+                    size="sm"
                     onSelect={toggleSelection}
                     onUpdateQuantity={updateQuantity}
                   />
-                );
-              })}
-            </div>
+                )}
+              />
+            )}
           </div>
         </div>
-        {/* 地址 */}
-        <div>
-          <div className="mb-2 flex items-center justify-between">
-            <span className="text-base font-semibold">
+
+        <div className="rounded-lg bg-white p-3">
+          <div
+            className="mb-2 flex cursor-pointer items-center justify-between"
+            role="button"
+            onClick={() => setShowAddressModal(true)}
+          >
+            <div className="text-base font-semibold">
               {t("shippingAddress")}
-            </span>
-            <button onClick={handleAddClick}>{t("addAddress")}</button>
+            </div>
+            <div className="flex items-center text-sm text-gray-500">
+              <span>{t("select")}</span>
+              <IoChevronForward size={16} />
+            </div>
           </div>
           {addressLoading ? (
-            <div className="space-y-2">
-              <Skeleton className="h-12 rounded-lg" />
-            </div>
+            <Skeleton className="h-12 rounded-lg" />
           ) : (
-            addressData?.length &&
-            addressData?.map((address: any) => (
-              <AddressItem
-                key={address.id}
-                selectable
-                addressDetail={address}
-                selected={address.id === selectedAddressId}
-                showDeleteButton={false}
-                onEdit={handleEditClick}
-                onSelect={(addr) => setSelectedAddressId(addr.id)}
-              />
-            ))
+            <>
+              {selectedAddressId ? (
+                addressData
+                  ?.filter((a: any) => a.id === selectedAddressId)
+                  .map((address: any) => (
+                    <AddressItem
+                      key={address.id}
+                      addressDetail={address}
+                      selectable={true}
+                      selected={false}
+                      showDeleteButton={false}
+                      size="sm"
+                      onEdit={() => setShowAddressModal(true)}
+                      onSelect={() => setShowAddressModal(true)} // 点击已选地址也重新打开选择弹窗
+                    />
+                  ))
+              ) : (
+                <div
+                  className="cursor-pointer rounded-lg border border-dashed border-gray-200 bg-gray-50 p-3 text-center text-sm text-gray-400"
+                  role="button"
+                  onClick={() => setShowAddressModal(true)}
+                >
+                  {t("noAddressSelected")}
+                </div>
+              )}
+            </>
           )}
         </div>
-        {/* 路线选择 */}
-        <div>
-          <div className="mb-2 text-base font-semibold">
-            {t("deliveryRoute")}
+
+        <div className="rounded-lg bg-white p-3">
+          <div
+            className="mb-2 flex cursor-pointer items-center justify-between"
+            role="button"
+            onClick={() => {
+              if (!selectedAddressId) {
+                return addToast({
+                  title: t("toast.selectAddress"),
+                  timeout: 1500,
+                  color: "warning",
+                });
+              }
+              setShowRouteModal(true);
+            }}
+          >
+            <div className="text-base font-semibold">{t("deliveryRoute")}</div>
+            <div className="flex items-center text-sm text-gray-500">
+              <span>{t("select")}</span>
+              <IoChevronForward size={16} />
+            </div>
           </div>
 
           {/* 如果在加载，优先显示 loading */}
-   
-            <div className="flex flex-col gap-3">
-              {routesList?.map((route) => (
-                <ShippingRouteCard
-                  key={route.id}
-                  isSelected={selectedRouteId === String(route.id)}
-                  route={route}
-                  onSelect={(id: any) => setSelectedRouteId(String(id))}
-                />
-              ))}
-
-              {routesList?.length < 1 && (
-                <div className="flex h-[20vh] flex-col items-center justify-center text-gray-500">
-                  <p className="mb-2 text-lg">{routesMessage}</p>
+          {lineLoading ? (
+            <Spinner className="flex justify-center" />
+          ) : (
+            <>
+              {Array.isArray(lineData) &&
+              lineData.length > 0 &&
+              selectedRouteId ? (
+                lineData
+                  .filter((r: any) => String(r.id) === selectedRouteId)
+                  .map((route: any) => (
+                    <ShippingRouteCard
+                      key={route.id}
+                      isSelected={false}
+                      route={route}
+                      size="sm"
+                      onSelect={() => setShowRouteModal(true)}
+                    />
+                  ))
+              ) : (
+                <div
+                  className="cursor-pointer rounded-lg border border-dashed border-gray-200 bg-gray-50 p-3 text-center text-sm text-gray-400"
+                  role="button"
+                  onClick={() => {
+                    if (!selectedAddressId) {
+                      return addToast({
+                        title: t("toast.selectAddress"),
+                        timeout: 1500,
+                        color: "warning",
+                      });
+                    }
+                    setShowRouteModal(true);
+                  }}
+                >
+                  {typeof lineData === "string"
+                    ? lineData
+                    : t("noRouteSelected")}
                 </div>
               )}
-            </div>
+            </>
+          )}
         </div>
 
-        <Textarea
-          fullWidth
-          classNames={{
-            inputWrapper: "bg-white  ",
-            input: "text-base",
-          }}
-          placeholder={t("textareaPlaceholder")}
-          size="lg"
-          value={remark}
-          onChange={(e) => setRemark(e.target.value)}
-        />
-        <Checkbox isSelected={isCheck} size="sm" onValueChange={setIsCheck}>
-          {t("agreement")}
-        </Checkbox>
-      </div>
-
-      {/* 底部提交 */}
-      <div className="border-t bg-white px-4 py-3">
+        {/* 费用估算区域 */}
         <div>
+          <TotalStatsCard
+            volume={estimateTotalVolume}
+            weight={estimateTotalWeight}
+          />
 
           {isEstimating ? (
-            <div className="mt-2 p-4   text-sm rounded-lg text-center flex items-center justify-center">
+            <div className="mt-2 flex items-center justify-center rounded-lg bg-white p-4 text-center text-sm">
               <div>{t("estimating")}</div>
-              <Spinner className=" ml-2" />
+              <Spinner className="ml-2" size="sm" />
             </div>
           ) : (
             feeEstimate?.outbound && (
-              <div className="mb-2 p-4  bg-gray-100 rounded-xl space-y-2">
+              <div className="space-y-2 rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">{t("estimatedShipping")}</span>
+                  <span className="text-gray-500">
+                    {t("estimatedShipping")}
+                  </span>
                   <span className="font-medium">
                     {currency.symbol}
                     {feeEstimate?.outbound.estimateShippingFee}
@@ -381,8 +403,8 @@ export default function SubmitWarehouse() {
                     {feeEstimate.outbound.serviceFee}
                   </span>
                 </div>
-                <div className="pt-2 mt-2 border-t border-gray-200 flex justify-between items-center">
-                  <span className="text-gray-900 font-semibold">
+                <div className="mt-2 flex items-center justify-between border-t border-gray-100 pt-2">
+                  <span className="font-semibold text-gray-900">
                     {t("estimatedTotal")}
                   </span>
                   <span className="text-xl font-bold text-primary">
@@ -390,32 +412,70 @@ export default function SubmitWarehouse() {
                     {feeEstimate.outbound.totalFee}
                   </span>
                 </div>
-                <div className="text-sm text-gray-500 text-left">
+                <div className="rounded bg-gray-50 p-2 text-left text-xs text-gray-400">
                   {t("estimatedTip")}
                 </div>
               </div>
             )
           )}
         </div>
+        <Textarea
+          fullWidth
+          classNames={{
+            inputWrapper: "bg-white  ",
+            input: "text-base",
+          }}
+          placeholder={t("textareaPlaceholder")}
+          size="lg"
+          value={remark}
+          onChange={(e) => setRemark(e.target.value)}
+        />
+      </div>
+
+      {/* 底部提交 */}
+      <div className="border-t bg-white px-4 py-3">
         <Button
           className="w-full"
           color="primary"
-          isLoading={submitting}
+          isLoading={isSubmitting}
           size="md"
           onPress={handleSubmit}
         >
           {t("submitPackage")}
         </Button>
+        <div className="mt-3 flex justify-center">
+          <Checkbox isSelected={isCheck} size="sm" onValueChange={setIsCheck}>
+            <span className="text-xs text-gray-500">{t("agreement")}</span>
+          </Checkbox>
+        </div>
       </div>
 
-      {/* 地址modal */}
-      <AddressModal
-        defaultData={
-          modalState.type === "edit" ? modalState.address : undefined
-        }
-        isOpen={modalState.type === "add" || modalState.type === "edit"}
-        type={modalState.type === "add" ? "add" : "edit"}
-        onOpenChange={handleOpenChange}
+      {/* 服务选择弹窗 */}
+      <ServiceSelectionModal
+        isOpen={showServiceModal}
+        services={services}
+        onOpenChange={setShowServiceModal}
+        onSelect={toggleSelection}
+        onUpdateQuantity={updateQuantity}
+      />
+
+      {/* 地址选择弹窗 */}
+      <AddressSelectionModal
+        addressList={addressData || []}
+        isOpen={showAddressModal}
+        selectedAddressId={selectedAddressId}
+        onOpenChange={setShowAddressModal}
+        onSelect={(addr) => setSelectedAddressId(addr.id)}
+      />
+
+      {/* 路线选择弹窗 */}
+      <RouteSelectionModal
+        isOpen={showRouteModal}
+        routes={Array.isArray(lineData) ? lineData : []}
+        routesMessage={typeof lineData === "string" ? lineData : ""}
+        selectedRouteId={selectedRouteId}
+        onOpenChange={setShowRouteModal}
+        onSelect={(id) => setSelectedRouteId(id)}
       />
     </>
   );

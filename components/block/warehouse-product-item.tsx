@@ -6,12 +6,14 @@ import { memo } from "react";
 export default memo(function WarehouseProductItem({ warehouse, product }: any) {
   const t = useTranslations("components.block.warehouseProductItem");
 
+  console.log("渲染商品item");
+
   return (
-    <div className="rounded-xl  bg-white p-2 ">
+    <div className="rounded-xl bg-white p-2">
       <div className="flex gap-3">
         <Image
           alt="product"
-          className="rounded-lg object-cover "
+          className="rounded-lg object-cover"
           classNames={{ wrapper: "self-start" }}
           height={80}
           referrerPolicy="no-referrer"

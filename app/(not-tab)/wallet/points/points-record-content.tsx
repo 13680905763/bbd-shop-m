@@ -1,27 +1,25 @@
-import { Spinner } from "@heroui/react";
 import { InfiniteScroll } from "antd-mobile";
 import React from "react";
+
 import { BlockSpinner, EmptyState } from "@/components/ui";
 import { usePointsList } from "@/hook/wallet/usePointsList";
 
-
-
 export default function PointsRecordContent() {
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetching,
-    isFetchingNextPage,
-  } = usePointsList();
+  const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } =
+    usePointsList();
   const records = data?.pages?.flatMap((page: any) => page?.records) ?? [];
+
   if (!records?.length && !isFetching) return <EmptyState />;
+
   return (
     <>
-      {(isFetching) && <BlockSpinner />}
+      {isFetching && <BlockSpinner />}
       <div className="space-y-2">
         {records.map((r: any) => (
-          <div key={r?.id} className="rounded-lg bg-white px-4 py-3 shadow-sm transition-shadow">
+          <div
+            key={r?.id}
+            className="rounded-lg bg-white px-4 py-3 shadow-sm transition-shadow"
+          >
             <div className="flex justify-between">
               <div className="flex flex-col gap-1">
                 <div className="text-title !text-base font-medium text-gray-800">

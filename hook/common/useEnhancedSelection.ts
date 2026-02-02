@@ -31,7 +31,7 @@ export interface EnhancedSelectionResult<T> {
  * @param dataList 原始数据列表
  */
 export default function useEnhancedSelection<T extends BaseSelectionItem>(
-  dataList: T[] = []
+  dataList: T[] = [],
 ): EnhancedSelectionResult<T> {
   // 内部状态：记录每个服务的选中、数量和备注
   const [selectionState, setSelectionState] = useState<
@@ -64,6 +64,7 @@ export default function useEnhancedSelection<T extends BaseSelectionItem>(
   const toggleSelection = useCallback((id: string) => {
     setSelectionState((prev) => {
       const current = prev[id];
+
       if (!current) return prev;
 
       return {
@@ -82,6 +83,7 @@ export default function useEnhancedSelection<T extends BaseSelectionItem>(
 
     setSelectionState((prev) => {
       const current = prev[id];
+
       if (!current) return prev;
 
       return {
@@ -98,6 +100,7 @@ export default function useEnhancedSelection<T extends BaseSelectionItem>(
   const updateRemark = useCallback((id: string, remark: string) => {
     setSelectionState((prev) => {
       const current = prev[id];
+
       if (!current) return prev;
 
       return {
@@ -118,6 +121,7 @@ export default function useEnhancedSelection<T extends BaseSelectionItem>(
         quantity: 1,
         remark: "",
       };
+
       return {
         ...item,
         ...state,
@@ -131,7 +135,7 @@ export default function useEnhancedSelection<T extends BaseSelectionItem>(
     const selectedIds = new Set(
       Object.entries(selectionState)
         .filter(([_, state]) => state.isSelected)
-        .map(([id]) => id)
+        .map(([id]) => id),
     );
 
     // 返回合并了状态的完整对象

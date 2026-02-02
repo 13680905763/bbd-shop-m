@@ -1,10 +1,8 @@
 "use client";
-import { Checkbox, Image, Input } from "@heroui/react";
+import { Checkbox } from "@heroui/react";
 
 import SourceIcon from "@/components/common/source-icon";
 import { ProductItem } from "@/components/common";
-
-
 
 export default function CartItem({
   cart,
@@ -16,7 +14,7 @@ export default function CartItem({
   onRemark,
 }: any) {
   return (
-    <div className="rounded-lg bg-white px-2 py-3 space-y-2">
+    <div className="space-y-2 rounded-lg bg-white px-2 py-3">
       <div className="flex items-center gap-2">
         <Checkbox
           className="m-0 p-0"
@@ -31,12 +29,12 @@ export default function CartItem({
       {cart.cartList.map((p: any) => (
         <ProductItem
           key={p.id}
-          product={p}
           isOperated={true}
-          onToggle={toggle}
           isSelected={isSelected}
-          onUpdateQuantity={onQuantityChange}
+          product={p}
           onRemark={onRemark}
+          onToggle={toggle}
+          onUpdateQuantity={onQuantityChange}
         />
       ))}
     </div>

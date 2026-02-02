@@ -49,7 +49,7 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(false);
 
   // 使用 ref 存储 resolve 函数，以便在 confirm 中调用
-  const resolveRef = useRef<(value: boolean) => void>(() => { });
+  const resolveRef = useRef<(value: boolean) => void>(() => {});
 
   const confirm = useCallback((opts: ConfirmOptions) => {
     opts.showCancel = opts.showCancel ?? true;
@@ -136,17 +136,15 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
                   >
                     {options.cancelText || t("cancel")}
                   </Button>
-                  {
-                    options.showConfirm && (
-                      <Button
-                        color={getButtonColor(options.type)}
-                        isLoading={loading || options.isLoading}
-                        onPress={handleConfirm}
-                      >
-                        {options.confirmText || t("confirm")}
-                      </Button>
-                    )
-                  }
+                  {options.showConfirm && (
+                    <Button
+                      color={getButtonColor(options.type)}
+                      isLoading={loading || options.isLoading}
+                      onPress={handleConfirm}
+                    >
+                      {options.confirmText || t("confirm")}
+                    </Button>
+                  )}
                 </ModalFooter>
               </>
             )}

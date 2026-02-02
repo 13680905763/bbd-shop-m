@@ -1,5 +1,5 @@
 import { Button, Checkbox, Image } from "@heroui/react";
-import { FiChevronRight, FiSearch } from "react-icons/fi";
+import { FiSearch } from "react-icons/fi";
 import { useTranslations } from "next-intl";
 import { ImageViewer } from "antd-mobile";
 import { useState } from "react";
@@ -48,7 +48,7 @@ export default function PackageItem({
   console.log("filled", filled);
 
   return (
-    <div className="rounded-xl  bg-white p-3  space-y-2">
+    <div className="space-y-2 rounded-xl bg-white p-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-sm font-medium text-gray-800">
           {showCheckbox && (
@@ -125,18 +125,16 @@ export default function PackageItem({
               <p>{pack?.shipping?.templateName}</p>
               {pack?.shipping?.shippingCode && (
                 <Button
-                  className="text-[#f0700c] border-[#f0700c] border bg-[#fff]"
-                  size="sm"
+                  className="border border-[#f0700c] bg-[#fff] text-[#f0700c]"
                   isLoading={isTrackLoading}
+                  size="sm"
                   onPress={async () => {
                     setIsTrackLoading(true);
                     await onTrack(pack);
                     setIsTrackLoading(false);
                   }}
                 >
-                  <FiSearch
-                    size={14}
-                  />
+                  <FiSearch size={14} />
                   {pack.shipping.shippingCode}
                 </Button>
               )}
@@ -164,18 +162,18 @@ export default function PackageItem({
         </div>
       </div>
       {/* 服务列表 */}
-      {
-        pack?.serviceList?.length > 0 && (
-          <div className="flex flex-col gap-2 rounded-lg bg-[#fafafa] p-2">
-            {pack?.serviceList.map((service: any) => (
-              <div key={service.serviceId} className="flex gap-2">
-                <div className="text-sm text-[#acacac]">{service.serviceName}</div>
-                <MediaPreviewGroup fileList={service.fileList as MediaItem[]} />
+      {pack?.serviceList?.length > 0 && (
+        <div className="flex flex-col gap-2 rounded-lg bg-[#fafafa] p-2">
+          {pack?.serviceList.map((service: any) => (
+            <div key={service.serviceId} className="flex gap-2">
+              <div className="text-sm text-[#acacac]">
+                {service.serviceName}
               </div>
-            ))}
-          </div>
-        )
-      }
+              <MediaPreviewGroup fileList={service.fileList as MediaItem[]} />
+            </div>
+          ))}
+        </div>
+      )}
       {/* 金额 + 按钮 */}
       <div className="text-right text-base font-bold text-gray-700">
         <p>
@@ -192,10 +190,10 @@ export default function PackageItem({
       <div className="flex justify-end gap-1">
         {pack?.cancelFlag && (
           <Button
+            isLoading={isCancelLoading}
             radius="sm"
             size="sm"
             variant="flat"
-            isLoading={isCancelLoading}
             onPress={async () => {
               setIsCancelLoading(true);
               await onCancel(pack);
@@ -220,11 +218,11 @@ export default function PackageItem({
         {/* 状态：更换路线 */}
         {pack?.changeFlag && (
           <Button
-            className="text-[#f0700c] border-[#f0700c] border bg-[#fff]"
+            className="border border-[#f0700c] bg-[#fff] text-[#f0700c]"
+            isLoading={isChangeLoading}
             radius="sm"
             size="sm"
             variant="flat"
-            isLoading={isChangeLoading}
             onPress={async () => {
               setIsChangeLoading(true);
               await onChangeLine(pack);
@@ -238,9 +236,9 @@ export default function PackageItem({
         {(pack?.statusCode == 203 || pack?.statusCode == 209) && (
           <Button
             color="primary"
+            isLoading={isPayLoading}
             radius="sm"
             size="sm"
-            isLoading={isPayLoading}
             onPress={async () => {
               setIsPayLoading(true);
               await onPay([pack?.packingPackageCode]);

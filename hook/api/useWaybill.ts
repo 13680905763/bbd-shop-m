@@ -14,6 +14,7 @@ export function useWaybillList(params: any) {
     },
     getNextPageParam: (lastPage: any) => {
       const loaded = lastPage.current * lastPage.size;
+
       return loaded < lastPage.total ? lastPage.current + 1 : undefined;
     },
     initialPageParam: 1,
@@ -22,7 +23,8 @@ export function useWaybillList(params: any) {
 }
 export function useBatchPay() {
   return useMutation({
-    mutationFn: (params: { packageSet: string[] }) => waybillApi.batchPay(params),
+    mutationFn: (params: { packageSet: string[] }) =>
+      waybillApi.batchPay(params),
   });
 }
 export function usePreviewCancel() {
@@ -67,7 +69,8 @@ export function useTrackDetail() {
 }
 export function useReceipt() {
   return useMutation({
-    mutationFn: (outboundPackingId: string) => waybillApi.receipt(outboundPackingId),
+    mutationFn: (outboundPackingId: string) =>
+      waybillApi.receipt(outboundPackingId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["waybillList"] });
     },

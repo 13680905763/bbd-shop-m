@@ -49,14 +49,12 @@ export const loginWithGoogle = (idToken: string): Promise<string> => {
   );
 };
 /** 谷歌登录新 */
-export const loginWithGoogleNew = (
-  data: any
-): Promise<string> => {
+export const loginWithGoogleNew = (data: any): Promise<string> => {
   return requestWithOption<string>(
     {
       url: "/customer/google/code",
       method: "POST",
-      data
+      data,
     },
     { showToast: true }, // 登录成功/失败都会弹 toast
   );

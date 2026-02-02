@@ -18,18 +18,13 @@ export default function RefundCountdown({ timestamp }: RefundCountdownProps) {
 
   // 如果已经过期，显示过期状态
   if (timeLeft === 0) {
-    return (
-      <span className="text-xs ml-1 text-red-500">
-        ({t("expired")})
-      </span>
-    );
+    return <span className="ml-1 text-xs text-red-500">({t("expired")})</span>;
   }
 
   return (
     <span style={{ fontSize: "12px", color: "inherit", lineHeight: "inherit" }}>
-      (
-      {days} {t("day")} {hours} {t("hour")} {minutes} {t("minute")} {seconds} {t("second")}
-      )
+      ({days} {t("day")} {hours} {t("hour")} {minutes} {t("minute")} {seconds}{" "}
+      {t("second")})
     </span>
   );
 }

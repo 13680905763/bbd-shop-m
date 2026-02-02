@@ -4,10 +4,11 @@ import { useRouter } from "next/navigation";
 import { IoWallet } from "react-icons/io5";
 import { useTranslations } from "next-intl";
 
-import { CommonTabs } from "@/components/common";
-import { useUserInfo } from "@/hook/api";
 import PointsRecordContent from "./points-record-content";
 import PointsChangeContent from "./points-change-content";
+
+import { CommonTabs } from "@/components/common";
+import { useUserInfo } from "@/hook/api";
 
 export default function PointsPage() {
   const t = useTranslations("wallet.points");
@@ -25,12 +26,13 @@ export default function PointsPage() {
       content: <PointsChangeContent />,
     },
   ];
+
   return (
     <>
       <NavBar className="bg-white" onBack={() => router.back()}>
         <span className="navbar-title">{t("title")}</span>
       </NavBar>
-      <div className="m-2 flex rounded-lg bg-[#ffeee1] p-6 items-center gap-2">
+      <div className="m-2 flex items-center gap-2 rounded-lg bg-[#ffeee1] p-6">
         <IoWallet className="h-5 w-5 text-[#f0700c]" />
         <span>{t("myPoints")}</span>
         <span className="text-balance">{user?.myPoints}</span>

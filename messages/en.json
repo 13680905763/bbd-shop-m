@@ -51,6 +51,10 @@
                 "remark": "Product Remarks",
                 "placeholder": "Enter product remarks",
                 "noRemark": "No remarks"
+            },
+            "expandableList": {
+                "expand": "Expand",
+                "collapse": "Collapse"
             }
         },
         "block": {
@@ -497,7 +501,6 @@
                 "change": "Points Exchange"
             },
             "myPoints": "Points"
-       
         }
     },
     "goods": {
@@ -578,6 +581,15 @@
             "agreement": "I have read and agreed to the bbdbuy Package Shipping Agreement",
             "submitPackage": "Submit Package",
             "defaultMessage": "Please select an address to view shipping routes",
+            "selectService": "Select Service",
+            "select": "Select",
+            "noServiceSelected": "No service selected, click to select",
+            "noServices": "No services available",
+            "noAddressSelected": "No address selected, click to select",
+            "noAddress": "No address available",
+            "noRouteSelected": "No route selected, click to select",
+            "noRoutes": "No routes available",
+            "confirm": "Confirm",
             "totalWeight": "Total Weight",
             "totalVolume": "Total Volume",
             "estimating": "Estimating fee...",

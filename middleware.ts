@@ -2,7 +2,14 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // 移动端公开访问页面
-const PUBLIC_PATHS = ["/", "/login", "/register", "/goods", "/setting/language", "/setting/currency"];
+const PUBLIC_PATHS = [
+  "/",
+  "/login",
+  "/register",
+  "/goods",
+  "/setting/language",
+  "/setting/currency",
+];
 
 // // 判断是否公开路径
 function isPublicPath(pathname: string) {

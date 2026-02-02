@@ -25,9 +25,12 @@ export default function AuthLayout({
     scope: "email profile openid",
     onSuccess: async (codeResponse) => {
       try {
-        await loginWithGoogleNew({ authorizationCode: codeResponse.code, inviteCode: searchParams.get("inviteCode") || "", });
+        await loginWithGoogleNew({
+          authorizationCode: codeResponse.code,
+          inviteCode: searchParams.get("inviteCode") || "",
+        });
         router.push(redirect);
-      } catch { }
+      } catch {}
     },
   });
 

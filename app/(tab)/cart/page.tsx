@@ -3,16 +3,21 @@ import { Button, Checkbox } from "@heroui/react";
 import React, { useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+
 import CartItem from "./cart-item";
-import { useCartList } from "@/hook";
-import { useGlobalStore } from "@/store";
-import { useDebounceCallback, useSelection } from "@/hook/common";
-import { BlockSpinner, EmptyState, FullscreenLoader } from "@/components/ui";
-import { useCreateOrderPreview, useDeleteCart, useUpdateCartItem } from "@/hook/api";
-import { useConfirm } from "@/components/common";
-import { calculateTotalPrice } from "@/lib/price";
 import EditRemarkModal from "./edit-remark-modal";
 
+import { useCartList } from "@/hook";
+import { useGlobalStore } from "@/store";
+import { useSelection } from "@/hook/common";
+import { BlockSpinner, EmptyState, FullscreenLoader } from "@/components/ui";
+import {
+  useCreateOrderPreview,
+  useDeleteCart,
+  useUpdateCartItem,
+} from "@/hook/api";
+import { useConfirm } from "@/components/common";
+import { calculateTotalPrice } from "@/lib/price";
 
 export default function Cart() {
   const t = useTranslations("cart"); // ✅ 命名空间 cart
@@ -64,14 +69,17 @@ export default function Cart() {
     });
   };
   const updateProductQuantity = async (productId: string, quantity: number) => {
-    await updateMutation([{
-      id: productId,
-      quantity,
-    }]);
-  }
+    await updateMutation([
+      {
+        id: productId,
+        quantity,
+      },
+    ]);
+  };
   const submitCart = async () => {
     if (isEdit) {
       deleteCart();
+
       return;
     }
     try {
@@ -79,12 +87,12 @@ export default function Cart() {
         previewList: selectedIds.map((cartId) => ({
           cartId,
           serviceList: [],
-        }))
+        })),
       };
       const key: string = await createOrderPreview(params);
+
       router.push("/submit/order?type=cart&key=" + key);
-    } catch {
-    }
+    } catch {}
   };
   const updateProductRemark = useCallback(
     (productId: string, remark: string) => {
@@ -122,7 +130,7 @@ export default function Cart() {
           {isEdit ? t("cancel") : t("manage")}
         </button>
       </div>
-      <div className="flex-1 overflow-auto px-2 space-y-2 pb-2">
+      <div className="flex-1 space-y-2 overflow-auto px-2 pb-2">
         {(isFetching || isUpdating) && <BlockSpinner />}
         {flatList.length === 0 ? (
           <EmptyState desc={t("emptyDesc")} title={t("emptyTitle")} />
@@ -131,12 +139,12 @@ export default function Cart() {
             <CartItem
               key={c.shopId}
               cart={c}
-              toggleGroup={onToggleGroup} // 店铺onChange
               isGroupAllSelected={isGroupAllSelected} //  店铺selected
-              toggle={onSelect}
               isSelected={isSelected}
-              onRemark={updateProductRemark}
+              toggle={onSelect}
+              toggleGroup={onToggleGroup} // 店铺onChange
               onQuantityChange={updateProductQuantity}
+              onRemark={updateProductRemark}
             />
           ))
         )}
@@ -146,7 +154,7 @@ export default function Cart() {
           {t("selectAll")}
         </Checkbox>
         <div className="flex items-center gap-2">
-          {togglePrice as unknown as number != 0 && (
+          {(togglePrice as unknown as number) != 0 && (
             <p className="text-price-lg">
               {currency.symbol}
               {togglePrice}

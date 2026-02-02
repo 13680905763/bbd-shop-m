@@ -15,26 +15,29 @@ const tabKeyToStatusCode: Record<string, string> = {
   used: "2", // 已使用
   expired: "3", // 过期
 };
+
 export default function CouponPage() {
   const t = useTranslations("dashboard.coupon");
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("all");
-  const { data, isFetching } = useUserCoupon({ status: tabKeyToStatusCode[activeTab] });
+  const [activeTab, setActiveTab] = useState("unused");
+  const { data, isFetching } = useUserCoupon({
+    status: tabKeyToStatusCode[activeTab],
+  });
 
   const renderCouponContent = () => {
     if (!data?.length && !isFetching) return <EmptyState />;
+
     return (
       <>
-        {(isFetching) && <BlockSpinner />}
+        {isFetching && <BlockSpinner />}
         <div className="grid grid-cols-2 gap-2">
-          {
-            data?.map((coupon: Coupon) => (
-              <CouponCard key={coupon.id} coupon={coupon} />
-            ))}
+          {data?.map((coupon: Coupon) => (
+            <CouponCard key={coupon.id} coupon={coupon} />
+          ))}
         </div>
       </>
     );
-  }
+  };
   const tabs = [
     {
       key: "unused",
@@ -52,6 +55,7 @@ export default function CouponPage() {
       content: renderCouponContent(),
     },
   ];
+
   return (
     <>
       <NavBar className="bg-white" onBack={() => router.back()}>

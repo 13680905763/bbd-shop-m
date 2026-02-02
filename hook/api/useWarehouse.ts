@@ -15,18 +15,11 @@ export function useWarehousePackageList(params: WarehousePackageListParams) {
     },
     getNextPageParam: (lastPage: any) => {
       const loaded = lastPage.current * lastPage.size;
+
       return loaded < lastPage.total ? lastPage.current + 1 : undefined;
     },
     initialPageParam: 1,
     refetchOnWindowFocus: false, //  禁止切回 Tab 时自动请求
-  });
-}
-/** 提交包裹 附加服务 key */
-export function useWarehouseServicesList() {
-  return useQuery({
-    queryKey: ["warehouseServicesList"],
-    queryFn: () => warehouseApi.listServices(),
-    staleTime: 5 * 10 * 1000,
   });
 }
 
@@ -44,6 +37,7 @@ export function useWaybillFeeEstimate(data: any) {
       if (!data) {
         return {};
       }
+
       return warehouseApi.getWaybillFeeEstimate(data);
     },
   });
@@ -63,7 +57,18 @@ export function useWaybillPreview(key: string) {
     refetchOnWindowFocus: false,
   });
 }
+export function useLineByWaybill(data: any) {
+  return useQuery<any>({
+    queryKey: ["lineByWaybill", data],
+    queryFn: () => {
+      if (!data) {
+        return {};
+      }
 
+      return warehouseApi.listLineByWaybill(data);
+    },
+  });
+}
 /** 创建运单 */
 export function useCreateWaybill() {
   return useMutation({

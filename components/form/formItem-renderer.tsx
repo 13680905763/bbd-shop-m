@@ -75,6 +75,7 @@ export default function FormItemRenderer<T extends Record<string, any>>({
                   inputWrapper: "bg-white",
                 }}
                 errorMessage={errorMessage}
+                isDisabled={isDisabled}
                 isRequired={required}
                 label={label}
                 placeholder={placeholder}
@@ -82,7 +83,6 @@ export default function FormItemRenderer<T extends Record<string, any>>({
                 startContent={startContent}
                 value={value}
                 variant="bordered"
-                isDisabled={isDisabled}
                 onValueChange={(val) => handleChange(name, val)}
               />
             );

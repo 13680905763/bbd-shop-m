@@ -1,4 +1,3 @@
-
 export * from "./useWarehouse";
 export * from "./useCart";
 // export * from "./useHistory";
@@ -10,3 +9,4 @@ export * from "./useUser";
 // export * from "./useWallet";
 export * from "./usePromotion";
 export * from "./useConfig";
+export * from "./useAddress";

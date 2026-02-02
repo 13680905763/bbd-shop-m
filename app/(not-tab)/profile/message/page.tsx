@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import MessageItem from "./message-item";
+
 import { useSelection } from "@/hook/common";
 import { BottomAction, CommonTabs, useConfirm } from "@/components/common";
 import { useMessageList, useReadMessage, useDeleteMessage } from "@/hook/api";
@@ -17,19 +18,15 @@ const tabKeyToStatusCode: any = {
   read: 1,
 };
 
-
 export default function MessagePage() {
   const t = useTranslations("profile.message");
   const [activeTab, setActiveTab] = useState("all");
   const [isEdit, setIsEdit] = useState(false);
 
   const router = useRouter();
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetching,
-  } = useMessageList(tabKeyToStatusCode[activeTab]);
+  const { data, fetchNextPage, hasNextPage, isFetching } = useMessageList(
+    tabKeyToStatusCode[activeTab],
+  );
 
   const messages = data?.pages?.flatMap((page: any) => page.records) ?? [];
   const {
@@ -39,11 +36,11 @@ export default function MessagePage() {
     isAllSelected,
     onToggleSelectAll,
   } = useSelection(messages, { idKey: "id" });
-  const { mutateAsync: readMessage, isPending: isReadPending } = useReadMessage();
-  const { mutateAsync: deleteMessage, isPending: isDeletePending } = useDeleteMessage();
+  const { mutateAsync: readMessage, isPending: isReadPending } =
+    useReadMessage();
+  const { mutateAsync: deleteMessage, isPending: isDeletePending } =
+    useDeleteMessage();
   const { confirm } = useConfirm();
-
-
 
   const onDetail = async (message: any) => {
     await confirm({
@@ -71,22 +68,22 @@ export default function MessagePage() {
 
   const renderMessageContent = () => {
     if (!messages?.length && !isFetching) return <EmptyState />;
+
     return (
       <>
-        {(isFetching) && <BlockSpinner />}
-        <div className="space-y-2 ">
-          {
-            messages.map((m: any) => (
-              <MessageItem
-                key={m.id}
-                activeTab={activeTab}
-                isEdit={isEdit}
-                message={m}
-                isSelected={isSelected}
-                onChange={onSelect}
-                onDetail={onDetail} //取消订单
-              />
-            ))}
+        {isFetching && <BlockSpinner />}
+        <div className="space-y-2">
+          {messages.map((m: any) => (
+            <MessageItem
+              key={m.id}
+              activeTab={activeTab}
+              isEdit={isEdit}
+              isSelected={isSelected}
+              message={m}
+              onChange={onSelect}
+              onDetail={onDetail} //取消订单
+            />
+          ))}
         </div>
         <InfiniteScroll
           hasMore={!!hasNextPage}
@@ -101,22 +98,20 @@ export default function MessagePage() {
     {
       key: "all",
       title: t("tabs.all"),
-      content: renderMessageContent()
-      ,
+      content: renderMessageContent(),
     },
     {
       key: "unread",
       title: t("tabs.unread"),
-      content: renderMessageContent()
-      ,
+      content: renderMessageContent(),
     },
     {
       key: "read",
       title: t("tabs.read"),
-      content: renderMessageContent()
-      ,
+      content: renderMessageContent(),
     },
   ];
+
   return (
     <>
       <NavBar
@@ -130,10 +125,13 @@ export default function MessagePage() {
       >
         <span className="navbar-title">{t("title")}</span>
       </NavBar>
-      <CommonTabs tabs={tabs} onSelectionChange={(key) => {
-        setActiveTab(String(key))
-        // unselectAll()
-      }} />
+      <CommonTabs
+        tabs={tabs}
+        onSelectionChange={(key) => {
+          setActiveTab(String(key));
+          // unselectAll()
+        }}
+      />
       {isEdit && messages.length > 0 && (
         <BottomAction
           buttonText={t("delete")}

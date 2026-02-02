@@ -79,9 +79,8 @@ export const getPayOrderStatus = (bizCode: string): Promise<number> =>
   request.get(`/customer/pay-order/status?bizCode=${bizCode}`);
 
 /** 订单列表 */
-export const getOrderList = (
-  data: any,
-): Promise<OrderListResponse> => request.post("/orders/page", data);
+export const getOrderList = (data: any): Promise<OrderListResponse> =>
+  request.post("/orders/page", data);
 /** 获取增值服务列表 */
 export const getServicesList = (): Promise<any> => {
   return requestWithOption(

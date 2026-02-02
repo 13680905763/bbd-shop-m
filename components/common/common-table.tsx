@@ -39,18 +39,15 @@ export default function CommonTable({
   onPageSizeChange,
   renderCell,
 }: CommonTableProps) {
-  console.log('isLoading', isLoading);
-  console.log('data', data);
-  console.log('columns', columns);
+  console.log("isLoading", isLoading);
+  console.log("data", data);
+  console.log("columns", columns);
   const total = data?.total || 10;
+
   return (
     <Table
-      className="relative"
       bottomContent={
-        !isLoading &&
-          total > 0 &&
-          onPageChange &&
-          onPageSizeChange ? (
+        !isLoading && total > 0 && onPageChange && onPageSizeChange ? (
           <div className="">
             <PaginationBar
               page={page}
@@ -62,11 +59,10 @@ export default function CommonTable({
           </div>
         ) : null
       }
+      className="relative"
     >
       <TableHeader columns={columns}>
-        {(column) => (
-          <TableColumn key={column.key}>{column.label}</TableColumn>
-        )}
+        {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
       </TableHeader>
       <TableBody
         emptyContent={<EmptyState className="!h-auto" />}

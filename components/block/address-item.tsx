@@ -1,6 +1,6 @@
 import type { Address } from "@/types/address";
 
-import { Chip, Divider } from "@heroui/react";
+import { Chip } from "@heroui/react";
 import { useTranslations } from "next-intl";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
 import { memo, useCallback } from "react";
@@ -24,7 +24,8 @@ export default memo(function AddressItem({
   onSelect,
   onEdit,
   onDelete,
-}: AddressItemProps) {
+  size = "md", // 新增 size 属性
+}: AddressItemProps & { size?: "sm" | "md" }) {
   const t = useTranslations("components.addressItem");
 
   const fullCity =
@@ -52,6 +53,36 @@ export default memo(function AddressItem({
 
   console.log("重渲染");
 
+  if (size === "sm") {
+    return (
+      <div
+        className={clsx(
+          "flex flex-col gap-1 rounded-lg border border-gray-100 bg-gray-50 p-3 text-sm transition",
+          selectable && "cursor-pointer",
+        )}
+        role="button"
+        onClick={handleSelect}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 font-semibold text-gray-900">
+            <span>{addressDetail.recipient}</span>
+            <span className="text-xs font-normal text-gray-500">
+              {addressDetail.phone}
+            </span>
+          </div>
+          {addressDetail.defaultAddress ? (
+            <span className="rounded bg-primary/10 px-1.5 py-0.5 text-xs text-primary">
+              {t("default")}
+            </span>
+          ) : null}
+        </div>
+        <div className="truncate text-xs text-gray-600">
+          {fullCity} {fullAddress}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className={clsx(
@@ -73,8 +104,6 @@ export default memo(function AddressItem({
       <div className="text-gray-700">
         <span className="line-clamp-2">{fullAddress}</span>
       </div>
-
-      <Divider className="my-1" />
 
       <div className="flex items-center justify-between">
         {addressDetail.defaultAddress ? (

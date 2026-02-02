@@ -37,7 +37,8 @@ export default function BottomAction({
             isLoading={isLoading}
             onPress={onPress}
           >
-            {buttonText || t("submit")} {selectedCount > 0 && `(${selectedCount})`}
+            {buttonText || t("submit")}{" "}
+            {selectedCount > 0 && `(${selectedCount})`}
           </Button>
         </div>
       </div>

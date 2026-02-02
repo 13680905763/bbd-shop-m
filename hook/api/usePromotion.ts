@@ -1,6 +1,6 @@
-import { PromotionApi } from "@/services/promotionApi";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
+import { PromotionApi } from "@/services/promotionApi";
 
 export const useInvitedUsers = () => {
   return useInfiniteQuery({
@@ -10,10 +10,12 @@ export const useInvitedUsers = () => {
         current: pageParam,
         size: 10,
       };
+
       return PromotionApi.listInvitedUsers(params);
     },
     getNextPageParam: (lastPage) => {
       const loaded = lastPage.current * lastPage.size;
+
       return loaded < lastPage.total ? lastPage.current + 1 : undefined;
     },
     initialPageParam: 1,
@@ -28,10 +30,12 @@ export const useExperience = () => {
         current: pageParam,
         size: 10,
       };
+
       return PromotionApi.listExperience(params);
     },
     getNextPageParam: (lastPage) => {
       const loaded = lastPage.current * lastPage.size;
+
       return loaded < lastPage.total ? lastPage.current + 1 : undefined;
     },
     initialPageParam: 1,
@@ -46,10 +50,12 @@ export const useBonus = () => {
         current: pageParam,
         size: 10,
       };
+
       return PromotionApi.listBonus(params);
     },
     getNextPageParam: (lastPage: any) => {
       const loaded = lastPage.current * lastPage.size;
+
       return loaded < lastPage.total ? lastPage.current + 1 : undefined;
     },
     initialPageParam: 1,

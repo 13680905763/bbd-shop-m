@@ -13,6 +13,7 @@ export default function WarehouseItem({
   isSelected,
 }: any) {
   const product = warehouse?.orderProduct;
+
   return (
     <div className="rounded-xl border border-gray-100 bg-white p-3 shadow-sm">
       <div className="flex items-center justify-between border-gray-100">

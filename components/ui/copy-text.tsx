@@ -17,11 +17,11 @@ export default function CopyText({
   toastMessage = "",
   className = "",
 }: CopyTextProps) {
-  const  t  = useTranslations("components.ui.copy");
+  const t = useTranslations("components.ui.copy");
 
   const handleCopy = async (e: React.MouseEvent) => {
     e.stopPropagation(); // 防止冒泡触发父级点击事件
-    
+
     if (!text) return;
 
     try {
@@ -42,11 +42,11 @@ export default function CopyText({
   };
 
   return (
-    <div 
-      className={`cursor-pointer ${className}`} 
-      onClick={handleCopy}
+    <div
+      className={`cursor-pointer ${className}`}
       role="button"
       tabIndex={0}
+      onClick={handleCopy}
     >
       {children}
     </div>

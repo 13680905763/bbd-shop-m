@@ -27,7 +27,7 @@ export default function PaginationBar({
   // );
 
   return (
-    <div className="flex flex-wrap gap-4 items-center justify-center w-full">
+    <div className="flex w-full flex-wrap items-center justify-center gap-4">
       <Pagination
         showControls
         page={page}

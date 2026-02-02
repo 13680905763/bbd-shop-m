@@ -9,15 +9,42 @@ export default function WarehouseServiceCard({
   service,
   onSelect,
   onUpdateQuantity,
+  size = "md", // 新增 size 属性
 }: any) {
   const { currency } = useGlobalStore();
+
+  if (size === "sm") {
+    return (
+      <div className="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50 p-2">
+        <div className="flex min-w-0 flex-1 items-center gap-2">
+          <Image
+            alt={service.serviceName}
+            className="flex-shrink-0 rounded-md object-cover"
+            height={40}
+            src={service.sample}
+            width={40}
+          />
+          <div className="flex min-w-0 flex-col">
+            <span className="truncate text-sm font-medium text-gray-900">
+              {service.serviceName}
+            </span>
+            <span className="text-xs font-medium text-primary">
+              {currency.symbol}
+              {service.price}
+              {service.stacked == 1 && ` x ${service.quantity}`}
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <button
       className={clsx(
-        "p-3 rounded-xl border transition cursor-pointer w-full text-left relative",
+        "relative w-full cursor-pointer rounded-xl border p-3 text-left transition",
         service.isSelected
-          ? "border-primary bg-orange-50 border-2"
+          ? "border-2 border-primary bg-orange-50"
           : "border-gray-200 bg-white",
       )}
       onClick={() => onSelect?.(service.id)}
@@ -35,27 +62,27 @@ export default function WarehouseServiceCard({
         </div>
 
         {/* 右侧内容区域 */}
-        <div className="flex flex-col flex-1 min-w-0">
+        <div className="flex min-w-0 flex-1 flex-col">
           {/* 服务名称（2 行展示） */}
-          <p className="text-sm font-medium text-gray-900 line-clamp-2 leading-snug">
+          <p className="line-clamp-2 text-sm font-medium leading-snug text-gray-900">
             {service.serviceName}
           </p>
           {/* 价格 + Stepper */}
-          <div className="mt-auto pt-2 flex items-center justify-between">
-            <span className="text-primary font-semibold whitespace-nowrap">
+          <div className="mt-auto flex items-center justify-between pt-2">
+            <span className="whitespace-nowrap font-semibold text-primary">
               {currency.symbol}
               {service.price}
             </span>
             {/* 数量 Stepper（右侧） */}
             {service.stacked == 1 && (
               <div
-                className="flex items-center bg-gray-100 rounded-lg overflow-hidden flex-shrink-0"
+                className="flex flex-shrink-0 items-center overflow-hidden rounded-lg bg-gray-100"
                 role="button"
                 onClick={(e) => e.stopPropagation()} // 避免点 + - 触发选中卡片
               >
                 {/* 减号 */}
                 <div
-                  className="w-7 h-7 flex items-center justify-center text-gray-600 hover:bg-gray-200 cursor-pointer"
+                  className="flex h-7 w-7 cursor-pointer items-center justify-center text-gray-600 hover:bg-gray-200"
                   role="button"
                   onClick={() =>
                     onUpdateQuantity?.(service.id, service.quantity - 1)
@@ -64,12 +91,12 @@ export default function WarehouseServiceCard({
                   -
                 </div>
                 {/* 数量显示 */}
-                <span className="px-2 min-w-[24px] text-center text-gray-900 text-sm">
+                <span className="min-w-[24px] px-2 text-center text-sm text-gray-900">
                   {service.quantity}
                 </span>
                 {/* 加号 */}
                 <div
-                  className="w-7 h-7 flex items-center justify-center text-gray-600 hover:bg-gray-200 cursor-pointer"
+                  className="flex h-7 w-7 cursor-pointer items-center justify-center text-gray-600 hover:bg-gray-200"
                   role="button"
                   onClick={() =>
                     onUpdateQuantity?.(service.id, service.quantity + 1)

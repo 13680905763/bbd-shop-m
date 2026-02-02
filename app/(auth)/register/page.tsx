@@ -71,7 +71,7 @@ export default function RegisterPage() {
     try {
       await signUpCustomer(data);
       setIsEmailVerified(true);
-    } catch { }
+    } catch {}
   };
   const handleInviteCode = async (code: string) => {
     if (code.length === 6) {
@@ -81,7 +81,7 @@ export default function RegisterPage() {
           activationCode: code,
         });
         router.push("/dashboard");
-      } catch { }
+      } catch {}
     }
   };
 

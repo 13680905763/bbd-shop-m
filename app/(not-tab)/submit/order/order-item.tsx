@@ -2,11 +2,11 @@
 
 import { Button } from "@heroui/react";
 import { useTranslations } from "next-intl";
+import React from "react";
 
 import SourceIcon from "@/components/common/source-icon";
 import { useGlobalStore } from "@/store";
 import { ProductItem } from "@/components/common";
-import React from "react";
 
 export default function OrderItem({ order, openServiceModal }: any) {
   const t = useTranslations("submit.order");
@@ -14,7 +14,7 @@ export default function OrderItem({ order, openServiceModal }: any) {
   const { currency } = useGlobalStore();
 
   return (
-    <div className="rounded-lg bg-white px-2 py-3 space-y-2">
+    <div className="space-y-2 rounded-lg bg-white px-2 py-3">
       <div className="flex items-center gap-2">
         <SourceIcon source={order?.source} />
         <div className="text-title">{order?.shopName}</div>
@@ -62,7 +62,7 @@ export default function OrderItem({ order, openServiceModal }: any) {
         </React.Fragment>
       ))}
 
-      <div className=" text-right">
+      <div className="text-right">
         <div>
           {t("shippingFee")}
           {currency.symbol}

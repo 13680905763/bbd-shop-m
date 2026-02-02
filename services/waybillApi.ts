@@ -1,16 +1,15 @@
-import { PageResult } from "@/types/api";
 import { request } from "./request";
+
+import { PageResult } from "@/types/api";
 
 export const waybillApi = {
   /** 获取运单分页列表 */
-  listWaybill(
-    params: any,
-  ): Promise<PageResult<any>> {
+  listWaybill(params: any): Promise<PageResult<any>> {
     return request.post("/waybill/page", params);
   },
   /** 运单批量支付 */
   batchPay(data: any): Promise<any> {
-    return request.post("/waybill/pay/preview/init", data,);
+    return request.post("/waybill/pay/preview/init", data);
   },
   /** 运单取消预览 */
   previewCancel(waybillId: string): Promise<any> {

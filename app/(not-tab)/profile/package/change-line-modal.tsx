@@ -1,6 +1,8 @@
-import CommonModal from "@/components/modal/common-modal";
-import ShippingRouteCard from "../../submit/warehouse/shipping-route-card";
 import { useTranslations } from "next-intl";
+
+import ShippingRouteCard from "../../submit/warehouse/shipping-route-card";
+
+import CommonModal from "@/components/modal/common-modal";
 
 interface ChangeLineModalProps {
   isOpen: boolean;
@@ -27,16 +29,20 @@ export default function ChangeLineModal({
     <CommonModal
       isOpen={isOpen}
       title={t("changeTitle")}
-      onConfirm={async () => await onConfirm(currentWaybill?.id, selectedRouteId)}
+      onConfirm={async () =>
+        await onConfirm(currentWaybill?.id, selectedRouteId)
+      }
       onOpenChange={onClose}
     >
       <div className="flex flex-col gap-2">
         {currentWaybill?.changePre?.map((line: any) => (
           <ShippingRouteCard
             key={line.id}
-            route={line}
             isSelected={line?.id == selectedRouteId}
-            onSelect={() => { setSelectedRouteId(line?.id || null) }}
+            route={line}
+            onSelect={() => {
+              setSelectedRouteId(line?.id || null);
+            }}
           />
         ))}
       </div>

@@ -49,7 +49,7 @@ export default function Estimation() {
         const res: any = await getCategory();
 
         setCategoryOptions(res);
-      } catch { }
+      } catch {}
     };
 
     fetchData();
@@ -152,7 +152,7 @@ export default function Estimation() {
           </div>
         </div>
         {route.disable && route.prompt && (
-          <div className="mt-2 p-2 bg-red-50 text-red-500 text-sm rounded-lg text-center">
+          <div className="mt-2 rounded-lg bg-red-50 p-2 text-center text-sm text-red-500">
             {route.prompt}
           </div>
         )}
@@ -290,7 +290,11 @@ export default function Estimation() {
           </Form>
           {routes.length > 0 && (
             <div className="mt-3">
-              <Accordion className="!border-1" variant="bordered" disabledKeys={disabledKeys}>
+              <Accordion
+                className="!border-1"
+                disabledKeys={disabledKeys}
+                variant="bordered"
+              >
                 {routes.map((route, index) => (
                   <AccordionItem
                     key={index}

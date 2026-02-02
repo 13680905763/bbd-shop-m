@@ -51,6 +51,10 @@
                 "remark": "商品备注",
                 "placeholder": "输入商品备注",
                 "noRemark": "暂无备注"
+            },
+            "expandableList": {
+                "expand": "展开",
+                "collapse": "收起"
             }
         },
         "block": {
@@ -576,7 +580,16 @@
             "textareaPlaceholder": "如有特殊要求请在此备注",
             "agreement": "我已阅读并同意 bbdbuy 包裹寄送协议",
             "submitPackage": "提交包裹",
-            "defaultMessage": "请选择地址后查看运输路线",
+            "defaultMessage": "请先选择地址",
+            "selectService": "选择服务",
+            "select": "去选择",
+            "noServiceSelected": "暂未选择服务，点击选择",
+            "noServices": "暂无可用服务",
+            "noAddressSelected": "暂未选择地址，点击选择",
+            "noAddress": "暂无可用地址",
+            "noRouteSelected": "暂未选择路线，点击选择",
+            "noRoutes": "暂无可用路线",
+            "confirm": "确认",
             "totalWeight": "总重量",
             "totalVolume": "总体积",
             "estimating": "费用估算中",
