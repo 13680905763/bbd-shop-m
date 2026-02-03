@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslations } from "next-intl";
 
-import CommonModal from "./common-modal";
+import CommonDrawer from "./common-drawer";
 
 import ShippingRouteCard from "@/app/(not-tab)/submit/warehouse/shipping-route-card";
 
@@ -25,7 +25,7 @@ export default function RouteSelectionModal({
   const t = useTranslations("submit.warehouse");
 
   return (
-    <CommonModal
+    <CommonDrawer
       confirmText={t("confirm")}
       isOpen={isOpen}
       showCancel={false}
@@ -52,6 +52,6 @@ export default function RouteSelectionModal({
           </div>
         )}
       </div>
-    </CommonModal>
+    </CommonDrawer>
   );
 }

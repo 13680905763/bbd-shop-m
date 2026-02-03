@@ -34,3 +34,32 @@ export function useWarehouseServicesList() {
     staleTime: 5 * 10 * 1000,
   });
 }
+
+// 获取国家列表
+export const useCountries = () => {
+  return useQuery({
+    queryKey: ["countries"],
+    queryFn: () => configApi.listCountries(),
+    staleTime: 5 * 60 * 1000,
+  });
+};
+
+// 获取省份列表
+export const useProvinces = (countryId?: string) => {
+  return useQuery({
+    queryKey: ["provinces", countryId],
+    queryFn: () => configApi.listProvinces(countryId as string),
+    enabled: !!countryId, // 只有 countryId 存在才请求
+    staleTime: 5 * 60 * 1000,
+  });
+};
+
+// 获取城市列表
+export const useCities = (stateId?: string) => {
+  return useQuery({
+    queryKey: ["cities", stateId],
+    queryFn: () => configApi.listCities(stateId as string),
+    enabled: !!stateId,
+    staleTime: 5 * 60 * 1000,
+  });
+};

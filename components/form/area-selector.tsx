@@ -7,7 +7,7 @@ import {
   useCountries,
   useProvinces,
   useCities,
-} from "@/hook/addresses/useAreaSelector";
+} from "@/hook/api";
 
 interface Option {
   id: string | number; // 接口可能是 number，也可能是 string
@@ -28,6 +28,8 @@ interface Props {
 export default function AreaSelector({ value, onChange }: Props) {
   const t = useTranslations("components.areaSelector");
   const { data: countries = [] } = useCountries();
+  console.log('countries', countries);
+  
   const { data: states = [] } = useProvinces(value.countryId);
   const { data: cities = [] } = useCities(value.stateId);
 

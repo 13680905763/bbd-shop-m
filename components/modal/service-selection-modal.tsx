@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslations } from "next-intl";
 
-import CommonModal from "./common-modal";
+import CommonDrawer from "./common-drawer";
 
 import WarehouseServiceCard from "@/app/(not-tab)/submit/warehouse/werahouse-service-card";
 
@@ -23,7 +23,7 @@ export default function ServiceSelectionModal({
   const t = useTranslations("submit.warehouse");
 
   return (
-    <CommonModal
+    <CommonDrawer
       confirmText={t("confirm")}
       isOpen={isOpen}
       showCancel={false}
@@ -46,6 +46,6 @@ export default function ServiceSelectionModal({
           </div>
         )}
       </div>
-    </CommonModal>
+    </CommonDrawer>
   );
 }

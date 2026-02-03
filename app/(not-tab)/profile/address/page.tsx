@@ -10,7 +10,7 @@ import { Address, AddressModalState } from "@/types";
 import ConfirmModal from "@/components/confirm-modal";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
 import { deleteAddress } from "@/services/address";
-import { useAddressList } from "@/hook/addresses/useAddressList";
+import { useAddressList } from "@/hook/api";
 import AddressModal from "@/components/modal/address-modal";
 import AddressItem from "@/components/block/address-item";
 

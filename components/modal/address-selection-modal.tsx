@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { useTranslations } from "next-intl";
 
-import CommonModal from "./common-modal";
+import CommonDrawer from "./common-drawer";
 import AddressModal from "./address-modal";
 
 import AddressItem from "@/components/block/address-item";
@@ -42,7 +42,7 @@ export default function AddressSelectionModal({
 
   return (
     <>
-      <CommonModal
+      <CommonDrawer
         confirmText={t("confirm")}
         isOpen={isOpen}
         showCancel={false}
@@ -80,7 +80,7 @@ export default function AddressSelectionModal({
             </div>
           )}
         </div>
-      </CommonModal>
+      </CommonDrawer>
 
       <AddressModal
         defaultData={
