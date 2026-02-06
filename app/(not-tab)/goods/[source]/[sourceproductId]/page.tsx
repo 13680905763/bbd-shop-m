@@ -4,7 +4,6 @@ import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import { IoCart, IoStar } from "react-icons/io5";
 import {
-  addToast,
   Button,
   Drawer,
   DrawerBody,
@@ -16,20 +15,19 @@ import {
 } from "@heroui/react";
 import { GrPowerReset } from "react-icons/gr";
 import { IoIosLink } from "react-icons/io";
-import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
 import ProgressBar from "./progress-bar";
 import DisclaimerDrawer from "./disclaimer-drawer";
 
-import Stepper from "@/components/stepper";
-import { addCart } from "@/services/cart";
-import { favoriteProduct, getGoodsInfo } from "@/services/goods";
+import { Stepper } from "@/components/ui";
+import { getGoodsInfo } from "@/services/goods";
 import { createOrderPreviewKeyByProduct } from "@/services";
 import { source } from "@/types";
 import CommonModal from "@/components/modal/common-modal";
 import { useGlobalStore } from "@/store";
 import { GoodsSkeleton } from "@/components/ui";
+import { useAddCartItem, useFavoriteProduct } from "@/hook/api";
 interface Sku {
   skuID: string;
   stock: number;
@@ -141,7 +139,9 @@ export default function GoodsDetails() {
   const [visible, setVisible] = useState(false);
   const [qcVisible, setQcVisible] = useState(false);
   const [qcIndex, setQcIndex] = useState(0);
-  const queryClient = useQueryClient();
+  const { mutateAsync: addCartItem, isPending: isAddingCart } =
+    useAddCartItem();
+  const { mutateAsync: favoriteProduct } = useFavoriteProduct();
   const handleBuyNow = async () => {
     if (issub) return;
 
@@ -167,18 +167,16 @@ export default function GoodsDetails() {
   };
   const handleFavorite = async () => {
     try {
-      await favoriteProduct(
-        params.source as source,
-        params.sourceProductId as string,
-        isFavorite ? 0 : 1,
-      );
+      await favoriteProduct({
+        source: params.source as source,
+        sourceProductId: params.sourceProductId as string,
+        collection: isFavorite ? 0 : 1,
+      });
       setIsFavorite(!isFavorite);
-    } catch (e) {}
+    } catch (e) { }
   };
   const add = async () => {
-    if (issub) return;
-
-    setissub(true);
+    if (isAddingCart) return;
 
     const data = {
       source: params.source,
@@ -192,18 +190,8 @@ export default function GoodsDetails() {
     };
 
     try {
-      const tip = await addCart(data);
-
-      addToast({
-        title: tip,
-        timeout: 1000,
-        color: "success",
-      });
-      queryClient.invalidateQueries({ queryKey: ["cartList"] }); // 手动刷新
-    } catch (e) {
-    } finally {
-      setissub(false);
-    }
+      await addCartItem(data);
+    } catch (e) { }
   };
 
   // 切换选择状态
@@ -223,8 +211,6 @@ export default function GoodsDetails() {
         });
       }
     });
-
-    // setGoodsInfo(cloned);
 
     undateDisabledStatus(cloned);
   };
@@ -370,7 +356,7 @@ export default function GoodsDetails() {
         <GoodsSkeleton />
       ) : (
         <>
-          <div className="flex-1 overflow-y-auto overflow-x-hidden">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide">
             <Swiper autoplay>
               {goodsInfo?.productInfo.imgList.map((item: any) => (
                 <Swiper.Item key={item}>
@@ -632,14 +618,12 @@ export default function GoodsDetails() {
                     );
                   },
                 )}
-                <div>
-                  <div className="my-2 text-sm font-bold">{t("quantity")}</div>
-                  <div className="w-[40%]">
-                    <Stepper
-                      value={quantity}
-                      onChange={(value) => setQuantity(value)}
-                    />
-                  </div>
+                <div className="flex justify-between items-center">
+                  <div className="text-sm font-bold">{t("quantity")}</div>
+                  <Stepper
+                    value={quantity}
+                    onChange={(value) => setQuantity(value)}
+                  />
                 </div>
                 <div className="mb-4">
                   <div className="my-2 text-sm font-bold"> {t("remark")}</div>
@@ -669,7 +653,7 @@ export default function GoodsDetails() {
                   <Button
                     className="w-full bg-[linear-gradient(to_right,#ffd01e,#ff8917)] text-white"
                     isDisabled={!currentSku}
-                    isLoading={issub}
+                    isLoading={isAddingCart}
                     onPress={() => add()}
                   >
                     {t("addToCart")}

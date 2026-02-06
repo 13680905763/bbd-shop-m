@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 
 import { OrderApi } from "@/services/orderApi";
 import { queryClient } from "@/lib/react-query";
@@ -72,5 +72,36 @@ export function useRevokeOrder() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orderList"] });
     },
+  });
+}
+
+export function useForwardingOrder() {
+  return useMutation({
+    mutationFn: (data: any): any => OrderApi.forwardingOrder(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orderList"] });
+    },
+  });
+}
+export function usePreviewOrderByCart(key: string) {
+  return useQuery<any>({
+    queryKey: ["orderPreviewByCart", key],
+    queryFn: () => OrderApi.previewOrderByCart(key),
+    gcTime: 0,
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+    enabled: key !== "",
+  });
+}
+export function usePreviewOrderByProduct(key: string) {
+  return useQuery<any>({
+    queryKey: ["orderPreviewByProduct", key],
+    queryFn: () => OrderApi.previewOrderByProduct(key),
+    gcTime: 0,
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+    enabled: key !== "",
   });
 }

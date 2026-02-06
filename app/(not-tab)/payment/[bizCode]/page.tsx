@@ -17,11 +17,11 @@ import { useTranslations } from "next-intl";
 import { IoWallet } from "react-icons/io5";
 
 import {
-  useBillingAddress,
   useBillingAddressActions,
-  usePaymentMethodList,
-  useWalletInfo,
-} from "@/hook";
+} from "@/hook/business";
+import { useBillingAddress, } from "@/hook/api";
+
+import { useWalletInfo, usePaymentMethodList } from "@/hook/api";
 import { createPayOrder } from "@/services";
 import { useGlobalStore } from "@/store";
 import FullscreenLoader from "@/components/common/fullscreen-loader";

@@ -1,6 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { PromotionApi } from "@/services/promotionApi";
+import { getPointsList } from "@/services";
 
 export const useInvitedUsers = () => {
   return useInfiniteQuery({
@@ -63,12 +64,16 @@ export const useBonus = () => {
   });
 };
 
-// export const usePointsList = () => {
-//   return useQuery({
-//     queryKey: ["pointsList"],
-//     queryFn: () => PromotionApi.listPromotionBonuses(),
-//     staleTime: 10 * 1000, // 10 秒内认为是新鲜的
-//     refetchOnWindowFocus: true, // 用户回来自动更新
-//     refetchOnReconnect: true, // 网络恢复自动更新
-//   });
-// };
+export function usePointsList() {
+  return useInfiniteQuery({
+    queryKey: ["pointsList"],
+    queryFn: ({ pageParam = 1 }) =>
+      getPointsList({ current: pageParam, size: 10 }),
+    getNextPageParam: (lastPage) => {
+      const loaded = lastPage.current * lastPage.size;
+
+      return loaded < lastPage.total ? lastPage.current + 1 : undefined;
+    },
+    initialPageParam: 1,
+  });
+}

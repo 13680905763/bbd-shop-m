@@ -2,7 +2,7 @@ import { InfiniteScroll } from "antd-mobile";
 import React from "react";
 
 import { BlockSpinner, EmptyState } from "@/components/ui";
-import { usePointsList } from "@/hook/wallet/usePointsList";
+import { usePointsList } from "@/hook/api";
 
 export default function PointsRecordContent() {
   const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } =

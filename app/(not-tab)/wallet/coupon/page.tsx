@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { CommonTabs } from "@/components/common";
-import { useUserCoupon } from "@/hook/api/useCoupon";
+import { useUserCoupon } from "@/hook/api";
 import CouponCard from "@/components/block/coupon-card";
 import { Coupon } from "@/types/wallet";
 import { BlockSpinner, EmptyState } from "@/components/ui";

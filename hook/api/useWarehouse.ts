@@ -69,6 +69,19 @@ export function useLineByWaybill(data: any) {
     },
   });
 }
+export function useLineEstimate(params: any) {
+  return useQuery<any>({
+    queryKey: ["lineEstimate", params],
+    queryFn: () => {
+      if (!params) {
+        return {};
+      }
+
+      return warehouseApi.listLineEstimate(params);
+    },
+    enabled: !!params,
+  });
+}
 /** 创建运单 */
 export function useCreateWaybill() {
   return useMutation({

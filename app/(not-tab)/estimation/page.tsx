@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Autocomplete,
   AutocompleteItem,
@@ -16,20 +16,24 @@ import { useTranslations } from "next-intl";
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 
-import { getCategory, searchWarehouseRoutesList } from "@/services";
-import { useCountries, useProvinces, useCities } from "@/hook/api";
+import { useCountries, useCategoryOptions, useLineEstimate } from "@/hook/api";
 import { useGlobalStore } from "@/store";
-import FullscreenLoader from "@/components/common/fullscreen-loader";
 
 export default function Estimation() {
   const t = useTranslations("estimation");
   const { currency } = useGlobalStore();
-  const [loading, setLoading] = useState(false);
-  const { data: countries = [], isLoading } = useCountries();
-  const [categoryOptions, setCategoryOptions] = useState<any[]>([]);
-  const [routesMessage, setRoutesMessage] = useState<string>("");
+  const { data: countries = [], isLoading: isCountriesLoading } =
+    useCountries();
+  const { data: categoryOptions = [], isLoading: isCategoryLoading } =
+    useCategoryOptions();
 
-  const [routes, setRoutes] = useState<any[]>([]);
+  const [searchParams, setSearchParams] = useState<any>(null);
+  const { data: lineEstimate = [], isLoading: isSearching } =
+    useLineEstimate(searchParams);
+
+  const routes = Array.isArray(lineEstimate) ? lineEstimate : [];
+  const routesMessage = typeof lineEstimate === "string" ? lineEstimate : "";
+
   const router = useRouter();
 
   // ✅ 受控表单数据
@@ -42,25 +46,12 @@ export default function Estimation() {
     height: "",
   });
 
-  /** 货物类别 */
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res: any = await getCategory();
-
-        setCategoryOptions(res);
-      } catch { }
-    };
-
-    fetchData();
-  }, []);
   const handleChange = (key: string, value: any) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     const { countryId, categoryId, weight, length, width, height } = formData;
 
     // 校验国家和分类
@@ -73,7 +64,6 @@ export default function Estimation() {
 
       return;
     }
-
     if (!categoryId) {
       addToast({
         title: t("selectCategory"),
@@ -102,22 +92,7 @@ export default function Estimation() {
 
       return;
     }
-
-    console.log("formData", formData);
-    setLoading(true); // 开始请求，显示 loading
-    try {
-      const res = await searchWarehouseRoutesList(formData);
-
-      if (typeof res != "string" && res?.length) {
-        setRoutes(res || []);
-      } else {
-        setRoutes([]);
-        setRoutesMessage(res);
-      }
-    } catch {
-    } finally {
-      setLoading(false); // 请求结束，隐藏 loading
-    }
+    setSearchParams(formData);
   };
 
   const disabledKeys = routes
@@ -127,7 +102,6 @@ export default function Estimation() {
     return (
       <>
         <div className="flex w-full gap-2">
-          {/* 左侧 */}
           <div className="flex w-[90px] flex-shrink-0 flex-col items-center gap-1">
             <Avatar
               className="h-20 w-20 flex-shrink-0 rounded-sm"
@@ -146,7 +120,6 @@ export default function Estimation() {
             </p>
           </div>
 
-          {/* 右侧描述 */}
           <div className="line-clamp-5 flex-1 rounded-md bg-gray-50 p-2 text-sm text-gray-600">
             {route.shippingLine.description}
           </div>
@@ -162,7 +135,6 @@ export default function Estimation() {
 
   return (
     <>
-      {isLoading && <FullscreenLoader />}
       <NavBar className="bg-white" onBack={() => router.push("/")}>
         <span className="navbar-title">{t("title")}</span>
       </NavBar>
@@ -179,6 +151,7 @@ export default function Estimation() {
                     input: "text-base",
                   },
                 }}
+                isDisabled={isCountriesLoading}
                 label={t("warehouse")}
                 name="countryId"
                 selectedKey={String(formData.countryId)}
@@ -212,6 +185,7 @@ export default function Estimation() {
                   input: "text-base",
                 },
               }}
+              isDisabled={isCategoryLoading}
               label={t("category")}
               name="categoryId"
               selectedKey={String(formData.categoryId)}
@@ -281,7 +255,7 @@ export default function Estimation() {
             <Spacer y={2} />
             <Button
               className="w-full bg-[#f0700c] text-white"
-              isLoading={loading}
+              isLoading={isSearching}
               type="submit"
               variant="bordered"
             >

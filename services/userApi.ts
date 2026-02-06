@@ -15,10 +15,5 @@ export const userApi = {
       params,
     });
   },
-  /** 获取优惠券列表 */
-  listCoupon(params: { status?: number | string }): Promise<any> {
-    return request.get(`/customer-coupon`, {
-      params,
-    });
-  },
+ 
 };

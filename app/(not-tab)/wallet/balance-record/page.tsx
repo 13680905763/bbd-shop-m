@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { Spinner } from "@heroui/react";
 
 import { useGlobalStore } from "@/store";
-import { useWalletDetailList } from "@/hook";
+import { useWalletDetailList } from "@/hook/api";
 
 export default function BalanceRecord() {
   const t = useTranslations("wallet.balanceRecord");

@@ -24,33 +24,3 @@ export const getGoodsImageId = async (file: File) => {
     throw error;
   }
 };
-export const getGoodsList = (data: any) => {
-  return request.post("/product/search/image", data);
-};
-export const getHistory = () => {
-  return request.get("/customer-browsing-product/browsingProductList");
-};
-export const delHistory = (data: string[]) => {
-  return request.delete("/customer-browsing-product/deleteBrowsingProduct", {
-    data,
-  });
-};
-export const getFavorite = () => {
-  return request.get("/customer-browsing-product/collectionList");
-};
-export const delFavorite = (data: string[]) => {
-  return request.delete("/customer-browsing-product/deleteCollection", {
-    data,
-  });
-};
-export const favoriteProduct = (
-  source: string,
-  sourceProductId: string,
-  collection: number,
-) => {
-  return request.put("/customer-browsing-product", {
-    source,
-    sourceProductId,
-    collection,
-  });
-};

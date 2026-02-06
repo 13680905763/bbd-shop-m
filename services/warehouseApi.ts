@@ -23,7 +23,7 @@ export const warehouseApi = {
   getWaybillPreview(previewKey: string): Promise<any> {
     return request.get(`/waybill/preview/key?key=${previewKey}`);
   },
-  /** 获取路线模板 */
+  /** 获取路线模板 提交运单的时候*/
   listLineByWaybill(data: any): Promise<any> {
     return requestWithOption(
       {
@@ -32,6 +32,13 @@ export const warehouseApi = {
         data,
       },
       { isSuccess: false },
+    );
+  },
+  /** 获取路线模板 估算费用 */
+  listLineEstimate(data: any): Promise<any> {
+    return requestWithOption(
+      { url: "/shipping-line-template/estimate", method: "POST", data },
+      { showToast: true, isSuccess: false },
     );
   },
   /** 获取运单费用估算 */

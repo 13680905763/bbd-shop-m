@@ -20,7 +20,7 @@ export default function OrderItem({ order, openServiceModal }: any) {
         <div className="text-title">{order?.shopName}</div>
       </div>
       {order.products.map((product: any) => (
-        <React.Fragment key={product?.cartId}>
+        <React.Fragment key={product?.propAndValue?.propId_valueId}>
           <ProductItem product={product} />
           <div className="rounded-lg bg-[#f8f8f8] p-2">
             <div className="flex items-center justify-between">

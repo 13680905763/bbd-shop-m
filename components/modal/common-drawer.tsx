@@ -36,13 +36,13 @@ export default function CommonDrawer({
 
   return (
     <Drawer
-      isOpen={isOpen}
-      placement="bottom"
-      onOpenChange={onOpenChange}
-      size="xl"
       classNames={{
         base: "max-h-[85vh] rounded-t-xl",
       }}
+      isOpen={isOpen}
+      placement="bottom"
+      size="xl"
+      onOpenChange={onOpenChange}
     >
       <DrawerContent>
         {(onClose) => (
@@ -52,7 +52,7 @@ export default function CommonDrawer({
                 {title}
               </DrawerHeader>
             )}
-            <DrawerBody className="scrollbar-hide overflow-y-auto p-4">
+            <DrawerBody className="overflow-y-auto p-4 scrollbar-hide">
               {children}
             </DrawerBody>
             <DrawerFooter className="border-t border-gray-100 p-4">

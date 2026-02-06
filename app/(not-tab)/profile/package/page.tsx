@@ -9,9 +9,9 @@ import CancelModal from "./cancel-modal";
 import ChangeLineModal from "./change-line-modal";
 import LineDetailModal from "./line-detail-modal";
 
-import { useSelection } from "@/hook/common";
+import { useSelection, useConfirm } from "@/hook/common";
 import { BlockSpinner, EmptyState } from "@/components/ui";
-import { BottomAction, CommonTabs, useConfirm } from "@/components/common";
+import { BottomAction, CommonTabs } from "@/components/common";
 import {
   useBatchPay,
   useCancelWaybill,

@@ -1,16 +1,16 @@
 "use client";
 
-import { Button, NumberInput } from "@heroui/react";
+import { Button, Input, NumberInput } from "@heroui/react";
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { IoWallet } from "react-icons/io5";
 import { useTranslations } from "next-intl";
 
-import { createOrderByRecharge } from "@/services";
+import { walletApi } from "@/services/walletApi";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
 import { useGlobalStore } from "@/store";
-import { useWalletInfo } from "@/hook";
+import { useWalletInfo } from "@/hook/api";
 
 export default function WalletRechargePage() {
   const t = useTranslations("wallet.page"); // ✅ 命名空间
@@ -26,12 +26,18 @@ export default function WalletRechargePage() {
   const handleRecharge = async () => {
     try {
       setRechargeLoading(true);
-      const bizCode: any = await createOrderByRecharge({
-        currencyAmount: currentPrice,
-        currencyCode: currency.value,
-      });
+      // const res = await createOrderByRecharge({
+      //   amount: currentPrice,
+      //   payType: "PAYPAL",
+      //   returnUrl: window.location.origin + "/payment/result?paymentMethod=PAYPAL",
+      // });
+      const res: any = await walletApi.payPaypel(
+        `amount=${currentPrice}&returnUrl=${window.location.origin + "/payment/result?paymentMethod=PAYPAL"}`,
+      );
 
-      router.push("/payment/" + bizCode);
+      console.log("res", res);
+
+      window.location.href = res.payUrl;
     } catch (error) {
       setRechargeLoading(false);
     }

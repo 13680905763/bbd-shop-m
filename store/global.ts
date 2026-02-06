@@ -2,8 +2,6 @@
 
 import { create } from "zustand";
 
-import { getCurrency } from "@/services";
-
 interface GlobalState {
   language: string;
   currency: any;
@@ -11,7 +9,7 @@ interface GlobalState {
   currencies: { label: string; value: string; symbol: string; rate: number }[];
   setLanguage: (language: string) => void;
   setCurrency: (currency: any) => void;
-  fetchConfig: () => Promise<void>;
+  setCurrencies: (res: any[]) => void;
 }
 
 export const useGlobalStore = create<GlobalState>((set) => ({
@@ -29,9 +27,7 @@ export const useGlobalStore = create<GlobalState>((set) => ({
     set({ currency });
   },
 
-  fetchConfig: async () => {
-    const res: any = await getCurrency();
-
+  setCurrencies: (res) => {
     set({
       currencies: res.map((item: any) => ({
         label: item?.currency,

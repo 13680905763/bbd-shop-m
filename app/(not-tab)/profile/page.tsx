@@ -10,7 +10,7 @@ import CommonForm from "@/components/form/common-form";
 import { updateUserInfo, uploadAvatar } from "@/services"; // ✅ uploadAvatar 是上传接口
 import { FieldConfig } from "@/components/form/formItem-renderer";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
-import { useUserInfo } from "@/hook";
+import { useUserInfo } from "@/hook/api";
 import { queryClient } from "@/lib/react-query";
 
 export default function Settingpage() {

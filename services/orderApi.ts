@@ -3,6 +3,18 @@ import { request } from "./request";
 import { OrderListParams } from "@/types";
 
 export const OrderApi = {
+  /** 购物车结算订单预览 */
+  previewOrderByCart: (key: string): Promise<any> =>
+    request.get(`/customer/cart/order/preview/key?key=${key}`),
+  /** 商品结算订单预览 */
+  previewOrderByProduct: (key: string): Promise<any> =>
+    request.get(`/orders/preview/key?key=${key}`),
+
+  /** 创建转运订单 */
+  forwardingOrder: (data: any): Promise<any> => {
+    return request.post("/drop-shipping-order", data);
+  },
+
   /** 获取订单列表 */
   listOrder: (data: OrderListParams): Promise<any> =>
     request.post("/orders/page", data),

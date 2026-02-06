@@ -2,14 +2,25 @@ import { useQuery } from "@tanstack/react-query";
 
 import { configApi } from "@/services/configApi";
 
+// 货物分类列表
 export const useCategoryOptions = () => {
   return useQuery({
     queryKey: ["categoryOptions"],
-    queryFn: configApi.getCategory,
-    staleTime: 50 * 1000, // 十秒保证积分数据足够新
+    queryFn: configApi.listCategories,
+    staleTime: 50 * 1000,
     refetchOnWindowFocus: true,
   });
 };
+// 货币列表
+export const useCurrencyOptions = () => {
+  return useQuery({
+    queryKey: ["currencyOptions"],
+    queryFn: configApi.listCurrencies,
+    staleTime: 50 * 1000,
+    refetchOnWindowFocus: true,
+  });
+};
+// 奖金等级列表
 export const useBonusConfig = () => {
   return useQuery({
     queryKey: ["bonusConfig"],
@@ -19,6 +30,7 @@ export const useBonusConfig = () => {
     refetchOnReconnect: true, // 网络恢复自动更新
   });
 };
+// 优惠券列表
 export const useCouponsConfig = () => {
   return useQuery({
     queryKey: ["couponsConfig"],
@@ -31,6 +43,13 @@ export function useWarehouseServicesList() {
   return useQuery({
     queryKey: ["warehouseServicesList"],
     queryFn: () => configApi.listWarehouseServices(),
+    staleTime: 5 * 10 * 1000,
+  });
+}
+export function useOrderServicesList() {
+  return useQuery({
+    queryKey: ["orderServicesList"],
+    queryFn: () => configApi.listOrderServices(),
     staleTime: 5 * 10 * 1000,
   });
 }

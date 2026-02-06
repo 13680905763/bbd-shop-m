@@ -7,7 +7,6 @@ import { FaRegImage } from "react-icons/fa";
 import { useTranslations } from "next-intl";
 
 import { getGoodsId, getGoodsImageId } from "@/services";
-import { SearchIcon } from "@/components/icons";
 
 export default function Searchpage() {
   const t = useTranslations("goods.search");
@@ -69,8 +68,8 @@ export default function Searchpage() {
   };
 
   return (
-    <div className="bg flex h-[100vh] flex-col">
-      <div className="flex items-center justify-between p-4">
+    <>
+      <div className="flex bg items-center justify-between p-2 py-4">
         <button onClick={() => router.back()}>
           <IoChevronBack className="h-[25px] w-[25px]" />
         </button>
@@ -106,9 +105,7 @@ export default function Searchpage() {
             labelPlacement="outside"
             name="url"
             placeholder={t("searchPlaceholder")} // 使用翻译
-            startContent={
-              <SearchIcon className="pointer-events-none flex-shrink-0 text-base text-default-400" />
-            }
+
             type="search"
           />
           <input
@@ -121,18 +118,9 @@ export default function Searchpage() {
         </Form>
       </div>
 
-      <div className="flex-1 bg-white p-4">
+      <div className="flex-1 bg-white p-4 ">
         <div className="font-bold">{t("historyTitle")}</div> {/* 使用翻译 */}
-        <Divider className="my-2" />
-        {/* <div className="flex flex-wrap gap-2 p-2">
-          <div className="bg-[#f8f8f8] p-2">123</div>
-          <div className="bg-[#f8f8f8] p-2">jfaljgf;ljsa;gjs</div>
-          <div className="bg-[#f8f8f8] p-2">agsahhdsfhfdh</div>
-          <div className="line-clamp-1 overflow-hidden text-ellipsis text-nowrap bg-[#f8f8f8] p-2">
-            https://item.taobao.com/item.htm?id=775526482716&pisk=gv1sHpjcscm62vdxld4e...
-          </div>
-        </div> */}
       </div>
-    </div>
+    </>
   );
 }

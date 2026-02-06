@@ -2,7 +2,6 @@
 
 import React, {
   createContext,
-  useContext,
   useState,
   useCallback,
   ReactNode,
@@ -24,7 +23,6 @@ export interface ConfirmOptions {
   content: ReactNode;
   confirmText?: string;
   cancelText?: string;
-  type?: "default" | "danger" | "warning"; // 增加类型支持
   onConfirm?: () => Promise<void> | void;
   onCancel?: () => void;
   showCancel?: boolean; // 新增控制是否显示取消按钮的选项
@@ -38,7 +36,9 @@ interface ConfirmContextType {
   close: () => void;
 }
 
-const ConfirmContext = createContext<ConfirmContextType | undefined>(undefined);
+export const ConfirmContext = createContext<ConfirmContextType | undefined>(
+  undefined,
+);
 
 // 3. Provider 组件
 export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
@@ -46,10 +46,10 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [options, setOptions] = useState<ConfirmOptions | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // 使用 ref 存储 resolve 函数，以便在 confirm 中调用
-  const resolveRef = useRef<(value: boolean) => void>(() => {});
+  const resolveRef = useRef<(value: boolean) => void>(() => { });
 
   const confirm = useCallback((opts: ConfirmOptions) => {
     opts.showCancel = opts.showCancel ?? true;
@@ -65,24 +65,22 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
   const close = useCallback(() => {
     setIsOpen(false);
     setOptions(null);
-    setLoading(false);
+    setIsLoading(false);
   }, []);
 
   const handleConfirm = async () => {
     if (options?.onConfirm) {
       // 如果提供了 onConfirm，处理异步逻辑
       try {
-        setLoading(true);
+        setIsLoading(true);
         await options.onConfirm();
       } catch (error) {
         console.error("Confirm action failed:", error);
-
         return; // 出错时不关闭弹窗
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     }
-
     resolveRef.current(true);
     close();
   };
@@ -92,24 +90,15 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
     resolveRef.current(false);
     close();
   };
+  console.log('isLoading', options?.isLoading);
 
-  const getButtonColor = (type?: string) => {
-    switch (type) {
-      case "danger":
-        return "danger";
-      case "warning":
-        return "warning";
-      default:
-        return "primary";
-    }
-  };
 
   return (
     <ConfirmContext.Provider value={{ confirm, close }}>
       {children}
       {options && (
         <Modal
-          hideCloseButton={loading}
+          hideCloseButton={isLoading || options.isLoading}
           isDismissable={false}
           isOpen={isOpen}
           placement="center"
@@ -121,25 +110,21 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
                 <ModalHeader className="flex flex-col gap-1">
                   {options.title || t("title")}
                 </ModalHeader>
-                <ModalBody>
-                  <div
-                    className={options.type === "danger" ? "text-danger" : ""}
-                  >
-                    {options.content}
-                  </div>
-                </ModalBody>
+                <ModalBody>{options.content}</ModalBody>
                 <ModalFooter>
-                  <Button
-                    isDisabled={loading || options.isLoading}
-                    variant="light"
-                    onPress={handleCancel}
-                  >
-                    {options.cancelText || t("cancel")}
-                  </Button>
+                  {options.showCancel && (
+                    <Button
+                      isDisabled={isLoading || options.isLoading}
+                      variant="light"
+                      onPress={handleCancel}
+                    >
+                      {options.cancelText || t("cancel")}
+                    </Button>
+                  )}
                   {options.showConfirm && (
                     <Button
-                      color={getButtonColor(options.type)}
-                      isLoading={loading || options.isLoading}
+                      color="primary"
+                      isLoading={isLoading || options.isLoading}
                       onPress={handleConfirm}
                     >
                       {options.confirmText || t("confirm")}
@@ -153,15 +138,4 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
       )}
     </ConfirmContext.Provider>
   );
-};
-
-// 4. 自定义 Hook
-export const useConfirm = () => {
-  const context = useContext(ConfirmContext);
-
-  if (!context) {
-    throw new Error("useConfirm must be used within a ConfirmProvider");
-  }
-
-  return context;
 };

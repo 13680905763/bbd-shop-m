@@ -5,22 +5,23 @@ import {
   Form,
   Input,
   Image,
-  Tabs,
-  Tab,
-  Spinner,
   Card,
   CardBody,
   CardFooter,
+  Spinner,
 } from "@heroui/react";
 import { useTranslations } from "next-intl";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { IoChevronBack } from "react-icons/io5";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FaRegImage } from "react-icons/fa";
+import { InfiniteScroll } from "antd-mobile";
 
-import { getGoodsId, getGoodsImageId, getGoodsList } from "@/services";
-import { SearchIcon } from "@/components/icons";
+import { getGoodsId, getGoodsImageId } from "@/services";
 import { useGlobalStore } from "@/store";
+import { BlockSpinner, EmptyState } from "@/components/ui";
+import { useSearchList } from "@/hook/api";
+import { CommonTabs } from "@/components/common";
 
 export default function Searchpage() {
   const t = useTranslations("goods.search");
@@ -36,71 +37,22 @@ export default function Searchpage() {
   // 根据当前 tab 选择 id
   const currentId = selectedTab === "TAOBAO" ? taobaoId : alibabaId;
   const [uploading, setUploading] = useState(false);
-  // 商品列表 & 分页状态
-  const [list, setList] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(1);
-  const fetchData = useCallback(
-    async (pageNum: number) => {
-      if (!currentId) return;
 
-      try {
-        setLoading(true);
-        const res: any = await getGoodsList({
-          imageId: currentId,
-          source: selectedTab,
-          current: pageNum,
-          size: 20,
-        });
+  const {
+    data,
+    isLoading: loading,
+    isFetching,
+    fetchNextPage,
+    hasNextPage,
+  } = useSearchList({
+    imageId: currentId,
+    source: selectedTab,
+    size: 100,
+    enabled: !!currentId,
+  });
 
-        if (!res || res.length === 0) {
-          setHasMore(false);
+  const list = data?.pages?.flatMap((page: any) => page) ?? [];
 
-          return;
-        }
-
-        if (res.length < 20) setHasMore(false);
-
-        setList((prev) => (pageNum === 1 ? res : [...prev, ...res]));
-      } catch (err) {
-        console.error("搜索失败:", err);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [currentId, selectedTab],
-  );
-
-  // 切换 Tab 或 URL 参数变化时重置列表
-  useEffect(() => {
-    setList([]);
-    setPage(1);
-    setHasMore(true);
-
-    if (currentId) fetchData(1);
-  }, [currentId, fetchData]);
-  // 翻页加载
-  useEffect(() => {
-    if (page === 1) return;
-    fetchData(page);
-  }, [page, fetchData]);
-  // 滚动加载更多
-  useEffect(() => {
-    const handleScroll = () => {
-      if (loading || !hasMore) return;
-      const { scrollTop, clientHeight, scrollHeight } =
-        document.documentElement;
-
-      if (scrollTop + clientHeight >= scrollHeight - 50) {
-        setPage((prev) => prev + 1);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [loading, hasMore]);
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -145,101 +97,17 @@ export default function Searchpage() {
   const onSubmit = async (e: any) => {
     e.preventDefault();
     const data: any = Object.fromEntries(new FormData(e.currentTarget));
-
     const res: any = await getGoodsId({ url: data.url });
-
     router.push(
       `/goods/${res.source}/${res.sourceProductId}`, // 目标路由
     );
   };
-
-  return (
-    <div className="bg flex h-[100vh] flex-col">
-      <div className="flex items-center justify-between gap-4 p-4">
-        <button onClick={() => router.back()}>
-          <IoChevronBack className="h-[25px] w-[25px]" />
-        </button>
-        <Form className="w-full max-w-xs" onSubmit={onSubmit}>
-          <Input
-            aria-label="Search"
-            classNames={{
-              inputWrapper: "bg-default-100",
-              input: "text-sm",
-            }}
-            endContent={
-              <div className="flex items-center gap-2">
-                {uploading ? (
-                  <Spinner color="primary" size="sm" />
-                ) : (
-                  <FaRegImage
-                    className="cursor-pointer text-xl"
-                    onClick={triggerUpload}
-                  />
-                )}
-                <Button
-                  isIconOnly
-                  color="primary"
-                  size="sm"
-                  type="submit"
-                  variant="light"
-                >
-                  {t("searchButton")}
-                </Button>
-              </div>
-            }
-            labelPlacement="outside"
-            name="url"
-            placeholder={t("searchPlaceholder")}
-            startContent={
-              <SearchIcon className="pointer-events-none flex-shrink-0 text-lg" />
-            }
-            type="search"
-          />
-          <input
-            ref={fileInputRef}
-            hidden
-            accept="image/*"
-            type="file"
-            onChange={handleImageUpload}
-          />
-        </Form>
-        <button
-          onClick={() => {
-            router.push("/cart");
-          }}
-        >
-          <Image
-            alt="cart"
-            className="text-black"
-            src="/m/images/cart.png"
-            width={35}
-          />
-        </button>
-      </div>
-      <div className="flex flex-1 flex-col items-center justify-center bg-white p-4 pt-0">
-        {/* Tabs */}
-        <Tabs
-          classNames={{
-            tabList: "flex bg-white",
-            tab: "flex-1 text-center py-2 ",
-            cursor: "w-full bg-[#f0700c]",
-            tabContent: "group-data-[selected=true]:text-[#f0700c]",
-          }}
-          selectedKey={selectedTab}
-          size="lg"
-          variant="underlined"
-          onSelectionChange={(key) => setSelectedTab(key as "TAOBAO" | "1688")}
-        >
-          <Tab key="TAOBAO" title={t("taobao")} />
-          <Tab key="1688" title={t("1688")} />
-        </Tabs>
-        {/* 商品列表 */}
+  const renderSearchContent = () => {
+    if (!list?.length && !loading) return <EmptyState />;
+    return (
+      <>
+        {isFetching && <BlockSpinner />}
         <div className="flex-1 overflow-auto">
-          {loading && list.length === 0 && (
-            <div className="flex h-[50vh] items-center justify-center">
-              <Spinner color="primary" size="lg" />
-            </div>
-          )}
 
           {list.length > 0 && (
             <div className="grid grid-cols-2 gap-2">
@@ -276,19 +144,99 @@ export default function Searchpage() {
             </div>
           )}
 
-          {loading && hasMore && list.length > 0 && (
-            <div className="flex justify-center py-4">
-              <Spinner color="primary" size="lg" />
-            </div>
-          )}
-
-          {!loading && list.length === 0 && (
-            <div className="py-10 text-center text-gray-500">
-              {t("noResult")}
-            </div>
-          )}
+          <InfiniteScroll
+            hasMore={!!hasNextPage}
+            loadMore={(isRetry) => fetchNextPage().then(() => undefined)}
+          >
+            {!hasNextPage && list.length > 0 && (
+              <div className="py-10 text-center text-gray-500">
+                {t("noResult")}
+              </div>
+            )}
+          </InfiniteScroll>
         </div>
+      </>
+    );
+  };
+  const tabs = [
+    {
+      key: "TAOBAO",
+      title: t("taobao"),
+      content: renderSearchContent(),
+    },
+    {
+      key: "1688",
+      title: t("1688"),
+      content: renderSearchContent(),
+    },
+  ];
+  return (
+    <>
+      <div className=" bg flex items-center justify-between gap-4  p-2 py-4">
+        <button onClick={() => router.back()}>
+          <IoChevronBack className="h-[25px] w-[25px]" />
+        </button>
+        <Form className="w-full max-w-xs" onSubmit={onSubmit}>
+          <Input
+            aria-label="Search"
+            classNames={{
+              inputWrapper: "bg-white",
+              input: "text-base",
+            }}
+            endContent={
+              <div className="flex items-center gap-2">
+                {uploading ? (
+                  <Spinner color="primary" size="sm" />
+                ) : (
+                  <FaRegImage
+                    className="cursor-pointer text-xl"
+                    onClick={triggerUpload}
+                  />
+                )}
+                <Button
+                  isIconOnly
+                  color="primary"
+                  size="sm"
+                  type="submit"
+                  variant="light"
+                >
+                  {t("searchButton")}
+                </Button>
+              </div>
+            }
+            labelPlacement="outside"
+            name="url"
+            placeholder={t("searchPlaceholder")}
+            // startContent={
+            //   <IoSearch className="pointer-events-none flex-shrink-0 text-lg" />
+            // }
+            type="search"
+          />
+          <input
+            ref={fileInputRef}
+            hidden
+            accept="image/*"
+            type="file"
+            onChange={handleImageUpload}
+          />
+        </Form>
+        <button
+          onClick={() => {
+            router.push("/cart");
+          }}
+        >
+          <Image
+            alt="cart"
+            className="text-black"
+            src="/m/images/cart.png"
+            width={35}
+          />
+        </button>
       </div>
-    </div>
+      <CommonTabs
+        tabs={tabs}
+        onSelectionChange={(key) => setSelectedTab(key as "TAOBAO" | "1688")}
+      />
+    </>
   );
 }

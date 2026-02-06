@@ -8,22 +8,20 @@ import { ImageViewer, NavBar, Stepper } from "antd-mobile";
 import { IoCopyOutline } from "react-icons/io5";
 
 import { useGlobalStore } from "@/store";
-import { createCustomizeOrder, getServicesList } from "@/services";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
 import CommonModal from "@/components/modal/common-modal";
-import { useUserInfo } from "@/hook";
+import { useForwardingOrder, useOrderServicesList, useUserInfo } from "@/hook/api";
 import { CopyText } from "@/components/ui";
 
 export default function ForwardingPage() {
   const t = useTranslations("forwardingPage");
-  const [isLoading, setIsLoading] = useState(false);
 
   const { currency } = useGlobalStore();
   const { data: user, error } = useUserInfo();
+  const { mutate: forwardingOrder, isPending } = useForwardingOrder();
 
-  const [servicesList, setServicesList] = useState([]);
+  const [servicesList, setServicesList] = useState<any[]>([]);
   const [acceptAgreement, setAcceptAgreement] = useState(false);
-  const [loading, setLoading] = useState(false);
   // 当前服务详情对象
   const [currentService, setCurrentService] = useState<any>(null);
   const [visible, setVisible] = useState(false);
@@ -31,35 +29,26 @@ export default function ForwardingPage() {
   // 弹窗状态
   const [isServiceDetailOpen, setIsServiceDetailOpen] = useState(false);
 
+  const { data, isLoading } = useOrderServicesList();
+  useEffect(() => {
+    if (data) {
+      setServicesList(
+        data.map((s: any) => {
+          return {
+            ...s,
+            serviceId: s?.id,
+            isCheck: false,
+            remark: "",
+            quantity: 1,
+          };
+        }),
+      );
+    }
+  }, [data]);
+
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const res = await getServicesList();
 
-        // 克隆服务，初始化 isCheck、remark
-        setServicesList(
-          res.map((s: any) => {
-            return {
-              ...s,
-              serviceId: s?.id,
-              isCheck: false,
-              remark: "",
-              quantity: 1,
-            };
-          }),
-        );
-      } catch (err) {
-        console.error("获取服务列表失败:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -83,8 +72,7 @@ export default function ForwardingPage() {
     };
 
     try {
-      setLoading(true);
-      const bizCode = await createCustomizeOrder(payload);
+      const bizCode: any = await forwardingOrder(payload);
 
       if (bizCode) {
         router.push("/payment/" + bizCode);
@@ -93,8 +81,6 @@ export default function ForwardingPage() {
       }
     } catch (err) {
       console.error("创建失败:", err);
-    } finally {
-      setLoading(false);
     }
   };
   // 保存服务详情备注
@@ -112,11 +98,11 @@ export default function ForwardingPage() {
       prev.map((s: any) =>
         s.id === currentService.id
           ? {
-              ...s,
-              remark: currentService?.remark,
-              isCheck: true,
-              quantity: currentService?.quantity,
-            }
+            ...s,
+            remark: currentService?.remark,
+            isCheck: true,
+            quantity: currentService?.quantity,
+          }
           : s,
       ),
     );
@@ -147,7 +133,7 @@ export default function ForwardingPage() {
       <NavBar className="bg-white" onBack={() => router.push("/")}>
         <span className="navbar-title">{t("title")}</span>
       </NavBar>
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto scrollbar-hide">
         <div className="h-[120px] bg-[url('https://hoobuy.com/_nuxt/estimation_bg.BPnQS2i-.webp')] bg-cover bg-no-repeat" />
         <Form
           className="flex flex-col gap-4 p-4"
@@ -387,8 +373,8 @@ export default function ForwardingPage() {
           className="w-full"
           color="primary"
           form="form"
-          isDisabled={!acceptAgreement || loading}
-          isLoading={loading}
+          isDisabled={!acceptAgreement}
+          isLoading={isPending}
           type="submit"
         >
           {t("submit")}

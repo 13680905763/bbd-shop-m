@@ -7,7 +7,7 @@ import { FieldConfig } from "../form/formItem-renderer";
 
 import FormModal from "./form-modal";
 
-import { addAddress, updateAddress } from "@/services/address";
+import { useAddAddress, useUpdateAddress } from "@/hook/api";
 
 export interface AddressModalProps {
   isOpen: boolean;
@@ -36,6 +36,9 @@ export default function AddressModal({
   defaultData,
 }: AddressModalProps) {
   const t = useTranslations("components.modal.address");
+  const { mutateAsync: addAddressMutate } = useAddAddress();
+  const { mutateAsync: updateAddressMutate } = useUpdateAddress();
+
   const queryClient = useQueryClient();
 
   const addressFields: FieldConfig[] = [
@@ -103,25 +106,21 @@ export default function AddressModal({
 
   const handleSave = async (data: any) => {
     const { createTime, updateTime, customerId, ...filteredData } = data;
-
     try {
       if (type === "add") {
-        await addAddress({
+        await addAddressMutate({
           ...data,
-          addressType: 1,
           defaultAddress: filteredData.defaultAddress ? 1 : 0,
         });
       } else if (type === "edit") {
-        await updateAddress({
+        await updateAddressMutate({
           ...filteredData,
           defaultAddress: filteredData.defaultAddress ? 1 : 0,
         });
       }
       onOpenChange(false);
-
       return true;
     } finally {
-      queryClient.invalidateQueries({ queryKey: ["addressList"] });
     }
   };
 

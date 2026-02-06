@@ -7,7 +7,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { useTranslations } from "next-intl";
 import { FaGoogle } from "react-icons/fa";
 
-import { Logo } from "@/components/icons";
+import { Logo } from "@/components/ui/icons";
 import { loginWithGoogleNew } from "@/services";
 
 export default function AuthLayout({

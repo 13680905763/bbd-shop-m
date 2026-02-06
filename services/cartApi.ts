@@ -3,7 +3,7 @@ import { request, requestWithOption } from "./request";
 
 export const cartApi = {
   /** 获取购物车列表（按店铺分组） */
-  getList(): Promise<any> {
+  listCart(): Promise<any> {
     return request.get("/customer/cart/shop");
   },
   /** 添加商品到购物车 */

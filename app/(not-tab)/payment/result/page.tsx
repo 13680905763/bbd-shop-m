@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { useTranslations } from "next-intl"; // 新增
 
-import { payNotice, payPaypel } from "@/services/wallet";
 import { useGlobalStore } from "@/store";
+import { walletApi } from "@/services/walletApi";
 
 function formatTime(ts: string) {
   if (!ts) return "";
@@ -81,7 +81,7 @@ export default function PaymentResultPage() {
           console.log("走paypel");
 
           // PayPal: 用 token 请求后端
-          const res = await payPaypel(searchParams.toString());
+          const res = await walletApi.payPaypel(searchParams.toString());
 
           paymentInfo = {
             success: res?.resultCode === "SUCCESS" || res?.status === "2",
@@ -107,7 +107,7 @@ export default function PaymentResultPage() {
 
           // 同步通知后端（非钱包支付）
           if (paymentMethod != "WALLET") {
-            await payNotice(searchParams.toString());
+            await walletApi.payNotice(searchParams.toString());
           }
         }
         console.log("paymentInfo", paymentInfo);

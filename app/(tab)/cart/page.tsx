@@ -7,16 +7,15 @@ import { useTranslations } from "next-intl";
 import CartItem from "./cart-item";
 import EditRemarkModal from "./edit-remark-modal";
 
-import { useCartList } from "@/hook";
 import { useGlobalStore } from "@/store";
-import { useSelection } from "@/hook/common";
+import { useConfirm, useSelection } from "@/hook/common";
 import { BlockSpinner, EmptyState, FullscreenLoader } from "@/components/ui";
 import {
+  useCartList,
   useCreateOrderPreview,
   useDeleteCart,
   useUpdateCartItem,
 } from "@/hook/api";
-import { useConfirm } from "@/components/common";
 import { calculateTotalPrice } from "@/lib/price";
 
 export default function Cart() {
@@ -27,7 +26,7 @@ export default function Cart() {
   const { data, isLoading, isError, isFetching } = useCartList();
   const { mutateAsync: updateMutation, isPending: isUpdating } =
     useUpdateCartItem();
-  const { mutateAsync: deleteMutation } = useDeleteCart();
+  const { mutateAsync: deleteMutation, isPending: isDeleting } = useDeleteCart();
   const { mutateAsync: createOrderPreview, isPending: isSubmitting } =
     useCreateOrderPreview();
   const { confirm } = useConfirm();
@@ -39,9 +38,9 @@ export default function Cart() {
     remark: string;
   }>({ open: false, productId: "", remark: "" });
   // 扁平化购物车数据
-  const flatList =
+  const flatList: any =
     useMemo(() => {
-      return data?.flatMap((shop) => shop.cartList);
+      return data?.flatMap((shop: any) => shop.cartList);
     }, [data]) ?? [];
 
   const {
@@ -58,11 +57,13 @@ export default function Cart() {
     idKey: "id",
     groupKey: "shopId",
   });
+  console.log('isDeleting', isDeleting);
 
   const deleteCart = async () => {
     await confirm({
       content: t("deleteContent"), // 弹窗正文
       title: t("deleteTitle"), // 弹窗标题
+      isLoading: isDeleting,
       onConfirm: async () => {
         await deleteMutation({ idList: selectedIds });
       },
@@ -92,7 +93,7 @@ export default function Cart() {
       const key: string = await createOrderPreview(params);
 
       router.push("/submit/order?type=cart&key=" + key);
-    } catch {}
+    } catch { }
   };
   const updateProductRemark = useCallback(
     (productId: string, remark: string) => {
@@ -111,7 +112,7 @@ export default function Cart() {
   };
 
   const togglePrice = useMemo(
-    () => calculateTotalPrice(selectedItems, "totalFee"),
+    () => calculateTotalPrice(selectedItems, "totalFee" as any),
     [selectedItems],
   );
 
@@ -130,12 +131,12 @@ export default function Cart() {
           {isEdit ? t("cancel") : t("manage")}
         </button>
       </div>
-      <div className="flex-1 space-y-2 overflow-auto px-2 pb-2">
+      <div className="flex-1 space-y-2 overflow-auto px-2 pb-2 scrollbar-hide">
         {(isFetching || isUpdating) && <BlockSpinner />}
         {flatList.length === 0 ? (
           <EmptyState desc={t("emptyDesc")} title={t("emptyTitle")} />
         ) : (
-          data?.map((c) => (
+          data?.map((c: any) => (
             <CartItem
               key={c.shopId}
               cart={c}

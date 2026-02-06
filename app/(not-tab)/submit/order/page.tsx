@@ -17,15 +17,18 @@ import OrderItem from "./order-item";
 import {
   createOrderByCart,
   createOrderByProduct,
-  getServicesList,
   updateOrderPreviewCart,
   updateOrderPreviewProduct,
 } from "@/services";
-import { useOrderPreview } from "@/hook";
 import { createOrderPreviewKeyByProductParams } from "@/types";
 import { useGlobalStore } from "@/store";
 import CommonModal from "@/components/modal/common-modal";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
+import {
+  useOrderServicesList,
+  usePreviewOrderByCart,
+  usePreviewOrderByProduct,
+} from "@/hook/api";
 
 export default function SubmitOrder() {
   const t = useTranslations("submit.order");
@@ -35,7 +38,22 @@ export default function SubmitOrder() {
   const router = useRouter();
   const type = searchParam.get("type") as "cart" | "product";
   const key = searchParam.get("key") as string;
-  const { data, isLoading, isError } = useOrderPreview(type, key);
+
+  const {
+    data: cartData,
+    isLoading: isCartLoading,
+    isError: isCartError,
+  } = usePreviewOrderByCart(type === "cart" ? key : "",);
+  const {
+    data: productData,
+    isLoading: isProductLoading,
+    isError: isProductError,
+  } = usePreviewOrderByProduct(type === "product" ? key : "");
+
+  const data = type === "cart" ? cartData : productData;
+  const isLoading = type === "cart" ? isCartLoading : isProductLoading;
+  const isError = type === "cart" ? isCartError : isProductError;
+
   const [orderData, setOrderData] = useState<any>(null);
 
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -62,7 +80,7 @@ export default function SubmitOrder() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [visible, setVisible] = useState(false);
   const [startIndex, setStartIndex] = useState(0);
-  const [servicesList, setServicesList] = useState([]);
+  const { data: servicesList, isLoading: servicesLoading } = useOrderServicesList();
 
   // 本地状态：存储克隆的服务列表，用于单商品
   const [localServices, setLocalServices] = useState<any[]>([]);
@@ -78,6 +96,7 @@ export default function SubmitOrder() {
 
   // 打开商品服务列表弹窗
   const openServiceModal = (cartId: string, skuId: string) => {
+    if (!servicesList?.length) return;
     setCurrentCartId(cartId);
     const handleSO = orderData?.orderList?.find((item: any) => {
       return item?.products.find((iitem: any) => {
@@ -136,11 +155,11 @@ export default function SubmitOrder() {
       prev.map((s) =>
         s.id === currentService.id
           ? {
-              ...s,
-              remark: currentService.remark,
-              isCheck: true,
-              quantity: currentService?.quantity,
-            }
+            ...s,
+            remark: currentService.remark,
+            isCheck: true,
+            quantity: currentService?.quantity,
+          }
           : s,
       ),
     );
@@ -208,32 +227,20 @@ export default function SubmitOrder() {
   useEffect(() => {
     if (data) setOrderData(data);
   }, [data]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await getServicesList();
 
-        setServicesList(res);
-      } catch {}
-    };
-
-    fetchData();
-  }, []);
 
   if (isError) return <div>出错了</div>;
 
   return (
     <>
-      {/* 顶部导航 */}
       <NavBar className="bg-white" onBack={() => router.back()}>
         <span className="navbar-title">{t("title")}</span>
       </NavBar>
       {isLoading && <FullscreenLoader />}
-      {/* 中间可滚动商品列表 */}
       <div className="flex-1 overflow-auto p-2">
-        {orderData?.orderList?.map((order: any) => (
+        {orderData?.orderList?.map((order: any, index: number) => (
           <OrderItem
-            key={order?.shopName}
+            key={order?.shopName + index}
             openServiceModal={openServiceModal}
             order={order}
           />

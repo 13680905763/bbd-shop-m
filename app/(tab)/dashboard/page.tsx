@@ -5,11 +5,11 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { useGlobalStore } from "@/store";
-import { useUserInfo, useWalletInfo } from "@/hook";
-import FullscreenLoader from "@/components/common/fullscreen-loader";
-import { useUserExperience } from "@/hook/api";
+import { useUserInfo } from "@/hook/api";
+import { FullscreenLoader } from "@/components/ui";
+import { useUserExperience, useWalletInfo } from "@/hook/api";
 
-export default function DashBoard() {
+export default function Dashboard() {
   const t = useTranslations("dashboard");
   const router = useRouter();
   const { currency } = useGlobalStore();

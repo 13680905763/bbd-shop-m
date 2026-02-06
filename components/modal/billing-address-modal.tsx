@@ -7,7 +7,7 @@ import { FieldConfig } from "../form/formItem-renderer";
 
 import FormModal from "./form-modal";
 
-import { addAddress, updateAddress } from "@/services/address";
+import { useAddBillingAddress, useUpdateAddress } from "@/hook/api";
 
 export interface AddressModalProps {
   isOpen: boolean;
@@ -35,6 +35,8 @@ export default function AddressModal({
   defaultData,
 }: AddressModalProps) {
   const t = useTranslations("components.modal.billingAddress");
+  const { mutateAsync: addBillingAddressMutate } = useAddBillingAddress();
+  const { mutateAsync: updateBillingAddressMutate } = useUpdateAddress();
   const queryClient = useQueryClient();
 
   const billingAddress: FieldConfig[] = [
@@ -108,13 +110,11 @@ export default function AddressModal({
 
     try {
       if (type === "add") {
-        await addAddress({
+        await addBillingAddressMutate({
           ...data,
-          addressType: 2,
-          defaultAddress: 1,
         });
       } else if (type === "edit") {
-        await updateAddress({
+        await updateBillingAddressMutate({
           ...filteredData,
         });
       }

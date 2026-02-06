@@ -7,16 +7,17 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
 import { Address, AddressModalState } from "@/types";
-import ConfirmModal from "@/components/confirm-modal";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
-import { deleteAddress } from "@/services/address";
-import { useAddressList } from "@/hook/api";
+import { useAddressList, useDeleteAddress } from "@/hook/api";
 import AddressModal from "@/components/modal/address-modal";
 import AddressItem from "@/components/block/address-item";
+import { useConfirm } from "@/hook/common";
 
 export default function AddressPage() {
   const t = useTranslations("profile.address"); // 绑定 JSON 路径
   const { data: addressList, isLoading } = useAddressList();
+  const { mutateAsync: deleteAddressMutate } = useDeleteAddress();
+  const { confirm } = useConfirm();
 
   const [modalState, setModalState] = useState<AddressModalState>({
     type: null,
@@ -34,19 +35,17 @@ export default function AddressPage() {
   const handleEditClick = useCallback((address: Address) => {
     setModalState({ type: "edit", address });
   }, []);
-  const handleDeleteClick = useCallback((address: Address) => {
-    setModalState({ type: "delete", address });
-  }, []);
-
-  const handleDeleteSubmit = useCallback(async () => {
-    if (modalState.type !== "delete") return;
-    try {
-      await deleteAddress({ id: modalState.address.id });
-      queryClient.invalidateQueries({ queryKey: ["addressList"] });
-    } catch (error) {
-      console.error("删除地址失败:", error);
-    }
-  }, [modalState, queryClient]);
+  const handleDeleteClick = useCallback(
+    async (address: Address) => {
+      await confirm({
+        content: t("deleteContent"),
+        onConfirm: async () => {
+          await deleteAddressMutate({ id: address.id });
+        },
+      });
+    },
+    [confirm, deleteAddressMutate],
+  );
 
   if (isLoading) return <FullscreenLoader />;
 
@@ -77,13 +76,6 @@ export default function AddressPage() {
         }
         isOpen={modalState.type === "add" || modalState.type === "edit"}
         type={modalState.type === "add" ? "add" : "edit"}
-        onOpenChange={handleOpenChange}
-      />
-
-      <ConfirmModal
-        content={t("deleteContent")}
-        isOpen={modalState.type === "delete"}
-        onConfirm={handleDeleteSubmit}
         onOpenChange={handleOpenChange}
       />
     </>

@@ -44,7 +44,6 @@ export default async function RootLayout({
     <html suppressHydrationWarning lang={initialLocale}>
       <head />
       <body>
-        {/* <ViewportFixer /> */}
         <NextIntlClientProvider messages={messages}>
           <Providers
             initialCurrency={initialCurrency}

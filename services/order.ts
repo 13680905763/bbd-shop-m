@@ -5,7 +5,6 @@ import {
   CreateOrderPreviewKeyByCartParams,
   createOrderPreviewKeyByProductParams,
   createPayOrderParams,
-  OrderListResponse,
   OrderPreviewByCart,
   OrderPreviewByProduct,
 } from "@/types";
@@ -33,30 +32,13 @@ export const createOrderByProduct = (
 export const createOrderByCart = (data: any): Promise<string> =>
   request.post("/customer/cart/order/submit", data);
 
-/** 购物车结算订单预览 */
-export const getOrderPreviewCart = (key: string): Promise<OrderPreviewByCart> =>
-  request.get("/customer/cart/order/preview/key?key=" + key);
 /** 更新购物车结算订单预览 */
 export const updateOrderPreviewCart = (
   data: OrderPreviewByCart,
 ): Promise<OrderPreviewByCart> =>
   request.post("/customer/cart/order/preview", data);
 
-/** 商品立即购买订单预览 */
-export const getOrderPreviewProduct = (
-  key: string,
-  options?: { showToast?: boolean },
-): Promise<OrderPreviewByProduct> => {
-  return requestWithOption(
-    {
-      url: `/orders/preview/key?key=${key}`,
-      method: "GET",
-    },
-    {
-      showToast: options?.showToast ?? false, // 默认显示提示
-    },
-  );
-};
+
 /** 更新商品立即购买订单预览 */
 export const updateOrderPreviewProduct = (
   data: any,
@@ -74,62 +56,6 @@ export const createPayOrder = (data: createPayOrderParams): Promise<any> => {
     },
   );
 };
-/** 获取支付状态 */
-export const getPayOrderStatus = (bizCode: string): Promise<number> =>
-  request.get(`/customer/pay-order/status?bizCode=${bizCode}`);
 
-/** 订单列表 */
-export const getOrderList = (data: any): Promise<OrderListResponse> =>
-  request.post("/orders/page", data);
-/** 获取增值服务列表 */
-export const getServicesList = (): Promise<any> => {
-  return requestWithOption(
-    { url: "/services/query?serviceLevel=1", method: "GET" },
-    { showToast: false },
-  );
-};
-/** 订单取消 */
-export const putOrderCancel = (id: string): Promise<any> => {
-  return request.put(`/orders/cancel?orderId=${id}`);
 
-  // return requestWithOption(
-  //   { url: "/orders/cancel?orderId=" + data.id, method: "PUT" },
-  //   { showToast: true },
-  // );
-};
-/** 订单批量支付 */
-export const batchPayOrder = (data: any): Promise<any> => {
-  return requestWithOption(
-    { url: "/orders/pay/preview/init", method: "POST", data },
-    { showToast: true },
-  );
-};
-/** 订单取消 */
-export const OrderRefund = (data: any): Promise<any> => {
-  return request.post("/order-refund/applyRefund", data);
 
-  // return requestWithOption(
-  //   { url: "/order-refund/applyRefund", method: "POST", data },
-  //   { showToast: true },
-  // );
-};
-
-/** 订单取消 */
-export const createCustomizeOrder = (data: any): Promise<any> => {
-  return requestWithOption(
-    { url: "/drop-shipping-order", method: "POST", data },
-    { showToast: true },
-  );
-};
-/** 撤销退款 */
-export const putOrderRevoke = (id: string): Promise<any> => {
-  // return requestWithOption(
-  //   { url: `/order-refund/cancelApplyRefund/${id}`, method: "PUT" },
-  //   { showToast: true },
-  // );
-  return request.put(`/order-refund/cancelApplyRefund/${id}`);
-};
-/** 撤销列表 */
-export const getRefundList = (data = {}): Promise<any> => {
-  return request.post("/order-refund/list", data);
-};

@@ -1,11 +1,10 @@
-import axios from "axios";
 import { request } from "./request";
 
 export const configApi = {
   /** 获取货币列表 */
-  getCurrency: (): Promise<any[]> => request.get("/rate"),
+  listCurrencies: (): Promise<any[]> => request.get("/rate"),
   /** 获取商品分类 */
-  getCategory: (): Promise<any[]> => request.get("/cargo-category"),
+  listCategories: (): Promise<any[]> => request.get("/cargo-category"),
   /** 获取奖金配置 */
   getBonusConfig(): Promise<any> {
     return request.get(`/promotion-config?configType=EXPERIENCE`);
@@ -14,9 +13,13 @@ export const configApi = {
   listCoupons(): Promise<any[]> {
     return request.get("/coupon");
   },
-  /** 获取增值服务列表 */
+  /** 获取运单增值服务列表 */
   listWarehouseServices(): Promise<any[]> {
     return request.get("/services/query?serviceLevel=2");
+  },
+  /** 获取订单增值服务列表 */
+  listOrderServices: (): Promise<any[]> => {
+    return request.get("/services/query?serviceLevel=1");
   },
   /** 获取国家列表 */
   listCountries: (): Promise<any> => {

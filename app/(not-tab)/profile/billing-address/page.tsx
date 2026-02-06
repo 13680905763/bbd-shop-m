@@ -3,10 +3,11 @@ import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-import ConfirmModal from "@/components/confirm-modal";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
 import BillingAddressModal from "@/components/modal/billing-address-modal";
-import { useBillingAddress, useBillingAddressActions } from "@/hook";
+import { useBillingAddressActions } from "@/hook/business";
+import { useBillingAddress } from "@/hook/api";
+
 import BillingAddress from "@/components/block/billing-address";
 
 export default function BillingAddressPage() {
@@ -20,7 +21,6 @@ export default function BillingAddressPage() {
     handleAddClick,
     handleEditClick,
     handleDeleteClick,
-    handleDeleteSubmit,
   } = useBillingAddressActions();
 
   if (isLoading) return <FullscreenLoader />;
@@ -46,13 +46,6 @@ export default function BillingAddressPage() {
         }
         isOpen={modalState.type === "add" || modalState.type === "edit"}
         type={modalState.type === "add" ? "add" : "edit"}
-        onOpenChange={handleOpenChange}
-      />
-
-      <ConfirmModal
-        content={t("deleteContent")}
-        isOpen={modalState.type === "delete"}
-        onConfirm={handleDeleteSubmit}
         onOpenChange={handleOpenChange}
       />
     </>

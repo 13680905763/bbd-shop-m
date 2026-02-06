@@ -7,37 +7,39 @@ import { useRouter } from "next/navigation";
 
 import ProductItem from "./product-item";
 
-import { useHistory, useSelection } from "@/hook";
+import { useDelHistory, useHistory } from "@/hook/api";
 import { HistoryProduct } from "@/types";
-import ConfirmModal from "@/components/confirm-modal";
-import { delHistory } from "@/services";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
-import { queryClient } from "@/lib/react-query";
+import { useSelection, useConfirm } from "@/hook/common";
+import { BottomAction } from "@/components/common";
 
 export default function History() {
   const t = useTranslations("history");
   const router = useRouter();
   const [isEdit, setIsEdit] = useState(false);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { confirm } = useConfirm();
 
   const { data, isLoading } = useHistory();
+  const { mutateAsync: delHistory } = useDelHistory();
+
   const historyList = (data as unknown as HistoryProduct[]) || [];
 
   const {
     selectedIds,
     isSelected,
-    toggle,
-    hasSelected,
+    onSelect,
     isAllSelected,
-    toggleSelectAll,
-    unselectAll,
+    onToggleSelectAll,
   } = useSelection(historyList, { idKey: "id" });
 
   const handleDelete = async () => {
-    await delHistory(selectedIds as string[]);
-    await queryClient.invalidateQueries({ queryKey: ["history"] }); // 手动刷新
-    unselectAll();
-    onOpenChange();
+    await confirm({
+      content: t("deleteConfirmContent"),
+      title: t("deleteConfirmTitle"),
+      onConfirm: async () => {
+        await delHistory(selectedIds as string[]);
+      },
+    });
   };
 
   return (
@@ -58,7 +60,7 @@ export default function History() {
         <span className="navbar-title">{t("title")}</span>
       </NavBar>
       {isLoading && <FullscreenLoader />}
-      <div className="no-scrollbar flex-1 space-y-2 overflow-auto p-2">
+      <div className="no-scrollbar flex-1 space-y-2 overflow-auto p-2 scrollbar-hide">
         {historyList.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center text-sm text-gray-400">
             {t("empty")}
@@ -70,30 +72,21 @@ export default function History() {
               isEdit={isEdit}
               isSelected={isSelected(product.id)}
               product={product}
-              onToggle={() => toggle(product.id)}
+              onToggle={() => onSelect(product.id)}
             />
           ))
         )}
       </div>
-      {isEdit && historyList.length > 0 ? (
-        <div className="bottom-settle">
-          <Checkbox isSelected={isAllSelected} onValueChange={toggleSelectAll}>
-            {t("selectAll")}
-          </Checkbox>
-          <Button color="primary" isDisabled={!hasSelected} onPress={onOpen}>
-            {t("delete")}{" "}
-            {selectedIds.length > 0 ? `(${selectedIds.length})` : ""}
-          </Button>
-        </div>
-      ) : null}
-
-      <ConfirmModal
-        content={t("deleteConfirmContent")}
-        isOpen={isOpen}
-        title={t("deleteConfirmTitle")}
-        onConfirm={handleDelete}
-        onOpenChange={onOpenChange}
-      />
+      {isEdit && historyList.length > 0 && (
+        <BottomAction
+          isLoading={false}
+          buttonText={t("delete")}
+          isAllSelected={isAllSelected}
+          selectedCount={selectedIds.length}
+          onPress={handleDelete}
+          onToggleSelectAll={onToggleSelectAll}
+        />
+      )}
     </>
   );
 }

@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { FaRegImage } from "react-icons/fa";
 import { useTranslations } from "next-intl";
 
-import { Logo } from "@/components/icons";
+import { Logo } from "@/components/ui/icons";
 
 export default function Home() {
   const t = useTranslations("home");
