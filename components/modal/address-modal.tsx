@@ -39,8 +39,6 @@ export default function AddressModal({
   const { mutateAsync: addAddressMutate } = useAddAddress();
   const { mutateAsync: updateAddressMutate } = useUpdateAddress();
 
-  const queryClient = useQueryClient();
-
   const addressFields: FieldConfig[] = [
     {
       type: "input",

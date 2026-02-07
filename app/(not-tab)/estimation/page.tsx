@@ -1,16 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import {
-  Autocomplete,
-  AutocompleteItem,
   Avatar,
-  Form,
-  Button,
-  Input,
-  Spacer,
   Accordion,
   AccordionItem,
-  addToast,
 } from "@heroui/react";
 import { useTranslations } from "next-intl";
 import { NavBar } from "antd-mobile";
@@ -18,6 +11,9 @@ import { useRouter } from "next/navigation";
 
 import { useCountries, useCategoryOptions, useLineEstimate } from "@/hook/api";
 import { useGlobalStore } from "@/store";
+import { FieldConfig } from "@/components/form/formItem-renderer";
+import CommonForm from "@/components/form/common-form";
+import { EmptyState } from "@/components/ui";
 
 export default function Estimation() {
   const t = useTranslations("estimation");
@@ -28,7 +24,7 @@ export default function Estimation() {
     useCategoryOptions();
 
   const [searchParams, setSearchParams] = useState<any>(null);
-  const { data: lineEstimate = [], isLoading: isSearching } =
+  const { data: lineEstimate = [], isFetching: isSearching } =
     useLineEstimate(searchParams);
 
   const routes = Array.isArray(lineEstimate) ? lineEstimate : [];
@@ -46,53 +42,50 @@ export default function Estimation() {
     height: "",
   });
 
-  const handleChange = (key: string, value: any) => {
-    setFormData((prev) => ({ ...prev, [key]: value }));
-  };
+  const fields: FieldConfig[] = [
+    {
+      type: "autocomplete",
+      name: "countryId",
+      label: t("warehouse"),
+      options: countries,
+      required: true,
+      errorMessage: t("selectCountry"),
+      isDisabled: isCountriesLoading,
+      config: {
+        labelKey: "name",
+        valueKey: "id",
+        imageKey: "nationalFlag",
+      },
+    },
+    {
+      type: "autocomplete",
+      name: "categoryId",
+      label: t("category"),
+      options: categoryOptions,
+      required: true,
+      errorMessage: t("selectCategory"),
+      isDisabled: isCategoryLoading,
+      config: {
+        labelKey: "categoryName",
+        valueKey: "id",
+      },
+    },
+    {
+      type: "dimensions",
+      name: "dimensions",
+      required: true,
+      errorMessage: t("fillWeightOrSize"),
+      labels: {
+        weight: t("weight"),
+        length: t("length"),
+        width: t("width"),
+        height: t("height"),
+      },
+    },
+  ];
 
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const { countryId, categoryId, weight, length, width, height } = formData;
-
-    // 校验国家和分类
-    if (!countryId) {
-      addToast({
-        title: t("selectCountry"),
-        timeout: 1000,
-        color: "danger",
-      });
-
-      return;
-    }
-    if (!categoryId) {
-      addToast({
-        title: t("selectCategory"),
-        timeout: 1000,
-        color: "danger",
-      });
-
-      return;
-    }
-    // 校验逻辑
-    const isWeightFilled = weight && Number(weight) > 0;
-    const isSizeFilled =
-      length &&
-      Number(length) > 0 &&
-      width &&
-      Number(width) > 0 &&
-      height &&
-      Number(height) > 0;
-
-    if (!isWeightFilled && !isSizeFilled) {
-      addToast({
-        title: t("fillWeightOrSize"),
-        timeout: 1000,
-        color: "danger",
-      });
-
-      return;
-    }
-    setSearchParams(formData);
+  const onSubmit = async (data: typeof formData) => {
+    setSearchParams(data);
   };
 
   const disabledKeys = routes
@@ -132,7 +125,6 @@ export default function Estimation() {
       </>
     );
   };
-
   return (
     <>
       <NavBar className="bg-white" onBack={() => router.push("/")}>
@@ -141,127 +133,14 @@ export default function Estimation() {
       <div className="flex-1 overflow-auto">
         <div className="bg-[url('/m/images/estimation/bg.webp')] bg-center pt-[30%]" />
         <div className="bg-[#fff] p-5">
-          <Form onSubmit={onSubmit}>
-            <div className="flex w-full gap-8">
-              <Autocomplete
-                className="flex-1"
-                defaultItems={countries}
-                inputProps={{
-                  classNames: {
-                    input: "text-base",
-                  },
-                }}
-                isDisabled={isCountriesLoading}
-                label={t("warehouse")}
-                name="countryId"
-                selectedKey={String(formData.countryId)}
-                size="sm"
-                onSelectionChange={(key) =>
-                  handleChange("countryId", Number(key))
-                }
-              >
-                {(country: any) => (
-                  <AutocompleteItem
-                    key={country.id}
-                    className="text-base"
-                    startContent={
-                      <Avatar
-                        alt={country.name}
-                        className="h-6 w-6"
-                        src={country.nationalFlag}
-                      />
-                    }
-                  >
-                    {country.name}
-                  </AutocompleteItem>
-                )}
-              </Autocomplete>
-            </div>
-            <Autocomplete
-              className="flex-1"
-              defaultItems={categoryOptions}
-              inputProps={{
-                classNames: {
-                  input: "text-base",
-                },
-              }}
-              isDisabled={isCategoryLoading}
-              label={t("category")}
-              name="categoryId"
-              selectedKey={String(formData.categoryId)}
-              size="sm"
-              onSelectionChange={(key) => handleChange("categoryId", key)}
-            >
-              {(category: any) => (
-                <AutocompleteItem key={category.id}>
-                  {category.categoryName}
-                </AutocompleteItem>
-              )}
-            </Autocomplete>
-
-            <div className="flex flex-1 gap-2">
-              <Input
-                className="flex-1 text-base"
-                classNames={{
-                  input: "text-base",
-                }}
-                label={t("weight")}
-                name="weight"
-                size="sm"
-                type="number"
-                value={formData.weight}
-                onChange={(e) => handleChange("weight", e.target.value)}
-              />
-              <Input
-                className="flex-1 text-base"
-                classNames={{
-                  input: "text-base",
-                }}
-                label={t("length")}
-                name="length"
-                size="sm"
-                type="number"
-                value={formData.length}
-                onChange={(e) => handleChange("length", e.target.value)}
-              />
-            </div>
-            <div className="flex flex-1 gap-2">
-              <Input
-                className="flex-1 text-base"
-                classNames={{
-                  input: "text-base",
-                }}
-                label={t("width")}
-                name="width"
-                size="sm"
-                type="number"
-                value={formData.width}
-                onChange={(e) => handleChange("width", e.target.value)}
-              />
-              <Input
-                className="flex-1 text-base"
-                classNames={{
-                  input: "text-base",
-                }}
-                label={t("height")}
-                name="height"
-                size="sm"
-                type="number"
-                value={formData.height}
-                onChange={(e) => handleChange("height", e.target.value)}
-              />
-            </div>
-
-            <Spacer y={2} />
-            <Button
-              className="w-full bg-[#f0700c] text-white"
-              isLoading={isSearching}
-              type="submit"
-              variant="bordered"
-            >
-              {t("search")}
-            </Button>
-          </Form>
+          <CommonForm
+            confirmText={t("search")}
+            fields={fields}
+            formData={formData}
+            isLoading={isSearching}
+            onChange={setFormData}
+            onSubmit={onSubmit}
+          />
           {routes.length > 0 && (
             <div className="mt-3">
               <Accordion
@@ -331,10 +210,8 @@ export default function Estimation() {
               </Accordion>
             </div>
           )}
-          {routes?.length < 1 && (
-            <div className="mt-5 flex flex-col items-center justify-center text-gray-500">
-              <p className="text-lg">{routesMessage}</p>
-            </div>
+          {routes?.length < 1 && routesMessage && (
+            <EmptyState className="!h-auto" desc={routesMessage} />
           )}
         </div>
       </div>

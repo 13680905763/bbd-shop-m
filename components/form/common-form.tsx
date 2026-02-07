@@ -3,6 +3,7 @@ import React, { ReactNode, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import FormItemRenderer, { FieldConfig } from "./formItem-renderer";
+import { validateField } from "./utils";
 
 interface CommonFormProps<T extends Record<string, any> = Record<string, any>> {
   fields: FieldConfig[];
@@ -21,17 +22,26 @@ export default function CommonForm<T extends Record<string, any>>({
   onSubmit,
   confirmText,
   children,
+  isLoading,
 }: CommonFormProps<T>) {
   const t = useTranslations("components.form");
-  const [isLoading, setIsLoading] = useState(false);
+  const [innerLoading, setInnerLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    setIsSubmitted(true);
+
+    // 校验所有字段
+    const isValid = fields.every((field) => validateField(field, formData));
+    if (!isValid) return;
+
     try {
-      setIsLoading(true);
+      setInnerLoading(true);
       await onSubmit?.(formData);
     } finally {
-      setIsLoading(false);
+      setInnerLoading(false);
     }
   };
 
@@ -40,11 +50,16 @@ export default function CommonForm<T extends Record<string, any>>({
       <FormItemRenderer
         fields={fields}
         formData={formData}
+        isSubmitted={isSubmitted}
         onChange={onChange}
       />
 
       <div className="my-2 flex w-full flex-col gap-2">
-        <Button color="primary" isLoading={isLoading} type="submit">
+        <Button
+          color="primary"
+          isLoading={isLoading || innerLoading}
+          type="submit"
+        >
           {confirmText ?? t("save")}
         </Button>
         {children}

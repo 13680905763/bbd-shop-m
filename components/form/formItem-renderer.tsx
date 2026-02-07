@@ -10,37 +10,62 @@ import { useState } from "react";
 import { HiEye, HiEyeOff } from "react-icons/hi";
 
 import AreaSelector from "./area-selector";
+import CustomAutocompleteItem from "./autocomplete-item";
+import DimensionItem from "./dimension-item";
+import { validateField } from "./utils";
 
 export interface FieldOption {
   label: string;
   value: string;
   icon?: string;
+  [key: string]: any;
 }
 
 export interface FieldConfig {
   key?: string; // 用于 React 元素 key
-  type: "input" | "password" | "select" | "checkbox" | "date" | "area";
+  type:
+    | "input"
+    | "password"
+    | "select"
+    | "checkbox"
+    | "date"
+    | "area"
+    | "autocomplete"
+    | "dimensions";
   name: string; // 用于 formData
   label?: string;
   placeholder?: string;
   size?: "sm" | "md" | "lg";
   required?: boolean;
-  options?: FieldOption[];
+  options?: any[];
   startContent?: React.ReactNode;
   errorMessage?: string;
   isDisabled?: boolean;
+  labels?: {
+    weight: string;
+    length: string;
+    width: string;
+    height: string;
+  };
+  config?: {
+    labelKey?: string;
+    valueKey?: string;
+    imageKey?: string;
+  };
 }
 
 interface DynamicFormProps<T extends Record<string, any>> {
   fields: FieldConfig[];
   formData: T;
   onChange: (data: T) => void;
+  isSubmitted?: boolean;
 }
 
 export default function FormItemRenderer<T extends Record<string, any>>({
   fields,
   formData,
   onChange,
+  isSubmitted,
 }: DynamicFormProps<T>) {
   const handleChange = (key: string, value: any) => {
     onChange({ ...formData, [key]: value });
@@ -187,6 +212,45 @@ export default function FormItemRenderer<T extends Record<string, any>>({
                 onChange={(val) => onChange({ ...formData, ...val })}
               />
             );
+          case "autocomplete":
+            return (
+              <CustomAutocompleteItem
+                key={name}
+                errorMessage={errorMessage}
+                imageKey={field.config?.imageKey}
+                isLoading={isDisabled}
+                isRequired={required}
+                label={label || ""}
+                labelKey={field.config?.labelKey}
+                name={name}
+                options={options}
+                value={value}
+                valueKey={field.config?.valueKey}
+                onChange={(val) => handleChange(name, val)}
+              />
+            );
+          case "dimensions": {
+            const isValid = validateField(field, formData);
+            const isInvalid = !isValid;
+            return (
+              <DimensionItem
+                key={name}
+                errorMessage={errorMessage}
+                formData={formData}
+                isInvalid={required && isInvalid && !!isSubmitted}
+                labels={
+                  field.labels || {
+                    weight: "Weight",
+                    length: "Length",
+                    width: "Width",
+                    height: "Height",
+                  }
+                }
+                onChange={handleChange}
+              />
+            );
+          }
+
           default:
             return null;
         }

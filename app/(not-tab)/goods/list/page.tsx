@@ -47,11 +47,12 @@ export default function Searchpage() {
   } = useSearchList({
     imageId: currentId,
     source: selectedTab,
-    size: 100,
+    size: 20,
     enabled: !!currentId,
   });
+  console.log('data', data);
 
-  const list = data?.pages?.flatMap((page: any) => page) ?? [];
+  const list = data?.pages?.flatMap((page: any) => page.records) ?? [];
 
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -148,11 +149,7 @@ export default function Searchpage() {
             hasMore={!!hasNextPage}
             loadMore={(isRetry) => fetchNextPage().then(() => undefined)}
           >
-            {!hasNextPage && list.length > 0 && (
-              <div className="py-10 text-center text-gray-500">
-                {t("noResult")}
-              </div>
-            )}
+            {!hasNextPage && <EmptyState className="!h-auto" />}
           </InfiniteScroll>
         </div>
       </>
@@ -195,6 +192,7 @@ export default function Searchpage() {
                 )}
                 <Button
                   isIconOnly
+                  className="w-full"
                   color="primary"
                   size="sm"
                   type="submit"

@@ -49,7 +49,6 @@ export const useSearchList = (params: any) => {
         queryKey: ["searchList", params],
         queryFn: ({ pageParam = 1 }) => {
             const { enabled, ...restParams } = params;
-
             return goodsApi.listSearch({
                 ...restParams,
                 current: pageParam,
