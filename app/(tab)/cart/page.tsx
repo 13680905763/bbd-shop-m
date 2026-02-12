@@ -26,7 +26,8 @@ export default function Cart() {
   const { data, isLoading, isError, isFetching } = useCartList();
   const { mutateAsync: updateMutation, isPending: isUpdating } =
     useUpdateCartItem();
-  const { mutateAsync: deleteMutation, isPending: isDeleting } = useDeleteCart();
+  const { mutateAsync: deleteMutation, isPending: isDeleting } =
+    useDeleteCart();
   const { mutateAsync: createOrderPreview, isPending: isSubmitting } =
     useCreateOrderPreview();
   const { confirm } = useConfirm();
@@ -57,7 +58,8 @@ export default function Cart() {
     idKey: "id",
     groupKey: "shopId",
   });
-  console.log('isDeleting', isDeleting);
+
+  console.log("isDeleting", isDeleting);
 
   const deleteCart = async () => {
     await confirm({
@@ -93,7 +95,7 @@ export default function Cart() {
       const key: string = await createOrderPreview(params);
 
       router.push("/submit/order?type=cart&key=" + key);
-    } catch { }
+    } catch {}
   };
   const updateProductRemark = useCallback(
     (productId: string, remark: string) => {

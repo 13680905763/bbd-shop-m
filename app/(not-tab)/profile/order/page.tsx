@@ -6,7 +6,7 @@ import { useDisclosure } from "@heroui/react";
 import { useTranslations } from "next-intl";
 
 import OrderItem from "./order-item";
-import RefundModal from "./refund-modal";
+import OrderRefundDrawer from "./order-refund-drawer";
 import RefundOrderItem from "./refund-order-item";
 import OrderPromptCard from "./order-prompt-card";
 
@@ -68,13 +68,6 @@ export default function OrderPage() {
   const { mutateAsync: refundOrder } = useRefundOrder();
   const { mutateAsync: revokeOrder } = useRevokeOrder();
 
-  const {
-    items,
-    toggleSelection,
-    updateQuantity, // 更新数量
-    updateRemark, // 更新备注
-    getSelectedItems, // 获取选中结果
-  } = useEnhancedSelection(currentItem?.products || []);
   // 打开取消弹窗
   const onCancel = async (orderId: string) => {
     await confirm({
@@ -100,10 +93,10 @@ export default function OrderPage() {
     onOpen();
   };
   // 提交退款逻辑
-  const handleRefundSubmit = async () => {
+  const handleRefundSubmit = async (selectedProducts: any[]) => {
     const param = {
       orderId: currentItem.id,
-      skuList: getSelectedItems().map((p: any) => ({
+      skuList: selectedProducts.map((p: any) => ({
         sourceProductId: p?.sourceProductId,
         sourceSkuId: p?.sourceSkuId,
         quantity: p.quantity,
@@ -215,17 +208,13 @@ export default function OrderPage() {
         />
       )}
       {isOpen && (
-        <RefundModal
-          isDisabled={getSelectedItems().length === 0}
-          products={items}
+        <OrderRefundDrawer
+          products={currentItem?.products || []}
           onCancel={() => {
             setCurrentItem(null);
             onClose();
           }}
-          onRemarkChange={updateRemark}
-          onSelect={toggleSelection}
-          onSubmit={handleRefundSubmit}
-          onUpdateQuantity={updateQuantity}
+          onConfirm={handleRefundSubmit}
         />
       )}
     </>

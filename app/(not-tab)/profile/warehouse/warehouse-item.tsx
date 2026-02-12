@@ -4,7 +4,7 @@ import MediaPreviewGroup, {
   MediaItem,
 } from "@/components/common/media-preview";
 import SourceIcon from "@/components/common/source-icon";
-import WarehouseProductItem from "@/components/block/warehouse-product-item";
+import { WarehouseProductItem } from "@/components/list-item";
 
 export default function WarehouseItem({
   warehouse,

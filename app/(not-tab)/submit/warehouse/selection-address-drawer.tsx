@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from "react";
 import { useTranslations } from "next-intl";
 
-import CommonDrawer from "./common-drawer";
-import AddressModal from "./address-modal";
+import { CommonDrawer, EditAddressDrawer } from "@/components/drawer";
 
-import AddressItem from "@/components/block/address-item";
+
+import AddressItem from "@/components/list-item/address-item";
 import { Address, AddressModalState } from "@/types";
 
 interface AddressSelectionModalProps {
@@ -15,7 +15,7 @@ interface AddressSelectionModalProps {
   onSelect: (address: Address) => void;
 }
 
-export default function AddressSelectionModal({
+export default function SelectionAddressDrawer({
   isOpen,
   onOpenChange,
   addressList,
@@ -45,7 +45,6 @@ export default function AddressSelectionModal({
       <CommonDrawer
         confirmText={t("confirm")}
         isOpen={isOpen}
-        showCancel={false}
         title={t("shippingAddress")}
         onConfirm={() => onOpenChange(false)}
         onOpenChange={onOpenChange}
@@ -62,12 +61,11 @@ export default function AddressSelectionModal({
           {addressList?.map((address) => (
             <AddressItem
               key={address.id}
-              selectable
               addressDetail={address}
-              selected={address.id === selectedAddressId}
+              isSelected={address.id === selectedAddressId}
               showDeleteButton={false}
               onEdit={() => handleEditClick(address)}
-              onSelect={(addr) => {
+              onClick={(addr) => {
                 onSelect(addr);
                 onOpenChange(false);
               }}
@@ -82,7 +80,7 @@ export default function AddressSelectionModal({
         </div>
       </CommonDrawer>
 
-      <AddressModal
+      <EditAddressDrawer
         defaultData={
           modalState.type === "edit" ? modalState.address : undefined
         }

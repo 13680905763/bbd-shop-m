@@ -16,17 +16,14 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { IoWallet } from "react-icons/io5";
 
-import {
-  useBillingAddressActions,
-} from "@/hook/business";
-import { useBillingAddress, } from "@/hook/api";
-
+import { useBillingAddressActions } from "@/hook/business";
+import { useBillingAddress } from "@/hook/api";
 import { useWalletInfo, usePaymentMethodList } from "@/hook/api";
 import { createPayOrder } from "@/services";
 import { useGlobalStore } from "@/store";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
 import BillingAddress from "@/components/block/billing-address";
-import BillingAddressModal from "@/components/modal/billing-address-modal";
+import { EditBillingAddressDrawer } from "@/components/drawer";
 // 自定义 Radio 组件
 const CustomRadio = (props: RadioProps) => {
   const {
@@ -280,7 +277,7 @@ export default function PayOrder() {
           {t("submit")}
         </Button>
       </div>
-      <BillingAddressModal
+      <EditBillingAddressDrawer
         defaultData={
           modalState.type === "edit" ? modalState.address : undefined
         }

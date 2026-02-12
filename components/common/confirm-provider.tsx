@@ -49,7 +49,7 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   // 使用 ref 存储 resolve 函数，以便在 confirm 中调用
-  const resolveRef = useRef<(value: boolean) => void>(() => { });
+  const resolveRef = useRef<(value: boolean) => void>(() => {});
 
   const confirm = useCallback((opts: ConfirmOptions) => {
     opts.showCancel = opts.showCancel ?? true;
@@ -76,6 +76,7 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
         await options.onConfirm();
       } catch (error) {
         console.error("Confirm action failed:", error);
+
         return; // 出错时不关闭弹窗
       } finally {
         setIsLoading(false);
@@ -90,8 +91,8 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
     resolveRef.current(false);
     close();
   };
-  console.log('isLoading', options?.isLoading);
 
+  console.log("isLoading", options?.isLoading);
 
   return (
     <ConfirmContext.Provider value={{ confirm, close }}>

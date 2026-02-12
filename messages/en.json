@@ -38,6 +38,11 @@
             "missingFieldsTitle": "Please fill in: {fields}"
         },
         "common": {
+            "selectBlock": {
+                "title": "Default Title",
+                "emptyText": "No selection made",
+                "select": "Select"
+            },
             "bottomAction": {
                 "selectAll": "Select All",
                 "submit": "Submit"
@@ -61,6 +66,15 @@
             "warehouseProductItem": {
                 "weight": "Poids",
                 "size": "Dimensions"
+            }
+        },
+        "drawer": {
+            "selectionService": {
+                "title": "Extra Services",
+                "free": "Free",
+                "add": "Add",
+                "remark": "Remark",
+                "noRemark": "No remark"
             }
         },
         "modal": {
@@ -526,9 +540,6 @@
             "enterDescription": "Please enter remarks",
             "buyNow": "Buy Now",
             "addToCart": "Add to Cart",
-            "riskNotice": "Risk Notice",
-            "continueShopping": "Continue Shopping",
-            "riskMessage": "The product you submitted may have certain delivery risks. For the security of your funds, we are temporarily unable to provide online ordering services. For more information, please contact online customer service!",
             "productDescription": "Product Description",
             "stock": "Stock:",
             "shippingFee": "Shipping Fee:",
@@ -536,7 +547,10 @@
             "avgArrivalTime": "Avg Arrival Time",
             "salesVolume": "Sales Volume",
             "weightWithUnit": "Weight (g)",
-            "volumeWithUnit": "Volume (cm)"
+            "volumeWithUnit": "Volume (cm)",
+            "continueShopping": "Return to Home",
+            "riskNotice": "Warning",
+            "riskDescription": "Sorry! This product is either discontinued or sold out. It can't be purchased right now. Please contact live support for details."
         },
         "search": {
             "searchPlaceholder": "Search...",
@@ -759,7 +773,8 @@
         "serviceItem": "Service Item",
         "delete": "Delete",
         "save": "Save",
-        "confirm": "Confirm"
+        "confirm": "Confirm",
+        "selectServices": "Select Services"
     },
     "history": {
         "title": "History",

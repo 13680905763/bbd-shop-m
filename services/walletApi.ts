@@ -1,4 +1,5 @@
 import { request } from "./request";
+
 import { WalletInfo } from "@/types";
 
 export const walletApi = {
@@ -20,9 +21,8 @@ export const walletApi = {
     });
   },
   /** 获取支付方式列表 */
-  listPaymentMethod: (bizCode: string,): Promise<any> =>
+  listPaymentMethod: (bizCode: string): Promise<any> =>
     request.get("/customer/pay-order/preview?bizCode=" + bizCode),
-
 
   /** 支付回调 */
   payNotice: (param: any): Promise<any> => {

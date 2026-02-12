@@ -173,7 +173,7 @@ export default function GoodsDetails() {
         collection: isFavorite ? 0 : 1,
       });
       setIsFavorite(!isFavorite);
-    } catch (e) { }
+    } catch (e) {}
   };
   const add = async () => {
     if (isAddingCart) return;
@@ -191,7 +191,7 @@ export default function GoodsDetails() {
 
     try {
       await addCartItem(data);
-    } catch (e) { }
+    } catch (e) {}
   };
 
   // 切换选择状态
@@ -227,8 +227,6 @@ export default function GoodsDetails() {
   };
   // 更新选中状态
   const undateDisabledStatus = (cloned: any) => {
-    // const cloned: any = structuredClone(goodsInfo);
-
     cloned?.productInfo.skuPropList.forEach((spec: any, index: number) => {
       const selectedValues = getSelectedValues(cloned.productInfo.skuPropList);
 
@@ -618,7 +616,7 @@ export default function GoodsDetails() {
                     );
                   },
                 )}
-                <div className="flex justify-between items-center">
+                <div className="flex items-center justify-between">
                   <div className="text-sm font-bold">{t("quantity")}</div>
                   <Stepper
                     value={quantity}
@@ -678,10 +676,8 @@ export default function GoodsDetails() {
         }}
         onOpenChange={setIsOpen1}
       >
-        <div>
-          <div className="my-4 rounded-lg bg-[#ffeee1] p-2 text-sm">
-            {t("riskMessage")}
-          </div>
+        <div className="my-4 rounded-lg bg-[#ffeee1] p-2 text-sm">
+          {t("riskDescription")}
         </div>
       </CommonModal>
     </>

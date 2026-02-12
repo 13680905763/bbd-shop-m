@@ -44,6 +44,11 @@
             }
         },
         "common": {
+            "selectBlock": {
+                "title": "Titre par défaut",
+                "emptyText": "Aucune sélection effectuée",
+                "select": "Sélectionner"
+            },
             "bottomAction": {
                 "selectAll": "Tout sélectionner",
                 "submit": "Soumettre"
@@ -61,6 +66,15 @@
             "expandableList": {
                 "expand": "Étendre",
                 "collapse": "Réduire"
+            }
+        },
+        "drawer": {
+            "selectionService": {
+                "title": "Services Supplémentaires",
+                "free": "Gratuit",
+                "add": "Ajouter",
+                "remark": "Remarque",
+                "noRemark": "Aucune remarque"
             }
         },
         "modal": {
@@ -526,9 +540,6 @@
             "enterDescription": "Veuillez saisir des remarques",
             "buyNow": "Acheter",
             "addToCart": "Ajouter au Panier",
-            "riskNotice": "Avis de Risque",
-            "continueShopping": "Continuer les Achats",
-            "riskMessage": "Le produit que vous avez soumis peut présenter certains risques d'expédition. Pour la sécurité de vos fonds, nous sommes temporairement incapables de fournir des services de commande en ligne. Pour plus d'informations, veuillez contacter le service client en ligne !",
             "productDescription": "Description du Produit",
             "stock": "Stock :",
             "shippingFee": "Frais d'Expédition :",
@@ -536,7 +547,10 @@
             "avgArrivalTime": "Temps Moyen d'Arrivée",
             "salesVolume": "Volume des Ventes",
             "weightWithUnit": "Poids (g)",
-            "volumeWithUnit": "Volume (cm)"
+            "volumeWithUnit": "Volume (cm)",
+            "continueShopping": "Retourner à l'Accueil",
+            "riskNotice": "Attention",
+            "riskDescription": "Désolé! Ce produit est soit discontinué, soit épuisé. Il n'est pas disponible à l'achat pour l'instant. Veuillez contacter le support en direct pour plus d'informations."
         },
         "search": {
             "searchPlaceholder": "Rechercher...",

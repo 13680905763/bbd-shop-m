@@ -40,7 +40,7 @@ export default function Warehouse() {
       const key = await createPreview(selectedIds);
 
       router.push(`/submit/warehouse?key=${key}`);
-    } catch {}
+    } catch { }
   };
   const renderWarehouseContent = () => {
     if (!warehouse?.length && !isFetching) return <EmptyState />;

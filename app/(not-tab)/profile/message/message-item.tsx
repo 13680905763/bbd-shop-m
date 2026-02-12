@@ -16,11 +16,11 @@ export default function MessageItem({
 
   return (
     <Card
-      className="mb-2 w-full    gap-3 rounded-xl bg-white p-4 text-left shadow-sm transition-all active:bg-gray-100"
+      className="mb-2 w-full gap-3 rounded-xl bg-white p-4 text-left shadow-sm transition-all active:bg-gray-100"
       isPressable={!isEdit} // 编辑模式下不触发点击查看
       onClick={async () => !isEdit && (await onDetail?.(message))}
     >
-      <div className=" w-full">
+      <div className="w-full">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             {/* 编辑模式勾选框 */}

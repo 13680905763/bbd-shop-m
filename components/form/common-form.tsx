@@ -35,6 +35,7 @@ export default function CommonForm<T extends Record<string, any>>({
 
     // 校验所有字段
     const isValid = fields.every((field) => validateField(field, formData));
+
     if (!isValid) return;
 
     try {

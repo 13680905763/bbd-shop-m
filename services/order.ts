@@ -6,7 +6,6 @@ import {
   createOrderPreviewKeyByProductParams,
   createPayOrderParams,
   OrderPreviewByCart,
-  OrderPreviewByProduct,
 } from "@/types";
 
 /** 创建立即购买订单预览key */
@@ -38,7 +37,6 @@ export const updateOrderPreviewCart = (
 ): Promise<OrderPreviewByCart> =>
   request.post("/customer/cart/order/preview", data);
 
-
 /** 更新商品立即购买订单预览 */
 export const updateOrderPreviewProduct = (
   data: any,
@@ -56,6 +54,3 @@ export const createPayOrder = (data: createPayOrderParams): Promise<any> => {
     },
   );
 };
-
-
-

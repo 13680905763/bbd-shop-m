@@ -1,11 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { Form } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { FieldConfig } from "../form/formItem-renderer";
-
-import FormModal from "./form-modal";
+import FormItemRenderer from "../form/formItem-renderer";
+import CommonDrawer from "./common-drawer";
+import { validateField } from "../form/utils";
 
 import { useAddBillingAddress, useUpdateAddress } from "@/hook/api";
 
@@ -26,9 +28,10 @@ const initAddress = {
   addressType: "",
   postcode: "",
   doorNo: "",
+  address: "",
 };
 
-export default function AddressModal({
+export default function EditBillingAddressDrawer({
   isOpen,
   onOpenChange,
   type,
@@ -37,7 +40,6 @@ export default function AddressModal({
   const t = useTranslations("components.modal.billingAddress");
   const { mutateAsync: addBillingAddressMutate } = useAddBillingAddress();
   const { mutateAsync: updateBillingAddressMutate } = useUpdateAddress();
-  const queryClient = useQueryClient();
 
   const billingAddress: FieldConfig[] = [
     {
@@ -105,13 +107,17 @@ export default function AddressModal({
     }
   }, [type, defaultData, isOpen]);
 
-  const handleSave = async (data: any) => {
-    const { createTime, updateTime, customerId, ...filteredData } = data;
+  const handleSave = async (e?: React.FormEvent) => {
+    e?.preventDefault(); // 阻止表单默认提交
+    const isValid = billingAddress.every((field) => validateField(field, formData));
+    if (!isValid) return;
+
+    const { createTime, updateTime, customerId, ...filteredData } = formData;
 
     try {
       if (type === "add") {
         await addBillingAddressMutate({
-          ...data,
+          ...formData,
         });
       } else if (type === "edit") {
         await updateBillingAddressMutate({
@@ -119,22 +125,25 @@ export default function AddressModal({
         });
       }
       onOpenChange(false);
-
-      return true;
-    } finally {
-      queryClient.invalidateQueries({ queryKey: ["billingAddress"] });
+    } catch (error) {
+      console.error(error);
     }
   };
 
   return (
-    <FormModal
-      fields={billingAddress}
-      formData={formData}
+    <CommonDrawer
       isOpen={isOpen}
       title={type === "add" ? t("addTitle") : t("editTitle")}
-      onChange={setFormData}
+      onConfirm={handleSave}
       onOpenChange={onOpenChange}
-      onSubmit={handleSave}
-    />
+    >
+      <Form className="w-full" onSubmit={handleSave}>
+        <FormItemRenderer
+          fields={billingAddress}
+          formData={formData}
+          onChange={setFormData}
+        />
+      </Form>
+    </CommonDrawer>
   );
 }

@@ -10,7 +10,7 @@ interface ProductItemProps {
   onToggle?: (selected: boolean) => void;
 }
 
-export default function ProductItem({
+export default function HistoryProductItem({
   product,
   isEdit,
   isSelected,
@@ -54,8 +54,8 @@ export default function ProductItem({
             width={64}
           />
         </div>
-        <div className="flex flex-1 flex-col justify-between overflow-hidden">
-          <div className="text-title line-clamp-2 leading-tight">
+        <div className="flex flex-1 flex-col justify-between overflow-hidden items-start">
+          <div className="text-title line-clamp-2 leading-tight text-left">
             {product.productTitle}
           </div>
           <div className="text-sm text-gray-400">{product.updateTime}</div>

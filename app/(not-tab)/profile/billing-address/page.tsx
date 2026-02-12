@@ -4,11 +4,10 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import FullscreenLoader from "@/components/common/fullscreen-loader";
-import BillingAddressModal from "@/components/modal/billing-address-modal";
 import { useBillingAddressActions } from "@/hook/business";
 import { useBillingAddress } from "@/hook/api";
-
 import BillingAddress from "@/components/block/billing-address";
+import { EditBillingAddressDrawer } from "@/components/drawer";
 
 export default function BillingAddressPage() {
   const t = useTranslations("profile.billingAddress");
@@ -40,7 +39,7 @@ export default function BillingAddressPage() {
           onEdit={handleEditClick}
         />
       </div>
-      <BillingAddressModal
+      <EditBillingAddressDrawer
         defaultData={
           modalState.type === "edit" ? modalState.address : undefined
         }

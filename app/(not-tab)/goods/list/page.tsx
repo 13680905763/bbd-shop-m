@@ -50,7 +50,8 @@ export default function Searchpage() {
     size: 20,
     enabled: !!currentId,
   });
-  console.log('data', data);
+
+  console.log("data", data);
 
   const list = data?.pages?.flatMap((page: any) => page.records) ?? [];
 
@@ -99,17 +100,18 @@ export default function Searchpage() {
     e.preventDefault();
     const data: any = Object.fromEntries(new FormData(e.currentTarget));
     const res: any = await getGoodsId({ url: data.url });
+
     router.push(
       `/goods/${res.source}/${res.sourceProductId}`, // 目标路由
     );
   };
   const renderSearchContent = () => {
     if (!list?.length && !loading) return <EmptyState />;
+
     return (
       <>
         {isFetching && <BlockSpinner />}
         <div className="flex-1 overflow-auto">
-
           {list.length > 0 && (
             <div className="grid grid-cols-2 gap-2">
               {list.map((item: any) => (
@@ -167,9 +169,10 @@ export default function Searchpage() {
       content: renderSearchContent(),
     },
   ];
+
   return (
     <>
-      <div className=" bg flex items-center justify-between gap-4  p-2 py-4">
+      <div className="bg flex items-center justify-between gap-4 p-2 py-4">
         <button onClick={() => router.back()}>
           <IoChevronBack className="h-[25px] w-[25px]" />
         </button>

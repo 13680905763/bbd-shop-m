@@ -1,10 +1,10 @@
 import { useCallback, useState } from "react";
-
 import { useTranslations } from "next-intl";
 
-import { Address, AddressModalState } from "@/types";
 import { useDeleteAddress } from "../api";
 import { useConfirm } from "../common";
+
+import { Address, AddressModalState } from "@/types";
 
 export const useBillingAddressActions = () => {
   const t = useTranslations("profile.billingAddress");

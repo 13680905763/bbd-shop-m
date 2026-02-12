@@ -60,7 +60,7 @@ export default function OrderItem({
               <div className="flex flex-wrap items-center gap-2">
                 {product.orderServiceList.map((service: any) => (
                   <span
-                    key={service.serviceId}
+                    key={service.id}
                     className="rounded-full border border-gray-200 bg-white px-2.5 py-0.5 text-xs text-gray-700 shadow-sm"
                   >
                     {service.serviceName}*{service.quantity}

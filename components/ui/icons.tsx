@@ -4,11 +4,7 @@ import { Image } from "@heroui/react";
 
 import { IconSvgProps } from "@/types";
 
-export const Logo: React.FC<IconSvgProps> = ({
-  size = 36,
-  width,
-  height,
-}) => (
+export const Logo: React.FC<IconSvgProps> = ({ size = 36, width, height }) => (
   <Image
     alt="HeroUI hero Image"
     height={height || size}

@@ -1,17 +1,17 @@
 "use client";
-import { Button, Checkbox, useDisclosure } from "@heroui/react";
 import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 
-import ProductItem from "./product-item";
+import { HistoryProductItem } from "@/components/list-item";
 
 import { useDelFavorite, useFavorite } from "@/hook/api";
 import { HistoryProduct } from "@/types";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
 import { useSelection, useConfirm } from "@/hook/common";
 import { BottomAction } from "@/components/common";
+import { EmptyState } from "@/components/ui";
 
 export default function Favorite() {
   const t = useTranslations("favorite");
@@ -61,12 +61,10 @@ export default function Favorite() {
       {isLoading && <FullscreenLoader />}
       <div className="no-scrollbar flex-1 space-y-2 overflow-auto p-2 scrollbar-hide">
         {favoriteList.length === 0 ? (
-          <div className="flex h-full flex-col items-center justify-center text-sm text-gray-400">
-            {t("empty")}
-          </div>
+          <EmptyState />
         ) : (
           favoriteList.map((product) => (
-            <ProductItem
+            <HistoryProductItem
               key={product.id}
               isEdit={isEdit}
               isSelected={isSelected(product.id)}
@@ -75,12 +73,13 @@ export default function Favorite() {
             />
           ))
         )}
+        {!!favoriteList.length && <EmptyState className="!h-auto" />}
       </div>
       {isEdit && favoriteList.length > 0 && (
         <BottomAction
-          isLoading={false}
           buttonText={t("delete")}
           isAllSelected={isAllSelected}
+          isLoading={false}
           selectedCount={selectedIds.length}
           onPress={handleDelete}
           onToggleSelectAll={onToggleSelectAll}

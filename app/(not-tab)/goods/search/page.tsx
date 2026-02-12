@@ -69,7 +69,7 @@ export default function Searchpage() {
 
   return (
     <>
-      <div className="flex bg items-center justify-between p-2 py-4">
+      <div className="bg flex items-center justify-between p-2 py-4">
         <button onClick={() => router.back()}>
           <IoChevronBack className="h-[25px] w-[25px]" />
         </button>
@@ -105,7 +105,6 @@ export default function Searchpage() {
             labelPlacement="outside"
             name="url"
             placeholder={t("searchPlaceholder")} // 使用翻译
-
             type="search"
           />
           <input
@@ -118,7 +117,7 @@ export default function Searchpage() {
         </Form>
       </div>
 
-      <div className="flex-1 bg-white p-4 ">
+      <div className="flex-1 bg-white p-4">
         <div className="font-bold">{t("historyTitle")}</div> {/* 使用翻译 */}
       </div>
     </>

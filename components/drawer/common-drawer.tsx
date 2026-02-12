@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Drawer,
   DrawerContent,
@@ -15,7 +15,6 @@ interface CommonDrawerProps {
   title?: string;
   children?: React.ReactNode;
   footer?: React.ReactNode;
-  showCancel?: boolean;
   onConfirm?: () => void | Promise<void>;
   confirmText?: string;
   height?: string | number;
@@ -26,22 +25,20 @@ export default function CommonDrawer({
   onOpenChange,
   title,
   children,
-  footer,
-  showCancel = false,
   onConfirm,
   confirmText,
-  height = "80vh",
 }: CommonDrawerProps) {
   const t = useTranslations("components.confirmModal");
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <Drawer
       classNames={{
         base: "max-h-[85vh] rounded-t-xl",
       }}
+      isDismissable={!isLoading}
       isOpen={isOpen}
       placement="bottom"
-      size="xl"
       onOpenChange={onOpenChange}
     >
       <DrawerContent>
@@ -52,28 +49,29 @@ export default function CommonDrawer({
                 {title}
               </DrawerHeader>
             )}
-            <DrawerBody className="overflow-y-auto p-4 scrollbar-hide">
+            <DrawerBody className="overflow-y-auto p-4 scrollbar-hide w-full">
               {children}
             </DrawerBody>
             <DrawerFooter className="border-t border-gray-100 p-4">
-              {footer ? (
-                footer
-              ) : (
-                <Button
-                  className="w-full font-medium"
-                  color="primary"
-                  size="lg"
-                  onPress={() => {
+              <Button
+                className="w-full font-medium"
+                color="primary"
+                isLoading={isLoading}
+                onPress={async () => {
+                  try {
+                    setIsLoading(true);
                     if (onConfirm) {
-                      onConfirm();
+                      await onConfirm();
                     } else {
                       onClose();
                     }
-                  }}
-                >
-                  {confirmText || t("confirmText")}
-                </Button>
-              )}
+                  } finally {
+                    setIsLoading(false);
+                  }
+                }}
+              >
+                {confirmText || t("confirmText")}
+              </Button>
             </DrawerFooter>
           </>
         )}

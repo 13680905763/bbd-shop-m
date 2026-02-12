@@ -43,7 +43,7 @@ export default function SubmitOrder() {
     data: cartData,
     isLoading: isCartLoading,
     isError: isCartError,
-  } = usePreviewOrderByCart(type === "cart" ? key : "",);
+  } = usePreviewOrderByCart(type === "cart" ? key : "");
   const {
     data: productData,
     isLoading: isProductLoading,
@@ -80,7 +80,8 @@ export default function SubmitOrder() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [visible, setVisible] = useState(false);
   const [startIndex, setStartIndex] = useState(0);
-  const { data: servicesList, isLoading: servicesLoading } = useOrderServicesList();
+  const { data: servicesList, isLoading: servicesLoading } =
+    useOrderServicesList();
 
   // 本地状态：存储克隆的服务列表，用于单商品
   const [localServices, setLocalServices] = useState<any[]>([]);
@@ -155,11 +156,11 @@ export default function SubmitOrder() {
       prev.map((s) =>
         s.id === currentService.id
           ? {
-            ...s,
-            remark: currentService.remark,
-            isCheck: true,
-            quantity: currentService?.quantity,
-          }
+              ...s,
+              remark: currentService.remark,
+              isCheck: true,
+              quantity: currentService?.quantity,
+            }
           : s,
       ),
     );
@@ -227,7 +228,6 @@ export default function SubmitOrder() {
   useEffect(() => {
     if (data) setOrderData(data);
   }, [data]);
-
 
   if (isError) return <div>出错了</div>;
 

@@ -4,8 +4,6 @@ import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-
-
 export default function Settingpage() {
   const router = useRouter();
 

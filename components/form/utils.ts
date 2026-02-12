@@ -2,7 +2,7 @@ import { FieldConfig } from "./formItem-renderer";
 
 export const validateField = (
   field: FieldConfig,
-  formData: Record<string, any>
+  formData: Record<string, any>,
 ): boolean => {
   if (!field.required) return true;
 
@@ -16,6 +16,7 @@ export const validateField = (
         Number(formData.width) > 0 &&
         formData.height &&
         Number(formData.height) > 0;
+
       return !!(isWeightFilled || isSizeFilled);
     }
     case "autocomplete":
@@ -25,6 +26,7 @@ export const validateField = (
     case "area":
     case "date": {
       const value = formData[field.name];
+
       // 检查空字符串、null、undefined、0（如果是 ID）
       if (typeof value === "string") {
         return value.trim() !== "";
@@ -32,6 +34,7 @@ export const validateField = (
       if (typeof value === "number") {
         return value !== 0; // 假设 ID 0 是无效的
       }
+
       return value !== null && value !== undefined;
     }
     default:

@@ -6,7 +6,6 @@ import { useTranslations } from "next-intl";
 
 import PackageItem from "./package-item";
 import CancelModal from "./cancel-modal";
-import ChangeLineModal from "./change-line-modal";
 import LineDetailModal from "./line-detail-modal";
 
 import { useSelection, useConfirm } from "@/hook/common";
@@ -23,6 +22,7 @@ import {
   useWaybillList,
   useWithdrawCancel,
 } from "@/hook/api/useWaybill";
+import SelectionLineDrawer from "../../submit/warehouse/selection-line-drawer";
 
 const tabKeyToStatusCode: Record<string, string> = {
   all: "",
@@ -107,12 +107,11 @@ export default function WaybillPage() {
   };
   // 提交跟换路线
   const handleChangeLine = async (
-    waybillId: string,
-    routeId: string | null,
+    lineId: string | null,
   ) => {
     await changeLine({
-      id: waybillId,
-      templateId: routeId,
+      id: currentWaybill?.id,
+      templateId: lineId,
     });
     setModalType(null);
   };
@@ -239,12 +238,12 @@ export default function WaybillPage() {
         onClose={() => setModalType(null)}
         onConfirm={handleCancel}
       />
-      <ChangeLineModal
-        currentWaybill={currentWaybill}
+    
+      <SelectionLineDrawer
         isOpen={modalType === "changeLine"}
+        lines={Array.isArray(currentWaybill?.changePre) ? currentWaybill?.changePre : []}
         selectedRouteId={selectedRouteId}
-        setSelectedRouteId={setSelectedRouteId}
-        onClose={() => setModalType(null)}
+        onOpenChange={() => setModalType(null)}
         onConfirm={handleChangeLine}
       />
 

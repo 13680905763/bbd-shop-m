@@ -129,7 +129,6 @@ export default function MessagePage() {
         tabs={tabs}
         onSelectionChange={(key) => {
           setActiveTab(String(key));
-          // unselectAll()
         }}
       />
       {isEdit && messages.length > 0 && (

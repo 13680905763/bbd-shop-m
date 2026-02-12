@@ -18,6 +18,7 @@ export const useBillingAddress = () => {
     queryKey: ["billingAddress"],
     queryFn: async () => {
       const res = await addressApi.listBillingAddress();
+
       return res[0] || {};
     },
     staleTime: 0,

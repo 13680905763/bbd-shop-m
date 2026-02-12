@@ -1,10 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import {
-  Avatar,
-  Accordion,
-  AccordionItem,
-} from "@heroui/react";
+import { Accordion, AccordionItem } from "@heroui/react";
 import { useTranslations } from "next-intl";
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
@@ -14,6 +10,7 @@ import { useGlobalStore } from "@/store";
 import { FieldConfig } from "@/components/form/formItem-renderer";
 import CommonForm from "@/components/form/common-form";
 import { EmptyState } from "@/components/ui";
+import { LineItem } from "@/components/list-item";
 
 export default function Estimation() {
   const t = useTranslations("estimation");
@@ -91,48 +88,15 @@ export default function Estimation() {
   const disabledKeys = routes
     .map((route, index) => (route.disable ? String(index) : null))
     .filter((item) => item !== null) as string[];
-  const ShippingRouteCard = ({ route }: any) => {
-    return (
-      <>
-        <div className="flex w-full gap-2">
-          <div className="flex w-[90px] flex-shrink-0 flex-col items-center gap-1">
-            <Avatar
-              className="h-20 w-20 flex-shrink-0 rounded-sm"
-              radius="none"
-              src={route.logoUrl}
-            />
-            <p className="line-clamp-2 text-center text-sm font-semibold leading-tight text-gray-900">
-              {route.templateName}
-            </p>
-            <p className="text-center text-sm font-bold leading-snug text-orange-500">
-              {currency.symbol}
-              {route.shippingFee}
-            </p>
-            <p className="text-center text-xs leading-snug text-gray-500">
-              {route.shippingLine.minDays}-{route.shippingLine.maxDays} day
-            </p>
-          </div>
 
-          <div className="line-clamp-5 flex-1 rounded-md bg-gray-50 p-2 text-sm text-gray-600">
-            {route.shippingLine.description}
-          </div>
-        </div>
-        {route.disable && route.prompt && (
-          <div className="mt-2 rounded-lg bg-red-50 p-2 text-center text-sm text-red-500">
-            {route.prompt}
-          </div>
-        )}
-      </>
-    );
-  };
   return (
     <>
       <NavBar className="bg-white" onBack={() => router.push("/")}>
         <span className="navbar-title">{t("title")}</span>
       </NavBar>
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto scrollbar-hide ">
         <div className="bg-[url('/m/images/estimation/bg.webp')] bg-center pt-[30%]" />
-        <div className="bg-[#fff] p-5">
+        <div className="p-5 bg-white">
           <CommonForm
             confirmText={t("search")}
             fields={fields}
@@ -142,73 +106,58 @@ export default function Estimation() {
             onSubmit={onSubmit}
           />
           {routes.length > 0 && (
-            <div className="mt-3">
-              <Accordion
-                className="!border-1"
-                disabledKeys={disabledKeys}
-                variant="bordered"
-              >
-                {routes.map((route, index) => (
-                  <AccordionItem
-                    key={index}
-                    title={<ShippingRouteCard route={route} />}
-                  >
-                    {/* 展开后的内容 */}
-                    <div className="flex flex-col gap-3 pb-3">
-                      {/* 价格规则 */}
-                      <div className="rounded-lg border border-gray-100 bg-white p-3 shadow-sm">
-                        <p className="mb-2 text-sm font-semibold">
-                          {t("pricingStandard")}({route.firstWeight}g)
-                        </p>
-                        <div className="grid grid-cols-2 gap-4 text-sm">
-                          <div className="flex flex-col gap-1">
-                            <span className="text-xs text-gray-500">
-                              {t("firstWeightFee")}
-                            </span>
-                            <span className="font-semibold text-gray-800">
-                              {currency.symbol}
-                              {route.firstWeightFee}
-                            </span>
-                          </div>
-                          <div className="flex flex-col gap-1">
-                            <span className="text-xs text-gray-500">
-                              {t("additionalWeightFee")}
-                            </span>
-                            <span className="font-semibold text-gray-800">
-                              {currency.symbol}
-                              {route.additionalWeightFee}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 限重 + 特点 */}
-                      <div className="flex flex-col gap-2 rounded-lg border border-gray-100 bg-white p-3 shadow-sm">
-                        {/* 限重 */}
-                        <p className="text-sm font-semibold">
-                          {t("shippingLimit")}
-                        </p>
-                        <div className="inline-flex items-center rounded-md border border-gray-200 px-3 py-2">
-                          <span className="text-base font-semibold text-gray-800">
-                            {route.shippingLine.minWeight} -{" "}
-                            {route.shippingLine.maxWeight}
+            <Accordion disabledKeys={disabledKeys} className="!border-1" variant="bordered">
+              {routes.map((route, index) => (
+                <AccordionItem key={index} title={<LineItem line={route} />}>
+                  <div className="flex flex-col gap-3 pb-3">
+                    <div className="rounded-lg border border-gray-100 bg-white p-3 shadow-sm">
+                      <p className="mb-2 text-sm font-semibold">
+                        {t("pricingStandard")}({route.firstWeight}g)
+                      </p>
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div className="flex flex-col gap-1">
+                          <span className="text-xs text-gray-500">
+                            {t("firstWeightFee")}
                           </span>
-                          <span className="ml-1 text-xs text-gray-500">g</span>
+                          <span className="font-semibold text-gray-800">
+                            {currency.symbol}
+                            {route.firstWeightFee}
+                          </span>
                         </div>
-
-                        {/* 特点 */}
-                        <p className="mt-2 text-sm font-semibold">
-                          {t("routeFeature")}
-                        </p>
-                        <div className="line-clamp-5 rounded-md bg-gray-50 p-3 text-xs leading-snug text-gray-700">
-                          {route.shippingLine.description}
+                        <div className="flex flex-col gap-1">
+                          <span className="text-xs text-gray-500">
+                            {t("additionalWeightFee")}
+                          </span>
+                          <span className="font-semibold text-gray-800">
+                            {currency.symbol}
+                            {route.additionalWeightFee}
+                          </span>
                         </div>
                       </div>
                     </div>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
+
+                    <div className="flex flex-col gap-2 rounded-lg border border-gray-100 bg-white p-3 shadow-sm">
+                      <p className="text-sm font-semibold">
+                        {t("shippingLimit")}
+                      </p>
+                      <div className="inline-flex items-center rounded-md border border-gray-200 px-3 py-2">
+                        <span className="text-base font-semibold text-gray-800">
+                          {route.shippingLine.minWeight} -{" "}
+                          {route.shippingLine.maxWeight}
+                        </span>
+                        <span className="ml-1 text-xs text-gray-500">g</span>
+                      </div>
+                      <p className="mt-2 text-sm font-semibold">
+                        {t("routeFeature")}
+                      </p>
+                      <div className="line-clamp-5 rounded-md bg-gray-50 p-3 text-xs leading-snug text-gray-700">
+                        {route.shippingLine.description}
+                      </div>
+                    </div>
+                  </div>
+                </AccordionItem>
+              ))}
+            </Accordion>
           )}
           {routes?.length < 1 && routesMessage && (
             <EmptyState className="!h-auto" desc={routesMessage} />

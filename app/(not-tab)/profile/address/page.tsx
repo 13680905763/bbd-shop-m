@@ -3,18 +3,17 @@
 import React, { useCallback, useState } from "react";
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
 import { Address, AddressModalState } from "@/types";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
 import { useAddressList, useDeleteAddress } from "@/hook/api";
-import AddressModal from "@/components/modal/address-modal";
-import AddressItem from "@/components/block/address-item";
+import { AddressItem } from "@/components/list-item";
 import { useConfirm } from "@/hook/common";
+import { EditAddressDrawer } from "@/components/drawer";
 
 export default function AddressPage() {
-  const t = useTranslations("profile.address"); // 绑定 JSON 路径
+  const t = useTranslations("profile.address");
   const { data: addressList, isLoading } = useAddressList();
   const { mutateAsync: deleteAddressMutate } = useDeleteAddress();
   const { confirm } = useConfirm();
@@ -22,7 +21,6 @@ export default function AddressPage() {
   const [modalState, setModalState] = useState<AddressModalState>({
     type: null,
   });
-  const queryClient = useQueryClient();
   const router = useRouter();
 
   const handleOpenChange = useCallback((open: boolean) => {
@@ -48,7 +46,6 @@ export default function AddressPage() {
   );
 
   if (isLoading) return <FullscreenLoader />;
-
   return (
     <>
       <NavBar
@@ -58,8 +55,7 @@ export default function AddressPage() {
       >
         <span className="navbar-title">{t("title")}</span>
       </NavBar>
-
-      <div className="flex-1 overflow-auto px-3">
+      <div className="flex-1 overflow-auto p-2 scrollbar-hide">
         {addressList?.map((addressDetail: Address) => (
           <AddressItem
             key={addressDetail.id}
@@ -69,8 +65,15 @@ export default function AddressPage() {
           />
         ))}
       </div>
-
-      <AddressModal
+      {/* <AddressModal
+        defaultData={
+          modalState.type === "edit" ? modalState.address : undefined
+        }
+        isOpen={modalState.type === "add" || modalState.type === "edit"}
+        type={modalState.type === "add" ? "add" : "edit"}
+        onOpenChange={handleOpenChange}
+      /> */}
+      <EditAddressDrawer
         defaultData={
           modalState.type === "edit" ? modalState.address : undefined
         }

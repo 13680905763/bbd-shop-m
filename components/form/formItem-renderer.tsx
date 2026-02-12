@@ -24,14 +24,14 @@ export interface FieldOption {
 export interface FieldConfig {
   key?: string; // 用于 React 元素 key
   type:
-    | "input"
-    | "password"
-    | "select"
-    | "checkbox"
-    | "date"
-    | "area"
-    | "autocomplete"
-    | "dimensions";
+  | "input"
+  | "password"
+  | "select"
+  | "checkbox"
+  | "date"
+  | "area"
+  | "autocomplete"
+  | "dimensions";
   name: string; // 用于 formData
   label?: string;
   placeholder?: string;
@@ -232,6 +232,7 @@ export default function FormItemRenderer<T extends Record<string, any>>({
           case "dimensions": {
             const isValid = validateField(field, formData);
             const isInvalid = !isValid;
+
             return (
               <DimensionItem
                 key={name}

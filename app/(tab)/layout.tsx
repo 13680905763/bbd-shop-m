@@ -8,17 +8,14 @@ import { useEffect, useState } from "react";
 const TAB_ITEMS = [
   {
     key: "/",
-    title: "首页",
     iconPath: "/m/images/home.png",
   },
   {
     key: "/cart",
-    title: "购物车",
     iconPath: "/m/images/cart.png",
   },
   {
     key: "/dashboard",
-    title: "我的",
     iconPath: "/m/images/user.png",
   },
 ];
@@ -78,7 +75,7 @@ export default function TabLayout({ children }: { children: React.ReactNode }) {
           <TabBar.Item
             key={item.key}
             icon={(active) => (
-              <TabIcon active={active} alt={item.title} path={item.iconPath} />
+              <TabIcon active={active} alt={item.key} path={item.iconPath} />
             )}
           />
         ))}
