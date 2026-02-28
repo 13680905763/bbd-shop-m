@@ -35,7 +35,15 @@
         "form": {
             "save": "确认",
             "cancel": "取消",
-            "missingFieldsTitle": "请填写：{fields}"
+            "specification": {
+                "s1": "颜色",
+                "s2": "尺寸",
+                "quantity": "数量",
+                "add": "添加规格"
+            },
+            "uploadImages": {
+                "tip": "最多上传5张图片"
+            }
         },
         "common": {
             "selectBlock": {
@@ -69,6 +77,15 @@
                 "add": "添加",
                 "remark": "备注",
                 "noRemark": "暂无备注"
+            },
+            "selectionServiceDetailDrawer": {
+                "serviceIntro": "服务介绍",
+                "noIntro": "无介绍",
+                "sample": "样品",
+                "serviceFee": "服务费",
+                "remarkPlaceholder": "请输入备注（可选）",
+                "remark": "备注",
+                "confirm": "确认"
             }
         },
         "block": {
@@ -398,6 +415,7 @@
                 "cancel": "取消",
                 "withdraw": "撤回申请",
                 "change": "更换路线",
+                "edit": "更多操作",
                 "pay": "支付",
                 "payCancel": "支付取消手续费",
                 "receipt": "确认收货"
@@ -411,16 +429,18 @@
                 "title": "取消",
                 "cancelCard": {
                     "title": "确认取消",
-                    "subtitle": "取消该订单",
-                    "submittingTitle": "正在取消...",
+                    "subtitle": "取消此订单",
+                    "submittingTitle": "取消中...",
                     "submittingSubtitle": "请稍候",
                     "serviceFee": "服务费",
-                    "packingFee": "打包费",
-                    "totalFee": "总费用"
+                    "packingFee": "包装费",
+                    "totalFee": "总费用",
+                    "feeNotice": "由于库内作业已经进行，本次取消包裹需要缴纳 {amount}，具体费用如下：",
+                    "freeNotice": "本次取消包裹无需缴纳费用"
                 },
                 "changeRouteCard": {
                     "title": "更换路线",
-                    "subtitle": "重新选择发货路线"
+                    "subtitle": "重新选择运输路线"
                 }
             },
             "changeTitle": "更换路线",
@@ -432,6 +452,28 @@
                 "currentStatus": "当前状态：",
                 "location": "地点：",
                 "mainTimeline": "主运单轨迹："
+            },
+            "moreActions": {
+                "title": "更多操作",
+                "changeLine": {
+                    "title": "更换路线",
+                    "description": "重新选择更合适的运输路线"
+                },
+                "changeAddress": {
+                    "title": "更换地址",
+                    "description": "修改收货地址信息"
+                }
+            },
+            "changeAddress": {
+                "title": "更换地址",
+                "selectAddress": "收货地址",
+                "selectLine": "运输路线",
+                "remark": "备注",
+                "result": {
+                    "noChange": "修改成功，运费无变化",
+                    "payExtra": "修改成功，需补缴运费 {amount}",
+                    "refund": "修改成功，将退还运费 {amount} 至您的余额"
+                }
             }
         },
         "address": {
@@ -743,38 +785,25 @@
         "routeFeature": "路线特点",
         "category": "货物类别"
     },
-    "forwardingPage": {
-        "title": "代发包裹",
-        "warehouseAddress": "仓库地址",
-        "warehouseFullAddress": "中国广东省惠州市水口街道荔城工业园胜豪科技大厦8A-801",
-        "forwardingPackage": "代发包裹",
-        "trackingNo": "物流单号:",
-        "trackingNoPlaceholder": "输入您的物流单号",
-        "errorTrackingNo": "请输入有效的物流单号",
-        "packageName": "包裹名称:",
-        "packageNamePlaceholder": "输入您的包裹名称",
-        "errorPackageName": "请输入有效的包裹名称",
+    "forwarding": {
+        "title": "转运订单",
+        "forwardAddress": "仓库地址",
+        "forwardingPackage": "转运包裹",
+        "fields": {
+            "trackingNo": {
+                "label": "物流单号",
+                "placeholder": "输入您的物流单号",
+                "errorMessage": "请输入有效的物流单号"
+            },
+            "packageName": {
+                "label": "包裹名称",
+                "placeholder": "输入您的包裹名称",
+                "errorMessage": "请输入有效的包裹名称"
+            }
+        },
         "extraServices": "额外服务",
-        "serviceInspection": "开箱检查违禁物品",
-        "serviceConfirmation": "BBDbuy代发默认不提供商品确认。如需确认，请选择'商品确认'服务。",
-        "serviceRemoveInvoice": "移除发票（可能降低被税概率）",
-        "serviceOriginalBox": "原箱储存",
         "submit": "提交",
-        "acceptAgreement": "我已阅读并接受《代发包裹检查规则与服务协议》",
-        "serviceIntro": "服务介绍",
-        "noIntro": "无介绍",
-        "sample": "样品",
-        "serviceFee": "服务费",
-        "remarkPlaceholder": "请输入备注（可选）",
-        "remark": "备注",
-        "valueAddedService": "增值服务",
-        "free": "免费",
-        "add": "添加",
-        "serviceItem": "服务项目",
-        "delete": "删除",
-        "save": "保存",
-        "confirm": "确认",
-        "selectServices": "请选择服务"
+        "acceptAgreement": "我已阅读并接受《代发包裹检查规则与服务协议》"
     },
     "history": {
         "title": "历史记录",
@@ -795,5 +824,38 @@
         "deleteConfirmTitle": "删除收藏",
         "deleteConfirmContent": "确定要删除当前收藏商品吗？",
         "empty": "暂无收藏商品"
+    },
+    "diy": {
+        "title": "DIY订单",
+        "productDetails": "商品详情",
+        "extraServices": "额外服务",
+        "fee": "费用",
+        "submit": "提交",
+        "fields": {
+            "productLink": {
+                "label": "商品链接",
+                "placeholder": "请输入商品链接",
+                "errorMessage": "商品链接不能为空"
+            },
+            "productName": {
+                "label": "商品名称",
+                "placeholder": "请输入商品名称",
+                "errorMessage": "商品名称不能为空"
+            },
+            "remark": {
+                "label": "留言",
+                "placeholder": "请输入留言"
+            },
+            "productPrice": {
+                "label": "商品价格",
+                "placeholder": "请输入商品价格",
+                "errorMessage": "商品价格不能为空"
+            },
+            "postage": {
+                "label": "运费",
+                "placeholder": "请输入运费",
+                "errorMessage": "运费不能为空"
+            }
+        }
     }
 }

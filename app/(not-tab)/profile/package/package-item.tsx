@@ -16,15 +16,14 @@ export default function PackageItem({
   isSelected,
   onCancel,
   onRevoke,
-  onChangeLine,
   onPay,
   onTrack,
   onReceipt,
+  onEdit
 }: any) {
   const t = useTranslations("profile.package");
   const { currency } = useGlobalStore();
   const [isCancelLoading, setIsCancelLoading] = useState(false);
-  const [isChangeLoading, setIsChangeLoading] = useState(false);
   const [isTrackLoading, setIsTrackLoading] = useState(false);
   const [isPayLoading, setIsPayLoading] = useState(false);
   const [startIndex, setStartIndex] = useState(0);
@@ -45,7 +44,7 @@ export default function PackageItem({
     return item.orderProduct?.skuPicUrl || item.orderProduct?.picUrl;
   });
 
-  console.log("filled", filled);
+  // console.log("filled", filled);
 
   return (
     <div className="space-y-2 rounded-xl bg-white p-3">
@@ -139,25 +138,6 @@ export default function PackageItem({
                 </Button>
               )}
             </div>
-            {/* {pack?.shipping?.shippingCode && (
-              <button
-                className="inline-flex cursor-pointer items-center gap-1 rounded-lg px-1 py-0.5 text-sm text-gray-600 hover:text-gray-800"
-                onClick={onLine}
-              >
-                <FiSearch className="text-gray-500" size={16} />
-
-                <div className="flex flex-col text-sm leading-tight">
-                  <span className="text-left text-xs text-gray-500">
-                    {t("shippingCode")}
-                  </span>
-                  <span className="break-all font-medium text-gray-700">
-                    {pack.shipping.shippingCode}
-                  </span>
-                </div>
-
-                <FiChevronRight className="text-gray-400" size={16} />
-              </button>
-            )} */}
           </div>
         </div>
       </div>
@@ -188,6 +168,16 @@ export default function PackageItem({
         </p>
       </div>
       <div className="flex justify-end gap-1">
+        {(pack?.changeFlag || pack?.addressFlag) && (
+          <Button
+            className="button-default"
+            radius="sm"
+            size="sm"
+            onPress={() => onEdit(pack)}
+          >
+            {t("buttons.edit")}
+          </Button>
+        )}
         {pack?.cancelFlag && (
           <Button
             isLoading={isCancelLoading}
@@ -213,23 +203,6 @@ export default function PackageItem({
             onPress={() => onRevoke(pack?.id)}
           >
             {t("buttons.withdraw")}
-          </Button>
-        )}
-        {/* 状态：更换路线 */}
-        {pack?.changeFlag && (
-          <Button
-            className="border border-[#f0700c] bg-[#fff] text-[#f0700c]"
-            isLoading={isChangeLoading}
-            radius="sm"
-            size="sm"
-            variant="flat"
-            onPress={async () => {
-              setIsChangeLoading(true);
-              await onChangeLine(pack);
-              setIsChangeLoading(false);
-            }}
-          >
-            {t("buttons.change")}
           </Button>
         )}
         {/* 状态：待付款 */}

@@ -6,7 +6,7 @@ import { CopyText } from "@/components/ui";
 import { useUserInfo } from "@/hook/api";
 
 export default function ForwardAddress() {
-  const t = useTranslations("forwardingPage");
+  const t = useTranslations("forwarding");
   const { data: userInfo } = useUserInfo();
 
   const addressInfo = {
@@ -19,7 +19,7 @@ export default function ForwardAddress() {
 
   return (
     <div className="w-full rounded-lg bg-white p-4">
-      <p className="mb-3 text-lg font-semibold">{t("warehouseAddress")}</p>
+      <p className="mb-3 text-lg font-semibold">{t("forwardAddress")}</p>
       <div className="relative w-full rounded-large bg-[#f4f4f5] p-4 font-mono text-sm text-default-600">
         <div className="flex flex-col gap-1">
           <span>{addressInfo.recipient}</span>

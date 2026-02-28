@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 
 import { waybillApi } from "@/services/waybillApi";
 import { queryClient } from "@/lib/react-query";
@@ -50,6 +50,23 @@ export function useWithdrawCancel() {
   });
 }
 export function usePreviewChangeLine() {
+
+  return useMutation({
+    mutationFn: (waybillId: string) => waybillApi.previewChangeLine(waybillId),
+  });
+}
+export function usePreviewChangeLine1(data: any) {
+  return useQuery<any>({
+    queryKey: ["lineByWaybill", data],
+    queryFn: () => {
+      if (!data) {
+        return {};
+      }
+
+      return waybillApi.previewChangeLine1(data);
+    },
+    enabled: !!data,
+  });
   return useMutation({
     mutationFn: (waybillId: string) => waybillApi.previewChangeLine(waybillId),
   });
@@ -71,6 +88,14 @@ export function useReceipt() {
   return useMutation({
     mutationFn: (outboundPackingId: string) =>
       waybillApi.receipt(outboundPackingId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["waybillList"] });
+    },
+  });
+}
+export function useChangeAddress() {
+  return useMutation({
+    mutationFn: (params: any) => waybillApi.changeAddress(params),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["waybillList"] });
     },

@@ -1,5 +1,7 @@
 // 购物车商品项，提交订单商品项，订单商品项
-import { Checkbox, Image, Input } from "@heroui/react";
+import {
+  Checkbox, Image, Input, Textarea
+} from "@heroui/react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { memo } from "react";
@@ -11,15 +13,20 @@ import { useGlobalStore } from "@/store";
 
 export default memo(function ProductItem({
   product,
-  isOperated = false,
+  type = "order",
   isSelected,
   onToggle,
   onRemark,
   onUpdateQuantity,
 }: any) {
-  const t = useTranslations("components.common.productItem"); // ✅ 命名空间 cart
+  const t = useTranslations("components.common.productItem");
   const { currency } = useGlobalStore();
   const router = useRouter();
+  console.log('type', type);
+  console.log('product', product);
+
+
+  const isOperated = type === "cart" || type === "refund";
 
   return (
     <>
@@ -45,10 +52,12 @@ export default memo(function ProductItem({
         <div className="flex-1 space-y-2">
           <button
             className="text-left"
-            onClick={() =>
+            onClick={() => {
+              if (type === "refund") return
               router.push(
                 `/goods/${product.source}/${product?.sourceProductId}`,
               )
+            }
             }
           >
             <div className="text-title line-clamp-2">
@@ -66,6 +75,7 @@ export default memo(function ProductItem({
             {isOperated ? (
               <Stepper
                 min={1}
+                max={type === "refund" ? product?.canRefundQty : undefined}
                 value={product.quantity}
                 onChange={(value) => onUpdateQuantity!(product.id, value)}
               />
@@ -75,7 +85,7 @@ export default memo(function ProductItem({
           </div>
         </div>
       </div>
-      {isOperated ? (
+      {type === "cart" ? (
         <Input
           isReadOnly
           classNames={{ inputWrapper: "bg-[#f8f8f8]", input: "!text-[#333]" }}
@@ -88,12 +98,26 @@ export default memo(function ProductItem({
           size="sm"
           value={product.remark}
         />
-      ) : (
+      ) : type === "order" ? (
         product.remark && (
           <div className="m-2 line-clamp-2">
             {t("remark")}: {product.remark}
           </div>
         )
+      ) : (
+        <Textarea
+          classNames={{
+            inputWrapper:
+              "bg-white border border-gray-300 rounded-md shadow-none " +
+              "focus-within:bg-white focus-within:border-primary " +
+              "focus-within:ring-1 focus-within:ring-primary transition-colors",
+            input: "text-sm text-gray-800 placeholder:text-gray-400",
+          }}
+          minRows={2}
+          placeholder={t("placeholder")}
+          value={product.remark || ""}
+          onChange={(e) => onRemark(product.id, e.target.value)}
+        />
       )}
     </>
   );

@@ -53,6 +53,7 @@ export default function Home() {
     {
       image: "/m/images/home/FillBuy.png",
       title: t("toolList.fillBuy"),
+      to: "/diy",
     },
   ];
 

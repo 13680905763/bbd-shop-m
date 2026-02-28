@@ -29,9 +29,9 @@ export default function CartItem({
       {cart.cartList.map((p: any) => (
         <ProductItem
           key={p.id}
-          isOperated={true}
           isSelected={isSelected}
           product={p}
+          type="cart"
           onRemark={onRemark}
           onToggle={toggle}
           onUpdateQuantity={onQuantityChange}

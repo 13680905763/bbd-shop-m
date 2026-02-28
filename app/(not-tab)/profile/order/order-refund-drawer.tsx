@@ -2,7 +2,6 @@ import { Card, CardBody } from "@heroui/react";
 import { useTranslations } from "next-intl";
 
 import { CommonDrawer } from "@/components/drawer";
-import { useGlobalStore } from "@/store";
 import { useEnhancedSelection } from "@/hook/common";
 import ProductItem from "@/components/common/product-item";
 
@@ -18,7 +17,7 @@ export default function OrderRefundDrawer({
   onCancel,
 }: OrderRefundDrawerProps) {
   const t = useTranslations("profile.order.refundModal");
-  const { currency } = useGlobalStore();
+
   const {
     items,
     toggleSelection,
@@ -34,10 +33,11 @@ export default function OrderRefundDrawer({
   };
 
   console.log('darwer render');
-  
+
   return (
     <CommonDrawer
       isOpen
+      isDisabled={getSelectedItems().length === 0}
       title={t("title")}
       onConfirm={handleConfirm}
       onOpenChange={onCancel}
@@ -46,18 +46,17 @@ export default function OrderRefundDrawer({
         {items.map((product: any, index: number) => (
           <Card
             key={index}
-            className={`rounded-lg border shadow-sm transition-all duration-150 ${
-              product.isSelected
-                ? "border-primary bg-primary/5"
-                : "border-gray-200 bg-white"
-            }`}
+            className={`rounded-lg border shadow-sm transition-all duration-150 ${product.isSelected
+              ? "border-primary bg-primary/5"
+              : "border-gray-200 bg-white"
+              }`}
             isPressable={false}
           >
             <CardBody className="flex flex-col gap-3 p-4">
               <ProductItem
-                isOperated
                 isSelected={() => product.isSelected}
                 product={product}
+                type="refund"
                 onRemark={updateRemark}
                 onToggle={toggleSelection}
                 onUpdateQuantity={updateQuantity}

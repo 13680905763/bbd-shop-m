@@ -1,32 +1,30 @@
 import React from "react";
 import { useTranslations } from "next-intl";
 
-import CommonModal from "@/components/modal/common-modal";
+import { CommonDrawer } from "@/components/drawer";
 
-interface LineDetailModalProps {
+interface LineDetailDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   currentWaybill: any;
 }
 
-export default function LineDetailModal({
+export default function LineDetailDrawer({
   isOpen,
   onClose,
   currentWaybill,
-}: LineDetailModalProps) {
+}: LineDetailDrawerProps) {
   const t = useTranslations("profile.package");
 
   console.log("currentWaybill123", currentWaybill);
 
   return (
-    <CommonModal
-      footer={<div />}
+    <CommonDrawer
       isOpen={isOpen}
-      size="2xl"
       title={t("lineModal.title")}
       onOpenChange={onClose}
     >
-      <div className="max-h-[60vh] space-y-8 overflow-y-auto pr-2 scrollbar-hide">
+      <div className="space-y-8 overflow-y-auto pr-2 scrollbar-hide">
         {/* ========== 主运单基本信息 ========== */}
         <div className="space-y-2 rounded-xl border bg-gray-50 p-4">
           <p className="text-sm text-gray-600">
@@ -121,6 +119,6 @@ export default function LineDetailModal({
             ),
           )}
       </div>
-    </CommonModal>
+    </CommonDrawer>
   );
 }

@@ -8,6 +8,7 @@ import {
   Button,
 } from "@heroui/react";
 import { useTranslations } from "next-intl";
+// import { useVisualViewport } from "@/hook/common";
 
 interface CommonDrawerProps {
   isOpen: boolean;
@@ -18,6 +19,7 @@ interface CommonDrawerProps {
   onConfirm?: () => void | Promise<void>;
   confirmText?: string;
   height?: string | number;
+  isDisabled?: boolean;
 }
 
 export default function CommonDrawer({
@@ -27,9 +29,11 @@ export default function CommonDrawer({
   children,
   onConfirm,
   confirmText,
+  isDisabled = false,
 }: CommonDrawerProps) {
   const t = useTranslations("components.confirmModal");
   const [isLoading, setIsLoading] = useState(false);
+  // useVisualViewport();
 
   return (
     <Drawer
@@ -57,6 +61,7 @@ export default function CommonDrawer({
                 className="w-full font-medium"
                 color="primary"
                 isLoading={isLoading}
+                isDisabled={isDisabled}
                 onPress={async () => {
                   try {
                     setIsLoading(true);

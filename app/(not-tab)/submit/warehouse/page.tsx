@@ -359,7 +359,7 @@ export default function SubmitWarehouse() {
         }}
         lines={Array.isArray(lineData) ? lineData : []}
         tip={typeof lineData === "string" ? lineData : ""}
-        selectedRouteId={selectedRouteId}
+        selectedLineId={selectedRouteId}
       />
     </>
   );

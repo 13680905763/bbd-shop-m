@@ -51,7 +51,7 @@ export default memo(function AddressItem({
   return (
     <div
       className={clsx(
-        "home-card mt-2 flex flex-col gap-1 p-4 text-sm transition",
+        "home-card mt-2 flex flex-col gap-1 p-4 text-sm transition ring-1 ring-default",
         isSelected && "bg-primary/5 ring-2 ring-primary",
       )}
       role="button"

@@ -35,7 +35,15 @@
         "form": {
             "save": "Confirm",
             "cancel": "Cancel",
-            "missingFieldsTitle": "Please fill in: {fields}"
+            "specification": {
+                "s1": "Color",
+                "s2": "Size",
+                "quantity": "Quantity",
+                "add": "Add Specification"
+            },
+            "uploadImages": {
+                "tip": "Upload up to 5 images"
+            }
         },
         "common": {
             "selectBlock": {
@@ -75,6 +83,15 @@
                 "add": "Add",
                 "remark": "Remark",
                 "noRemark": "No remark"
+            },
+            "selectionServiceDetailDrawer": {
+                "serviceIntro": "Service Introduction",
+                "noIntro": "No introduction",
+                "sample": "Sample",
+                "serviceFee": "Service Fee",
+                "remarkPlaceholder": "Enter remark (optional)",
+                "remark": "Remark",
+                "confirm": "Confirm"
             }
         },
         "modal": {
@@ -377,63 +394,88 @@
             },
             "submit": "Soumettre les colis"
         },
-        "package": {
-            "title": "Packages",
-            "tabs": {
-                "all": "All",
-                "pay": "Pending Payment",
-                "shipping": "In Transit",
-                "received": "Received"
-            },
-            "selectAll": "Select All",
-            "submitPay": "Batch Pay",
-            "noOrders": "No Packages",
-            "noMoreRecords": "No More Records",
-            "withdrawTitle": "Withdraw Application",
-            "withdrawContent": "Are you sure you want to withdraw this application?",
-            "receiptTitle": "Confirm Receipt",
-            "receiptContent": "Confirm receipt of this item?",
-            "refundTitle": "Request Refund",
-            "buttons": {
-                "cancel": "Cancel",
-                "withdraw": "Withdraw Application",
-                "change": "Change Route",
-                "pay": "Pay",
-                "payCancel": "Pay Cancellation Fee",
-                "receipt": "Confirm Receipt"
-            },
-            "weight": "Weight:",
-            "size": "Size:",
-            "serviceFee": "Service Fee:",
-            "totalFee": "Total Fee:",
-            "shippingCode": "Tracking Number:",
-            "cancelModal": {
-                "title": "Cancel",
-                "cancelCard": {
-                    "title": "Confirm Cancellation",
-                    "subtitle": "Cancel this order",
-                    "submittingTitle": "Cancelling...",
-                    "submittingSubtitle": "Please wait",
-                    "serviceFee": "Service Fee",
-                    "packingFee": "Packing Fee",
-                    "totalFee": "Total Fee"
-                },
-                "changeRouteCard": {
-                    "title": "Change Route",
-                    "subtitle": "Reselect shipping route"
-                }
-            },
-            "changeTitle": "Change Route",
-            "lineModal": {
-                "title": "Shipping Tracking",
-                "mainWaybillTitle": "Main Waybill Tracking",
-                "subWaybillTitle": "Sub Waybill:",
-                "waybillNumber": "Waybill Number:",
-                "currentStatus": "Current Status:",
-                "location": "Location:",
-                "mainTimeline": "Main Waybill Timeline:"
-            }
-        },
+       "package": {
+    "title": "Packages",
+    "tabs": {
+      "all": "All",
+      "pay": "Pending Payment",
+      "shipping": "In Transit",
+      "received": "Received"
+    },
+    "selectAll": "Select All",
+    "submitPay": "Batch Payment",
+    "noOrders": "No packages yet",
+    "noMoreRecords": "No more records",
+    "withdrawTitle": "Withdraw Application",
+    "withdrawContent": "Are you sure you want to withdraw the current application?",
+    "receiptTitle": "Confirm Receipt",
+    "receiptContent": "Are you sure you have received this package?",
+    "refundTitle": "Apply for Refund",
+    "buttons": {
+      "cancel": "Cancel",
+      "withdraw": "Withdraw Application",
+      "change": "Change Route",
+      "edit": "More Actions",
+      "pay": "Pay",
+      "payCancel": "Payment Cancellation Fee",
+      "receipt": "Confirm Receipt"
+    },
+    "weight": "Weight:",
+    "size": "Dimensions:",
+    "serviceFee": "Service Fee:",
+    "totalFee": "Total Fee:",
+    "shippingCode": "Tracking Number:",
+    "cancelModal": {
+      "title": "Cancel",
+      "cancelCard": {
+        "title": "Confirm Cancellation",
+        "subtitle": "Cancel this order",
+        "submittingTitle": "Cancelling...",
+        "submittingSubtitle": "Please wait",
+        "serviceFee": "Service Fee",
+        "packingFee": "Packing Fee",
+        "totalFee": "Total Fee",
+        "feeNotice": "Since warehouse processing has already begun, canceling this package requires a fee of {amount}. The details are as follows:",
+        "freeNotice": "No fee is required to cancel this package"
+      },
+      "changeRouteCard": {
+        "title": "Change Route",
+        "subtitle": "Reselect shipping route"
+      }
+    },
+    "changeTitle": "Change Route",
+    "lineModal": {
+      "title": "Logistics Tracking",
+      "mainWaybillTitle": "Main Waybill Tracking",
+      "subWaybillTitle": "Sub Waybill:",
+      "waybillNumber": "Waybill Number:",
+      "currentStatus": "Current Status:",
+      "location": "Location:",
+      "mainTimeline": "Main Waybill Timeline:"
+    },
+    "moreActions": {
+      "title": "More Actions",
+      "changeLine": {
+        "title": "Change Route",
+        "description": "Reselect a more suitable shipping route"
+      },
+      "changeAddress": {
+        "title": "Change Address",
+        "description": "Modify shipping address information"
+      }
+    },
+    "changeAddress": {
+      "title": "Change Address",
+      "selectAddress": "Shipping Address",
+      "selectLine": "Shipping Route",
+      "remark": "Remarks",
+      "result": {
+        "noChange": "Successfully modified, shipping fee remains unchanged",
+        "payExtra": "Successfully modified, additional shipping fee of {amount} required",
+        "refund": "Successfully modified, shipping fee of {amount} will be refunded to your balance"
+      }
+    }
+  },
         "address": {
             "title": "Address",
             "addButton": "Add",
@@ -743,38 +785,25 @@
         "routeFeature": "Route Features",
         "category": "Cargo Category"
     },
-    "forwardingPage": {
-        "title": "Forwarding Package",
-        "warehouseAddress": "Warehouse Address",
-        "warehouseFullAddress": "8A-801 Shenghao Technology Building, Licheng Industrial Park, Shuikou Street, Huizhou, Guangdong, China",
+    "forwarding": {
+        "title": "Forwarding Order",
+        "forwardAddress": "Warehouse Address",
         "forwardingPackage": "Forwarding Package",
-        "trackingNo": "Tracking Number:",
-        "trackingNoPlaceholder": "Enter your tracking number",
-        "errorTrackingNo": "Please enter a valid tracking number",
-        "packageName": "Package Name:",
-        "packageNamePlaceholder": "Enter your package name",
-        "errorPackageName": "Please enter a valid package name",
-        "extraServices": "Additional Services",
-        "serviceInspection": "Open-box inspection for prohibited items",
-        "serviceConfirmation": "BBDbuy forwarding does not provide item confirmation by default. Choose 'Item Confirmation' if needed.",
-        "serviceRemoveInvoice": "Remove invoice (may reduce tax probability)",
-        "serviceOriginalBox": "Original box storage",
+        "fields": {
+            "trackingNo": {
+                "label": "Tracking Number",
+                "placeholder": "Enter your tracking number",
+                "errorMessage": "Please enter a valid tracking number"
+            },
+            "packageName": {
+                "label": "Package Name",
+                "placeholder": "Enter your package name",
+                "errorMessage": "Please enter a valid package name"
+            }
+        },
+        "extraServices": "Extra Services",
         "submit": "Submit",
-        "acceptAgreement": "I have read and accept the 'Forwarding Package Inspection Rules and Service Agreement'",
-        "serviceIntro": "Service Introduction",
-        "noIntro": "No Introduction",
-        "sample": "Sample",
-        "serviceFee": "Service Fee",
-        "remarkPlaceholder": "Enter remarks (optional)",
-        "remark": "Remark",
-        "valueAddedService": "Value-Added Service",
-        "free": "Free",
-        "add": "Add",
-        "serviceItem": "Service Item",
-        "delete": "Delete",
-        "save": "Save",
-        "confirm": "Confirm",
-        "selectServices": "Select Services"
+        "acceptAgreement": "I have read and accepted the 'Package Inspection Rules and Service Agreement'"
     },
     "history": {
         "title": "History",
@@ -795,5 +824,38 @@
         "deleteConfirmTitle": "Delete Favorite",
         "deleteConfirmContent": "Are you sure you want to delete this product?",
         "empty": "No favorite products"
+    },
+    "diy": {
+        "title": "DIY Order",
+        "productDetails": "Product Details",
+        "extraServices": "Extra Services",
+        "fee": "Fee",
+        "submit": "Submit",
+        "fields": {
+            "productLink": {
+                "label": "Product Link",
+                "placeholder": "Please enter product link",
+                "errorMessage": "Product link cannot be empty"
+            },
+            "productName": {
+                "label": "Product Name",
+                "placeholder": "Please enter product name",
+                "errorMessage": "Product name cannot be empty"
+            },
+            "remark": {
+                "label": "Remark",
+                "placeholder": "Please enter remark"
+            },
+            "productPrice": {
+                "label": "Product Price",
+                "placeholder": "Please enter product price",
+                "errorMessage": "Product price cannot be empty"
+            },
+            "postage": {
+                "label": "Shipping Fee",
+                "placeholder": "Please enter shipping fee",
+                "errorMessage": "Shipping fee cannot be empty"
+            }
+        }
     }
 }

@@ -35,7 +35,15 @@
         "form": {
             "save": "Confirmer",
             "cancel": "Annuler",
-            "missingFieldsTitle": "Veuillez remplir : {fields}"
+            "specification": {
+                "s1": "Couleur",
+                "s2": "Taille",
+                "quantity": "Quantité",
+                "add": "Ajouter une spécification"
+            },
+            "uploadImages": {
+                "tip": "Télécharger jusqu'à 5 images"
+            }
         },
         "block": {
             "warehouseProductItem": {
@@ -75,6 +83,15 @@
                 "add": "Ajouter",
                 "remark": "Remarque",
                 "noRemark": "Aucune remarque"
+            },
+            "selectionServiceDetailDrawer": {
+                "serviceIntro": "Introduction du Service",
+                "noIntro": "Aucune introduction",
+                "sample": "Exemple",
+                "serviceFee": "Frais de Service",
+                "remarkPlaceholder": "Entrez une remarque (facultatif)",
+                "remark": "Remarque",
+                "confirm": "Confirmer"
             }
         },
         "modal": {
@@ -387,23 +404,24 @@
             },
             "selectAll": "Tout sélectionner",
             "submitPay": "Paiement groupé",
-            "noOrders": "Aucun colis",
-            "noMoreRecords": "Plus d'enregistrements",
+            "noOrders": "Aucun colis pour le moment",
+            "noMoreRecords": "Aucun autre enregistrement",
             "withdrawTitle": "Retirer la demande",
-            "withdrawContent": "Êtes-vous sûr de vouloir retirer cette demande ?",
+            "withdrawContent": "Êtes-vous sûr de vouloir retirer la demande actuelle ?",
             "receiptTitle": "Confirmer la réception",
-            "receiptContent": "Confirmer la réception de cet article ?",
+            "receiptContent": "Confirmez-vous avoir reçu ce colis ?",
             "refundTitle": "Demander un remboursement",
             "buttons": {
                 "cancel": "Annuler",
                 "withdraw": "Retirer la demande",
                 "change": "Changer d'itinéraire",
+                "edit": "Plus d'actions",
                 "pay": "Payer",
-                "payCancel": "Payer les frais d'annulation",
+                "payCancel": "Frais d'annulation de paiement",
                 "receipt": "Confirmer la réception"
             },
             "weight": "Poids :",
-            "size": "Taille :",
+            "size": "Dimensions :",
             "serviceFee": "Frais de service :",
             "totalFee": "Frais totaux :",
             "shippingCode": "Numéro de suivi :",
@@ -416,7 +434,9 @@
                     "submittingSubtitle": "Veuillez patienter",
                     "serviceFee": "Frais de service",
                     "packingFee": "Frais d'emballage",
-                    "totalFee": "Frais totaux"
+                    "totalFee": "Frais totaux",
+                    "feeNotice": "Étant donné que le traitement en entrepôt a déjà commencé, l'annulation de ce colis nécessite des frais de {amount}. Les détails sont les suivants :",
+                    "freeNotice": "Aucun frais n'est requis pour annuler ce colis"
                 },
                 "changeRouteCard": {
                     "title": "Changer d'itinéraire",
@@ -425,13 +445,35 @@
             },
             "changeTitle": "Changer d'itinéraire",
             "lineModal": {
-                "title": "Suivi d'expédition",
+                "title": "Suivi logistique",
                 "mainWaybillTitle": "Suivi de la lettre de voiture principale",
-                "subWaybillTitle": "Lettre de voiture secondaire :",
+                "subWaybillTitle": "Sous-lettre de voiture :",
                 "waybillNumber": "Numéro de lettre de voiture :",
                 "currentStatus": "Statut actuel :",
-                "location": "Lieu :",
+                "location": "Emplacement :",
                 "mainTimeline": "Chronologie de la lettre de voiture principale :"
+            },
+            "moreActions": {
+                "title": "Plus d'actions",
+                "changeLine": {
+                    "title": "Changer d'itinéraire",
+                    "description": "Resélectionner un itinéraire d'expédition plus approprié"
+                },
+                "changeAddress": {
+                    "title": "Changer d'adresse",
+                    "description": "Modifier les informations d'adresse de livraison"
+                }
+            },
+            "changeAddress": {
+                "title": "Changer d'adresse",
+                "selectAddress": "Adresse de livraison",
+                "selectLine": "Itinéraire d'expédition",
+                "remark": "Remarques",
+                "result": {
+                    "noChange": "Modification réussie, les frais d'expédition restent inchangés",
+                    "payExtra": "Modification réussie, des frais d'expédition supplémentaires de {amount} sont requis",
+                    "refund": "Modification réussie, les frais d'expédition de {amount} seront remboursés sur votre solde"
+                }
             }
         },
         "address": {
@@ -743,37 +785,25 @@
         "routeFeature": "Caractéristiques de la route",
         "category": "Catégorie de marchandise"
     },
-    "forwardingPage": {
-        "title": "Réexpédition de colis",
-        "warehouseAddress": "Adresse de l'entrepôt",
-        "warehouseFullAddress": "Bâtiment technologique Shenghao 8A-801, Parc industriel de Licheng, Rue Shuikou, Huizhou, Guangdong, Chine",
-        "forwardingPackage": "Réexpédition de colis",
-        "trackingNo": "Numéro de suivi :",
-        "trackingNoPlaceholder": "Entrez votre numéro de suivi",
-        "errorTrackingNo": "Veuillez entrer un numéro de suivi valide",
-        "packageName": "Nom du colis :",
-        "packageNamePlaceholder": "Entrez le nom de votre colis",
-        "errorPackageName": "Veuillez entrer un nom de colis valide",
+    "forwarding": {
+        "title": "Commande de réexpédition",
+        "forwardAddress": "Adresse de l'entrepôt",
+        "forwardingPackage": "Colis de réexpédition",
+        "fields": {
+            "trackingNo": {
+                "label": "Numéro de suivi",
+                "placeholder": "Saisissez votre numéro de suivi",
+                "errorMessage": "Veuillez saisir un numéro de suivi valide"
+            },
+            "packageName": {
+                "label": "Nom du colis",
+                "placeholder": "Saisissez le nom de votre colis",
+                "errorMessage": "Veuillez saisir un nom de colis valide"
+            }
+        },
         "extraServices": "Services supplémentaires",
-        "serviceInspection": "Inspection ouverte pour les articles interdits",
-        "serviceConfirmation": "La réexpédition BBDbuy ne fournit pas de confirmation d'article par défaut. Choisissez 'Confirmation d'article' si nécessaire.",
-        "serviceRemoveInvoice": "Supprimer la facture (peut réduire la probabilité de taxe)",
-        "serviceOriginalBox": "Conservation de l'emballage d'origine",
         "submit": "Soumettre",
-        "acceptAgreement": "J'ai lu et j'accepte les 'Règles d'inspection et accord de service pour la réexpédition de colis'",
-        "serviceIntro": "Présentation du service",
-        "noIntro": "Aucune présentation",
-        "sample": "Exemple",
-        "serviceFee": "Frais de service",
-        "remarkPlaceholder": "Entrez des remarques (facultatif)",
-        "remark": "Remarque",
-        "valueAddedService": "Service à valeur ajoutée",
-        "free": "Gratuit",
-        "add": "Ajouter",
-        "serviceItem": "Article de service",
-        "delete": "Supprimer",
-        "save": "Enregistrer",
-        "confirm": "Confirmer"
+        "acceptAgreement": "J'ai lu et j'accepte les 'Règles d'inspection des colis et accord de service'"
     },
     "history": {
         "title": "Historique",
@@ -794,5 +824,38 @@
         "deleteConfirmTitle": "Supprimer des favoris",
         "deleteConfirmContent": "Êtes-vous sûr de vouloir supprimer ce produit des favoris ?",
         "empty": "Aucun produit favori"
+    },
+    "diy": {
+        "title": "Commande DIY",
+        "productDetails": "Détails du produit",
+        "extraServices": "Services supplémentaires",
+        "fee": "Frais",
+        "submit": "Soumettre",
+        "fields": {
+            "productLink": {
+                "label": "Lien du produit",
+                "placeholder": "Veuillez saisir le lien du produit",
+                "errorMessage": "Le lien du produit ne peut pas être vide"
+            },
+            "productName": {
+                "label": "Nom du produit",
+                "placeholder": "Veuillez saisir le nom du produit",
+                "errorMessage": "Le nom du produit ne peut pas être vide"
+            },
+            "remark": {
+                "label": "Remarque",
+                "placeholder": "Veuillez saisir une remarque"
+            },
+            "productPrice": {
+                "label": "Prix du produit",
+                "placeholder": "Veuillez saisir le prix du produit",
+                "errorMessage": "Le prix du produit ne peut pas être vide"
+            },
+            "postage": {
+                "label": "Frais de port",
+                "placeholder": "Veuillez saisir les frais de port",
+                "errorMessage": "Les frais de port ne peuvent pas être vides"
+            }
+        }
     }
 }

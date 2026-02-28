@@ -21,7 +21,7 @@ export default function SelectionServiceDetailDrawer({
   service,
   onConfirm,
 }: ServiceDetailDrawerProps) {
-  const t = useTranslations("forwardingPage");
+  const t = useTranslations("components.drawer.selectionServiceDetailDrawer");
   const { currency } = useGlobalStore();
   const [currentService, setCurrentService] = useState<any>(service);
   const [visible, setVisible] = useState(false);

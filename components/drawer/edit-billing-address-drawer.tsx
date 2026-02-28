@@ -1,12 +1,20 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { Form } from "@heroui/react";
+import {
+  Form,
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerBody,
+  DrawerFooter,
+  Button,
+} from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { FieldConfig } from "../form/formItem-renderer";
 import FormItemRenderer from "../form/formItem-renderer";
-import CommonDrawer from "./common-drawer";
+import { useVisualViewport } from "@/hook/common";
 import { validateField } from "../form/utils";
 
 import { useAddBillingAddress, useUpdateAddress } from "@/hook/api";
@@ -38,6 +46,8 @@ export default function EditBillingAddressDrawer({
   defaultData,
 }: AddressModalProps) {
   const t = useTranslations("components.modal.billingAddress");
+  const t2 = useTranslations("components.modal");
+
   const { mutateAsync: addBillingAddressMutate } = useAddBillingAddress();
   const { mutateAsync: updateBillingAddressMutate } = useUpdateAddress();
 
@@ -98,6 +108,8 @@ export default function EditBillingAddressDrawer({
     },
   ];
   const [formData, setFormData] = useState<any>(initAddress);
+  const [isLoading, setIsLoading] = useState(false);
+  useVisualViewport();
 
   useEffect(() => {
     if (type === "edit" && defaultData) {
@@ -131,19 +143,48 @@ export default function EditBillingAddressDrawer({
   };
 
   return (
-    <CommonDrawer
+    <Drawer
+      classNames={{
+        base: "rounded-t-xl",
+      }}
+      isDismissable={!isLoading}
       isOpen={isOpen}
-      title={type === "add" ? t("addTitle") : t("editTitle")}
-      onConfirm={handleSave}
+      placement="bottom"
       onOpenChange={onOpenChange}
     >
-      <Form className="w-full" onSubmit={handleSave}>
-        <FormItemRenderer
-          fields={billingAddress}
-          formData={formData}
-          onChange={setFormData}
-        />
-      </Form>
-    </CommonDrawer>
+      <DrawerContent style={{ maxHeight: "var(--visual-viewport-height, 100dvh)", transition: "max-height 0.1s ease-out" }}>
+        <div className="min-h-[300px]">
+          <DrawerHeader className="flex flex-col gap-1 border-b border-gray-100 py-3 text-center">
+            {type === "add" ? t("addTitle") : t("editTitle")}
+          </DrawerHeader>
+          <DrawerBody className="overflow-y-auto p-4 scrollbar-hide w-full">
+            <Form className="w-full min-h-[300px]" onSubmit={handleSave}>
+              <FormItemRenderer
+                fields={billingAddress}
+                formData={formData}
+                onChange={setFormData}
+              />
+            </Form>
+          </DrawerBody>
+          <DrawerFooter className="border-t border-gray-100 p-4">
+            <Button
+              className="w-full font-medium"
+              color="primary"
+              isLoading={isLoading}
+              onPress={async () => {
+                try {
+                  setIsLoading(true);
+                  await handleSave();
+                } finally {
+                  setIsLoading(false);
+                }
+              }}
+            >
+              {t2("confirm")}
+            </Button>
+          </DrawerFooter>
+        </div>
+      </DrawerContent>
+    </Drawer>
   );
 }

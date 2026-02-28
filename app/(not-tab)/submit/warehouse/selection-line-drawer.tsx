@@ -10,7 +10,7 @@ interface SelectionLineDrawerProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   lines: any[];
-  selectedRouteId: string | null;
+  selectedLineId: string | null;
   onConfirm: (id: string) => void | Promise<void>;
   tip?: string;
 }
@@ -19,18 +19,18 @@ export default function SelectionLineDrawer({
   isOpen,
   onOpenChange,
   lines,
-  selectedRouteId,
+  selectedLineId,
   onConfirm,
   tip,
 }: SelectionLineDrawerProps) {
   const t = useTranslations("submit.warehouse");
-  const [internalSelectedId, setInternalSelectedId] = useState<string | null>(selectedRouteId);
+  const [internalSelectedId, setInternalSelectedId] = useState<string | null>(selectedLineId);
 
   useEffect(() => {
     if (isOpen) {
-      setInternalSelectedId(selectedRouteId);
+      setInternalSelectedId(selectedLineId);
     }
-  }, [isOpen, selectedRouteId]);
+  }, [isOpen, selectedLineId]);
 
   const handleConfirm = async () => {
     if (internalSelectedId) {

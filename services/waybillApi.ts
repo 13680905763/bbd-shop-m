@@ -1,4 +1,4 @@
-import { request } from "./request";
+import { request, requestWithOption } from "./request";
 
 import { PageResult } from "@/types/api";
 
@@ -27,6 +27,18 @@ export const waybillApi = {
   previewChangeLine(waybillId: string): Promise<any> {
     return request.get(`/waybill/change/line/fee?id=${waybillId}`);
   },
+  /** 运单更换路线预览 */
+  previewChangeLine1(data: any): Promise<any> {
+    return requestWithOption(
+      {
+        url: "/waybill/change/line/fee",
+        method: "get",
+        params: data,
+      },
+      { isSuccess: false },
+    );
+    return request.get(`/waybill/change/line/fee`, { params: data });
+  },
   /** 包裹物流查询 */
   trackDetail(params: any): Promise<any> {
     return request.get(`/track`, { params });
@@ -34,6 +46,10 @@ export const waybillApi = {
   /** 运单更换路线提交 */
   changeLine(data: any): Promise<any> {
     return request.post(`/waybill/change/line`, data);
+  },
+  /** 运单更换地址提交 */
+  changeAddress(data: any): Promise<any> {
+    return request.post(`/waybill/change/address-line`, data);
   },
   /** 运单确认收货 */
   receipt(outboundPackingId: string): Promise<any> {

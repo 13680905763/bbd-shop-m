@@ -54,7 +54,7 @@ export default function OrderItem({
 
       {order?.products.map((product: any) => (
         <React.Fragment key={product?.id}>
-          <ProductItem product={product} />
+          <ProductItem product={product} type="order" />
           {product?.orderServiceList?.length > 0 && (
             <div className="rounded-lg bg-[#fafafa] px-3 py-2">
               <div className="flex flex-wrap items-center gap-2">

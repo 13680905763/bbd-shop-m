@@ -28,6 +28,17 @@ export default function SelectionAddressDrawer({
     type: null,
   });
 
+  const [internalSelectedId, setInternalSelectedId] = useState<string | null>(
+    selectedAddressId
+  );
+
+  // Sync internal state when prop changes or drawer opens
+  React.useEffect(() => {
+    if (isOpen) {
+      setInternalSelectedId(selectedAddressId);
+    }
+  }, [isOpen, selectedAddressId]);
+
   const handleAddClick = useCallback(() => {
     setModalState({ type: "add" });
   }, []);
@@ -40,13 +51,25 @@ export default function SelectionAddressDrawer({
     if (!open) setModalState({ type: null });
   }, []);
 
+  const handleConfirm = () => {
+    if (internalSelectedId) {
+      const selectedAddress = addressList.find(
+        (addr) => addr.id === internalSelectedId
+      );
+      if (selectedAddress) {
+        onSelect(selectedAddress);
+      }
+    }
+    onOpenChange(false);
+  };
+
   return (
     <>
       <CommonDrawer
         confirmText={t("confirm")}
         isOpen={isOpen}
         title={t("shippingAddress")}
-        onConfirm={() => onOpenChange(false)}
+        onConfirm={handleConfirm}
         onOpenChange={onOpenChange}
       >
         <div className="space-y-3 py-2">
@@ -62,12 +85,11 @@ export default function SelectionAddressDrawer({
             <AddressItem
               key={address.id}
               addressDetail={address}
-              isSelected={address.id === selectedAddressId}
+              isSelected={address.id === internalSelectedId}
               showDeleteButton={false}
               onEdit={() => handleEditClick(address)}
               onClick={(addr) => {
-                onSelect(addr);
-                onOpenChange(false);
+                setInternalSelectedId(addr.id);
               }}
             />
           ))}

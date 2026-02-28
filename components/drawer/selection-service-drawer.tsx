@@ -26,7 +26,6 @@ export default function SelectionServiceDrawer({
 }: ServiceSelectionDrawerProps) {
   const t = useTranslations("components.drawer.selectionService");
   const { currency } = useGlobalStore();
-  console.log("items", items);
 
   const [currentService, setCurrentService] = useState<any>(null);
   const [isServiceDetailOpen, setIsServiceDetailOpen] = useState(false);

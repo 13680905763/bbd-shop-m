@@ -1,5 +1,6 @@
 import {
   Input,
+  Textarea,
   Autocomplete,
   AutocompleteItem,
   Avatar,
@@ -12,6 +13,9 @@ import { HiEye, HiEyeOff } from "react-icons/hi";
 import AreaSelector from "./area-selector";
 import CustomAutocompleteItem from "./autocomplete-item";
 import DimensionItem from "./dimension-item";
+import SpecificationItem from "./specification-item";
+import ImageUploadItem from "./image-upload-item";
+import CurrencyInputItem from "./currency-input-item";
 import { validateField } from "./utils";
 
 export interface FieldOption {
@@ -31,7 +35,11 @@ export interface FieldConfig {
   | "date"
   | "area"
   | "autocomplete"
-  | "dimensions";
+  | "dimensions"
+  | "textarea"
+  | "specifications"
+  | "imageUpload"
+  | "currencyInput";
   name: string; // 用于 formData
   label?: string;
   placeholder?: string;
@@ -40,6 +48,7 @@ export interface FieldConfig {
   options?: any[];
   startContent?: React.ReactNode;
   errorMessage?: string;
+  inputType?: string; // e.g. "number", "email", etc.
   isDisabled?: boolean;
   labels?: {
     weight: string;
@@ -51,6 +60,7 @@ export interface FieldConfig {
     labelKey?: string;
     valueKey?: string;
     imageKey?: string;
+    onUpload?: (file: File) => Promise<string>;
   };
 }
 
@@ -59,6 +69,7 @@ interface DynamicFormProps<T extends Record<string, any>> {
   formData: T;
   onChange: (data: T) => void;
   isSubmitted?: boolean;
+  errors?: Record<string, string>;
 }
 
 export default function FormItemRenderer<T extends Record<string, any>>({
@@ -66,6 +77,7 @@ export default function FormItemRenderer<T extends Record<string, any>>({
   formData,
   onChange,
   isSubmitted,
+  errors,
 }: DynamicFormProps<T>) {
   const handleChange = (key: string, value: any) => {
     onChange({ ...formData, [key]: value });
@@ -85,10 +97,12 @@ export default function FormItemRenderer<T extends Record<string, any>>({
           size = "md",
           startContent = "",
           required = false,
-          errorMessage = "",
+          errorMessage: defaultErrorMessage = "",
+          inputType,
           isDisabled = false,
         } = field; // 默认 md
         const value = formData[name] ?? "";
+        const errorMessage = errors?.[name] || defaultErrorMessage;
 
         switch (type) {
           case "input":
@@ -106,6 +120,7 @@ export default function FormItemRenderer<T extends Record<string, any>>({
                 placeholder={placeholder}
                 size={size}
                 startContent={startContent}
+                type={inputType}
                 value={value}
                 variant="bordered"
                 onValueChange={(val) => handleChange(name, val)}
@@ -252,6 +267,62 @@ export default function FormItemRenderer<T extends Record<string, any>>({
             );
           }
 
+          case "textarea":
+            return (
+              <Textarea
+                key={name}
+                classNames={{
+                  input: "text-base",
+                  inputWrapper: "bg-white",
+                }}
+                errorMessage={errorMessage}
+                isDisabled={isDisabled}
+                isRequired={required}
+                label={label}
+                placeholder={placeholder}
+                size={size}
+                value={value}
+                variant="bordered"
+                onValueChange={(val) => handleChange(name, val)}
+              />
+            );
+          case "specifications":
+            return (
+              <SpecificationItem
+                key={name}
+                errorMessage={errorMessage}
+                formData={formData}
+                isRequired={required}
+                name={name}
+                onChange={handleChange}
+              />
+            );
+          case "imageUpload":
+            return (
+              <ImageUploadItem
+                key={name}
+                formData={formData}
+                label={label}
+                name={name}
+                onUpload={field.config?.onUpload}
+                onChange={handleChange}
+              />
+            );
+          case "currencyInput":
+            return (
+              <CurrencyInputItem
+                key={name}
+                errorMessage={errorMessage}
+                formData={formData}
+                isDisabled={isDisabled}
+                label={label}
+                name={name}
+                placeholder={placeholder}
+                required={required}
+                size={size}
+                onChange={handleChange}
+              />
+            );
           default:
             return null;
         }

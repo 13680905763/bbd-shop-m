@@ -23,7 +23,7 @@ import { SelectedServiceItem } from "@/components/list-item";
 
 
 export default function ForwardingPage() {
-  const t = useTranslations("forwardingPage");
+  const t = useTranslations("forwarding");
   const router = useRouter();
   const { data: user, error } = useUserInfo();
   const { mutate: forwardingOrder, isPending } = useForwardingOrder();
@@ -46,18 +46,18 @@ export default function ForwardingPage() {
   const fields: FieldConfig[] = [
     {
       name: "logisticsCode",
-      label: t("trackingNo"),
+      label: t("fields.trackingNo.label"),
       type: "input",
-      placeholder: t("trackingNoPlaceholder"),
-      errorMessage: t("errorTrackingNo"),
+      placeholder: t("fields.trackingNo.placeholder"),
+      errorMessage: t("fields.trackingNo.errorMessage"),
       required: true,
     },
     {
       name: "packageItemName",
-      label: t("packageName"),
+      label: t("fields.packageName.label"),
       type: "input",
-      placeholder: t("packageNamePlaceholder"),
-      errorMessage: t("errorPackageName"),
+      placeholder: t("fields.packageName.placeholder"),
+      errorMessage: t("fields.packageName.errorMessage"),
       required: true,
     },
   ];

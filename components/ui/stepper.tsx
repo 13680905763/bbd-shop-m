@@ -6,6 +6,7 @@ interface SimpleStepperProps {
   value: number;
   onChange?: (value: number) => void;
   min?: number;
+  max?: number;
   className?: string;
 }
 
@@ -13,6 +14,7 @@ export default function Stepper({
   value,
   onChange,
   min = 1,
+  max = 99999,
   className = "",
 }: SimpleStepperProps) {
   const [inputValue, setInputValue] = useState(value.toString());
@@ -48,6 +50,9 @@ export default function Stepper({
     } else if (parsedValue < min) {
       // 如果小于最小值，设为最小值
       onChange?.(min);
+    } else if (parsedValue > max) {
+      // 如果大于最大值，设为最大值
+      onChange?.(max);
     } else {
       // 否则使用新值
       onChange?.(parsedValue);
@@ -86,7 +91,8 @@ export default function Stepper({
       />
 
       <button
-        className="flex h-7 w-7 items-center justify-center text-xl text-gray-600 hover:bg-gray-200"
+        className="flex h-7 w-7 items-center justify-center text-xl text-gray-600 hover:bg-gray-200 disabled:opacity-30"
+        disabled={value >= max}
         type="button"
         onClick={handleIncrement}
       >
