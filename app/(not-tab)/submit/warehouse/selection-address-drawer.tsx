@@ -2,9 +2,7 @@ import React, { useState, useCallback } from "react";
 import { useTranslations } from "next-intl";
 
 import { CommonDrawer, EditAddressDrawer } from "@/components/drawer";
-
-
-import AddressItem from "@/components/list-item/address-item";
+import AddressItem from "@/components/item-list/address-item";
 import { Address, AddressModalState } from "@/types";
 
 interface AddressSelectionModalProps {
@@ -29,7 +27,7 @@ export default function SelectionAddressDrawer({
   });
 
   const [internalSelectedId, setInternalSelectedId] = useState<string | null>(
-    selectedAddressId
+    selectedAddressId,
   );
 
   // Sync internal state when prop changes or drawer opens
@@ -54,8 +52,9 @@ export default function SelectionAddressDrawer({
   const handleConfirm = () => {
     if (internalSelectedId) {
       const selectedAddress = addressList.find(
-        (addr) => addr.id === internalSelectedId
+        (addr) => addr.id === internalSelectedId,
       );
+
       if (selectedAddress) {
         onSelect(selectedAddress);
       }
@@ -87,10 +86,10 @@ export default function SelectionAddressDrawer({
               addressDetail={address}
               isSelected={address.id === internalSelectedId}
               showDeleteButton={false}
-              onEdit={() => handleEditClick(address)}
               onClick={(addr) => {
                 setInternalSelectedId(addr.id);
               }}
+              onEdit={() => handleEditClick(address)}
             />
           ))}
 

@@ -1,5 +1,5 @@
 "use client";
-import { Button, Checkbox, Form, } from "@heroui/react";
+import { Button, Checkbox, Form } from "@heroui/react";
 import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -14,13 +14,11 @@ import {
   useUserInfo,
 } from "@/hook/api";
 import useEnhancedSelection from "@/hook/common/useEnhancedSelection";
-
 import FormItemRenderer, {
   FieldConfig,
 } from "@/components/form/formItem-renderer";
 import SelectionBlock from "@/components/common/selection-block";
-import { SelectedServiceItem } from "@/components/list-item";
-
+import { SelectedServiceItem } from "@/components/item-list";
 
 export default function ForwardingPage() {
   const t = useTranslations("forwarding");
@@ -79,7 +77,8 @@ export default function ForwardingPage() {
       receiveAddress: "中国广东省惠州市水口街道荔城工业园胜豪科技大厦8A-801",
     };
     const bizCode: any = await forwardingOrder(payload);
-    console.log('bizCode');
+
+    console.log("bizCode");
 
     if (bizCode) {
       router.push("/payment/" + bizCode);
@@ -95,18 +94,14 @@ export default function ForwardingPage() {
       </NavBar>
       <div className="flex-1 overflow-auto scrollbar-hide">
         <div className="h-[120px] bg-[url('/m/images/estimation/bg.webp')] bg-cover bg-no-repeat" />
-        <div className="p-2 space-y-2">
+        <div className="space-y-2 p-2">
           <ForwardAddress />
           {/* 包裹信息 */}
           <div className="w-full rounded-lg bg-white p-4">
             <p className="mb-3 text-lg font-semibold">
               {t("forwardingPackage")}
             </p>
-            <Form
-              className="w-full "
-              id="form"
-              onSubmit={handleSubmit}
-            >
+            <Form className="w-full" id="form" onSubmit={handleSubmit}>
               <FormItemRenderer
                 fields={fields}
                 formData={formData}
@@ -116,13 +111,10 @@ export default function ForwardingPage() {
           </div>
           <SelectionBlock
             data={servicesList.filter((s) => s.isSelected)}
-            renderItem={(service: any) => (
-              <SelectedServiceItem
-                key={service.id}
-                service={service}
-              />
-            )}
             isLoading={isLoading}
+            renderItem={(service: any) => (
+              <SelectedServiceItem key={service.id} service={service} />
+            )}
             title={t("extraServices")}
             onClick={() => setIsServiceSelectionOpen(true)}
           />
@@ -134,7 +126,7 @@ export default function ForwardingPage() {
             onUpdateQuantity={updateQuantity}
             onUpdateRemark={updateRemark}
           />
-        </div >
+        </div>
       </div>
       <div className="bg-white p-4">
         <Button

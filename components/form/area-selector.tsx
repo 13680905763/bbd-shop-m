@@ -32,19 +32,19 @@ export default function AreaSelector({ value, onChange }: Props) {
 
   const renderItem =
     (key: keyof Option = "id") =>
-      // eslint-disable-next-line react/display-name
-      (opt: Option) => (
-        <AutocompleteItem
-          key={String(opt[key])}
-          startContent={
-            opt.nationalFlag ? (
-              <Avatar alt={opt.name} className="h-6 w-6" src={opt.nationalFlag} />
-            ) : null
-          }
-        >
-          {opt.name}
-        </AutocompleteItem>
-      );
+    // eslint-disable-next-line react/display-name
+    (opt: Option) => (
+      <AutocompleteItem
+        key={String(opt[key])}
+        startContent={
+          opt.nationalFlag ? (
+            <Avatar alt={opt.name} className="h-6 w-6" src={opt.nationalFlag} />
+          ) : null
+        }
+      >
+        {opt.name}
+      </AutocompleteItem>
+    );
 
   return (
     <div className="space-y-4">

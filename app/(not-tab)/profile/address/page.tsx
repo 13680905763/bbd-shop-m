@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 import { Address, AddressModalState } from "@/types";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
 import { useAddressList, useDeleteAddress } from "@/hook/api";
-import { AddressItem } from "@/components/list-item";
+import { AddressItem } from "@/components/item-list";
 import { useConfirm } from "@/hook/common";
 import { EditAddressDrawer } from "@/components/drawer";
 
@@ -46,6 +46,7 @@ export default function AddressPage() {
   );
 
   if (isLoading) return <FullscreenLoader />;
+
   return (
     <>
       <NavBar

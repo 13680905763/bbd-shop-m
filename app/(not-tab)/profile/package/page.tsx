@@ -4,9 +4,13 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
+import SelectionLineDrawer from "../../submit/warehouse/selection-line-drawer";
+
 import PackageItem from "./package-item";
 import CancelModal from "./cancel-modal";
 import LineDetailDrawer from "./line-detail-drawer";
+import MoreActions, { MoreActionType } from "./more-actions";
+import ChangeAddressModal from "./change-address-modal";
 
 import { useSelection, useConfirm } from "@/hook/common";
 import { BlockSpinner, EmptyState } from "@/components/ui";
@@ -23,9 +27,6 @@ import {
   useWaybillList,
   useWithdrawCancel,
 } from "@/hook/api/useWaybill";
-import SelectionLineDrawer from "../../submit/warehouse/selection-line-drawer";
-import MoreActions, { MoreActionType } from "./more-actions";
-import ChangeAddressModal from "./change-address-modal";
 
 const tabKeyToStatusCode: Record<string, string> = {
   all: "",
@@ -87,12 +88,14 @@ export default function WaybillPage() {
   // 打开取消弹窗
   const onCancel = async (waybill: any) => {
     const res = await previewCancel(waybill?.id);
+
     setCurrentWaybill({ ...waybill, cancelPre: res });
     setModalType("cancel");
   };
   const handleCancel = async (waybillId: string) => {
     try {
       const bizCode = await cancelWaybill(waybillId);
+
       if (bizCode) router.push("/payment/" + bizCode);
     } catch {
     } finally {
@@ -100,23 +103,21 @@ export default function WaybillPage() {
     }
   };
 
-
   // 统一处理 MoreActions
   const handleMoreActions = async (waybill: any, type: MoreActionType) => {
-    if (type === 'changeLine') {
-      console.log('waybill', waybill);
+    if (type === "changeLine") {
+      console.log("waybill", waybill);
       const res = await previewChangeLine(waybill.id);
+
       setSelectedLineId(waybill?.shipping?.templateId);
       setCurrentWaybill({ ...waybill, previewChangeLine: res });
       setModalType("changeLine");
-    } else if (type === 'changeAddress') {
+    } else if (type === "changeAddress") {
       setModalType("moreActions");
     }
   };
   // 提交跟换路线
-  const handleChangeLine = async (
-    lineId: string | null,
-  ) => {
+  const handleChangeLine = async (lineId: string | null) => {
     await changeLine({
       id: currentWaybill?.id,
       templateId: lineId,
@@ -157,6 +158,7 @@ export default function WaybillPage() {
     remark?: string;
   }) => {
     if (!currentWaybill) return;
+
     return await changeAddress({
       id: currentWaybill.id,
       customerAddressId: data.customerAddressId,
@@ -168,6 +170,7 @@ export default function WaybillPage() {
   // 批量支付 / 单个支付
   const handlePay = async (packageSet: string[] = []) => {
     const bizCode = await batchPay({ packageSet });
+
     if (bizCode) router.push(`/payment/${bizCode}`);
   };
   // 打开路线详情弹窗
@@ -194,14 +197,12 @@ export default function WaybillPage() {
               pack={p}
               showCheckbox={activeTab == "pay"}
               onCancel={onCancel} //取消包裹预览
+              onEdit={onEdit} // 编辑包裹
               onPay={handlePay} //支付
               onReceipt={onReceipt} //收货
-
-
               onRevoke={onRevoke} //撤回取消包裹
               onSelect={onSelect}
               onTrack={onTrack} // 路线详情
-              onEdit={onEdit} // 编辑包裹
             />
           ))}
         </div>
@@ -271,19 +272,23 @@ export default function WaybillPage() {
         onClose={() => setModalType(null)}
       />
       <ChangeAddressModal
-        isOpen={modalType === "moreActions"}
         currentWaybill={currentWaybill}
+        isOpen={modalType === "moreActions"}
+        onConfirm={handleChangeAddress}
         onOpenChange={(open) => {
           if (!open) setModalType(null);
         }}
-        onConfirm={handleChangeAddress}
       />
       <SelectionLineDrawer
         isOpen={modalType === "changeLine"}
-        lines={Array.isArray(currentWaybill?.previewChangeLine) ? currentWaybill?.previewChangeLine : []}
+        lines={
+          Array.isArray(currentWaybill?.previewChangeLine)
+            ? currentWaybill?.previewChangeLine
+            : []
+        }
         selectedLineId={selectedLineId}
-        onOpenChange={() => setModalType(null)}
         onConfirm={handleChangeLine}
+        onOpenChange={() => setModalType(null)}
       />
 
       <LineDetailDrawer

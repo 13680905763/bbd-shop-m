@@ -1,4 +1,4 @@
-import { request } from "./request";
+import { request, requestWithOption } from "./request";
 
 import { WalletInfo } from "@/types";
 
@@ -20,10 +20,52 @@ export const walletApi = {
       params,
     });
   },
+  /** 兑换优惠券 */
+  pointExchangeCoupon: (couponId: number | string): Promise<any> => {
+    return requestWithOption(
+      {
+        url: "/customer-coupon/exchange?couponId=" + couponId,
+        method: "POST",
+      },
+      { showToast: true },
+    );
+  },
+  /** 兑换码兑换优惠券 */
+  codeExchangeCoupon: (redemptionCode: string): Promise<any> => {
+    return requestWithOption(
+      {
+        url: "/customer-coupon/redemptionCodeCoupons?redemptionCode=" + redemptionCode,
+        method: "POST",
+      },
+      { showToast: true },
+    );
+  },
   /** 获取支付方式列表 */
-  listPaymentMethod: (bizCode: string): Promise<any> =>
-    request.get("/customer/pay-order/preview?bizCode=" + bizCode),
-
+  listPaymentMethod: (params: {
+    bizCode: string;
+    customerCouponId?: string;
+  }): Promise<any> =>
+    request.get("/customer/pay-order/preview", {
+      params,
+    }),
+  /** 支付 */
+  pay: (params: {
+    bizCode: string;
+    paymentId: string | number;
+    addressId: number | string;
+    customerCouponId?: string;
+  }): Promise<any> => {
+    return requestWithOption(
+      {
+        url: "/customer/pay-order/create",
+        method: "POST",
+        data: params,
+      },
+      {
+        showToast: true,
+      },
+    );
+  },
   /** 支付回调 */
   payNotice: (param: any): Promise<any> => {
     return request.get("/onlypay/callback/redirect?" + param);

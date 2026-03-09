@@ -1,7 +1,5 @@
 // 购物车商品项，提交订单商品项，订单商品项
-import {
-  Checkbox, Image, Input, Textarea
-} from "@heroui/react";
+import { Checkbox, Image, Input, Textarea } from "@heroui/react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { memo } from "react";
@@ -22,10 +20,6 @@ export default memo(function ProductItem({
   const t = useTranslations("components.common.productItem");
   const { currency } = useGlobalStore();
   const router = useRouter();
-  console.log('type', type);
-  console.log('product', product);
-
-
   const isOperated = type === "cart" || type === "refund";
 
   return (
@@ -53,12 +47,11 @@ export default memo(function ProductItem({
           <button
             className="text-left"
             onClick={() => {
-              if (type === "refund") return
+              if (type === "refund") return;
               router.push(
                 `/goods/${product.source}/${product?.sourceProductId}`,
-              )
-            }
-            }
+              );
+            }}
           >
             <div className="text-title line-clamp-2">
               {product.productTitle}
@@ -74,8 +67,8 @@ export default memo(function ProductItem({
             </span>
             {isOperated ? (
               <Stepper
-                min={1}
                 max={type === "refund" ? product?.canRefundQty : undefined}
+                min={1}
                 value={product.quantity}
                 onChange={(value) => onUpdateQuantity!(product.id, value)}
               />

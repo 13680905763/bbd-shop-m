@@ -53,15 +53,15 @@ export default function CommonDrawer({
                 {title}
               </DrawerHeader>
             )}
-            <DrawerBody className="overflow-y-auto p-4 scrollbar-hide w-full">
+            <DrawerBody className="w-full overflow-y-auto p-4 scrollbar-hide">
               {children}
             </DrawerBody>
             <DrawerFooter className="border-t border-gray-100 p-4">
               <Button
                 className="w-full font-medium"
                 color="primary"
-                isLoading={isLoading}
                 isDisabled={isDisabled}
+                isLoading={isLoading}
                 onPress={async () => {
                   try {
                     setIsLoading(true);

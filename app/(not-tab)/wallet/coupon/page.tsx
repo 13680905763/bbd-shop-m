@@ -6,9 +6,10 @@ import { useTranslations } from "next-intl";
 
 import { CommonTabs } from "@/components/common";
 import { useUserCoupon } from "@/hook/api";
-import CouponCard from "@/components/block/coupon-card";
 import { Coupon } from "@/types/wallet";
 import { BlockSpinner, EmptyState } from "@/components/ui";
+import { CouponItem } from "@/components/item-list";
+import CouponRedemption from "./coupon-redemption";
 
 const tabKeyToStatusCode: Record<string, string> = {
   unused: "1", // 可用
@@ -20,19 +21,19 @@ export default function CouponPage() {
   const t = useTranslations("dashboard.coupon");
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("unused");
-  const { data, isFetching } = useUserCoupon({
+
+  const { data, isFetching, } = useUserCoupon({
     status: tabKeyToStatusCode[activeTab],
   });
 
   const renderCouponContent = () => {
     if (!data?.length && !isFetching) return <EmptyState />;
-
     return (
       <>
         {isFetching && <BlockSpinner />}
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 gap-2">
           {data?.map((coupon: Coupon) => (
-            <CouponCard key={coupon.id} coupon={coupon} />
+            <CouponItem key={coupon.id} coupon={coupon} />
           ))}
         </div>
       </>
@@ -55,14 +56,14 @@ export default function CouponPage() {
       content: renderCouponContent(),
     },
   ];
-
   return (
     <>
-      <NavBar className="bg-white" onBack={() => router.back()}>
+      <NavBar className="bg-white shrink-0" onBack={() => router.back()}>
         <span className="navbar-title">{t("title")}</span>
       </NavBar>
+      <CouponRedemption />
       <CommonTabs
-        defaultSelectedKey="all"
+        defaultSelectedKey="unused"
         tabs={tabs}
         onSelectionChange={(key) => setActiveTab(String(key))}
       />

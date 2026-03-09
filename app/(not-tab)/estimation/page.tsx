@@ -10,7 +10,7 @@ import { useGlobalStore } from "@/store";
 import { FieldConfig } from "@/components/form/formItem-renderer";
 import CommonForm from "@/components/form/common-form";
 import { EmptyState } from "@/components/ui";
-import { LineItem } from "@/components/list-item";
+import { LineItem } from "@/components/item-list";
 
 export default function Estimation() {
   const t = useTranslations("estimation");
@@ -94,9 +94,9 @@ export default function Estimation() {
       <NavBar className="bg-white" onBack={() => router.push("/")}>
         <span className="navbar-title">{t("title")}</span>
       </NavBar>
-      <div className="flex-1 overflow-auto scrollbar-hide ">
+      <div className="flex-1 overflow-auto scrollbar-hide">
         <div className="bg-[url('/m/images/estimation/bg.webp')] bg-center pt-[30%]" />
-        <div className="p-5 bg-white">
+        <div className="bg-white p-5">
           <CommonForm
             confirmText={t("search")}
             fields={fields}
@@ -106,7 +106,11 @@ export default function Estimation() {
             onSubmit={onSubmit}
           />
           {routes.length > 0 && (
-            <Accordion disabledKeys={disabledKeys} className="!border-1" variant="bordered">
+            <Accordion
+              className="!border-1"
+              disabledKeys={disabledKeys}
+              variant="bordered"
+            >
               {routes.map((route, index) => (
                 <AccordionItem key={index} title={<LineItem line={route} />}>
                   <div className="flex flex-col gap-3 pb-3">

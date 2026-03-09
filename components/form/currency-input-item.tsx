@@ -1,5 +1,6 @@
 import React from "react";
 import { Input } from "@heroui/react";
+
 import { useGlobalStore } from "@/store/global";
 
 interface CurrencyInputItemProps {
@@ -42,7 +43,7 @@ export default function CurrencyInputItem({
         mainWrapper: "w-full",
       }}
       endContent={
-        <div className="pointer-events-none flex items-center text-gray-400 text-2xl whitespace-nowrap">
+        <div className="pointer-events-none flex items-center whitespace-nowrap text-2xl text-gray-400">
           ≈ {currency.symbol}{" "}
           {currency.rate
             ? (parseFloat(value || "0") / currency.rate).toFixed(2)
@@ -58,7 +59,7 @@ export default function CurrencyInputItem({
       size={size}
       startContent={
         <div className="pointer-events-none flex items-center">
-          <span className="text-gray-500 text-base font-medium">¥</span>
+          <span className="text-base font-medium text-gray-500">¥</span>
         </div>
       }
       type="number"

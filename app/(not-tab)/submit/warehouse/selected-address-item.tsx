@@ -12,7 +12,7 @@ type SelectedAddressItemProps = {
 export default memo(function SelectedAddressItem({
   addressDetail,
 }: SelectedAddressItemProps) {
-  const t = useTranslations("components.addressItem");
+  const t = useTranslations("components.itemList.addressItem");
 
   const fullCity =
     addressDetail.city === addressDetail.state

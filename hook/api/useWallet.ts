@@ -1,7 +1,8 @@
-import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
-
+import { useQuery, useInfiniteQuery, useMutation, } from "@tanstack/react-query";
 import { walletApi } from "@/services/walletApi";
+import { queryClient } from "@/lib/react-query";
 
+// 钱包信息
 export const useWalletInfo = () => {
   return useQuery({
     queryKey: ["walletInfo"],
@@ -12,7 +13,7 @@ export const useWalletInfo = () => {
     refetchOnReconnect: true, // 网络恢复刷新
   });
 };
-
+// 钱包交易记录
 export function useWalletDetailList() {
   return useInfiniteQuery({
     queryKey: ["walletDetailList"],
@@ -20,12 +21,12 @@ export function useWalletDetailList() {
       walletApi.getWalletDetailList(pageParam, 10),
     getNextPageParam: (lastPage) => {
       const loaded = lastPage.current * lastPage.size;
-
       return loaded < lastPage.total ? lastPage.current + 1 : undefined;
     },
     initialPageParam: 1,
   });
 }
+// 用户优惠券列表
 export const useUserCoupon = (params: { status?: number | string }) => {
   return useQuery({
     queryKey: ["userCoupon", params],
@@ -34,12 +35,55 @@ export const useUserCoupon = (params: { status?: number | string }) => {
     refetchOnWindowFocus: true,
   });
 };
-export function usePaymentMethodList(bizCode: string) {
+// 支付方式列表
+export function usePaymentMethodList(params: {
+  bizCode: string;
+  customerCouponId?: string;
+}) {
   return useQuery({
-    queryKey: ["paymentMethodList", bizCode],
-    queryFn: () => walletApi.listPaymentMethod(bizCode),
+    queryKey: ["paymentMethodList", params],
+    queryFn: () => walletApi.listPaymentMethod(params),
     gcTime: 1000 * 60,
     staleTime: 0,
     refetchOnMount: true,
+    placeholderData: (previousData) => previousData, // 保持旧数据直到新数据加载完成
   });
 }
+// 支付
+export function usePay() {
+  return useMutation({
+    mutationFn: (data: {
+      bizCode: string;
+      paymentId: string | number;
+      addressId: number | string;
+      customerCouponId?: string;
+    }) => walletApi.pay(data),
+  });
+}
+// 兑换优惠券
+export const usePointExchangeCoupon = () => {
+  return useMutation({
+    mutationFn: (couponId: string | number) =>
+      walletApi.pointExchangeCoupon(couponId),
+    onSuccess: () => {
+      // 刷新用户优惠券列表
+      queryClient.invalidateQueries({ queryKey: ["userCoupon"] });
+      // 刷新钱包信息（积分变动）
+      queryClient.invalidateQueries({ queryKey: ["walletInfo"] });
+    },
+
+  });
+};
+// 兑换码兑换优惠券
+export const useCodeExchangeCoupon = () => {
+  return useMutation({
+    mutationFn: (redemptionCode: string) =>
+      walletApi.codeExchangeCoupon(redemptionCode),
+    onSuccess: () => {
+      // 刷新用户优惠券列表
+      queryClient.invalidateQueries({ queryKey: ["userCoupon"] });
+      // 刷新钱包信息（积分变动）
+      queryClient.invalidateQueries({ queryKey: ["walletInfo"] });
+    },
+  });
+};

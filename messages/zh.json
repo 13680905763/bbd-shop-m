@@ -1,22 +1,6 @@
 {
     "components": {
         "ui": {
-            "coupon": {
-                "minSpend": "满{amount}可用",
-                "discount": "优惠",
-                "restriction": "限制",
-                "shippingExcludingCustoms": "运费（不含关税）",
-                "usage": "用途",
-                "internationalPackage": "国际包裹",
-                "countries": "地区",
-                "all": "全部国家",
-                "redeem": "兑换",
-                "type": "类型",
-                "validity": "有效期",
-                "days": "天",
-                "points": "积分",
-                "src": "来源"
-            },
             "copy": {
                 "success": "复制成功",
                 "fail": "复制失败"
@@ -222,14 +206,50 @@
             "connectionLost": "连接断开，请稍后重试",
             "imageSendFail": "图片发送失败"
         },
-        "addressItem": {
-            "edit": "编辑",
-            "delete": "删除",
-            "default": "默认"
-        },
         "billingAddress": {
             "edit": "编辑",
             "delete": "删除"
+        },
+        "itemList": {
+            "addressItem": {
+                "edit": "编辑",
+                "delete": "删除",
+                "default": "默认"
+            },
+            "couponItem": {
+                "minSpend": "满{amount}可用",
+                "discount": "优惠",
+                "restriction": "限制",
+                "shippingExcludingCustoms": "运费（不含关税）",
+                "usage": "用途",
+                "internationalPackage": "国际包裹",
+                "countries": "地区",
+                "all": "全部国家",
+                "redeem": "兑换",
+                "type": "类型",
+                "validity": "有效期",
+                "days": "{count}天",
+                "points": "积分",
+                "src": "来源",
+                "usedFor": "用途"
+            },
+            "exchangeCouponItem": {
+                "minSpend": "满{amount}可用",
+                "discount": "优惠",
+                "restriction": "限制",
+                "shippingExcludingCustoms": "运费（不含关税）",
+                "usage": "用途",
+                "internationalPackage": "国际包裹",
+                "countries": "地区",
+                "all": "全部国家",
+                "redeem": "兑换",
+                "type": "类型",
+                "validity": "有效期",
+                "days": "{count}天",
+                "points": "积分",
+                "src": "来源",
+                "usedFor": "用途"
+            }
         }
     },
     "auth": {
@@ -307,6 +327,11 @@
                 "unused": "可用",
                 "used": "已用",
                 "expired": "过期"
+            },
+            "couponRedemption": {
+                "title": "优惠券兑换",
+                "inputPlaceholder": "输入优惠券代码",
+                "redeem": "兑换"
             }
         },
         "menuOrder": "购买订单",
@@ -556,7 +581,11 @@
                 "detail": "积分明细",
                 "change": "积分兑换"
             },
-            "myPoints": "我的积分"
+            "myPoints": "我的积分",
+            "exchangeConfirm": {
+                "title": "确认兑换",
+                "content": "确认兑换 {points} 积分的 {name} 吗？"
+            }
         }
     },
     "goods": {
@@ -700,6 +729,8 @@
         "total": "总计",
         "handlingFee": "手续费",
         "billingAddress": "账单地址",
+        "coupon": "优惠券",
+        "selectCoupon": "请选择优惠券",
         "submit": "提交",
         "balance": "余额",
         "recharge": "充值",

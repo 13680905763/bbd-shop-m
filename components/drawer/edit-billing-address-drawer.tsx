@@ -10,13 +10,12 @@ import {
   DrawerFooter,
   Button,
 } from "@heroui/react";
-import { useQueryClient } from "@tanstack/react-query";
 
 import { FieldConfig } from "../form/formItem-renderer";
 import FormItemRenderer from "../form/formItem-renderer";
-import { useVisualViewport } from "@/hook/common";
 import { validateField } from "../form/utils";
 
+import { useVisualViewport } from "@/hook/common";
 import { useAddBillingAddress, useUpdateAddress } from "@/hook/api";
 
 export interface AddressModalProps {
@@ -109,6 +108,7 @@ export default function EditBillingAddressDrawer({
   ];
   const [formData, setFormData] = useState<any>(initAddress);
   const [isLoading, setIsLoading] = useState(false);
+
   useVisualViewport();
 
   useEffect(() => {
@@ -121,7 +121,10 @@ export default function EditBillingAddressDrawer({
 
   const handleSave = async (e?: React.FormEvent) => {
     e?.preventDefault(); // 阻止表单默认提交
-    const isValid = billingAddress.every((field) => validateField(field, formData));
+    const isValid = billingAddress.every((field) =>
+      validateField(field, formData),
+    );
+
     if (!isValid) return;
 
     const { createTime, updateTime, customerId, ...filteredData } = formData;
@@ -152,13 +155,18 @@ export default function EditBillingAddressDrawer({
       placement="bottom"
       onOpenChange={onOpenChange}
     >
-      <DrawerContent style={{ maxHeight: "var(--visual-viewport-height, 100dvh)", transition: "max-height 0.1s ease-out" }}>
+      <DrawerContent
+        style={{
+          maxHeight: "var(--visual-viewport-height, 100dvh)",
+          transition: "max-height 0.1s ease-out",
+        }}
+      >
         <div className="min-h-[300px]">
           <DrawerHeader className="flex flex-col gap-1 border-b border-gray-100 py-3 text-center">
             {type === "add" ? t("addTitle") : t("editTitle")}
           </DrawerHeader>
-          <DrawerBody className="overflow-y-auto p-4 scrollbar-hide w-full">
-            <Form className="w-full min-h-[300px]" onSubmit={handleSave}>
+          <DrawerBody className="w-full overflow-y-auto p-4 scrollbar-hide">
+            <Form className="min-h-[300px] w-full" onSubmit={handleSave}>
               <FormItemRenderer
                 fields={billingAddress}
                 formData={formData}

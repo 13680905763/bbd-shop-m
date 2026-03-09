@@ -22,6 +22,7 @@ export interface EnhancedSelectionResult<T> {
 
   // 获取方法
   getSelectedItems: () => (T & SelectionStateItem)[];
+  selectAll: () => void;
 }
 
 /**
@@ -63,9 +64,11 @@ export default function useEnhancedSelection<T extends BaseSelectionItem>(
   // 切换选中状态
   const toggleSelection = useCallback((id: string) => {
     setSelectionState((prev) => {
-      const current = prev[id];
-
-      if (!current) return prev;
+      const current = prev[id] || {
+        isSelected: false,
+        quantity: 1,
+        remark: "",
+      };
 
       return {
         ...prev,
@@ -82,9 +85,11 @@ export default function useEnhancedSelection<T extends BaseSelectionItem>(
     if (quantity < 1) return;
 
     setSelectionState((prev) => {
-      const current = prev[id];
-
-      if (!current) return prev;
+      const current = prev[id] || {
+        isSelected: false,
+        quantity: 1,
+        remark: "",
+      };
 
       return {
         ...prev,
@@ -99,9 +104,11 @@ export default function useEnhancedSelection<T extends BaseSelectionItem>(
   // 更新备注
   const updateRemark = useCallback((id: string, remark: string) => {
     setSelectionState((prev) => {
-      const current = prev[id];
-
-      if (!current) return prev;
+      const current = prev[id] || {
+        isSelected: false,
+        quantity: 1,
+        remark: "",
+      };
 
       return {
         ...prev,
@@ -142,11 +149,29 @@ export default function useEnhancedSelection<T extends BaseSelectionItem>(
     return items.filter((item) => selectedIds.has(item.id));
   }, [items, selectionState]);
 
+  const selectAll = useCallback(() => {
+    setSelectionState((prev) => {
+      const nextState: Record<string, SelectionStateItem> = {};
+      dataList.forEach((item) => {
+        const current = prev[item.id] || {
+          quantity: 1,
+          remark: "",
+        };
+        nextState[item.id] = {
+          ...current,
+          isSelected: true,
+        };
+      });
+      return { ...prev, ...nextState };
+    });
+  }, [dataList]);
+
   return {
     items,
     toggleSelection,
     updateQuantity,
     updateRemark,
     getSelectedItems,
+    selectAll,
   };
 }

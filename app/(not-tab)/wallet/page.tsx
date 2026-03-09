@@ -11,6 +11,7 @@ import { walletApi } from "@/services/walletApi";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
 import { useGlobalStore } from "@/store";
 import { useWalletInfo } from "@/hook/api";
+import { createOrderByRecharge } from "@/services";
 
 export default function WalletRechargePage() {
   const t = useTranslations("wallet.page"); // ✅ 命名空间
@@ -31,13 +32,18 @@ export default function WalletRechargePage() {
       //   payType: "PAYPAL",
       //   returnUrl: window.location.origin + "/payment/result?paymentMethod=PAYPAL",
       // });
-      const res: any = await walletApi.payPaypel(
-        `amount=${currentPrice}&returnUrl=${window.location.origin + "/payment/result?paymentMethod=PAYPAL"}`,
-      );
+      const bizCode: any = await createOrderByRecharge({
+        currencyAmount: Number(currentPrice),
+        currencyCode: currency.label,
+      });
+      router.push(`/payment/${bizCode}`);
+      // const res: any = await walletApi.payPaypel(
+      //   `amount=${currentPrice}&returnUrl=${window.location.origin + "/payment/result?paymentMethod=PAYPAL"}`,
+      // );
 
-      console.log("res", res);
+      // console.log("res", res);
 
-      window.location.href = res.payUrl;
+      // window.location.href = res.payUrl;
     } catch (error) {
       setRechargeLoading(false);
     }
@@ -72,7 +78,7 @@ export default function WalletRechargePage() {
           <Button
             className="w-full button-default"
             isDisabled
-            // onPress={() => router.push("/wallet/withdrawal")}
+          // onPress={() => router.push("/wallet/withdrawal")}
           >
             {t("withdraw")}
           </Button>
@@ -85,11 +91,10 @@ export default function WalletRechargePage() {
             {priceList.map((item) => (
               <button
                 key={item}
-                className={`flex items-center justify-center rounded-lg bg-white py-3 ${
-                  Number(currentPrice) === item
-                    ? "border border-orange-500 font-semibold text-orange-600"
-                    : ""
-                }`}
+                className={`flex items-center justify-center rounded-lg bg-white py-3 ${Number(currentPrice) === item
+                  ? "border border-orange-500 font-semibold text-orange-600"
+                  : ""
+                  }`}
                 onClick={() => setCurrentPrice(item)}
               >
                 {currency.symbol} {item}

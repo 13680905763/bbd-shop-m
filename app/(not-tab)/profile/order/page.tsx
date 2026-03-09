@@ -10,7 +10,7 @@ import OrderRefundDrawer from "./order-refund-drawer";
 import RefundOrderItem from "./refund-order-item";
 import OrderPromptCard from "./order-prompt-card";
 
-import { useConfirm, useEnhancedSelection, useSelection } from "@/hook/common";
+import { useConfirm, useSelection } from "@/hook/common";
 import { BottomAction, CommonTabs } from "@/components/common";
 import { BlockSpinner, EmptyState } from "@/components/ui";
 import {

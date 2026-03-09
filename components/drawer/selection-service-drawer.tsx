@@ -5,7 +5,10 @@ import { FaCamera, FaTrash } from "react-icons/fa";
 import { Image } from "antd-mobile";
 
 import { useGlobalStore } from "@/store";
-import { CommonDrawer, SelectionServiceDetailDrawer } from "@/components/drawer";
+import {
+  CommonDrawer,
+  SelectionServiceDetailDrawer,
+} from "@/components/drawer";
 
 interface ServiceSelectionDrawerProps {
   isOpen: boolean;
@@ -92,7 +95,9 @@ export default function SelectionServiceDrawer({
                     src={service.sample[0]}
                     width={40}
                   />
-                  <div className="font-semibold text-sm">{service.serviceName}</div>
+                  <div className="text-sm font-semibold">
+                    {service.serviceName}
+                  </div>
                 </div>
                 {service.id == 1 ? (
                   // 免费的 icon
@@ -123,15 +128,12 @@ export default function SelectionServiceDrawer({
                       {t("remark")}: {service.remark || t("noRemark")}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm ">
-
+                  <div className="flex items-center gap-2 text-sm">
                     <span className="font-semibold">
                       {currency.symbol}
                       {service.price}
                     </span>
-                    <span >
-                      x{service.quantity}
-                    </span>
+                    <span>x{service.quantity}</span>
                     <Button
                       isIconOnly
                       className="h-6 w-6 min-w-0"

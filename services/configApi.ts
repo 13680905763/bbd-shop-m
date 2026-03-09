@@ -11,7 +11,7 @@ export const configApi = {
   },
   /** 获取积分兑换优惠券列表 */
   listCoupons(): Promise<any[]> {
-    return request.get("/coupon");
+    return request.get("/coupon?src=2");
   },
   /** 获取运单增值服务列表 */
   listWarehouseServices(): Promise<any[]> {

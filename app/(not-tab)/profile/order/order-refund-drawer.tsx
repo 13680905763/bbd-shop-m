@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { CommonDrawer } from "@/components/drawer";
 import { useEnhancedSelection } from "@/hook/common";
 import ProductItem from "@/components/common/product-item";
+import { useEffect } from "react";
 
 interface OrderRefundDrawerProps {
   products: any[];
@@ -20,10 +21,11 @@ export default function OrderRefundDrawer({
 
   const {
     items,
-    toggleSelection,
-    updateQuantity,
+    toggleSelection: onSelect,
+    updateQuantity: onUpdateQuantity,
     updateRemark,
     getSelectedItems,
+    selectAll
   } = useEnhancedSelection(products || []);
 
   const handleConfirm = async () => {
@@ -31,8 +33,14 @@ export default function OrderRefundDrawer({
     if (selected.length === 0) return;
     await onConfirm(selected);
   };
-
-  console.log('darwer render');
+  useEffect(() => {
+    if (products?.length > 0) {
+      selectAll();
+      products.forEach((product: any) => {
+        onUpdateQuantity(product.id, product.canRefundQty);
+      });
+    }
+  }, [products]);
 
   return (
     <CommonDrawer
@@ -58,8 +66,8 @@ export default function OrderRefundDrawer({
                 product={product}
                 type="refund"
                 onRemark={updateRemark}
-                onToggle={toggleSelection}
-                onUpdateQuantity={updateQuantity}
+                onToggle={onSelect}
+                onUpdateQuantity={onUpdateQuantity}
               />
             </CardBody>
           </Card>

@@ -32,10 +32,13 @@ export default function ImageUploadItem({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Ensure imageList is an array
-  const imageList: ImageItem[] = Array.isArray(formData[name]) ? formData[name] : [];
+  const imageList: ImageItem[] = Array.isArray(formData[name])
+    ? formData[name]
+    : [];
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
+
     if (!files || files.length === 0) return;
 
     const newImages: ImageItem[] = [];
@@ -53,6 +56,7 @@ export default function ImageUploadItem({
 
     // Update state with temporary images
     const currentList = [...imageList, ...tempImages];
+
     onChange(name, currentList);
 
     // Reset input
@@ -66,6 +70,7 @@ export default function ImageUploadItem({
         try {
           if (imgItem.file) {
             const url = await onUpload(imgItem.file);
+
             // Update the item with the real URL and remove uploading state
             updateImageItem(imgItem.id, {
               preview: url, // Assuming the API returns the URL
@@ -81,41 +86,50 @@ export default function ImageUploadItem({
         }
       });
     } else {
-        // If no upload handler, just set uploading to false
-        const updatedImages = tempImages.map(img => ({ ...img, uploading: false }));
-        // We need to update the state again to reflect 'uploading: false'
-        // But since we appended to imageList earlier, we can't easily find them unless we use IDs.
-        // Easier way:
-        onChange(name, [...imageList, ...updatedImages]);
+      // If no upload handler, just set uploading to false
+      const updatedImages = tempImages.map((img) => ({
+        ...img,
+        uploading: false,
+      }));
+
+      // We need to update the state again to reflect 'uploading: false'
+      // But since we appended to imageList earlier, we can't easily find them unless we use IDs.
+      // Easier way:
+      onChange(name, [...imageList, ...updatedImages]);
     }
   };
 
   const updateImageItem = (id: string, updates: Partial<ImageItem>) => {
     const newList = listRef.current.map((item) =>
-      item.id === id ? { ...item, ...updates } : item
+      item.id === id ? { ...item, ...updates } : item,
     );
+
     onChange(name, newList);
   };
-  
+
   // Ref to track current images for async updates
   const listRef = useRef<ImageItem[]>(imageList);
+
   // Update ref when prop changes
   listRef.current = imageList;
 
   const updateImageStatus = (id: string, url: string) => {
-      const newList = listRef.current.map(item => 
-          item.id === id ? { ...item, preview: url, uploading: false } : item
-      );
-      onChange(name, newList);
+    const newList = listRef.current.map((item) =>
+      item.id === id ? { ...item, preview: url, uploading: false } : item,
+    );
+
+    onChange(name, newList);
   };
 
   const removeImageById = (id: string) => {
-      const newList = listRef.current.filter(item => item.id !== id);
-      onChange(name, newList);
+    const newList = listRef.current.filter((item) => item.id !== id);
+
+    onChange(name, newList);
   };
 
   const handleRemoveImage = (index: number) => {
     const newImageList = [...imageList];
+
     // Revoke object URL to avoid memory leaks
     if (newImageList[index].preview.startsWith("blob:")) {
       URL.revokeObjectURL(newImageList[index].preview);
@@ -125,27 +139,27 @@ export default function ImageUploadItem({
   };
 
   return (
-    <div className="flex gap-4 items-start w-full flex-col">
-      <div className="flex flex-col gap-2 w-full">
+    <div className="flex w-full flex-col items-start gap-4">
+      <div className="flex w-full flex-col gap-2">
         <div className="flex flex-wrap gap-4">
           {imageList.map((item, index) => (
             <div
               key={item.id}
-              className="relative w-24 h-24 border rounded-xl overflow-hidden group"
+              className="group relative h-24 w-24 overflow-hidden rounded-xl border"
             >
               <Image
                 alt={`preview-${index}`}
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover"
                 radius="none"
                 src={item.preview}
               />
               {item.uploading && (
-                <div className="absolute inset-0 bg-black/30 flex items-center justify-center z-10">
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/30">
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
                 </div>
               )}
               <button
-                className="absolute top-1 right-1 text-red-500 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors z-20 cursor-pointer"
+                className="absolute right-1 top-1 z-20 cursor-pointer rounded-full bg-white text-red-500 shadow-md transition-colors hover:bg-gray-100"
                 type="button"
                 onClick={() => handleRemoveImage(index)}
               >
@@ -156,12 +170,12 @@ export default function ImageUploadItem({
 
           {imageList.length < maxCount && (
             <div
-              className="w-24 h-24 bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-blue-50 transition-colors text-gray-400 hover:text-primary"
+              className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 text-gray-400 transition-colors hover:border-primary hover:bg-blue-50 hover:text-primary"
               role="button"
               onClick={() => fileInputRef.current?.click()}
             >
               <FaCamera size={24} />
-              <span className="text-xs mt-1 font-medium">
+              <span className="mt-1 text-xs font-medium">
                 {imageList.length}/{maxCount}
               </span>
             </div>

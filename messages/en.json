@@ -1,22 +1,6 @@
 {
     "components": {
         "ui": {
-            "coupon": {
-                "minSpend": "Min Spend {amount}",
-                "discount": "OFF",
-                "restriction": "Limit",
-                "shippingExcludingCustoms": "Shipping fee (excl. Customs fee)",
-                "usage": "Usage",
-                "internationalPackage": "International Package",
-                "countries": "Region",
-                "all": "All Countries",
-                "redeem": "Redeem",
-                "validity": "Validity",
-                "days": "{count} Days",
-                "points": "Points",
-                "src": "Source",
-                "type": "Type"
-            },
             "copy": {
                 "success": "Copy success",
                 "fail": "Copy fail"
@@ -222,14 +206,50 @@
             "connectionLost": "Connection lost, please try again later",
             "imageSendFail": "Image send failed"
         },
-        "addressItem": {
-            "edit": "Edit",
-            "delete": "Delete",
-            "default": "Default"
-        },
         "billingAddress": {
             "edit": "Edit",
             "delete": "Delete"
+        },
+        "itemList": {
+            "addressItem": {
+                "edit": "Edit",
+                "delete": "Delete",
+                "default": "Default"
+            },
+            "couponItem": {
+                "minSpend": "Min. spend {amount}",
+                "discount": "Discount",
+                "restriction": "Restrictions",
+                "shippingExcludingCustoms": "Shipping (excl. customs)",
+                "usage": "Usage",
+                "internationalPackage": "International shipping",
+                "countries": "Countries/Regions",
+                "all": "All countries",
+                "redeem": "Redeem",
+                "type": "Type",
+                "validity": "Validity",
+                "days": "{count} days",
+                "points": "Points",
+                "src": "Source",
+                "usedFor": "Usage"
+            },
+            "exchangeCouponItem": {
+                "minSpend": "Min. spend {amount}",
+                "discount": "Discount",
+                "restriction": "Restrictions",
+                "shippingExcludingCustoms": "Shipping (excl. customs)",
+                "usage": "Usage",
+                "internationalPackage": "International shipping",
+                "countries": "Countries/Regions",
+                "all": "All countries",
+                "redeem": "Redeem",
+                "type": "Type",
+                "validity": "Validity",
+                "days": "{count} days",
+                "points": "Points",
+                "src": "Source",
+                "usedFor": "Usage"
+            }
         }
     },
     "auth": {
@@ -307,6 +327,11 @@
                 "unused": "Available",
                 "used": "Used",
                 "expired": "Expired"
+            },
+            "couponRedemption": {
+                "title": "Coupon Redemption",
+                "inputPlaceholder": "Enter coupon code",
+                "redeem": "Redeem"
             }
         },
         "menuOrder": "Purchase Orders",
@@ -394,88 +419,88 @@
             },
             "submit": "Soumettre les colis"
         },
-       "package": {
-    "title": "Packages",
-    "tabs": {
-      "all": "All",
-      "pay": "Pending Payment",
-      "shipping": "In Transit",
-      "received": "Received"
-    },
-    "selectAll": "Select All",
-    "submitPay": "Batch Payment",
-    "noOrders": "No packages yet",
-    "noMoreRecords": "No more records",
-    "withdrawTitle": "Withdraw Application",
-    "withdrawContent": "Are you sure you want to withdraw the current application?",
-    "receiptTitle": "Confirm Receipt",
-    "receiptContent": "Are you sure you have received this package?",
-    "refundTitle": "Apply for Refund",
-    "buttons": {
-      "cancel": "Cancel",
-      "withdraw": "Withdraw Application",
-      "change": "Change Route",
-      "edit": "More Actions",
-      "pay": "Pay",
-      "payCancel": "Payment Cancellation Fee",
-      "receipt": "Confirm Receipt"
-    },
-    "weight": "Weight:",
-    "size": "Dimensions:",
-    "serviceFee": "Service Fee:",
-    "totalFee": "Total Fee:",
-    "shippingCode": "Tracking Number:",
-    "cancelModal": {
-      "title": "Cancel",
-      "cancelCard": {
-        "title": "Confirm Cancellation",
-        "subtitle": "Cancel this order",
-        "submittingTitle": "Cancelling...",
-        "submittingSubtitle": "Please wait",
-        "serviceFee": "Service Fee",
-        "packingFee": "Packing Fee",
-        "totalFee": "Total Fee",
-        "feeNotice": "Since warehouse processing has already begun, canceling this package requires a fee of {amount}. The details are as follows:",
-        "freeNotice": "No fee is required to cancel this package"
-      },
-      "changeRouteCard": {
-        "title": "Change Route",
-        "subtitle": "Reselect shipping route"
-      }
-    },
-    "changeTitle": "Change Route",
-    "lineModal": {
-      "title": "Logistics Tracking",
-      "mainWaybillTitle": "Main Waybill Tracking",
-      "subWaybillTitle": "Sub Waybill:",
-      "waybillNumber": "Waybill Number:",
-      "currentStatus": "Current Status:",
-      "location": "Location:",
-      "mainTimeline": "Main Waybill Timeline:"
-    },
-    "moreActions": {
-      "title": "More Actions",
-      "changeLine": {
-        "title": "Change Route",
-        "description": "Reselect a more suitable shipping route"
-      },
-      "changeAddress": {
-        "title": "Change Address",
-        "description": "Modify shipping address information"
-      }
-    },
-    "changeAddress": {
-      "title": "Change Address",
-      "selectAddress": "Shipping Address",
-      "selectLine": "Shipping Route",
-      "remark": "Remarks",
-      "result": {
-        "noChange": "Successfully modified, shipping fee remains unchanged",
-        "payExtra": "Successfully modified, additional shipping fee of {amount} required",
-        "refund": "Successfully modified, shipping fee of {amount} will be refunded to your balance"
-      }
-    }
-  },
+        "package": {
+            "title": "Packages",
+            "tabs": {
+                "all": "All",
+                "pay": "Pending Payment",
+                "shipping": "In Transit",
+                "received": "Received"
+            },
+            "selectAll": "Select All",
+            "submitPay": "Batch Payment",
+            "noOrders": "No packages yet",
+            "noMoreRecords": "No more records",
+            "withdrawTitle": "Withdraw Application",
+            "withdrawContent": "Are you sure you want to withdraw the current application?",
+            "receiptTitle": "Confirm Receipt",
+            "receiptContent": "Are you sure you have received this package?",
+            "refundTitle": "Apply for Refund",
+            "buttons": {
+                "cancel": "Cancel",
+                "withdraw": "Withdraw Application",
+                "change": "Change Route",
+                "edit": "More Actions",
+                "pay": "Pay",
+                "payCancel": "Payment Cancellation Fee",
+                "receipt": "Confirm Receipt"
+            },
+            "weight": "Weight:",
+            "size": "Dimensions:",
+            "serviceFee": "Service Fee:",
+            "totalFee": "Total Fee:",
+            "shippingCode": "Tracking Number:",
+            "cancelModal": {
+                "title": "Cancel",
+                "cancelCard": {
+                    "title": "Confirm Cancellation",
+                    "subtitle": "Cancel this order",
+                    "submittingTitle": "Cancelling...",
+                    "submittingSubtitle": "Please wait",
+                    "serviceFee": "Service Fee",
+                    "packingFee": "Packing Fee",
+                    "totalFee": "Total Fee",
+                    "feeNotice": "Since warehouse processing has already begun, canceling this package requires a fee of {amount}. The details are as follows:",
+                    "freeNotice": "No fee is required to cancel this package"
+                },
+                "changeRouteCard": {
+                    "title": "Change Route",
+                    "subtitle": "Reselect shipping route"
+                }
+            },
+            "changeTitle": "Change Route",
+            "lineModal": {
+                "title": "Logistics Tracking",
+                "mainWaybillTitle": "Main Waybill Tracking",
+                "subWaybillTitle": "Sub Waybill:",
+                "waybillNumber": "Waybill Number:",
+                "currentStatus": "Current Status:",
+                "location": "Location:",
+                "mainTimeline": "Main Waybill Timeline:"
+            },
+            "moreActions": {
+                "title": "More Actions",
+                "changeLine": {
+                    "title": "Change Route",
+                    "description": "Reselect a more suitable shipping route"
+                },
+                "changeAddress": {
+                    "title": "Change Address",
+                    "description": "Modify shipping address information"
+                }
+            },
+            "changeAddress": {
+                "title": "Change Address",
+                "selectAddress": "Shipping Address",
+                "selectLine": "Shipping Route",
+                "remark": "Remarks",
+                "result": {
+                    "noChange": "Successfully modified, shipping fee remains unchanged",
+                    "payExtra": "Successfully modified, additional shipping fee of {amount} required",
+                    "refund": "Successfully modified, shipping fee of {amount} will be refunded to your balance"
+                }
+            }
+        },
         "address": {
             "title": "Address",
             "addButton": "Add",
@@ -556,7 +581,11 @@
                 "detail": "Points Details",
                 "change": "Points Exchange"
             },
-            "myPoints": "Points"
+            "myPoints": "Points",
+            "exchangeConfirm": {
+                "title": "Confirm Redemption",
+                "content": "Confirm redemption of {name} for {points} points?"
+            }
         }
     },
     "goods": {
@@ -703,6 +732,8 @@
         "submit": "Submit",
         "balance": "Balance",
         "recharge": "Recharge",
+        "coupon": "Coupon",
+        "selectCoupon": "Please select coupon",
         "pleaseAddBillingAddress": "Please add billing address",
         "result": {
             "loading": "Confirming payment result",

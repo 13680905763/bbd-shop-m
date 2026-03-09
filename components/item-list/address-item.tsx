@@ -23,7 +23,7 @@ export default memo(function AddressItem({
   onEdit,
   onDelete,
 }: AddressItemProps) {
-  const t = useTranslations("components.addressItem");
+  const t = useTranslations("components.itemList.addressItem");
 
   const fullCity =
     addressDetail.city === addressDetail.state
@@ -51,7 +51,7 @@ export default memo(function AddressItem({
   return (
     <div
       className={clsx(
-        "home-card mt-2 flex flex-col gap-1 p-4 text-sm transition ring-1 ring-default",
+        "home-card mt-2 flex flex-col gap-1 p-4 text-sm ring-1 ring-default transition",
         isSelected && "bg-primary/5 ring-2 ring-primary",
       )}
       role="button"

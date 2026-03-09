@@ -3,10 +3,11 @@ import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { ImageViewer } from "antd-mobile";
 
+import { Stepper } from "../ui";
+
 import CommonDrawer from "./common-drawer";
 
 import { useGlobalStore } from "@/store";
-import { Stepper } from "../ui";
 
 interface ServiceDetailDrawerProps {
   isOpen: boolean;
@@ -91,7 +92,9 @@ export default function SelectionServiceDetailDrawer({
         {/* 服务费（id != 1 时才展示） */}
         {currentService.id != 1 && (
           <div className="flex items-center justify-between">
-            <span className="text-base font-medium text-gray-900">{t("serviceFee")}</span>
+            <span className="text-base font-medium text-gray-900">
+              {t("serviceFee")}
+            </span>
             <div className="flex items-center gap-3">
               <span className="text-lg font-bold text-gray-900">
                 {currency.symbol}

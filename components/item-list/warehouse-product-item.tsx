@@ -5,6 +5,7 @@ import { memo } from "react";
 // 仓库的商品item
 export default memo(function WarehouseProductItem({ warehouse, product }: any) {
   const t = useTranslations("components.block.warehouseProductItem");
+
   return (
     <div className="rounded-xl bg-white p-2">
       <div className="flex gap-3">

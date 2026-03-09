@@ -15,9 +15,15 @@ export function useVisualViewport() {
       }
 
       rafId = requestAnimationFrame(() => {
-        const height = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+        const height = window.visualViewport
+          ? window.visualViewport.height
+          : window.innerHeight;
+
         // Use CSS variable to avoid re-renders
-        document.documentElement.style.setProperty("--visual-viewport-height", `${height}px`);
+        document.documentElement.style.setProperty(
+          "--visual-viewport-height",
+          `${height}px`,
+        );
       });
     };
 

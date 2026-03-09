@@ -1,6 +1,7 @@
 import { Image } from "antd-mobile";
-import { useGlobalStore } from "@/store";
 import React from "react";
+
+import { useGlobalStore } from "@/store";
 
 export default function SelectedServiceItem({ service }: any) {
   const { currency } = useGlobalStore();

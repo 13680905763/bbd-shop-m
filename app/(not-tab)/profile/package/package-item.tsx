@@ -19,7 +19,7 @@ export default function PackageItem({
   onPay,
   onTrack,
   onReceipt,
-  onEdit
+  onEdit,
 }: any) {
   const t = useTranslations("profile.package");
   const { currency } = useGlobalStore();

@@ -54,8 +54,8 @@ export default function HistoryProductItem({
             width={64}
           />
         </div>
-        <div className="flex flex-1 flex-col justify-between overflow-hidden items-start">
-          <div className="text-title line-clamp-2 leading-tight text-left">
+        <div className="flex flex-1 flex-col items-start justify-between overflow-hidden">
+          <div className="text-title line-clamp-2 text-left leading-tight">
             {product.productTitle}
           </div>
           <div className="text-sm text-gray-400">{product.updateTime}</div>

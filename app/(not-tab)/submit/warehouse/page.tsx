@@ -2,18 +2,16 @@
 import { NavBar } from "antd-mobile";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  addToast,
-  Button,
-  Checkbox,
-  Spinner,
-  Textarea,
-} from "@heroui/react";
+import { addToast, Button, Checkbox, Spinner, Textarea } from "@heroui/react";
 import { useTranslations } from "next-intl";
 
 import TotalStatsCard from "./total-stats-card";
+import SelectedAddressItem from "./selected-address-item";
+import SelectionAddressDrawer from "./selection-address-drawer";
+import SelectionLineDrawer from "./selection-line-drawer";
+import SelectedLineItem from "./selected-line-item";
 
-import { WarehouseProductItem } from "@/components/list-item";
+import { WarehouseProductItem } from "@/components/item-list";
 import {
   useWarehouseServicesList,
   useWaybillFeeEstimate,
@@ -22,19 +20,11 @@ import {
   useLineByWaybill,
   useCreateWaybill,
 } from "@/hook/api";
-
 import { useEnhancedSelection } from "@/hook/common";
 import { useGlobalStore } from "@/store";
 import SelectionBlock from "@/components/common/selection-block";
-
-
-import { SelectedServiceItem } from "@/components/list-item";
-import SelectedAddressItem from "./selected-address-item";
-import SelectionAddressDrawer from "./selection-address-drawer";
-import SelectionLineDrawer from "./selection-line-drawer";
+import { SelectedServiceItem } from "@/components/item-list";
 import { SelectionServiceDrawer } from "@/components/drawer";
-import SelectedLineItem from "./selected-line-item";
-
 
 export default function SubmitWarehouse() {
   const t = useTranslations("submit.warehouse");
@@ -78,6 +68,7 @@ export default function SubmitWarehouse() {
       const defaultAddr = addressData.find(
         (addr: any) => addr.defaultAddress === 1,
       );
+
       if (defaultAddr) setSelectedAddressId(defaultAddr.id);
     }
   }, [addressData, selectedAddressId]);
@@ -94,11 +85,11 @@ export default function SubmitWarehouse() {
   } = useLineByWaybill(
     countryId
       ? {
-        categoryIds: packageItemList.map((item: any) => item?.categoryId),
-        countryId,
-        weight: estimateTotalWeight,
-        volume: estimateTotalVolume,
-      }
+          categoryIds: packageItemList.map((item: any) => item?.categoryId),
+          countryId,
+          weight: estimateTotalWeight,
+          volume: estimateTotalVolume,
+        }
       : null,
   );
 
@@ -184,7 +175,7 @@ export default function SubmitWarehouse() {
       // 调接口
       await createWaybill(payload);
       router.push(`/profile/package`);
-    } catch { }
+    } catch {}
   };
 
   return (
@@ -213,10 +204,7 @@ export default function SubmitWarehouse() {
         <SelectionBlock
           data={services.filter((s) => s.isSelected)}
           renderItem={(service: any) => (
-            <SelectedServiceItem
-              key={service.id}
-              service={service}
-            />
+            <SelectedServiceItem key={service.id} service={service} />
           )}
           title={t("packagingMethod")}
           onClick={() => setShowServiceModal(true)}
@@ -228,10 +216,7 @@ export default function SubmitWarehouse() {
           }
           isLoading={addressLoading}
           renderItem={(address: any) => (
-            <SelectedAddressItem
-              key={address.id}
-              addressDetail={address}
-            />
+            <SelectedAddressItem key={address.id} addressDetail={address} />
           )}
           title={t("shippingAddress")}
           onClick={() => setShowAddressModal(true)}
@@ -243,18 +228,15 @@ export default function SubmitWarehouse() {
               ? lineData.filter((r: any) => String(r.id) === selectedRouteId)
               : []
           }
-          emptyText={
-            typeof lineData === "string" ? lineData : undefined
-          }
+          emptyText={typeof lineData === "string" ? lineData : undefined}
           isLoading={lineLoading}
           renderItem={(line: any) => (
-            <SelectedLineItem
-              key={line.id}
-              line={line}
-            />
+            <SelectedLineItem key={line.id} line={line} />
           )}
           title={t("deliveryRoute")}
-          onClick={() => { setShowRouteModal(true) }}
+          onClick={() => {
+            setShowRouteModal(true);
+          }}
         />
 
         {/* 费用估算区域 */}
@@ -352,14 +334,14 @@ export default function SubmitWarehouse() {
 
       <SelectionLineDrawer
         isOpen={showRouteModal}
-        onOpenChange={setShowRouteModal}
+        lines={Array.isArray(lineData) ? lineData : []}
+        selectedLineId={selectedRouteId}
+        tip={typeof lineData === "string" ? lineData : ""}
         onConfirm={(id) => {
           setSelectedRouteId(id);
           setShowRouteModal(false);
         }}
-        lines={Array.isArray(lineData) ? lineData : []}
-        tip={typeof lineData === "string" ? lineData : ""}
-        selectedLineId={selectedRouteId}
+        onOpenChange={setShowRouteModal}
       />
     </>
   );

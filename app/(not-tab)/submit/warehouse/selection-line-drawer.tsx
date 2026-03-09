@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 
 import { CommonDrawer } from "@/components/drawer";
-
-
-import { LineItem } from "@/components/list-item";
+import { LineItem } from "@/components/item-list";
 
 interface SelectionLineDrawerProps {
   isOpen: boolean;
@@ -24,7 +22,9 @@ export default function SelectionLineDrawer({
   tip,
 }: SelectionLineDrawerProps) {
   const t = useTranslations("submit.warehouse");
-  const [internalSelectedId, setInternalSelectedId] = useState<string | null>(selectedLineId);
+  const [internalSelectedId, setInternalSelectedId] = useState<string | null>(
+    selectedLineId,
+  );
 
   useEffect(() => {
     if (isOpen) {
@@ -48,8 +48,10 @@ export default function SelectionLineDrawer({
     >
       <div className="space-y-3 py-2">
         {lines?.map((line) => (
-          <LineItem key={line.id} line={line}
+          <LineItem
+            key={line.id}
             isSelected={internalSelectedId === String(line.id)}
+            line={line}
             onClick={(lineId) => setInternalSelectedId(String(lineId))}
           />
         ))}

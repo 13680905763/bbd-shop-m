@@ -4,9 +4,7 @@ import { useTranslations } from "next-intl";
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 
-import { HistoryProductItem } from "@/components/list-item";
-
-
+import { HistoryProductItem } from "@/components/item-list";
 import { useDelHistory, useHistory } from "@/hook/api";
 import { HistoryProduct } from "@/types";
 import FullscreenLoader from "@/components/common/fullscreen-loader";

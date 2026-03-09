@@ -28,18 +28,18 @@ export interface FieldOption {
 export interface FieldConfig {
   key?: string; // 用于 React 元素 key
   type:
-  | "input"
-  | "password"
-  | "select"
-  | "checkbox"
-  | "date"
-  | "area"
-  | "autocomplete"
-  | "dimensions"
-  | "textarea"
-  | "specifications"
-  | "imageUpload"
-  | "currencyInput";
+    | "input"
+    | "password"
+    | "select"
+    | "checkbox"
+    | "date"
+    | "area"
+    | "autocomplete"
+    | "dimensions"
+    | "textarea"
+    | "specifications"
+    | "imageUpload"
+    | "currencyInput";
   name: string; // 用于 formData
   label?: string;
   placeholder?: string;
@@ -304,8 +304,8 @@ export default function FormItemRenderer<T extends Record<string, any>>({
                 formData={formData}
                 label={label}
                 name={name}
-                onUpload={field.config?.onUpload}
                 onChange={handleChange}
+                onUpload={field.config?.onUpload}
               />
             );
           case "currencyInput":

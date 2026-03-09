@@ -1,11 +1,9 @@
 import { Avatar } from "@heroui/react";
-import { useGlobalStore } from "@/store";
 import { memo } from "react";
 
+import { useGlobalStore } from "@/store";
 
-export default memo(function SelectedLineItem({
-  line,
-}: any) {
+export default memo(function SelectedLineItem({ line }: any) {
   const { currency } = useGlobalStore();
 
   return (
@@ -20,12 +18,15 @@ export default memo(function SelectedLineItem({
           <span className="truncate pr-2 text-sm font-semibold text-gray-900">
             {line.templateName}
           </span>
-          <span className="flex-shrink-0 text-sm font-bold ">
+          <span className="flex-shrink-0 text-sm font-bold">
             {currency.symbol}
             {line.shippingFee}
           </span>
         </div>
-        <span className="text-sm text-gray-500">   {line.shippingLine.minDays}-{line.shippingLine.maxDays} day</span>
+        <span className="text-sm text-gray-500">
+          {" "}
+          {line.shippingLine.minDays}-{line.shippingLine.maxDays} day
+        </span>
       </div>
     </div>
   );

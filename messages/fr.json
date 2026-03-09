@@ -1,22 +1,6 @@
 {
     "components": {
         "ui": {
-            "coupon": {
-                "minSpend": "Dépense min. {amount}",
-                "discount": "DE RÉDUCTION",
-                "restriction": "Limite",
-                "shippingExcludingCustoms": "Frais de port (hors douane)",
-                "usage": "Usage",
-                "internationalPackage": "Colis international",
-                "countries": "Région",
-                "all": "Tous les pays",
-                "redeem": "Échanger",
-                "validity": "Validité",
-                "days": "{count} Jours",
-                "points": "Points",
-                "src": "Source",
-                "type": "Type"
-            },
             "copy": {
                 "success": "Copy success",
                 "fail": "Copy fail"
@@ -222,14 +206,50 @@
             "connectionLost": "Connexion perdue, veuillez réessayer plus tard",
             "imageSendFail": "Échec de l'envoi de l'image"
         },
-        "addressItem": {
-            "edit": "Modifier",
-            "delete": "Supprimer",
-            "default": "Par défaut"
-        },
         "billingAddress": {
             "edit": "Modifier",
             "delete": "Supprimer"
+        },
+        "itemList": {
+            "addressItem": {
+                "edit": "Modifier",
+                "delete": "Supprimer",
+                "default": "Par défaut"
+            },
+            "couponItem": {
+                "minSpend": "Min. {amount} d'achat",
+                "discount": "Réduction",
+                "restriction": "Restrictions",
+                "shippingExcludingCustoms": "Frais de port (hors douane)",
+                "usage": "Utilisation",
+                "internationalPackage": "Colis international",
+                "countries": "Pays/Régions",
+                "all": "Tous les pays",
+                "redeem": "Échanger",
+                "type": "Type",
+                "validity": "Validité",
+                "days": "{count} jours",
+                "points": "Points",
+                "src": "Source",
+                "usedFor": "Utilisation"
+            },
+            "exchangeCouponItem": {
+                "minSpend": "Min. {amount} d'achat",
+                "discount": "Réduction",
+                "restriction": "Restrictions",
+                "shippingExcludingCustoms": "Frais de port (hors douane)",
+                "usage": "Utilisation",
+                "internationalPackage": "Colis international",
+                "countries": "Pays/Régions",
+                "all": "Tous les pays",
+                "redeem": "Échanger",
+                "type": "Type",
+                "validity": "Validité",
+                "days": "{count} jours",
+                "points": "Points",
+                "src": "Source",
+                "usedFor": "Utilisation"
+            }
         }
     },
     "auth": {
@@ -307,6 +327,11 @@
                 "unused": "Disponible",
                 "used": "Utilisé",
                 "expired": "Expiré"
+            },
+            "couponRedemption": {
+                "title": "Échange de coupon",
+                "inputPlaceholder": "Saisir le code promo",
+                "redeem": "Échanger"
             }
         },
         "menuOrder": "Commandes",
@@ -556,7 +581,11 @@
                 "detail": "Détails des points",
                 "change": "Échange de points"
             },
-            "myPoints": "Points"
+            "myPoints": "Points",
+            "exchangeConfirm": {
+                "title": "Confirmer l'échange",
+                "content": "Confirmer l'échange de {name} contre {points} points ?"
+            }
         }
     },
     "goods": {
@@ -703,6 +732,8 @@
         "submit": "Soumettre",
         "balance": "Solde",
         "recharge": "Recharger",
+        "coupon": "Coupon",
+        "selectCoupon": "Veuillez sélectionner un coupon",
         "pleaseAddBillingAddress": "Veuillez ajouter une adresse de facturation",
         "result": {
             "loading": "Confirmation du résultat du paiement",

@@ -50,7 +50,6 @@ export function useWithdrawCancel() {
   });
 }
 export function usePreviewChangeLine() {
-
   return useMutation({
     mutationFn: (waybillId: string) => waybillApi.previewChangeLine(waybillId),
   });
@@ -67,6 +66,7 @@ export function usePreviewChangeLine1(data: any) {
     },
     enabled: !!data,
   });
+
   return useMutation({
     mutationFn: (waybillId: string) => waybillApi.previewChangeLine(waybillId),
   });

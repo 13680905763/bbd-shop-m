@@ -17,13 +17,16 @@ import { useTranslations } from "next-intl";
 import { IoWallet } from "react-icons/io5";
 
 import { useBillingAddressActions } from "@/hook/business";
-import { useBillingAddress } from "@/hook/api";
+import { useBillingAddress, usePay } from "@/hook/api";
 import { useWalletInfo, usePaymentMethodList } from "@/hook/api";
-import { createPayOrder } from "@/services";
 import { useGlobalStore } from "@/store";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
 import BillingAddress from "@/components/block/billing-address";
 import { EditBillingAddressDrawer } from "@/components/drawer";
+import SelectionBlock from "@/components/common/selection-block";
+import { CouponItem } from "@/components/item-list";
+import SelectionCouponDrawer from "./selection-coupon-drawer";
+
 // 自定义 Radio 组件
 const CustomRadio = (props: RadioProps) => {
   const {
@@ -112,86 +115,76 @@ export default function PayOrder() {
   const { currency } = useGlobalStore();
   const router = useRouter();
   const params = useParams<{ bizCode: string }>();
-  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [confirmedCouponId, setConfirmedCouponId] = useState<
+    string | undefined
+  >(undefined);
   const { data: billingAddress } = useBillingAddress();
+  const { data, isLoading, isFetching } = usePaymentMethodList({
+    bizCode: params.bizCode,
+    customerCouponId: confirmedCouponId,
+  });
+  console.log('data', data);
 
-  const { data, isLoading, isError } = usePaymentMethodList(params.bizCode);
-
-  const {
-    data: wallet,
-    isLoading: walletLoading,
-    error: walletError,
-  } = useWalletInfo();
+  const { mutateAsync: pay, isPending: isPayFetching } = usePay();
+  const paymentList = useMemo(() => data?.paymentAndFeeList || [], [data]);
+  const couponList = useMemo(() => data?.customerCouponList || [], [data]);
+  const { data: wallet } = useWalletInfo();
 
   const [paymentId, setPaymentId] = useState("");
+  const [showCouponDrawer, setShowCouponDrawer] = useState(false);
 
   const { modalState, handleOpenChange, handleAddClick, handleEditClick } =
     useBillingAddressActions();
 
   const hanldeCreatePayOrder = async () => {
-    if (submitting) return;
-    setSubmitting(true);
-
     if (paymentId !== "1" && !billingAddress?.id) {
       addToast({
         title: "Please add billing address",
         timeout: 1000,
         color: "danger",
       });
-      setSubmitting(false);
-
       return;
     }
 
     try {
-      const res = await createPayOrder({
+      const res = await pay({
         bizCode: params.bizCode,
         paymentId,
         addressId: billingAddress?.id as string,
+        customerCouponId: selectedCoupon?.id,
       });
 
-      if (typeof res === "string") {
-        // 判断是否是 URL
-        if (res.startsWith("http")) {
-          // 跳转第三方支付页面
-          window.location.href = res;
-        }
+      if (typeof res === "string" && res.startsWith("http")) {
+        console.log("res", res);
+        window.location.href = res;
       }
-    } catch {
-    } finally {
-      setSubmitting(false);
+    } catch (err) {
+      console.error(err);
     }
   };
   const currentPayMethod = useMemo(() => {
     return (
-      data
+      paymentList
         ?.flatMap((item: any) => item.paymentList)
         .find((item: any) => item.id === paymentId) ?? {}
     );
-  }, [paymentId]);
-  // 排序：余额支付放前面
-  const sortedData = useMemo(() => {
-    if (!data) return [];
-    const balance = data.filter((item: any) => item.methodName === "BALANCE");
-    const others = data.filter((item: any) => item.methodName !== "BALANCE");
+  }, [paymentId, paymentList]);
 
-    return [...balance, ...others];
-  }, [data]);
 
   useEffect(() => {
-    if (sortedData.length) {
-      const firstPayment = sortedData.flatMap(
-        (item: any) => item.paymentList,
-      )[0];
+    if (!paymentId && paymentList?.length > 0) {
+      const firstPayment = paymentList[0]?.paymentList?.[0];
 
-      if (firstPayment) setPaymentId(firstPayment.id);
+      if (firstPayment?.id) {
+        setPaymentId(firstPayment.id);
+      }
     }
-  }, [sortedData]);
-  useEffect(() => {
-    if (data) {
-      setPaymentId(data[0]?.paymentList[0]?.id);
-    }
-  }, [data]);
+  }, [paymentList, paymentId]);
+
+
+  const selectedCoupon = useMemo(() => {
+    return couponList.find((c: any) => c.id === confirmedCouponId);
+  }, [couponList, confirmedCouponId]);
 
   if (isLoading) return <FullscreenLoader />;
 
@@ -219,6 +212,15 @@ export default function PayOrder() {
         </div>
 
         <div className="flex w-full flex-col gap-1">
+          <SelectionBlock
+            title={t("coupon")}
+            isEmpty={!selectedCoupon}
+            emptyText={t("selectCoupon")}
+            onClick={() => setShowCouponDrawer(true)}
+          >
+            {selectedCoupon && <CouponItem coupon={selectedCoupon} />}
+          </SelectionBlock>
+
           {paymentId !== "1" ? (
             <div className="bg-white p-4">
               <p className="text-title mb-2">{t("billingAddress")}</p>
@@ -237,7 +239,7 @@ export default function PayOrder() {
               value={paymentId}
               onValueChange={setPaymentId}
             >
-              {sortedData.map((item: any) => (
+              {paymentList.map((item: any) => (
                 <div
                   key={item.methodName}
                   className={
@@ -270,7 +272,7 @@ export default function PayOrder() {
         <Button
           className="w-full"
           color="primary"
-          isLoading={submitting}
+          isLoading={isPayFetching}
           size="lg"
           onPress={hanldeCreatePayOrder}
         >
@@ -284,6 +286,13 @@ export default function PayOrder() {
         isOpen={modalState.type === "add" || modalState.type === "edit"}
         type={modalState.type === "add" ? "add" : "edit"}
         onOpenChange={handleOpenChange}
+      />
+      <SelectionCouponDrawer
+        isOpen={showCouponDrawer}
+        onOpenChange={setShowCouponDrawer}
+        couponList={couponList}
+        selectedCouponId={confirmedCouponId}
+        onSelect={(coupon) => setConfirmedCouponId(coupon.id)}
       />
     </>
   );

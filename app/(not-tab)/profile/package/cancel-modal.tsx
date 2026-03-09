@@ -31,19 +31,19 @@ export default function CancelModal({
     >
       <div className="flex flex-col gap-4 py-4">
         {totalFee > 0 ? (
-          <div className="bg-yellow-50 text-yellow-700 p-3 rounded-lg text-sm border border-yellow-200">
+          <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-3 text-sm text-yellow-700">
             {t("cancelCard.feeNotice", {
               amount: `${currency.symbol}${totalFee}`,
             })}
           </div>
         ) : (
-          <div className="bg-green-50 text-green-700 p-3 rounded-lg text-sm border border-green-200">
+          <div className="rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-700">
             {t("cancelCard.freeNotice")}
           </div>
         )}
         {totalFee > 0 && (
-          <div className="w-full rounded-xl bg-gray-50 p-4 text-sm text-gray-700 space-y-3">
-            <div className="flex justify-between items-center border-b border-gray-200 pb-3">
+          <div className="w-full space-y-3 rounded-xl bg-gray-50 p-4 text-sm text-gray-700">
+            <div className="flex items-center justify-between border-b border-gray-200 pb-3">
               <span className="text-gray-500">
                 {t("cancelCard.serviceFee")}
               </span>
@@ -52,7 +52,7 @@ export default function CancelModal({
                 {currentWaybill?.cancelPre?.serviceFee ?? 0}
               </span>
             </div>
-            <div className="flex justify-between items-center border-b border-gray-200 pb-3">
+            <div className="flex items-center justify-between border-b border-gray-200 pb-3">
               <span className="text-gray-500">
                 {t("cancelCard.packingFee")}
               </span>
@@ -61,7 +61,7 @@ export default function CancelModal({
                 {currentWaybill?.cancelPre?.packingFee ?? 0}
               </span>
             </div>
-            <div className="flex justify-between items-center pt-1 text-base font-bold text-red-600">
+            <div className="flex items-center justify-between pt-1 text-base font-bold text-red-600">
               <span>{t("cancelCard.totalFee")}</span>
               <span>
                 {currency.symbol}
