@@ -320,7 +320,7 @@
         "points": "Points",
         "coupon": {
             "title": "My Coupons",
-            "available": "0 coupons available",
+            "available": "{count} coupons available",
             "viewAll": "View All",
             "tabs": {
                 "all": "All",
@@ -340,6 +340,7 @@
         "inviteTitle": "Affiliate Invitation",
         "TotalReward": "Total Rewards",
         "inviteCount": "Invite Count",
+        "activeUsersCount": "Active Users Count",
         "myExperience": "My Experience",
         "servicesTitle": "More Services",
         "servicesMessage": "Message Notifications",
@@ -365,7 +366,10 @@
         "remarkTitle": "Remarks",
         "remarkPlaceholder": "Enter remarks",
         "emptyTitle": "Your cart is empty",
-        "emptyDesc": "Go find your favorite items!"
+        "emptyDesc": "Go find your favorite items!",
+        "itemExpired": "Item Expired",
+        "itemExpiredContent": "This item has expired and cannot be purchased.",
+        "back": "Re-select"
     },
     "profile": {
         "profilePage": {
@@ -762,6 +766,7 @@
         "title2": "My Level",
         "bonusRate": "Bonus Rate",
         "experienceRange": "Experience",
+        "activeUsersCount": "Active Users",
         "title3": "Benefits FAQ",
         "question1": "What is the referral membership program?",
         "answer1": "The referral membership program is a partnership marketing model. When you recommend new users to register and use our services through your exclusive invitation link or referral code, you can earn corresponding commission rewards. This is equivalent to becoming our brand promotion partner and earning additional income by sharing our services.",
@@ -771,6 +776,8 @@
         "answer3": "You can promote for free through the following methods: 1. Social media sharing: Share your exclusive invitation link on platforms like WeChat Moments, Weibo, Xiaohongshu, etc. 2. Content creation: Share usage experiences by writing review articles, making tutorial videos, etc. 3. Word-of-mouth recommendations: Directly recommend to friends, family, or colleagues, sharing your invitation code. 4. Community participation: Share valuable content in relevant forums and communities with your invitation information attached. 5. Personal network: Promote using your professional circles, interest groups, and other social networks.",
         "invitedUser": {
             "title": "Invited Users",
+            "active": "Active",
+            "inactive": "Inactive",
             "tableColumns": {
                 "name": "Invited User",
                 "email": "Invited User Email",

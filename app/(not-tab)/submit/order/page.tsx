@@ -29,9 +29,14 @@ import {
   usePreviewOrderByCart,
   usePreviewOrderByProduct,
 } from "@/hook/api";
+import { useConfirm } from "@/hook/common";
+import { queryClient } from "@/lib/react-query";
 
 export default function SubmitOrder() {
   const t = useTranslations("submit.order");
+  const t1 = useTranslations("cart");
+  const { confirm } = useConfirm();
+
   const { currency } = useGlobalStore();
 
   const searchParam = useSearchParams();
@@ -57,6 +62,43 @@ export default function SubmitOrder() {
   const [orderData, setOrderData] = useState<any>(null);
 
   const [submitting, setSubmitting] = useState<boolean>(false);
+
+
+
+  useEffect(() => {
+    if (data?.expirationList?.length > 0) {
+      confirm({
+        title: t1("itemExpired"),
+        content: (
+          <div className="w-full">
+            <div className="text-gray-500 mb-4">{t1("itemExpiredContent")}</div>
+            <div className="max-h-[50vh] overflow-y-auto space-y-4 pr-2">
+              {data.expirationList.map((item: any) => (
+                <OrderItem
+                  key={item.shopName}
+                  isExpired={true}
+                  openServiceModal={openServiceModal}
+                  order={item}
+                />
+              ))}
+            </div>
+          </div>
+        ),
+        onConfirm: () => {
+          queryClient.invalidateQueries({
+            queryKey: ["cartList"],
+          });
+          router.back();
+        },
+        showCancel: false,
+        hideCloseButton: true,
+        size: "4xl",
+        confirmText: t1("back"),
+      });
+    }
+  }, [data, t1, confirm, router]);
+
+
 
   const handleCartSubmit = async () => {
     if (submitting) return;
@@ -156,11 +198,11 @@ export default function SubmitOrder() {
       prev.map((s) =>
         s.id === currentService.id
           ? {
-              ...s,
-              remark: currentService.remark,
-              isCheck: true,
-              quantity: currentService?.quantity,
-            }
+            ...s,
+            remark: currentService.remark,
+            isCheck: true,
+            quantity: currentService?.quantity,
+          }
           : s,
       ),
     );

@@ -320,7 +320,7 @@
         "points": "积分",
         "coupon": {
             "title": "我的优惠券",
-            "available": "0张可用优惠券",
+            "available": "{count}张可用优惠券",
             "viewAll": "查看全部",
             "tabs": {
                 "all": "全部",
@@ -340,6 +340,7 @@
         "inviteTitle": "联盟邀请",
         "TotalReward": "总奖励",
         "inviteCount": "邀请人数",
+        "activeUsersCount": "活跃用户数",
         "myExperience": "我的经验",
         "servicesTitle": "更多服务",
         "servicesMessage": "消息通知",
@@ -365,7 +366,10 @@
         "remarkTitle": "备注",
         "remarkPlaceholder": "输入备注",
         "emptyTitle": "您的购物车是空的",
-        "emptyDesc": "去挑选您喜欢的商品吧！"
+        "emptyDesc": "去挑选您喜欢的商品吧！",
+        "itemExpired": "商品已过期",
+        "itemExpiredContent": "此商品已过期，无法购买。",
+        "back": "重新选择"
     },
     "profile": {
         "profilePage": {
@@ -762,6 +766,7 @@
         "title2": "我的等级",
         "bonusRate": "奖金比例",
         "experienceRange": "经验",
+        "activeUsersCount": "活跃用户数",
         "title3": "权益FAQ",
         "question1": "什么是联盟会员计划？",
         "answer1": "联盟会员计划是一种合作伙伴营销模式。当您通过您的专属邀请链接或邀请码推荐新用户注册并使用我们的服务时，您可以获得相应的佣金奖励。这相当于成为我们的品牌推广伙伴，通过分享我们的服务来获得额外收入。",
@@ -771,6 +776,8 @@
         "answer3": "您可以通过以下方式进行免费推广： 1. 社交媒体分享：在朋友圈、微博、小红书等平台分享您的专属邀请链接 2. 内容创作：通过写评测文章、制作使用教程视频等方式分享使用体验 3. 口碑推荐：向朋友、家人或同事直接推荐，分享您的邀请码 4. 社区参与：在相关论坛、社群中分享有价值的内容并附带您的邀请信息 5. 个人网络：利用您的职业圈、兴趣团体等社交网络进行推广",
         "invitedUser": {
             "title": "被邀请用户",
+            "active": "已激活",
+            "inactive": "未激活",
             "tableColumns": {
                 "name": "被邀请人",
                 "email": "被邀请人邮箱",

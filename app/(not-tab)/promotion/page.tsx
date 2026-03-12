@@ -90,7 +90,7 @@ export default function Promotion() {
               {user?.myBonus}
             </div>
             <div>{t("totalReward")}</div>
-            <div className="col-span-2 grid grid-cols-2">
+            <div className="col-span-2 grid grid-cols-3 mt-4">
               <div className="text-center">
                 <div>{user?.inviteCount}</div>
                 <button
@@ -98,6 +98,15 @@ export default function Promotion() {
                   onClick={() => router.push("/promotion/invitedUser")}
                 >
                   {t("inviteUsers")}
+                </button>
+              </div>
+              <div className="text-center">
+                <div>{user?.activeUsersCount || 0}</div>
+                <button
+                  className="hover:text-[#f0700c]"
+                  // onClick={() => router.push("/promotion/experience")}
+                >
+                  {t("activeUsersCount")}
                 </button>
               </div>
               <div className="text-center">
@@ -119,9 +128,8 @@ export default function Promotion() {
               {bonusConfig?.map((item: any, index: any) => (
                 <div
                   key={item.id}
-                  className={`flex flex-1 flex-col items-center justify-center border-l border-[#eeeeee] first:border-l-0 ${
-                    index === 0 ? "bg-[#ffeee1]" : "bg-white"
-                  }`}
+                  className={`flex flex-1 flex-col items-center justify-center border-l border-[#eeeeee] first:border-l-0 ${index === 0 ? "bg-[#ffeee1]" : "bg-white"
+                    }`}
                 >
                   <div className="py-4 text-center text-lg font-semibold text-[#f0700c]">
                     {item.rangeCode}

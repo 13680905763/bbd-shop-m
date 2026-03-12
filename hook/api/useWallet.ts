@@ -70,6 +70,9 @@ export const usePointExchangeCoupon = () => {
       queryClient.invalidateQueries({ queryKey: ["userCoupon"] });
       // 刷新钱包信息（积分变动）
       queryClient.invalidateQueries({ queryKey: ["walletInfo"] });
+      queryClient.invalidateQueries({ queryKey: ["userInfo"] });
+      queryClient.invalidateQueries({ queryKey: ["pointsList"] });
+
     },
 
   });

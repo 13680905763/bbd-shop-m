@@ -320,7 +320,7 @@
         "points": "Points",
         "coupon": {
             "title": "Mes Coupons",
-            "available": "0 coupons disponibles",
+            "available": "{count} coupons disponibles",
             "viewAll": "Voir tout",
             "tabs": {
                 "all": "Tous",
@@ -340,6 +340,7 @@
         "inviteTitle": "Invitation affiliée",
         "TotalReward": "Récompenses totales",
         "inviteCount": "Compte d'invitation",
+        "activeUsersCount": "Nombre d'utilisateurs actifs",
         "myExperience": "Mon expérience",
         "servicesTitle": "Plus de services",
         "servicesMessage": "Messages",
@@ -365,7 +366,10 @@
         "remarkTitle": "Remarques",
         "remarkPlaceholder": "Saisir des remarques",
         "emptyTitle": "Votre panier est vide",
-        "emptyDesc": "Allez trouver vos articles préférés!"
+        "emptyDesc": "Allez trouver vos articles préférés!",
+        "itemExpired": "Article expiré",
+        "itemExpiredContent": "Ce produit a expiré et ne peut pas être acheté.",
+        "back": "Resélectionner"
     },
     "profile": {
         "profilePage": {
@@ -762,6 +766,7 @@
         "title2": "Mon Niveau",
         "bonusRate": "Taux de Bonus",
         "experienceRange": "Expérience",
+        "activeUsersCount": "Utilisateurs Actifs",
         "title3": "FAQ sur les Avantages",
         "question1": "Qu'est-ce que le programme d'adhésion de parrainage?",
         "answer1": "Le programme d'adhésion de parrainage est un modèle de marketing partenarial. Lorsque vous recommandez à de nouveaux utilisateurs de s'inscrire et d'utiliser nos services via votre lien d'invitation exclusif ou votre code de parrainage, vous pouvez gagner des commissions correspondantes. Cela équivaut à devenir notre partenaire de promotion de marque et à gagner un revenu supplémentaire en partageant nos services.",
@@ -771,6 +776,8 @@
         "answer3": "Vous pouvez promouvoir gratuitement par les méthodes suivantes : 1. Partage sur les réseaux sociaux : Partagez votre lien d'invitation exclusif sur des plateformes comme WeChat Moments, Weibo, Xiaohongshu, etc. 2. Création de contenu : Partagez vos expériences d'utilisation en écrivant des articles d'évaluation, en réalisant des vidéos tutoriels, etc. 3. Recommandations de bouche à oreille : Recommandez directement à des amis, à la famille ou à des collègues, en partageant votre code d'invitation. 4. Participation communautaire : Partagez du contenu précieux dans des forums et communautés pertinents avec vos informations d'invitation jointes. 5. Réseau personnel : Faites la promotion en utilisant vos cercles professionnels, groupes d'intérêt et autres réseaux sociaux.",
         "invitedUser": {
             "title": "Utilisateurs Invités",
+            "active": "Actif",
+            "inactive": "Inactif",
             "tableColumns": {
                 "name": "Utilisateur Invité",
                 "email": "Email de l'Utilisateur Invité",

@@ -28,6 +28,8 @@ export interface ConfirmOptions {
   showCancel?: boolean; // 新增控制是否显示取消按钮的选项
   showConfirm?: boolean; // 新增控制是否显示确认按钮的选项
   isLoading?: boolean; // 外部控制 loading
+  hideCloseButton?: boolean; // 新增控制是否隐藏关闭按钮的选项
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";  // 新增控制弹窗大小的选项
 }
 
 // 2. 定义 Context
@@ -49,7 +51,7 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   // 使用 ref 存储 resolve 函数，以便在 confirm 中调用
-  const resolveRef = useRef<(value: boolean) => void>(() => {});
+  const resolveRef = useRef<(value: boolean) => void>(() => { });
 
   const confirm = useCallback((opts: ConfirmOptions) => {
     opts.showCancel = opts.showCancel ?? true;
@@ -99,10 +101,11 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
       {children}
       {options && (
         <Modal
-          hideCloseButton={isLoading || options.isLoading}
+          hideCloseButton={options.hideCloseButton || isLoading || options.isLoading}
           isDismissable={false}
           isOpen={isOpen}
           placement="center"
+          size={options.size || "md"}
           onOpenChange={(open) => !open && handleCancel()}
         >
           <ModalContent>

@@ -39,11 +39,14 @@ export default function Cart() {
     remark: string;
   }>({ open: false, productId: "", remark: "" });
   // 扁平化购物车数据
-  const flatList: any =
+  const flatList =
     useMemo(() => {
       return data?.flatMap((shop: any) => shop.cartList);
     }, [data]) ?? [];
 
+  const selectableList = useMemo(() => {
+    return flatList.filter((item: any) => item.status !== 3);
+  }, [flatList]);
   const {
     selectedIds,
     isSelected,
@@ -54,20 +57,20 @@ export default function Cart() {
     hasSelected,
     isGroupAllSelected,
     onToggleGroup,
-  } = useSelection(flatList, {
+  } = useSelection(selectableList, {
     idKey: "id",
     groupKey: "shopId",
   });
 
   console.log("isDeleting", isDeleting);
 
-  const deleteCart = async () => {
+  const deleteCart = async (id?: string) => {
     await confirm({
       content: t("deleteContent"), // 弹窗正文
       title: t("deleteTitle"), // 弹窗标题
       isLoading: isDeleting,
       onConfirm: async () => {
-        await deleteMutation({ idList: selectedIds });
+        await deleteMutation({ idList: id ? [id] : selectedIds  });
       },
     });
   };
@@ -95,7 +98,7 @@ export default function Cart() {
       const key: string = await createOrderPreview(params);
 
       router.push("/submit/order?type=cart&key=" + key);
-    } catch {}
+    } catch { }
   };
   const updateProductRemark = useCallback(
     (productId: string, remark: string) => {
@@ -145,6 +148,7 @@ export default function Cart() {
               isGroupAllSelected={isGroupAllSelected} //  店铺selected
               isSelected={isSelected}
               toggle={onSelect}
+              onDelete={deleteCart}
               toggleGroup={onToggleGroup} // 店铺onChange
               onQuantityChange={updateProductQuantity}
               onRemark={updateProductRemark}

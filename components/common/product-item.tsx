@@ -16,6 +16,7 @@ export default memo(function ProductItem({
   onToggle,
   onRemark,
   onUpdateQuantity,
+  isExpired = false,
 }: any) {
   const t = useTranslations("components.common.productItem");
   const { currency } = useGlobalStore();
@@ -47,6 +48,7 @@ export default memo(function ProductItem({
           <button
             className="text-left"
             onClick={() => {
+              if (isExpired) return;
               if (type === "refund") return;
               router.push(
                 `/goods/${product.source}/${product?.sourceProductId}`,
@@ -61,20 +63,25 @@ export default memo(function ProductItem({
             </div>
           </button>
           <div className="flex items-center justify-between">
-            <span className="text-base font-bold">
-              {currency.symbol}
-              {product?.price}
-            </span>
-            {isOperated ? (
-              <Stepper
-                max={type === "refund" ? product?.canRefundQty : undefined}
-                min={1}
-                value={product.quantity}
-                onChange={(value) => onUpdateQuantity!(product.id, value)}
-              />
-            ) : (
-              <span className="text-base font-bold">x{product.quantity}</span>
-            )}
+            {
+              product?.price &&
+              <span className="text-base font-bold">
+                {currency.symbol}
+                {product?.price}
+              </span>
+            }
+            {
+              product.quantity &&
+                isOperated ? (
+                <Stepper
+                  max={type === "refund" ? product?.canRefundQty : undefined}
+                  min={1}
+                  value={product.quantity}
+                  onChange={(value) => onUpdateQuantity!(product.id, value)}
+                />
+              ) : (
+                <span className="text-base font-bold">x{product.quantity}</span>
+              )}
           </div>
         </div>
       </div>

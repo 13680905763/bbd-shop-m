@@ -8,8 +8,22 @@ export default function CouponItem({ coupon }: { coupon: any }) {
   const t = useTranslations("components.itemList.couponItem");
   const { currency } = useGlobalStore();
   const isAvailable = coupon.status === 1;
-  const bgClass = isAvailable ? "bg-[#f0700c]" : "bg-[#cccccc]";
+  // Use orange for available, gray for others
+  const getBgClass = () => {
+    if (!isAvailable) return "bg-[#cccccc]";
+    switch (coupon.usedFor) {
+      case 0:
+        return "bg-[#f0700c]"; // All - Orange (Default)
+      case 1:
+        return "bg-[#ef4444]"; // Waybill - Red
+      case 2:
+        return "bg-[#8b5cf6]"; // Order - Purple
+      default:
+        return "bg-[#f0700c]";
+    }
+  };
 
+  const bgClass = getBgClass();
   return (
     <div
       className={clsx(
@@ -36,7 +50,7 @@ export default function CouponItem({ coupon }: { coupon: any }) {
         </div>
         <div className=" opacity-90 leading-tight">
           {t("minSpend", {
-            amount: Math.floor(Number(coupon.thresholdAmount)),
+            amount: coupon.thresholdAmount,
           })}
         </div>
       </div>

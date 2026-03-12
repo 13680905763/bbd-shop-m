@@ -45,11 +45,6 @@ export default function InvitedUser() {
               key={item.id}
               className="home-card flex items-center gap-3 px-4 py-3 shadow-sm transition-all active:scale-[0.99]"
             >
-              {/* <Avatar
-                  className="flex-shrink-0 bg-primary/10 text-primary"
-                  name={item.name?.slice(0, 1).toUpperCase()}
-                  size="md"
-                /> */}
               <div className="flex flex-1 flex-col overflow-hidden">
                 <div className="flex items-center justify-between">
                   <span className="truncate text-base font-bold text-gray-900">
@@ -59,8 +54,17 @@ export default function InvitedUser() {
                     {item.createTime}
                   </span>
                 </div>
-                <div className="mt-1 truncate text-sm text-gray-500">
-                  {item.email}
+                <div className="flex items-center justify-between mt-1">
+                  <div className="truncate text-sm text-gray-500">
+                    {item.email}
+                  </div>
+                  <div className={`text-xs px-2 py-0.5 rounded-full ${
+                    item.status === 1 
+                      ? "bg-[#f0700c] text-white" 
+                      : "bg-gray-100 text-gray-500"
+                  }`}>
+                    {item.status === 1 ? t("active") : t("inactive")}
+                  </div>
                 </div>
               </div>
             </div>

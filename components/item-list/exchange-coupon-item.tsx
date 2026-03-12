@@ -18,7 +18,20 @@ const ExchangeCouponItem = memo(function ExchangeCouponItem({
 }: ExchangeCouponItemProps) {
     const t = useTranslations("components.itemList.exchangeCouponItem");
     const { currency } = useGlobalStore();
-    const bgClass = "bg-[#f0700c]";
+    const getBgClass = () => {
+        switch (coupon.usedFor) {
+            case 0:
+                return "bg-[#f0700c]"; // All - Orange (Default)
+            case 1:
+                return "bg-[#ef4444]"; // Waybill - Red
+            case 2:
+                return "bg-[#8b5cf6]"; // Order - Purple
+            default:
+                return "bg-[#f0700c]";
+        }
+    };
+
+    const bgClass = getBgClass();
     return (
         <div
             className={clsx(
@@ -42,7 +55,7 @@ const ExchangeCouponItem = memo(function ExchangeCouponItem({
                 </div>
                 <div className=" opacity-90 leading-tight">
                     {t("minSpend", {
-                        amount: Math.floor(Number(coupon.thresholdAmount)),
+                        amount: coupon.thresholdAmount,
                     })}
                 </div>
             </div>
