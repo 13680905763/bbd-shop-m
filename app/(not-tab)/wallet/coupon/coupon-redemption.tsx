@@ -7,15 +7,12 @@ import { useCodeExchangeCoupon } from "@/hook/api";
 export default function CouponRedemption() {
   const t = useTranslations("dashboard.coupon.couponRedemption");
   const [couponCode, setCouponCode] = useState("");
-  const { mutateAsync: exchangeCoupon, isPending: isExchanging } =
-    useCodeExchangeCoupon();
+  const { codeExchangeCoupon, isChanging } = useCodeExchangeCoupon();
 
-  const handleExchange = async () => {
+  const handleExchange = () => {
     if (!couponCode.trim()) return;
-    try {
-      await exchangeCoupon(couponCode);
-      setCouponCode("");
-    } catch (error) { }
+    codeExchangeCoupon(couponCode);
+    setCouponCode("");
   };
 
   return (
@@ -32,7 +29,7 @@ export default function CouponRedemption() {
         />
         <Button
           color="primary"
-          isLoading={isExchanging}
+          isLoading={isChanging}
           onPress={handleExchange}
         >
           {t("redeem")}

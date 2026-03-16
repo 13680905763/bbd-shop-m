@@ -1,51 +1,77 @@
 import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 
-import { cartApi } from "@/services/cartApi";
+import { cartApi, DeleteCartData, SubmitCartData, UpdateCartData } from "@/services/cartApi";
 import { queryClient } from "@/lib/react-query";
-
+import { addToast } from "@heroui/react";
+import { useRouter } from "next/navigation";
 // 获取购物车列表
 export function useCartList() {
-  return useQuery({
+  const query = useQuery({
     queryKey: ["cartList"],
-    queryFn: () => cartApi.listCart(),
+    queryFn: () => cartApi.list(),
     staleTime: 5 * 60 * 1000, // 缓存 5 分钟
     placeholderData: keepPreviousData,
     refetchOnWindowFocus: false,
   });
+  return {
+    ...query,
+    flatList: query?.data?.flatMap((shop: any) => shop.cartList)?.filter((item: any) => item.status !== 3) || [],
+  }
 }
-
 // 添加商品到购物车
 export function useAddCartItem() {
   return useMutation({
-    mutationFn: (data: any) => cartApi.addItem(data),
-    onSuccess: () => {
+    mutationFn: (data: any) => cartApi.add(data),
+    onSuccess: (res) => {
+      addToast({
+        title: res || "Success",
+        timeout: 1000,
+        color: "success",
+      });
       queryClient.invalidateQueries({ queryKey: ["cartList"] });
     },
   });
 }
-
 // 更新购物车商品（数量/备注）
 export function useUpdateCartItem() {
-  return useMutation({
-    mutationFn: (data: any) => cartApi.updateItem(data),
+  const mutation = useMutation({
+    mutationFn: (data: UpdateCartData) => cartApi.update([data]),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cartList"] });
     },
+    onError: (error) => {
+      addToast({
+        title: error.message || "Update Cart Item Error",
+        color: "danger",
+      });
+    },
   });
+  return {
+    updateItem: mutation.mutateAsync,
+    isUpdating: mutation.isPending,
+  }
 }
-
 // 删除购物车商品
 export function useDeleteCart() {
-  return useMutation({
-    mutationFn: (data: any) => cartApi.deleteItem(data),
+  const mutation = useMutation({
+    mutationFn: (data: DeleteCartData) => cartApi.delete(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cartList"] });
     },
   });
+  return {
+    deleteItem: mutation.mutateAsync,
+    isDeleting: mutation.isPending,
+  }
 }
-
-export function useCreateOrderPreview() {
-  return useMutation({
-    mutationFn: (data: any) => cartApi.createOrderPreview(data),
+export function useSubmitCart() {
+  const router = useRouter();
+  const mutation = useMutation({
+    mutationFn: (data: SubmitCartData) => cartApi.submit(data),
+    onSuccess: (key) => { router.push(`/submit/order?type=cart&key=${key}`) },
   });
+  return {
+    submitCart: mutation.mutateAsync,
+    isSubmitting: mutation.isPending,
+  }
 }

@@ -258,6 +258,7 @@
         "login": {
             "loginButton": "Login",
             "registerButton": "Register",
+            "forgetPassword": "Forget Password",
             "fields": {
                 "email": {
                     "errorMessage": "Email cannot be empty",
@@ -266,6 +267,31 @@
                 "password": {
                     "errorMessage": "Password cannot be empty",
                     "placeholder": "Please enter your password"
+                }
+            }
+        },
+        "forgetPassword": {
+            "title": "Forget Password",
+            "desc": "Enter your email to reset your password",
+            "emailPlaceholder": "Enter your email",
+            "codePlaceholder": "Verification Code",
+            "sendCode": "Send Code",
+            "submit": "Submit",
+            "hasAccount": "Already have an account?",
+            "login": "Login",
+            "emailError": "Please enter your email",
+            "emailInvalid": "Please enter a valid email",
+            "fillAll": "Please fill in all fields",
+            "successMessage": "Password reset successfully",
+            "sendCodeSuccess": "Verification code sent",
+            "fields": {
+                "email": {
+                    "placeholder": "Enter your email",
+                    "errorMessage": "Please enter a valid email"
+                },
+                "code": {
+                    "placeholder": "Verification Code",
+                    "errorMessage": "Please enter verification code"
                 }
             }
         },
@@ -363,13 +389,15 @@
         },
         "deleteTitle": "Delete from Cart",
         "deleteContent": "Are you sure you want to delete the selected items?",
-        "remarkTitle": "Remarks",
-        "remarkPlaceholder": "Enter remarks",
         "emptyTitle": "Your cart is empty",
         "emptyDesc": "Go find your favorite items!",
         "itemExpired": "Item Expired",
         "itemExpiredContent": "This item has expired and cannot be purchased.",
-        "back": "Re-select"
+        "back": "Re-select",
+        "remarkModal": {
+            "title": "Remarks",
+            "placeholder": "Enter remarks"
+        }
     },
     "profile": {
         "profilePage": {
@@ -590,6 +618,27 @@
                 "title": "Confirm Redemption",
                 "content": "Confirm redemption of {name} for {points} points?"
             }
+        },
+        "withdraw": {
+            "title": "Withdraw",
+            "placeholder": "Please enter amount",
+            "fee": "Fee (1%)",
+            "receive": "You will receive",
+            "available": "Available",
+            "tip": "The amount withdrawn will first be placed in frozen balance. Once approved by the administrator, it will be automatically returned to your payment account. The processing time is usually 1-3 business days.",
+            "successTitle": "Withdrawal Application Submitted",
+            "successMessage": "Your withdrawal request has been submitted successfully.",
+            "failTitle": "Withdrawal Failed",
+            "failMessage": "Failed to submit withdrawal application. Please try again.",
+            "submit": "Submit",
+            "historyTitle": "Withdrawal History",
+            "amount": "Withdrawal Amount",
+            "actualAmount": "Actual Withdrawal Amount",
+            "remark": "Remark",
+            "status": "Status",
+            "pending": "Pending",
+            "success": "Success",
+            "failed": "Failed"
         }
     },
     "goods": {
@@ -834,9 +883,9 @@
                 "errorMessage": "Please enter a valid tracking number"
             },
             "packageName": {
-                "label": "Package Name",
-                "placeholder": "Enter your package name",
-                "errorMessage": "Please enter a valid package name"
+                "label": "Product Name",
+                "placeholder": "Enter your product name",
+                "errorMessage": "Please enter a valid product name"
             }
         },
         "extraServices": "Extra Services",

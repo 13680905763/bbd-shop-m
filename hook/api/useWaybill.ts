@@ -57,18 +57,9 @@ export function usePreviewChangeLine() {
 export function usePreviewChangeLine1(data: any) {
   return useQuery<any>({
     queryKey: ["lineByWaybill", data],
-    queryFn: () => {
-      if (!data) {
-        return {};
-      }
-
-      return waybillApi.previewChangeLine1(data);
-    },
+    queryFn: () => waybillApi.previewChangeLine1(data),
     enabled: !!data,
-  });
-
-  return useMutation({
-    mutationFn: (waybillId: string) => waybillApi.previewChangeLine(waybillId),
+    retry: 0, // 不重试
   });
 }
 export function useChangeLine() {

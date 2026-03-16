@@ -25,7 +25,7 @@ export default memo(function ProductItem({
 
   return (
     <>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 mb-2">
         {isOperated && (
           <Checkbox
             className="m-0 p-0"

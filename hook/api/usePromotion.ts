@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { PromotionApi } from "@/services/promotionApi";
-import { getPointsList } from "@/services";
+import { walletApi } from "@/services";
 
 export const useInvitedUsers = () => {
   return useInfiniteQuery({
@@ -68,7 +68,7 @@ export function usePointsList() {
   return useInfiniteQuery({
     queryKey: ["pointsList"],
     queryFn: ({ pageParam = 1 }) =>
-      getPointsList({ current: pageParam, size: 10 }),
+      walletApi.listPoints({ current: pageParam, size: 10 }),
     getNextPageParam: (lastPage) => {
       const loaded = lastPage.current * lastPage.size;
 

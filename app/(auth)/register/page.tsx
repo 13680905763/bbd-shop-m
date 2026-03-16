@@ -1,5 +1,4 @@
 "use client";
-
 import { addToast, InputOtp } from "@heroui/react";
 import React, { useState } from "react";
 import {
@@ -10,17 +9,26 @@ import {
 } from "react-icons/io5";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-
-import { activateEmail, signUpCustomer } from "@/services";
 import CommonForm from "@/components/form/common-form";
 import { FieldConfig } from "@/components/form/formItem-renderer";
 import { SignUpFormData } from "@/types";
+import { useSignUpFlow } from "@/hook/business";
 
 export default function RegisterPage() {
   const t = useTranslations("auth.register");
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [isEmailVerified, setIsEmailVerified] = useState(false);
+
+  const {
+    isEmailVerified,
+    registeredEmail,
+    setIsEmailVerified,
+    signUp,
+    isSigningUp,
+    activateEmail,
+    isActivating,
+  } = useSignUpFlow();
+
   const [formData, setFormData] = useState<SignUpFormData>({
     email: "",
     password: "",
@@ -60,28 +68,20 @@ export default function RegisterPage() {
       size: "sm",
     },
   ];
-  const handleSubmit = async (formData: SignUpFormData) => {
+  const handleSubmit = (formData: SignUpFormData) => {
     const { agreeToTerms, ...data } = formData;
-
     if (!agreeToTerms) {
-      addToast({ title: t("mustAgree"), timeout: 1500 });
-
+      addToast({ title: t("mustAgree"), timeout: 1500, color: "danger" });
       return;
     }
-    try {
-      await signUpCustomer(data);
-      setIsEmailVerified(true);
-    } catch {}
+    signUp(data);
   };
-  const handleInviteCode = async (code: string) => {
+  const handleInviteCode = (code: string) => {
     if (code.length === 6) {
-      try {
-        await activateEmail({
-          email: formData.email,
-          activationCode: code,
-        });
-        router.push("/dashboard");
-      } catch {}
+      activateEmail({
+        email: registeredEmail || formData.email,
+        activationCode: code,
+      });
     }
   };
 
@@ -95,9 +95,10 @@ export default function RegisterPage() {
             formData={formData}
             onChange={setFormData}
             onSubmit={handleSubmit}
+            isLoading={isSigningUp}
           />
           <div className="mt-2 text-center text-sm">
-            <span>{t("loginHint")} </span>
+            <span>{t("loginHint")}</span>
             <button
               className="text-[#f0700c]"
               onClick={() => router.push("/login")}
@@ -116,12 +117,13 @@ export default function RegisterPage() {
             <p className="font-semibold">{t("verifyTitle")}</p>
           </div>
           <div className="my-4 text-sm">
-            {t("otpDescription", { email: formData.email })}
+            {t("otpDescription", { email: registeredEmail || formData.email })}
           </div>
           <InputOtp
             className="m-auto"
             length={6}
             size="lg"
+            isDisabled={isActivating}
             onValueChange={handleInviteCode}
           />
         </div>

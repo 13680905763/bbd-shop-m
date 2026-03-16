@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { Textarea } from "@heroui/react";
+import { addToast, Textarea } from "@heroui/react";
 
 import SelectionAddressDrawer from "../../submit/warehouse/selection-address-drawer";
 import SelectedAddressItem from "../../submit/warehouse/selected-address-item";
@@ -43,21 +43,25 @@ export default function ChangeAddressModal({
     text: string;
   } | null>(null);
 
-  const { data: lineData, isPending: isRouteLoading } = usePreviewChangeLine1(
+  const { data: lineData, isPending: isRouteLoading, isError, error } = usePreviewChangeLine1(
     currentWaybill && selectedAddressId
       ? {
-          id: currentWaybill.id,
-          addressId: selectedAddressId,
-        }
+        waybillId: currentWaybill.id,
+        addressId: selectedAddressId,
+      }
       : null,
   );
   const [showRouteModal, setShowRouteModal] = useState(false);
 
+  // 在组件里处理错误提示
   useEffect(() => {
-    if (!Array.isArray(lineData)) {
-      setSelectedRouteId(null);
+    if (isError && error) {
+      addToast({
+        title: error?.message || "Search line failed",
+        color: "danger",
+      });
     }
-  }, [lineData]);
+  }, [isError, error]);
   useEffect(() => {
     console.log("currentWaybill", currentWaybill);
     console.log("address", currentWaybill?.address?.id);
@@ -115,13 +119,12 @@ export default function ChangeAddressModal({
       >
         {resultMessage ? (
           <div
-            className={`rounded-lg border p-4 text-center ${
-              resultMessage.type === "success"
-                ? "border-green-200 bg-green-50 text-green-700"
-                : resultMessage.type === "warning"
-                  ? "border-yellow-200 bg-yellow-50 text-yellow-700"
-                  : "border-blue-200 bg-blue-50 text-blue-700"
-            }`}
+            className={`rounded-lg border p-4 text-center ${resultMessage.type === "success"
+              ? "border-green-200 bg-green-50 text-green-700"
+              : resultMessage.type === "warning"
+                ? "border-yellow-200 bg-yellow-50 text-yellow-700"
+                : "border-blue-200 bg-blue-50 text-blue-700"
+              }`}
           >
             {resultMessage.text}
           </div>
@@ -145,7 +148,7 @@ export default function ChangeAddressModal({
                   ? lineData?.filter((a: any) => a.id === selectedRouteId) || []
                   : []
               }
-              emptyText={typeof lineData === "string" ? lineData : undefined}
+              emptyText={error?.message || "No line found"}
               isLoading={isRouteLoading}
               renderItem={(line: any) => (
                 <SelectedLineItem key={line.id} line={line} />

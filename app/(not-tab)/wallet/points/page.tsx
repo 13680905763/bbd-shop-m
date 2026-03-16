@@ -8,7 +8,7 @@ import PointsRecordContent from "./points-record-content";
 import PointsChangeContent from "./points-change-content";
 
 import { CommonTabs } from "@/components/common";
-import { useUserInfo } from "@/hook/api";
+import { useUserInfo } from "@/hook/business";
 
 export default function PointsPage() {
   const t = useTranslations("wallet.points");

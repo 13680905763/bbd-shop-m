@@ -1,6 +1,8 @@
 import { useQuery, useInfiniteQuery, useMutation, } from "@tanstack/react-query";
 import { walletApi } from "@/services/walletApi";
 import { queryClient } from "@/lib/react-query";
+import { addToast } from "@heroui/react";
+import { useRouter } from "next/navigation";
 
 // 钱包信息
 export const useWalletInfo = () => {
@@ -18,7 +20,7 @@ export function useWalletDetailList() {
   return useInfiniteQuery({
     queryKey: ["walletDetailList"],
     queryFn: ({ pageParam = 1 }) =>
-      walletApi.getWalletDetailList(pageParam, 10),
+      walletApi.listWalletDetail({ current: pageParam, size: 10 }),
     getNextPageParam: (lastPage) => {
       const loaded = lastPage.current * lastPage.size;
       return loaded < lastPage.total ? lastPage.current + 1 : undefined;
@@ -51,42 +53,110 @@ export function usePaymentMethodList(params: {
 }
 // 支付
 export function usePay() {
-  return useMutation({
+  const payMutation = useMutation({
     mutationFn: (data: {
       bizCode: string;
       paymentId: string | number;
       addressId: number | string;
       customerCouponId?: string;
     }) => walletApi.pay(data),
+    onSuccess: (res) => {
+      if (typeof res === "string" && res.startsWith("http")) {
+        window.location.href = res;
+      }
+    },
+    onError: (error) => {
+      addToast({
+        title: error?.message || "Payment failed, please try again",
+        color: "danger",
+      });
+    },
   });
+  return {
+    pay: payMutation.mutate,
+    isPayFetching: payMutation.isPending,
+  }
 }
-// 兑换优惠券
+// 积分兑换优惠券
 export const usePointExchangeCoupon = () => {
-  return useMutation({
+  const pointExchangeCouponMutation = useMutation({
     mutationFn: (couponId: string | number) =>
       walletApi.pointExchangeCoupon(couponId),
-    onSuccess: () => {
-      // 刷新用户优惠券列表
+    onSuccess: (res) => {
+      addToast({
+        title: res || "Coupon redemption successful",
+        color: "success",
+      });
       queryClient.invalidateQueries({ queryKey: ["userCoupon"] });
-      // 刷新钱包信息（积分变动）
-      queryClient.invalidateQueries({ queryKey: ["walletInfo"] });
       queryClient.invalidateQueries({ queryKey: ["userInfo"] });
       queryClient.invalidateQueries({ queryKey: ["pointsList"] });
-
     },
-
   });
+  return {
+    pointExchangeCoupon: pointExchangeCouponMutation.mutateAsync,
+    isChanging: pointExchangeCouponMutation.isPending,
+  }
 };
 // 兑换码兑换优惠券
 export const useCodeExchangeCoupon = () => {
-  return useMutation({
+  const codeExchangeCouponMutation = useMutation({
     mutationFn: (redemptionCode: string) =>
       walletApi.codeExchangeCoupon(redemptionCode),
-    onSuccess: () => {
-      // 刷新用户优惠券列表
+    onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["userCoupon"] });
-      // 刷新钱包信息（积分变动）
-      queryClient.invalidateQueries({ queryKey: ["walletInfo"] });
+      addToast({
+        title: res || "Coupon redemption successful",
+        color: "success",
+      });
+    },
+    onError: (error) => {
+      addToast({
+        title: error?.message || "Coupon redemption failed, please try again",
+        color: "danger",
+      });
     },
   });
+  return {
+    codeExchangeCoupon: codeExchangeCouponMutation.mutate,
+    isChanging: codeExchangeCouponMutation.isPending,
+  }
 };
+
+// 申请提现
+export const useApplyWithdrawal = () => {
+  const mutation = useMutation({
+    mutationFn: (data: { currencyAmount: number; currencyCode: string }) =>
+      walletApi.applyWithdrawal(data),
+    onSuccess: (res) => {
+      queryClient.invalidateQueries({ queryKey: ["walletInfo"] });
+      addToast({
+        title: res || "Withdrawal application submitted successfully",
+        color: "success",
+      });
+    },
+    onError: (error) => {
+      addToast({
+        title: error?.message || "Withdrawal application failed, please try again",
+        color: "danger",
+      });
+    },
+  });
+  return {
+    applyWithdrawal: mutation.mutate,
+    isApplying: mutation.isPending,
+  }
+};
+
+// 提现流水
+export function useWithdrawalList() {
+  return useInfiniteQuery({
+    queryKey: ["withdrawalList"],
+    queryFn: ({ pageParam = 1 }) =>
+      walletApi.listWithdrawalHistory({ current: pageParam, size: 10 }),
+    getNextPageParam: (lastPage) => {
+      const loaded = lastPage.current * lastPage.size;
+      return loaded < lastPage.total ? lastPage.current + 1 : undefined;
+    },
+    initialPageParam: 1,
+  });
+}

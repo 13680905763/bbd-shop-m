@@ -1,4 +1,4 @@
-import { request, requestWithOption } from "./request";
+import { request } from "./request";
 
 import {
   createOrderByRechargeParams,
@@ -41,16 +41,4 @@ export const updateOrderPreviewCart = (
 export const updateOrderPreviewProduct = (
   data: any,
 ): Promise<OrderPreviewByCart> => request.post("/orders/preview", data);
-/** 付款 */
-export const createPayOrder = (data: createPayOrderParams): Promise<any> => {
-  return requestWithOption(
-    {
-      url: "/customer/pay-order/create",
-      method: "POST",
-      data,
-    },
-    {
-      showToast: true,
-    },
-  );
-};
+

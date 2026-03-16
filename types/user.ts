@@ -8,7 +8,6 @@ export interface SignUpFormData extends LoginFormData {
   inviteCode?: string;
   agreeToTerms?: boolean;
 }
-
 export interface UserInfo {
   id: string;
   createTime: string; // 格式 "YYYY-MM-DD HH:mm:ss"
@@ -32,8 +31,4 @@ export interface UserInfo {
   inviteCount: number; // 邀请人数
   myBonus: number; // 邀请奖励
 }
-export interface UserState {
-  user: UserInfo | null;
-  setUser: (user: UserInfo | null) => void;
-  clearUser: () => void;
-}
+

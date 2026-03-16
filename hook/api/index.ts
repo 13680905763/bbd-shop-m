@@ -3,8 +3,6 @@ export * from "./useCart";
 export * from "./useMessage";
 export * from "./useOrder";
 export * from "./useGoods";
-// export * from "./useWaybill";
-export * from "./useUser";
 export * from "./useWallet";
 export * from "./usePromotion";
 export * from "./useConfig";

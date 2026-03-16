@@ -258,6 +258,7 @@
         "login": {
             "loginButton": "Se connecter",
             "registerButton": "S'inscrire",
+            "forgetPassword": "Mot de passe oublié",
             "fields": {
                 "email": {
                     "errorMessage": "L'email ne peut pas être vide",
@@ -266,6 +267,31 @@
                 "password": {
                     "errorMessage": "Le mot de passe ne peut pas être vide",
                     "placeholder": "Veuillez saisir votre mot de passe"
+                }
+            }
+        },
+        "forgetPassword": {
+            "title": "Mot de passe oublié",
+            "desc": "Veuillez saisir votre adresse e-mail pour réinitialiser votre mot de passe",
+            "emailPlaceholder": "Entrez votre e-mail",
+            "codePlaceholder": "Code de vérification",
+            "sendCode": "Envoyer le code",
+            "submit": "Valider",
+            "hasAccount": "Déjà un compte ?",
+            "login": "Se connecter",
+            "emailError": "Veuillez saisir votre e-mail",
+            "emailInvalid": "Veuillez saisir une adresse e-mail valide",
+            "fillAll": "Veuillez remplir tous les champs",
+            "successMessage": "Réinitialisation du mot de passe réussie",
+            "sendCodeSuccess": "Code de vérification envoyé",
+            "fields": {
+                "email": {
+                    "placeholder": "Entrez votre e-mail",
+                    "errorMessage": "Veuillez saisir un e-mail valide"
+                },
+                "code": {
+                    "placeholder": "Code de vérification",
+                    "errorMessage": "Veuillez saisir le code de vérification"
                 }
             }
         },
@@ -363,13 +389,15 @@
         },
         "deleteTitle": "Supprimer du panier",
         "deleteContent": "Êtes-vous sûr de vouloir supprimer les articles sélectionnés?",
-        "remarkTitle": "Remarques",
-        "remarkPlaceholder": "Saisir des remarques",
         "emptyTitle": "Votre panier est vide",
         "emptyDesc": "Allez trouver vos articles préférés!",
         "itemExpired": "Article expiré",
         "itemExpiredContent": "Ce produit a expiré et ne peut pas être acheté.",
-        "back": "Resélectionner"
+        "back": "Resélectionner",
+        "remarkModal": {
+            "title": "Remarques",
+            "placeholder": "Saisir des remarques"
+        }
     },
     "profile": {
         "profilePage": {
@@ -590,6 +618,27 @@
                 "title": "Confirmer l'échange",
                 "content": "Confirmer l'échange de {name} contre {points} points ?"
             }
+        },
+        "withdraw": {
+            "title": "Retrait",
+            "placeholder": "Veuillez saisir le montant",
+            "fee": "Frais (1%)",
+            "receive": "Vous recevrez",
+            "available": "Disponible",
+            "tip": "Le montant retiré sera d'abord placé dans le solde gelé. Une fois approuvé par l'administrateur, il sera automatiquement retourné sur votre compte de paiement. Le délai de traitement est de 1-3 jours.",
+            "successTitle": "Demande de retrait soumise",
+            "successMessage": "Votre demande de retrait a été soumise avec succès.",
+            "failTitle": "Échec du retrait",
+            "failMessage": "Échec de la soumission de la demande de retrait. Veuillez réessayer.",
+            "submit": "Soumettre",
+            "historyTitle": "Historique de retrait",
+            "amount": "Montant retiré",
+            "actualAmount": "Montant réel retiré",
+            "remark": "Remarque",
+            "status": "Statut",
+            "pending": "En attente",
+            "success": "Retiré",
+            "failed": "Échec"
         }
     },
     "goods": {
@@ -834,9 +883,9 @@
                 "errorMessage": "Veuillez saisir un numéro de suivi valide"
             },
             "packageName": {
-                "label": "Nom du colis",
-                "placeholder": "Saisissez le nom de votre colis",
-                "errorMessage": "Veuillez saisir un nom de colis valide"
+                "label": "Nom du produit",
+                "placeholder": "Saisissez le nom de votre produit",
+                "errorMessage": "Veuillez saisir un nom de produit valide"
             }
         },
         "extraServices": "Services supplémentaires",

@@ -125,7 +125,7 @@ export default function PayOrder() {
   });
   console.log('data', data);
 
-  const { mutateAsync: pay, isPending: isPayFetching } = usePay();
+  const { pay, isPayFetching } = usePay();
   const paymentList = useMemo(() => data?.paymentAndFeeList || [], [data]);
   const couponList = useMemo(() => data?.customerCouponList || [], [data]);
   const { data: wallet } = useWalletInfo();
@@ -145,22 +145,14 @@ export default function PayOrder() {
       });
       return;
     }
+    pay({
+      bizCode: params.bizCode,
+      paymentId,
+      addressId: billingAddress?.id as string,
+      customerCouponId: selectedCoupon?.id,
+    });
 
-    try {
-      const res = await pay({
-        bizCode: params.bizCode,
-        paymentId,
-        addressId: billingAddress?.id as string,
-        customerCouponId: selectedCoupon?.id,
-      });
 
-      if (typeof res === "string" && res.startsWith("http")) {
-        console.log("res", res);
-        window.location.href = res;
-      }
-    } catch (err) {
-      console.error(err);
-    }
   };
   const currentPayMethod = useMemo(() => {
     return (

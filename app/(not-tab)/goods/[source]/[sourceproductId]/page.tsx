@@ -173,7 +173,7 @@ export default function GoodsDetails() {
         collection: isFavorite ? 0 : 1,
       });
       setIsFavorite(!isFavorite);
-    } catch (e) {}
+    } catch (e) { }
   };
   const add = async () => {
     if (isAddingCart) return;
@@ -191,7 +191,7 @@ export default function GoodsDetails() {
 
     try {
       await addCartItem(data);
-    } catch (e) {}
+    } catch (e) { }
   };
 
   // 切换选择状态
@@ -664,9 +664,10 @@ export default function GoodsDetails() {
       </Drawer>
 
       <CommonModal
+        hideCloseButton={true}
         confirmText={t("continueShopping")}
         isDismissable={false}
-        isKeyboardDismissDisabled={true}
+        isKeyboardDismissDisabled={false}
         isOpen={isOpen1}
         showCancel={false}
         size="xl"

@@ -6,10 +6,8 @@ import { Divider, Button } from "@heroui/react";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useTranslations } from "next-intl";
 import { FaGoogle } from "react-icons/fa";
-
 import { Logo } from "@/components/ui/icons";
-import { loginWithGoogleNew } from "@/services";
-
+import { useGoogleLoginFlow } from "@/hook/business";
 export default function AuthLayout({
   children,
 }: {
@@ -18,22 +16,17 @@ export default function AuthLayout({
   const t = useTranslations("auth");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") || "/"; // 默认为首页
-
+  const { login: googleLogin, isLoggingIn } = useGoogleLoginFlow();
   const handleGoogleLogin = useGoogleLogin({
     flow: "auth-code",
     scope: "email profile openid",
     onSuccess: async (codeResponse) => {
-      try {
-        await loginWithGoogleNew({
-          authorizationCode: codeResponse.code,
-          inviteCode: searchParams.get("inviteCode") || "",
-        });
-        router.push(redirect);
-      } catch {}
+      await googleLogin({
+        authorizationCode: codeResponse.code,
+        inviteCode: searchParams.get("inviteCode") || "",
+      });
     },
   });
-
   return (
     <div className="bg h-[100dvh] p-2">
       <button onClick={() => router.back()}>
@@ -52,6 +45,7 @@ export default function AuthLayout({
         <Button
           className="w-full border border-gray-300 bg-white font-semibold"
           startContent={<FaGoogle />}
+          isLoading={isLoggingIn}
           onPress={() => handleGoogleLogin()}
         >
           Sign in with Google

@@ -6,8 +6,9 @@ import { useTranslations } from "next-intl";
 import { Accordion, AccordionItem } from "@heroui/react";
 
 import { CopyText } from "@/components/ui";
-import { useBonusConfig, useUserExperience, useUserInfo } from "@/hook/api";
+import { useBonusConfig } from "@/hook/api";
 import { useGlobalStore } from "@/store";
+import { useUserExperience, useUserInfo } from "@/hook/business";
 
 export default function Promotion() {
   const t = useTranslations("promotion");
@@ -104,7 +105,7 @@ export default function Promotion() {
                 <div>{user?.activeUsersCount || 0}</div>
                 <button
                   className="hover:text-[#f0700c]"
-                  // onClick={() => router.push("/promotion/experience")}
+                // onClick={() => router.push("/promotion/experience")}
                 >
                   {t("activeUsersCount")}
                 </button>

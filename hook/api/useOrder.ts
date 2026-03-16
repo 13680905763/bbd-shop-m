@@ -2,6 +2,8 @@ import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 
 import { OrderApi } from "@/services/orderApi";
 import { queryClient } from "@/lib/react-query";
+import { useRouter } from "next/navigation";
+import { addToast } from "@heroui/react";
 
 export function useOrderList(params: any) {
   return useInfiniteQuery({
@@ -76,12 +78,28 @@ export function useRevokeOrder() {
 }
 
 export function useForwardingOrder() {
-  return useMutation({
+  const router = useRouter();
+  const forwardingOrderMutation = useMutation({
     mutationFn: (data: any): any => OrderApi.forwardingOrder(data),
-    onSuccess: () => {
+    onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["orderList"] });
+      if (res) {
+        router.push("/payment/" + res);
+      } else {
+        router.push("/profile/order");
+      }
+    },
+    onError: (error) => {
+      addToast({
+        title: error?.message || "Forwarding failed, please try again",
+        color: "danger",
+      });
     },
   });
+  return {
+    forwardingOrder: forwardingOrderMutation.mutate,
+    isForwardingOrder: forwardingOrderMutation.isPending,
+  }
 }
 export function usePreviewOrderByCart(key: string) {
   return useQuery<any>({

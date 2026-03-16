@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import { IoCopyOutline } from "react-icons/io5";
 
 import { CopyText } from "@/components/ui";
-import { useUserInfo } from "@/hook/api";
+import { useUserInfo } from "@/hook/business";
 
 export default function ForwardAddress() {
   const t = useTranslations("forwarding");

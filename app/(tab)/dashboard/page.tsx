@@ -5,9 +5,12 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { useGlobalStore } from "@/store";
-import { useUserInfo } from "@/hook/api";
+import { } from "@/hook/api";
 import { FullscreenLoader } from "@/components/ui";
-import { useUserExperience, useWalletInfo } from "@/hook/api";
+import { useWalletInfo } from "@/hook/api";
+import { useUserInfo } from "@/hook/business";
+
+
 
 export default function Dashboard() {
   const t = useTranslations("dashboard");
@@ -15,8 +18,7 @@ export default function Dashboard() {
   const { currency } = useGlobalStore();
 
   const { data: user, isLoading, error } = useUserInfo();
-  const { data: experience, isLoading: isLoadingExperience } =
-    useUserExperience();
+
 
   const {
     data: wallet,

@@ -5,12 +5,12 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { IoChevronForwardSharp } from "react-icons/io5";
 import { useTranslations } from "next-intl";
-
-import { logoutCustomer } from "@/services";
+import { useLogoutFlow } from "@/hook/business";
 
 export default function Settingpage() {
   const router = useRouter();
   const t = useTranslations("setting.page");
+  const { logout, isLoggingOut } = useLogoutFlow();
 
   const menu = [
     { key: "language", label: t("menuLanguage"), path: "/setting/language" },
@@ -21,13 +21,7 @@ export default function Settingpage() {
       path: "/setting/changepwd",
     },
   ];
-  const handleLogoutCustomer = async () => {
-    try {
-      await logoutCustomer();
-      localStorage.removeItem("user-storage");
-      window.location.reload();
-    } catch {}
-  };
+
 
   return (
     <>
@@ -53,11 +47,11 @@ export default function Settingpage() {
             </ListboxItem>
           ))}
         </Listbox>
-
         <Button
           className="w-full"
           color="primary"
-          onPress={handleLogoutCustomer}
+          isLoading={isLoggingOut}
+          onPress={() => logout()}
         >
           {t("logout")}
         </Button>

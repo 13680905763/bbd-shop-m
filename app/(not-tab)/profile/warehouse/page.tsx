@@ -92,7 +92,7 @@ export default function Warehouse() {
       />
       {activeTab == "submit" && warehouse.length > 0 && (
         <BottomAction
-          buttonText={t("sumbit")}
+          // buttonText={t("sumbit")}
           isAllSelected={isAllSelected}
           isLoading={isSubmitting}
           selectedCount={selectedIds.length}

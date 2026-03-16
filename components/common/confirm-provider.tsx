@@ -50,13 +50,17 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
   const [options, setOptions] = useState<ConfirmOptions | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // 使用 ref 存储 resolve 函数，以便在 confirm 中调用
-  const resolveRef = useRef<(value: boolean) => void>(() => { });
 
+  // 使用 ref 存储 resolve 函数，以便在 confirm 中调用
+  const resolveRef = useRef<((value: boolean) => void) | null>(null);
   const confirm = useCallback((opts: ConfirmOptions) => {
-    opts.showCancel = opts.showCancel ?? true;
-    opts.showConfirm = opts.showConfirm ?? true;
-    setOptions(opts);
+    const mergedOptions: ConfirmOptions = {
+      showCancel: true,
+      showConfirm: true,
+      ...opts,
+    };
+
+    setOptions(mergedOptions);
     setIsOpen(true);
 
     return new Promise<boolean>((resolve) => {
@@ -64,7 +68,12 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
     });
   }, []);
 
+
+
   const close = useCallback(() => {
+    resolveRef.current?.(false);
+    resolveRef.current = null;
+
     setIsOpen(false);
     setOptions(null);
     setIsLoading(false);
@@ -75,26 +84,24 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
       // 如果提供了 onConfirm，处理异步逻辑
       try {
         setIsLoading(true);
-        await options.onConfirm();
+        await Promise.resolve(options.onConfirm?.());
       } catch (error) {
         console.error("Confirm action failed:", error);
-
         return; // 出错时不关闭弹窗
       } finally {
         setIsLoading(false);
       }
     }
-    resolveRef.current(true);
+    resolveRef.current?.(true);
     close();
   };
 
   const handleCancel = () => {
     options?.onCancel?.();
-    resolveRef.current(false);
+    resolveRef.current?.(false);
     close();
   };
-
-  console.log("isLoading", options?.isLoading);
+  console.log('modal渲染');
 
   return (
     <ConfirmContext.Provider value={{ confirm, close }}>
@@ -109,34 +116,30 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
           onOpenChange={(open) => !open && handleCancel()}
         >
           <ModalContent>
-            {(onClose) => (
-              <>
-                <ModalHeader className="flex flex-col gap-1">
-                  {options.title || t("title")}
-                </ModalHeader>
-                <ModalBody>{options.content}</ModalBody>
-                <ModalFooter>
-                  {options.showCancel && (
-                    <Button
-                      isDisabled={isLoading || options.isLoading}
-                      variant="light"
-                      onPress={handleCancel}
-                    >
-                      {options.cancelText || t("cancel")}
-                    </Button>
-                  )}
-                  {options.showConfirm && (
-                    <Button
-                      color="primary"
-                      isLoading={isLoading || options.isLoading}
-                      onPress={handleConfirm}
-                    >
-                      {options.confirmText || t("confirm")}
-                    </Button>
-                  )}
-                </ModalFooter>
-              </>
-            )}
+            <ModalHeader className="flex flex-col gap-1">
+              {options.title || t("title")}
+            </ModalHeader>
+            <ModalBody>{options.content}</ModalBody>
+            <ModalFooter>
+              {options.showCancel && (
+                <Button
+                  isDisabled={isLoading || options.isLoading}
+                  variant="light"
+                  onPress={handleCancel}
+                >
+                  {options.cancelText || t("cancel")}
+                </Button>
+              )}
+              {options.showConfirm && (
+                <Button
+                  color="primary"
+                  isLoading={isLoading || options.isLoading}
+                  onPress={handleConfirm}
+                >
+                  {options.confirmText || t("confirm")}
+                </Button>
+              )}
+            </ModalFooter>
           </ModalContent>
         </Modal>
       )}

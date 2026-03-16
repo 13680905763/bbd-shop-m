@@ -23,18 +23,19 @@ interface CommonModalProps {
   confirmText?: string;
   cancelText?: string;
   size?:
-    | "xs"
-    | "sm"
-    | "md"
-    | "lg"
-    | "xl"
-    | "2xl"
-    | "3xl"
-    | "4xl"
-    | "5xl"
-    | "full";
+  | "xs"
+  | "sm"
+  | "md"
+  | "lg"
+  | "xl"
+  | "2xl"
+  | "3xl"
+  | "4xl"
+  | "5xl"
+  | "full";
   isDismissable?: boolean;
   isKeyboardDismissDisabled?: boolean;
+  hideCloseButton?: boolean;
 }
 
 export default function CommonModal({
@@ -52,6 +53,7 @@ export default function CommonModal({
   size = "md",
   isDismissable = false,
   isKeyboardDismissDisabled = false,
+  hideCloseButton = false,
 }: CommonModalProps) {
   const t = useTranslations("components.confirmModal");
 
@@ -76,6 +78,7 @@ export default function CommonModal({
 
   return (
     <Modal
+      hideCloseButton={hideCloseButton}
       isDismissable={isDismissable}
       isKeyboardDismissDisabled={isKeyboardDismissDisabled}
       isOpen={isOpen}

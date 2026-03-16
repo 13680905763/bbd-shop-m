@@ -72,14 +72,14 @@ export function Providers({
   if (!ready) return <FullscreenLoader />;
 
   return (
-    <GoogleOAuthProvider clientId="545953191162-n0elu4ilreo1hdlptkgublu7bjegpp0u.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId="22212018787-g78t3vahfu3re7rphmcimrkpngf0b79i.apps.googleusercontent.com">
       <QueryClientProvider client={queryClient}>
         <ConfigSync />
         <HeroUIProvider navigate={router.push}>
           <ToastProvider
             placement="top-center"
             toastProps={{
-              timeout: 1000,
+              timeout: 2000,
             }}
           />
           <ConfirmProvider>

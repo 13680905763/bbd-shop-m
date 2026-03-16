@@ -1,6 +1,6 @@
 "use client";
-import React, { useState } from "react";
-import { Accordion, AccordionItem } from "@heroui/react";
+import React, { useEffect, useState } from "react";
+import { Accordion, AccordionItem, addToast } from "@heroui/react";
 import { useTranslations } from "next-intl";
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
@@ -21,14 +21,21 @@ export default function Estimation() {
     useCategoryOptions();
 
   const [searchParams, setSearchParams] = useState<any>(null);
-  const { data: lineEstimate = [], isFetching: isSearching } =
+  const { data: lineEstimate = [], isFetching: isSearching, isError, error } =
     useLineEstimate(searchParams);
 
   const routes = Array.isArray(lineEstimate) ? lineEstimate : [];
-  const routesMessage = typeof lineEstimate === "string" ? lineEstimate : "";
 
   const router = useRouter();
-
+  // 在组件里处理错误提示
+  useEffect(() => {
+    if (isError && error) {
+      addToast({
+        title: error?.message || "Search line failed",
+        color: "danger",
+      });
+    }
+  }, [isError, error]);
   // ✅ 受控表单数据
   const [formData, setFormData] = useState({
     countryId: 0, // 改成 number 类型
@@ -163,8 +170,8 @@ export default function Estimation() {
               ))}
             </Accordion>
           )}
-          {routes?.length < 1 && routesMessage && (
-            <EmptyState className="!h-auto" desc={routesMessage} />
+          {routes?.length < 1 && error?.message && (
+            <EmptyState className="!h-auto" desc={error?.message} />
           )}
         </div>
       </div>

@@ -1,52 +1,31 @@
 "use client";
-import { Button, Checkbox } from "@heroui/react";
-import React, { useCallback, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { Textarea } from "@heroui/react";
+import React, { useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import CartItem from "./cart-item";
-import EditRemarkModal from "./edit-remark-modal";
 
-import { useGlobalStore } from "@/store";
 import { useConfirm, useSelection } from "@/hook/common";
 import { BlockSpinner, EmptyState, FullscreenLoader } from "@/components/ui";
 import {
   useCartList,
-  useCreateOrderPreview,
   useDeleteCart,
+  useSubmitCart,
   useUpdateCartItem,
 } from "@/hook/api";
 import { calculateTotalPrice } from "@/lib/price";
+import { SubmitCartData, UpdateCartData } from "@/services";
+import { BottomAction } from "@/components/common";
 
 export default function Cart() {
-  const t = useTranslations("cart"); // ✅ 命名空间 cart
-  const { currency } = useGlobalStore();
-  const router = useRouter();
-
-  const { data, isLoading, isError, isFetching } = useCartList();
-  const { mutateAsync: updateMutation, isPending: isUpdating } =
-    useUpdateCartItem();
-  const { mutateAsync: deleteMutation, isPending: isDeleting } =
-    useDeleteCart();
-  const { mutateAsync: createOrderPreview, isPending: isSubmitting } =
-    useCreateOrderPreview();
+  const t = useTranslations("cart");
   const { confirm } = useConfirm();
-
+  const { data, flatList, isLoading, isFetching } = useCartList();
+  const { updateItem, isUpdating } = useUpdateCartItem();
+  const { deleteItem, isDeleting } = useDeleteCart();
+  const { submitCart, isSubmitting } = useSubmitCart();
   const [isEdit, setIsEdit] = useState(false);
-  const [remarkModalState, setRemarkModalState] = useState<{
-    open: boolean;
-    productId: string;
-    remark: string;
-  }>({ open: false, productId: "", remark: "" });
-  // 扁平化购物车数据
-  const flatList =
-    useMemo(() => {
-      return data?.flatMap((shop: any) => shop.cartList);
-    }, [data]) ?? [];
-
-  const selectableList = useMemo(() => {
-    return flatList.filter((item: any) => item.status !== 3);
-  }, [flatList]);
+  const remarkRef = useRef("");
   const {
     selectedIds,
     isSelected,
@@ -54,80 +33,57 @@ export default function Cart() {
     onSelect,
     isAllSelected,
     onToggleSelectAll,
-    hasSelected,
     isGroupAllSelected,
     onToggleGroup,
-  } = useSelection(selectableList, {
+  } = useSelection(flatList, {
     idKey: "id",
     groupKey: "shopId",
   });
-
-  console.log("isDeleting", isDeleting);
-
-  const deleteCart = async (id?: string) => {
+  const togglePrice = useMemo(() => {
+    return calculateTotalPrice(selectedItems, "totalFee" as any);
+  }, [selectedItems]);
+  const previewList = useMemo(() => {
+    return selectedIds.map((cartId): SubmitCartData["previewList"][number] => ({
+      cartId,
+      serviceList: [],
+    }));
+  }, [selectedIds]);
+  const handleDelete = async (idList: string[]) => {
     await confirm({
       content: t("deleteContent"), // 弹窗正文
       title: t("deleteTitle"), // 弹窗标题
       isLoading: isDeleting,
       onConfirm: async () => {
-        await deleteMutation({ idList: id ? [id] : selectedIds  });
+        await deleteItem({ idList });
       },
     });
   };
-  const updateProductQuantity = async (productId: string, quantity: number) => {
-    await updateMutation([
-      {
-        id: productId,
-        quantity,
+  const handleQuantityChange = async (data: UpdateCartData) => { await updateItem(data) };
+  const handleRemarkChange = async (data: UpdateCartData) => {
+    await confirm({
+      content: (
+        <Textarea
+          placeholder={t("remarkModal.placeholder")}
+          defaultValue={data.remark || ""}
+          onChange={(e) => remarkRef.current = e.target.value}
+        />
+      ),
+      title: t("remarkModal.title"),
+      onConfirm: async () => {
+        await updateItem({ id: data.id, remark: remarkRef.current });
       },
-    ]);
+    });
   };
-  const submitCart = async () => {
-    if (isEdit) {
-      deleteCart();
-
-      return;
-    }
-    try {
-      const params = {
-        previewList: selectedIds.map((cartId) => ({
-          cartId,
-          serviceList: [],
-        })),
-      };
-      const key: string = await createOrderPreview(params);
-
-      router.push("/submit/order?type=cart&key=" + key);
-    } catch { }
+  const handleSubmit = async () => {
+    if (isEdit) return handleDelete(selectedIds);
+    await submitCart({ previewList });
   };
-  const updateProductRemark = useCallback(
-    (productId: string, remark: string) => {
-      setRemarkModalState({ open: true, productId, remark });
-    },
-    [],
-  );
-  const submitProductRemark = async (newRemark: string) => {
-    if (!remarkModalState.productId) return;
-    await updateMutation([
-      {
-        id: remarkModalState.productId,
-        remark: newRemark,
-      },
-    ]);
-  };
-
-  const togglePrice = useMemo(
-    () => calculateTotalPrice(selectedItems, "totalFee" as any),
-    [selectedItems],
-  );
-
   if (isLoading) return <FullscreenLoader />;
-
   return (
     <>
       <div className="flex justify-between p-2">
         <span className="text-lg font-bold">
-          {t("title")}({flatList?.length})
+          {t("title")}({flatList.length})
         </span>
         <button
           className="text-sm font-semibold"
@@ -138,7 +94,7 @@ export default function Cart() {
       </div>
       <div className="flex-1 space-y-2 overflow-auto px-2 pb-2 scrollbar-hide">
         {(isFetching || isUpdating) && <BlockSpinner />}
-        {flatList.length === 0 ? (
+        {!flatList.length ? (
           <EmptyState desc={t("emptyDesc")} title={t("emptyTitle")} />
         ) : (
           data?.map((c: any) => (
@@ -148,43 +104,22 @@ export default function Cart() {
               isGroupAllSelected={isGroupAllSelected} //  店铺selected
               isSelected={isSelected}
               toggle={onSelect}
-              onDelete={deleteCart}
               toggleGroup={onToggleGroup} // 店铺onChange
-              onQuantityChange={updateProductQuantity}
-              onRemark={updateProductRemark}
+              onDelete={handleDelete}
+              onQuantityChange={handleQuantityChange}
+              onRemark={handleRemarkChange}
             />
           ))
         )}
       </div>
-      <div className="bottom-settle">
-        <Checkbox isSelected={isAllSelected} onChange={onToggleSelectAll}>
-          {t("selectAll")}
-        </Checkbox>
-        <div className="flex items-center gap-2">
-          {(togglePrice as unknown as number) != 0 && (
-            <p className="text-price-lg">
-              {currency.symbol}
-              {togglePrice}
-            </p>
-          )}
-          <Button
-            color="primary"
-            isDisabled={!hasSelected}
-            isLoading={isSubmitting}
-            onPress={submitCart}
-          >
-            {isEdit ? t("delete") : t("checkout")}
-            {hasSelected && `(${selectedIds.length})`}
-          </Button>
-        </div>
-      </div>
-      <EditRemarkModal
-        initialValue={remarkModalState.remark}
-        isOpen={remarkModalState.open}
-        onOpenChange={(open) =>
-          setRemarkModalState((prev) => ({ ...prev, open }))
-        }
-        onSubmit={submitProductRemark}
+      <BottomAction
+        buttonText={isEdit ? t("delete") : t("checkout")}
+        isAllSelected={isAllSelected}
+        isLoading={isSubmitting || isDeleting}
+        selectedCount={selectedIds.length}
+        onPress={handleSubmit}
+        onToggleSelectAll={onToggleSelectAll}
+        togglePrice={togglePrice}
       />
     </>
   );

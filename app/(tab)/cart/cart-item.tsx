@@ -33,16 +33,6 @@ export default function CartItem({
       </div>
       {
         cart.cartList.map((p: any) => (
-          // <ProductItem
-          //   key={p.id}
-          //   isSelected={isSelected}
-          //   product={p}
-          //   type="cart"
-          //   onRemark={onRemark}
-          //   onToggle={toggle}
-          //   onUpdateQuantity={onQuantityChange}
-          // />
-
           <div key={p.id} className="relative group">
             <ProductItem
               isDisabled={p.status === 3}
@@ -50,9 +40,9 @@ export default function CartItem({
               isSelected={isSelected}
               product={p}
               type="cart"
-              onRemark={onRemark}
+              onRemark={(id: string, remark: string) => onRemark({ id, remark })}
               onToggle={() => toggle(p.id)}
-              onUpdateQuantity={onQuantityChange}
+              onUpdateQuantity={(id: string, quantity: number) => onQuantityChange({ id, quantity })}
             />
             {p.status === 3 && (
               <div className="absolute inset-0 bg-gray-50/80 flex items-center justify-center z-10 rounded-lg backdrop-blur-[1px]">
@@ -62,8 +52,7 @@ export default function CartItem({
                   </span>
                   <button
                     className="text-gray-400 hover:text-red-500 transition-colors p-1"
-                    // title={t("delete")}
-                    onClick={() => onDelete(p.id)}
+                    onClick={() => onDelete([p.id])}
                   >
                     <FaTrashAlt className="w-4 h-4" />
                   </button>

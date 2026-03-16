@@ -16,6 +16,7 @@ import DimensionItem from "./dimension-item";
 import SpecificationItem from "./specification-item";
 import ImageUploadItem from "./image-upload-item";
 import CurrencyInputItem from "./currency-input-item";
+import VerificationCodeItem from "./verification-code-item";
 import { validateField } from "./utils";
 
 export interface FieldOption {
@@ -39,7 +40,8 @@ export interface FieldConfig {
     | "textarea"
     | "specifications"
     | "imageUpload"
-    | "currencyInput";
+    | "currencyInput"
+    | "verificationCode";
   name: string; // 用于 formData
   label?: string;
   placeholder?: string;
@@ -61,6 +63,9 @@ export interface FieldConfig {
     valueKey?: string;
     imageKey?: string;
     onUpload?: (file: File) => Promise<string>;
+    onSendCode?: () => Promise<void>;
+    sendCodeText?: string;
+    isSendDisabled?: boolean;
   };
 }
 
@@ -321,6 +326,23 @@ export default function FormItemRenderer<T extends Record<string, any>>({
                 required={required}
                 size={size}
                 onChange={handleChange}
+              />
+            );
+          case "verificationCode":
+            return (
+              <VerificationCodeItem
+                key={name}
+                errorMessage={errorMessage}
+                isDisabled={isDisabled}
+                isSendDisabled={field.config?.isSendDisabled}
+                label={label}
+                placeholder={placeholder}
+                required={required}
+                sendCodeText={field.config?.sendCodeText}
+                size={size}
+                value={value}
+                onChange={(val) => handleChange(name, val)}
+                onSendCode={field.config?.onSendCode}
               />
             );
           default:

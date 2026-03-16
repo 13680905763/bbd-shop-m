@@ -11,8 +11,8 @@ import { SelectionServiceDrawer } from "@/components/drawer";
 import {
   useForwardingOrder,
   useOrderServicesList,
-  useUserInfo,
 } from "@/hook/api";
+import { useUserInfo } from "@/hook/business";
 import useEnhancedSelection from "@/hook/common/useEnhancedSelection";
 import FormItemRenderer, {
   FieldConfig,
@@ -24,7 +24,7 @@ export default function ForwardingPage() {
   const t = useTranslations("forwarding");
   const router = useRouter();
   const { data: user, error } = useUserInfo();
-  const { mutate: forwardingOrder, isPending } = useForwardingOrder();
+  const { forwardingOrder, isForwardingOrder } = useForwardingOrder();
   const { data: rawServicesList, isLoading } = useOrderServicesList();
   const {
     items: servicesList,
@@ -76,15 +76,7 @@ export default function ForwardingPage() {
       receivePhone: "13602579223",
       receiveAddress: "中国广东省惠州市水口街道荔城工业园胜豪科技大厦8A-801",
     };
-    const bizCode: any = await forwardingOrder(payload);
-
-    console.log("bizCode");
-
-    if (bizCode) {
-      router.push("/payment/" + bizCode);
-    } else {
-      router.push("/profile/order");
-    }
+    forwardingOrder(payload);
   };
 
   return (
@@ -134,7 +126,7 @@ export default function ForwardingPage() {
           color="primary"
           form="form"
           isDisabled={!isChecked}
-          isLoading={isPending}
+          isLoading={isForwardingOrder}
           type="submit"
         >
           {t("submit")}

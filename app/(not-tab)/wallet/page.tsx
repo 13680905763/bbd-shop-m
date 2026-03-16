@@ -77,8 +77,7 @@ export default function WalletRechargePage() {
           </div>
           <Button
             className="w-full button-default"
-            isDisabled
-          // onPress={() => router.push("/wallet/withdrawal")}
+            onPress={() => router.push("/wallet/withdrawal")}
           >
             {t("withdraw")}
           </Button>

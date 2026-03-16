@@ -60,25 +60,16 @@ export function useWaybillPreview(key: string) {
 export function useLineByWaybill(data: any) {
   return useQuery<any>({
     queryKey: ["lineByWaybill", data],
-    queryFn: () => {
-      if (!data) {
-        return {};
-      }
-
-      return warehouseApi.listLineByWaybill(data);
-    },
+    queryFn: () => warehouseApi.listLineByWaybill(data),
+    retry: 0, // 不重试
+    enabled: !!data,
   });
 }
 export function useLineEstimate(params: any) {
   return useQuery<any>({
     queryKey: ["lineEstimate", params],
-    queryFn: () => {
-      if (!params) {
-        return {};
-      }
-
-      return warehouseApi.listLineEstimate(params);
-    },
+    queryFn: () => warehouseApi.listLineEstimate(params),
+    retry: 0, // 不重试
     enabled: !!params,
   });
 }

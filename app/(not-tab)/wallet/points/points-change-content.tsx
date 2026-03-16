@@ -5,15 +5,16 @@ import { ExchangeCouponItem } from "@/components/item-list"
 import {
   useCouponsConfig,
   usePointExchangeCoupon,
-  useUserInfo
 } from "@/hook/api";
 import { useConfirm } from "@/hook/common";
+import { useUserInfo } from "@/hook/business";
+import { addToast } from "@heroui/react";
 
 export default function PointsRecordContent() {
   const { data, isFetching } = useCouponsConfig();
   const { data: user } = useUserInfo();
 
-  const { mutateAsync: pointExchangeCoupon } = usePointExchangeCoupon();
+  const { pointExchangeCoupon, isChanging } = usePointExchangeCoupon();
   const { confirm } = useConfirm();
   const t = useTranslations("wallet.points");
 
@@ -22,10 +23,17 @@ export default function PointsRecordContent() {
       title: t("exchangeConfirm.title"),
       content: t("exchangeConfirm.content", { points: coupon.exchangePoints, name: coupon.title }),
       onConfirm: async () => {
-        await pointExchangeCoupon(coupon.id);
+        try {
+          await pointExchangeCoupon(coupon.id);
+        } catch (error: any) {
+          addToast({
+            title: error?.message || "Coupon redemption failed",
+            color: "danger",
+          });
+        }
       },
     });
-  }, [confirm, t, pointExchangeCoupon]);
+  }, [confirm, t, pointExchangeCoupon, isChanging]);
   return (
     <>
       {isFetching && <BlockSpinner />}

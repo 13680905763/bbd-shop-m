@@ -7,23 +7,24 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import CommonForm from "@/components/form/common-form";
-import { updateUserInfo, uploadAvatar } from "@/services"; // ✅ uploadAvatar 是上传接口
 import { FieldConfig } from "@/components/form/formItem-renderer";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
-import { useUserInfo } from "@/hook/api";
+import { useUpdateUserInfo, useUploadAvatar, useUserInfo } from "@/hook/business";
 import { queryClient } from "@/lib/react-query";
 
 export default function Settingpage() {
   const t = useTranslations("profile.profilePage");
   const router = useRouter();
   const { data: user, isLoading, error } = useUserInfo();
+  const { updateUserInfo, isUpdating } = useUpdateUserInfo();
+  const { uploadAvatar, isUploading } = useUploadAvatar();
+
   // --- 状态管理 ---
   const [formData, setFormData] = useState({
     id: "",
     nickName: "",
     mobile: "",
   });
-  const [avatarLoading, setAvatarLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fields: FieldConfig[] = [
@@ -43,11 +44,6 @@ export default function Settingpage() {
     },
   ];
 
-  const handleSubmit = async (data: any) => {
-    await updateUserInfo(data);
-    await queryClient.invalidateQueries({ queryKey: ["userInfo"] });
-  };
-
   // 点击头像触发文件选择
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
@@ -58,12 +54,10 @@ export default function Settingpage() {
     const file = e.target.files?.[0];
 
     if (!file) return;
-    setAvatarLoading(true);
     try {
       await uploadAvatar(file);
       await queryClient.invalidateQueries({ queryKey: ["userInfo"] });
     } finally {
-      setAvatarLoading(false);
     }
   };
 
@@ -89,7 +83,7 @@ export default function Settingpage() {
             className="relative cursor-pointer"
             onClick={handleAvatarClick}
           >
-            {avatarLoading ? (
+            {isUploading ? (
               <Spinner size="lg" />
             ) : (
               <>
@@ -117,7 +111,8 @@ export default function Settingpage() {
           fields={fields}
           formData={formData}
           onChange={setFormData}
-          onSubmit={handleSubmit}
+          onSubmit={updateUserInfo}
+          isLoading={isUpdating}
         />
       </div>
     </>

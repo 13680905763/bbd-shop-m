@@ -1,3 +1,4 @@
+import { useGlobalStore } from "@/store";
 import { Button, Checkbox } from "@heroui/react";
 import { useTranslations } from "next-intl";
 import React from "react";
@@ -10,6 +11,7 @@ interface BottomActionProps {
   onPress: () => void;
   buttonText?: string;
   selectAllText?: string;
+  togglePrice?: number | string;
 }
 
 export default function BottomAction({
@@ -20,8 +22,10 @@ export default function BottomAction({
   onPress,
   buttonText,
   selectAllText,
+  togglePrice,
 }: BottomActionProps) {
   const t = useTranslations("components.common.bottomAction");
+  const { currency } = useGlobalStore();
 
   return (
     <div className="card-cart sticky bottom-0 z-10 bg-white p-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
@@ -30,8 +34,14 @@ export default function BottomAction({
           {selectAllText || t("selectAll")}
         </Checkbox>
         <div className="flex items-center gap-2">
+          {togglePrice && (
+            <p className="text-price-lg">
+              {currency.symbol}
+              {togglePrice}
+            </p>
+          )}
           <Button
-            className="w-[150px]"
+            className="w-[120px]"
             color="primary"
             isDisabled={selectedCount === 0}
             isLoading={isLoading}

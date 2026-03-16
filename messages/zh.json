@@ -258,6 +258,7 @@
         "login": {
             "loginButton": "登录",
             "registerButton": "注册",
+            "forgetPassword": "忘记密码",
             "fields": {
                 "email": {
                     "errorMessage": "邮箱不能为空",
@@ -266,6 +267,31 @@
                 "password": {
                     "errorMessage": "密码不能为空",
                     "placeholder": "请输入密码"
+                }
+            }
+        },
+        "forgetPassword": {
+            "title": "忘记密码",
+            "desc": "请输入您的邮箱以重置密码",
+            "emailPlaceholder": "请输入邮箱",
+            "codePlaceholder": "验证码",
+            "sendCode": "发送验证码",
+            "submit": "提交",
+            "hasAccount": "已有账号？",
+            "login": "去登录",
+            "emailError": "请输入邮箱",
+            "emailInvalid": "请输入有效的邮箱格式",
+            "fillAll": "请填写所有字段",
+            "successMessage": "密码重置成功",
+            "sendCodeSuccess": "验证码已发送",
+            "fields": {
+                "email": {
+                    "placeholder": "请输入邮箱",
+                    "errorMessage": "请输入有效的邮箱"
+                },
+                "code": {
+                    "placeholder": "验证码",
+                    "errorMessage": "请输入验证码"
                 }
             }
         },
@@ -363,13 +389,15 @@
         },
         "deleteTitle": "从购物车删除",
         "deleteContent": "确定要删除选中的商品吗？",
-        "remarkTitle": "备注",
-        "remarkPlaceholder": "输入备注",
         "emptyTitle": "您的购物车是空的",
         "emptyDesc": "去挑选您喜欢的商品吧！",
         "itemExpired": "商品已过期",
         "itemExpiredContent": "此商品已过期，无法购买。",
-        "back": "重新选择"
+        "back": "重新选择",
+        "remarkModal": {
+            "title": "备注",
+            "placeholder": "输入备注"
+        }
     },
     "profile": {
         "profilePage": {
@@ -590,6 +618,27 @@
                 "title": "确认兑换",
                 "content": "确认兑换 {points} 积分的 {name} 吗？"
             }
+        },
+        "withdraw": {
+            "title": "提现",
+            "placeholder": "请输入提现金额",
+            "fee": "手续费 (1%)",
+            "receive": "实际到账",
+            "available": "可用余额",
+            "tip": "提现金额将先进入冻结余额，待管理员审核通过后，将自动原路返回您的付款账号，预计时常1-3个工作日",
+            "successTitle": "提现申请已提交",
+            "successMessage": "您的提现申请已成功提交。",
+            "failTitle": "提现失败",
+            "failMessage": "提现申请提交失败，请重试。",
+            "submit": "提交",
+            "historyTitle": "提现记录",
+            "amount": "提现金额",
+            "actualAmount": "实际到账",
+            "remark": "备注",
+            "status": "状态",
+            "pending": "待审核",
+            "success": "已提现",
+            "failed": "提现失败"
         }
     },
     "goods": {
@@ -834,9 +883,9 @@
                 "errorMessage": "请输入有效的物流单号"
             },
             "packageName": {
-                "label": "包裹名称",
-                "placeholder": "输入您的包裹名称",
-                "errorMessage": "请输入有效的包裹名称"
+                "label": "商品名称",
+                "placeholder": "输入您的商品名称",
+                "errorMessage": "请输入有效的商品名称"
             }
         },
         "extraServices": "额外服务",

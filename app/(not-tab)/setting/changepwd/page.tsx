@@ -7,11 +7,12 @@ import { addToast } from "@heroui/react";
 
 import CommonForm from "@/components/form/common-form";
 import { FieldConfig } from "@/components/form/formItem-renderer";
-import { updatePwd } from "@/services";
+import { useChangePassword } from "@/hook/business";
 
 export default function Settingpage() {
   const router = useRouter();
   const t = useTranslations("setting.changePassword");
+  const { changePassword, isChanging } = useChangePassword();
 
   const [formData, setFormData] = useState({
     oldPassword: "",
@@ -24,45 +25,36 @@ export default function Settingpage() {
       name: "oldPassword",
       key: "oldPassword",
       placeholder: t("form.oldPassword"),
-      type: "input",
+      type: "password",
     },
     {
       name: "newPassword",
       key: "newPassword",
       placeholder: t("form.newPassword"),
-      type: "input",
+      type: "password",
     },
     {
       name: "confirmPassword",
       key: "confirmPassword",
       placeholder: t("form.confirmPassword"),
-      type: "input",
+      type: "password",
     },
   ];
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     // 校验两次密码一致性
     if (formData.newPassword !== formData.confirmPassword) {
       addToast({
-        title: "两次输入的新密码不一致",
+        title: t('tip'),
         timeout: 1000,
         color: "danger",
       });
-
-      return false;
+      return;
     }
-    try {
-      await updatePwd({
-        oldPassword: formData.oldPassword,
-        newPassword: formData.newPassword,
-      });
-      setTimeout(() => {
-        router.push("/login");
-      }, 1000);
+    changePassword({
+      oldPassword: formData.oldPassword,
+      newPassword: formData.newPassword,
+    });
 
-      return true;
-    } catch {
-      // 可以加 toast 提示
-    }
   };
 
   return (
@@ -79,6 +71,7 @@ export default function Settingpage() {
             formData={formData}
             onChange={setFormData}
             onSubmit={handleSubmit}
+            isLoading={isChanging}
           />
         </div>
       </div>

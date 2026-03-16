@@ -68,12 +68,12 @@ export default function SubmitWarehouse() {
       const defaultAddr = addressData.find(
         (addr: any) => addr.defaultAddress === 1,
       );
-
       if (defaultAddr) setSelectedAddressId(defaultAddr.id);
     }
   }, [addressData, selectedAddressId]);
   // 选中地址国家id
   const countryId = useMemo(() => {
+    // return null
     return addressData?.find((item: any) => item.id == selectedAddressId)
       ?.countryId;
   }, [selectedAddressId, addressData]);
@@ -81,28 +81,33 @@ export default function SubmitWarehouse() {
   const {
     data: lineData,
     isLoading: lineLoading,
-    isError: lineError,
+    isError: islineError,
+    error: lineError,
   } = useLineByWaybill(
-    countryId
+    countryId &&
+      packageItemList.map((item: any) => item?.categoryId).length 
       ? {
-          categoryIds: packageItemList.map((item: any) => item?.categoryId),
-          countryId,
-          weight: estimateTotalWeight,
-          volume: estimateTotalVolume,
-        }
+        categoryIds: packageItemList.map((item: any) => item?.categoryId),
+        countryId,
+        weight: estimateTotalWeight,
+        volume: estimateTotalVolume,
+      }
       : null,
   );
-
-  console.log("lineData:", lineData);
-  console.log("lineError:", lineError);
-
-  const [showRouteModal, setShowRouteModal] = useState(false);
-
+  // 在组件里处理错误提示
   useEffect(() => {
-    if (!Array.isArray(lineData)) {
+    if (islineError && lineError) {
+      addToast({
+        title: lineError?.message || "Search line failed",
+        color: "danger",
+      });
       setSelectedRouteId(null);
     }
-  }, [lineData]);
+  }, [islineError, lineError]);
+  console.log("lineData:", lineData);
+  console.log("lineError:", lineError?.message);
+
+  const [showRouteModal, setShowRouteModal] = useState(false);
 
   const [isCheck, setIsCheck] = useState(false);
 
@@ -175,7 +180,7 @@ export default function SubmitWarehouse() {
       // 调接口
       await createWaybill(payload);
       router.push(`/profile/package`);
-    } catch {}
+    } catch { }
   };
 
   return (
@@ -228,7 +233,7 @@ export default function SubmitWarehouse() {
               ? lineData.filter((r: any) => String(r.id) === selectedRouteId)
               : []
           }
-          emptyText={typeof lineData === "string" ? lineData : undefined}
+          emptyText={lineError?.message}
           isLoading={lineLoading}
           renderItem={(line: any) => (
             <SelectedLineItem key={line.id} line={line} />

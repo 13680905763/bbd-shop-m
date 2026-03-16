@@ -17,7 +17,7 @@ import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 
 import { useChat } from "@/hook/chat/useChat";
-import { useUserInfo } from "@/hook/api";
+import { useUserInfo } from "@/hook/business";
 
 export default function ChatBox() {
   const t = useTranslations("components.chatbox");
