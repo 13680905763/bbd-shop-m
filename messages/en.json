@@ -56,7 +56,7 @@
         },
         "block": {
             "warehouseProductItem": {
-                "weight": "Poids",
+                "weight": "Weight",
                 "size": "Dimensions"
             }
         },
@@ -204,7 +204,13 @@
             "inputPlaceholder": "Enter message...",
             "send": "Send",
             "connectionLost": "Connection lost, please try again later",
-            "imageSendFail": "Image send failed"
+            "imageSendFail": "Image send failed",
+            "imageTooLarge": "Image size cannot exceed 5MB",
+            "selectOrder": "Select Order",
+            "noOrdersFound": "No orders found",
+            "orderNo": "Order No:",
+            "price": "Price:",
+            "close": "Close"
         },
         "billingAddress": {
             "edit": "Edit",
@@ -420,13 +426,13 @@
                 "pay": "Pay",
                 "cancel": "Cancel Order",
                 "batchPay": "Batch Payment",
-                "withdraw": "Withdraw Request",
+                "withdraw": "Cancel request",
                 "refund": "Request Refund"
             },
             "cancelTitle": "Cancel Order",
             "cancelContent": "Are you sure you want to cancel this order?",
-            "withdrawTitle": "Withdraw Request",
-            "withdrawContent": "Are you sure you want to withdraw this request?",
+            "withdrawTitle": "Cancel request",
+            "withdrawContent": "Are you sure you want to cancel request?",
             "refundModal": {
                 "title": "Request Refund",
                 "placeholder": "Please enter remarks (optional)",
@@ -444,12 +450,12 @@
             }
         },
         "warehouse": {
-            "title": "Entrepôt",
+            "title": "Warehouse",
             "tabs": {
-                "all": "Toutes",
-                "submit": "Soumettable"
+                "all": "All",
+                "submit": "Submittable"
             },
-            "submit": "Soumettre les colis"
+            "submit": "Submit Packages"
         },
         "package": {
             "title": "Packages",
@@ -943,6 +949,10 @@
                 "placeholder": "Please enter shipping fee",
                 "errorMessage": "Shipping fee cannot be empty"
             }
-        }
+        },
+        "productFee": "Product Fee:",
+        "serviceFee": "Service Fee:",
+        "totalCost": "Total Cost:",
+        "shippingFee": "Shipping Fee:"
     }
 }

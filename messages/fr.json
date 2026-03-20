@@ -204,7 +204,13 @@
             "inputPlaceholder": "Entrez votre message...",
             "send": "Envoyer",
             "connectionLost": "Connexion perdue, veuillez réessayer plus tard",
-            "imageSendFail": "Échec de l'envoi de l'image"
+            "imageSendFail": "Échec de l'envoi de l'image",
+            "imageTooLarge": "Image size cannot exceed 5MB",
+            "selectOrder": "Select Order",
+            "noOrdersFound": "No orders found",
+            "orderNo": "Order No:",
+            "price": "Price:",
+            "close": "Close"
         },
         "billingAddress": {
             "edit": "Modifier",
@@ -943,6 +949,10 @@
                 "placeholder": "Veuillez saisir les frais de port",
                 "errorMessage": "Les frais de port ne peuvent pas être vides"
             }
-        }
+        },
+        "productFee": "Frais de produit:",
+        "serviceFee": "Frais de service:",
+        "totalCost": "Coût total:",
+        "shippingFee": "Frais de port:"
     }
 }

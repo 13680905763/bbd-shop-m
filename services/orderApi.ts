@@ -36,6 +36,8 @@ export const OrderApi = {
   /** 获取订单列表 */
   listOrder: (data: OrderListParams): Promise<any> =>
     request.post("/orders/page", data),
+  listChatOrder: (data: OrderListParams): Promise<any> =>
+    request.post("/orders/myOrders", data),
   listRefundOrder: (data: any): Promise<any> => {
     return request.post("/order-refund/list", data);
   },

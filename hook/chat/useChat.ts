@@ -3,6 +3,7 @@ import { addToast } from "@heroui/react";
 import { useTranslations } from "next-intl";
 
 import { fetchChatHistory, uploadChatImage } from "@/services";
+import { useUserInfo } from "../business";
 
 export interface Message {
   id: number | string;
@@ -10,10 +11,13 @@ export interface Message {
   text?: string;
   type?: "TEXT" | "IMAGE" | "ORDER";
   sending?: boolean;
+  createTime?: number | string;
 }
 
-export function useChat(user: any, isOpen: boolean) {
+export function useChat(isOpen: boolean) {
   const t = useTranslations("components.chatbox");
+  const { data: user } = useUserInfo();
+  
   const [messages, setMessages] = useState<Message[]>([]);
   const [receiverId, setReceiverId] = useState<number | null>(null);
   const [hasAgent, setHasAgent] = useState(false);
@@ -25,19 +29,17 @@ export function useChat(user: any, isOpen: boolean) {
   const [firstLoading, setFirstLoading] = useState(false);
 
   // Refs for logic (to avoid stale closures and rapid events)
-  const loadingRef = useRef(false);
   const socketRef = useRef<WebSocket | null>(null);
   const receiverIdRef = useRef<number | null>(null);
   const shouldScrollRef = useRef(false); // To signal UI to scroll
 
-  // WebSocket Connection
+  // --- WebSocket Connection ---
   useEffect(() => {
-    if (!user?.id || !isOpen) {
+    if (!isOpen || !user?.id) {
       if (socketRef.current) {
         socketRef.current.close();
         socketRef.current = null;
       }
-
       return;
     }
 
@@ -52,10 +54,8 @@ export function useChat(user: any, isOpen: boolean) {
       if (!allowReconnect) return;
 
       const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
-
       if (!apiBase) {
         console.error("❌ 缺少 NEXT_PUBLIC_API_BASE_URL");
-
         return;
       }
 
@@ -63,9 +63,7 @@ export function useChat(user: any, isOpen: boolean) {
       const host = apiBase.replace(/^https?:\/\//, "");
       const wsUrl = `${protocol}://${host}/ws`;
 
-      if (socket && socket.readyState === WebSocket.OPEN) {
-        return;
-      }
+      if (socket && socket.readyState === WebSocket.OPEN) return;
 
       console.log(`🔌 尝试连接 WebSocket (${retryCount + 1}/${MAX_RETRY})`);
       socket = new WebSocket(wsUrl);
@@ -91,10 +89,11 @@ export function useChat(user: any, isOpen: boolean) {
           setMessages((prev) => [
             ...prev,
             {
-              id: Date.now(),
+              id: `ws-${Date.now()}-${Math.random()}`,
               sender: data.sender === "CUSTOMER" ? "user" : "bot",
               text: data.content,
-              type: data.type,
+              createTime: data.createTime || getCurrentFormattedTime(),
+              type: data.type || "TEXT",
             },
           ]);
           shouldScrollRef.current = true;
@@ -129,81 +128,87 @@ export function useChat(user: any, isOpen: boolean) {
     };
   }, [user?.id, isOpen]);
 
-  // Load History
+  // --- Load History ---
   const loadHistory = useCallback(
     async (initialLoad = false) => {
-      if (loadingRef.current) return;
-      // If not initial load and no more history, stop
-      if (!initialLoad && !hasMoreHistory) return;
+      if (!user?.id) return;
+      if (!initialLoad && (!hasMoreHistory || isLoadingHistory)) return;
 
-      loadingRef.current = true;
       setIsLoadingHistory(true);
 
       try {
-        // If initial load, use page 1, else use current page
         const currentPage = initialLoad ? 1 : page;
-        const res: any = await fetchChatHistory(user!.id, currentPage);
+        const res: any = await fetchChatHistory(user.id, currentPage);
         const records: any = res.records || [];
         const lastPage: number = res.pages ?? 1;
 
         const newMessages = records.reverse().map((msg: any) => ({
-          id: msg?.id ?? `srv-${Date.now()}-${Math.random()}`,
+          id: msg?.id ?? `his-${Date.now()}-${Math.random()}`,
           sender: msg.sender === "CUSTOMER" ? "user" : "bot",
-          type: msg.contentType,
+          createTime: msg.createTime,
+          type: msg.contentType || "TEXT",
           text: msg.content,
         }));
 
         if (initialLoad) {
           setMessages(newMessages);
-          setPage(2); // Next page is 2
+          setPage(2);
           setHasMoreHistory(1 < lastPage);
           shouldScrollRef.current = true;
 
-          // Check for agent
-          const hisM = records.filter((item: any) => item.sender === "SERVER");
-
-          if (hisM.length) {
-            receiverIdRef.current = hisM[0].userId;
-            setReceiverId(hisM[0].userId);
+          const hisM = records.find((item: any) => item.sender === "SERVER");
+          if (hisM) {
+            receiverIdRef.current = hisM.userId;
+            setReceiverId(hisM.userId);
           }
         } else {
           setMessages((prev) => [...newMessages, ...prev]);
           setPage((prev) => prev + 1);
           setHasMoreHistory(currentPage < lastPage);
-          shouldScrollRef.current = false; // Don't scroll to bottom on history load
+          shouldScrollRef.current = false; 
         }
       } catch (err) {
         console.error("获取历史消息失败", err);
       } finally {
-        loadingRef.current = false;
         setIsLoadingHistory(false);
       }
     },
-    [user?.id, page, hasMoreHistory],
+    [user?.id, page, hasMoreHistory, isLoadingHistory]
   );
 
-  // Initial Load Effect
+  // --- Initial Load Effect ---
   useEffect(() => {
     if (isOpen && user?.id) {
       setFirstLoading(true);
       loadHistory(true).finally(() => setFirstLoading(false));
-    } else {
-      // Reset when closed
+    } else if (!isOpen) {
       setMessages([]);
       setPage(1);
       setHasMoreHistory(true);
       setReceiverId(null);
+      receiverIdRef.current = null;
     }
-  }, [isOpen, user?.id]); // Removed loadHistory dependency to avoid loops if loadHistory isn't memoized correctly, but I memoized it.
+  }, [isOpen, user?.id]);
 
-  // Send Message
+  // --- Utility to format current date ---
+  const getCurrentFormattedTime = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const seconds = String(now.getSeconds()).padStart(2, "0");
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  };
+
+  // --- Send Message ---
   const sendMessage = useCallback(
     (msgText: string, type: Message["type"] = "TEXT") => {
       const socket = socketRef.current;
 
       if (!socket || socket.readyState !== WebSocket.OPEN) {
         addToast({ title: t("connectionLost"), color: "danger" });
-
         return;
       }
 
@@ -212,7 +217,6 @@ export function useChat(user: any, isOpen: boolean) {
         type,
         content: msgText,
         sendTime: new Date().toISOString(),
-        receiverId,
       };
 
       if (receiverIdRef.current) payload.receiverId = receiverIdRef.current;
@@ -220,31 +224,24 @@ export function useChat(user: any, isOpen: boolean) {
 
       setMessages((prev) => [
         ...prev,
-        { id: Date.now(), sender: "user", text: msgText, type },
+        { id: `local-${Date.now()}`, sender: "user", text: msgText, type, createTime: getCurrentFormattedTime() },
       ]);
       shouldScrollRef.current = true;
     },
-    [receiverId, t],
+    [t]
   );
 
-  // Upload Image
+  // --- Upload & Send Image ---
   const sendImage = useCallback(
     async (file: File) => {
       if (!user?.id) return;
 
-      const tempId = Date.now();
+      const tempId = `temp-${Date.now()}`;
       const tempUrl = URL.createObjectURL(file);
 
-      // Add temporary message
       setMessages((prev) => [
         ...prev,
-        {
-          id: tempId,
-          sender: "user",
-          type: "IMAGE",
-          sending: true,
-          text: tempUrl,
-        },
+        { id: tempId, sender: "user", type: "IMAGE", sending: true, text: tempUrl, createTime: getCurrentFormattedTime() },
       ]);
       shouldScrollRef.current = true;
 
@@ -262,30 +259,27 @@ export function useChat(user: any, isOpen: boolean) {
               sendTime: new Date().toISOString(),
             };
 
-            if (receiverIdRef.current)
-              payload.receiverId = receiverIdRef.current;
+            if (receiverIdRef.current) payload.receiverId = receiverIdRef.current;
             socket.send(JSON.stringify(payload));
           }
 
           setMessages((prev) =>
             prev.map((msg) =>
-              msg.id === tempId ? { ...msg, sending: false, text: url } : msg,
-            ),
+              msg.id === tempId ? { ...msg, sending: false, text: url } : msg
+            )
           );
         }
       } catch (err) {
         setMessages((prev) =>
           prev.map((msg) =>
-            msg.id === tempId
-              ? { ...msg, sending: false, text: t("imageSendFail") }
-              : msg,
-          ),
+            msg.id === tempId ? { ...msg, sending: false, text: t("imageSendFail") } : msg
+          )
         );
       } finally {
         URL.revokeObjectURL(tempUrl);
       }
     },
-    [user?.id, receiverId, t],
+    [user?.id, t]
   );
 
   return {
@@ -298,5 +292,6 @@ export function useChat(user: any, isOpen: boolean) {
     hasMoreHistory,
     shouldScrollRef,
     hasAgent,
+    user,
   };
 }

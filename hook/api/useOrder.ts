@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 
 import { OrderApi } from "@/services/orderApi";
 import { queryClient } from "@/lib/react-query";
@@ -132,5 +132,13 @@ export function useCreateDiyOrder() {
 export function useUploadDiyImage() {
   return useMutation({
     mutationFn: (file: File) => OrderApi.uploadDiyImage(file),
+  });
+}
+export function useChatOrderList(params: any) {
+  return useQuery({
+    queryKey: ["chatOrderList", params],
+    queryFn: () => OrderApi.listChatOrder(params),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: false, // ⚠️ 禁止切回 Tab 时自动请求
   });
 }

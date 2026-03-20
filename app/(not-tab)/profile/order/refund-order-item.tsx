@@ -20,6 +20,9 @@ export default function RefundOrderItem({ order }: any) {
             <div className="text-xs text-gray-500">{order?.createTime}</div>
           </div>
         </div>
+        <div className="self-start text-right text-sm font-bold text-[#f0700c]">
+          {order?.status}
+        </div>
       </div>
 
       <ProductItem key={order?.id} product={order} />

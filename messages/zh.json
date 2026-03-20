@@ -204,7 +204,13 @@
             "inputPlaceholder": "请输入消息...",
             "send": "发送",
             "connectionLost": "连接断开，请稍后重试",
-            "imageSendFail": "图片发送失败"
+            "imageSendFail": "图片发送失败",
+            "imageTooLarge": "图片大小不能超过 5MB",
+            "selectOrder": "选择订单",
+            "noOrdersFound": "暂无订单",
+            "orderNo": "订单号：",
+            "price": "价格：",
+            "close": "关闭"
         },
         "billingAddress": {
             "edit": "编辑",
@@ -943,6 +949,10 @@
                 "placeholder": "请输入运费",
                 "errorMessage": "运费不能为空"
             }
-        }
+        },
+        "productFee": "商品费用:",
+        "serviceFee": "服务费用:",
+        "totalCost": "总费用:",
+        "shippingFee": "运输费用:"
     }
 }

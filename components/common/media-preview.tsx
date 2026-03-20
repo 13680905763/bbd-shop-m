@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { FaArrowLeft, FaArrowRight, FaTimes, FaPlay, FaDownload } from "react-icons/fa";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 
 export type MediaItem = {
   id: string | number;
@@ -39,17 +41,34 @@ const MediaPreviewGroup: React.FC<MediaPreviewGroupProps> = ({
     try {
       const response = await fetch(url);
       const blob = await response.blob();
-      const blobUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      const fileName = url.split("/").pop() || "download";
-      link.download = fileName;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(blobUrl);
+      
+      // 检测是否为 iOS 设备
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+
+      if (isIOS) {
+        // iOS Safari 不支持 download 属性，直接打开 blob URL 让用户长按保存或使用分享菜单
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          if (e.target?.result) {
+            window.location.href = e.target.result as string;
+          }
+        };
+        reader.readAsDataURL(blob);
+      } else {
+        // 其他设备使用 createObjectURL 下载
+        const blobUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        const fileName = url.split("/").pop() || "download";
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(blobUrl);
+      }
     } catch (error) {
       console.error("Download failed:", error);
+      // 降级：直接在新窗口打开 URL
       window.open(url, "_blank");
     }
   };
@@ -62,13 +81,43 @@ const MediaPreviewGroup: React.FC<MediaPreviewGroupProps> = ({
 
   const handleDownloadAll = async () => {
     if (!fileList.length) return;
-    // 循环下载所有文件
-    for (const item of fileList) {
-      if (item.fileUrl) {
-        await downloadFile(item.fileUrl);
-        // 稍微延迟一下，避免浏览器请求过于频繁导致丢失或拦截
-        await new Promise((resolve) => setTimeout(resolve, 300));
+
+    try {
+      const zip = new JSZip();
+      const folder = zip.folder("images");
+      let successCount = 0;
+
+      // 并行下载所有文件
+      const promises = fileList.map(async (item, index) => {
+        if (!item.fileUrl) return;
+        try {
+          const response = await fetch(item.fileUrl);
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const blob = await response.blob();
+          
+          if (blob.size > 0) {
+            // 获取文件名，如果没有则使用默认名
+            const fileName = item.fileUrl.split("/").pop()?.split("?")[0] || `image_${index + 1}.jpg`;
+            folder?.file(fileName, blob);
+            successCount++;
+          }
+        } catch (err) {
+          console.error(`Failed to download ${item.fileUrl}`, err);
+        }
+      });
+
+      await Promise.all(promises);
+
+      if (successCount === 0) {
+        alert("Failed to download images. Please check your network or try again.");
+        return;
       }
+
+      // 生成 zip 并下载
+      const content = await zip.generateAsync({ type: "blob" });
+      saveAs(content, "images.zip");
+    } catch (error) {
+      console.error("Failed to zip files:", error);
     }
   };
 

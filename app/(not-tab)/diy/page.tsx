@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { Button, Form } from "@heroui/react";
 import { NavBar } from "antd-mobile";
@@ -51,6 +51,28 @@ export default function DIYPage() {
   } = useEnhancedSelection(rawServicesList || []);
 
   const [isServiceSelectionOpen, setIsServiceSelectionOpen] = useState(false);
+
+  // ✅ 计算所有服务费的总和
+  const totalServiceFee = useMemo(() => {
+    return getSelectedItems().reduce((acc, item) => {
+      const fee = parseFloat(item.price || "0") * item.quantity;
+      return acc + fee;
+    }, 0).toFixed(2);
+  }, [servicesList]);
+
+  const productFeeConverted = currency.rate
+    ? parseFloat(formData.productPrice || "0") / currency.rate
+    : 0;
+
+  const shippingFeeConverted = currency.rate
+    ? parseFloat(formData.postage || "0") / currency.rate
+    : 0;
+
+  const totalAmount = (
+    productFeeConverted +
+    shippingFeeConverted +
+    parseFloat(totalServiceFee || "0")
+  ).toFixed(2);
 
   const productFields: FieldConfig[] = [
     {
@@ -144,6 +166,9 @@ export default function DIYPage() {
     }
   };
 
+
+
+
   return (
     <>
       <NavBar className="bg-white" onBack={() => router.push("/")}>
@@ -192,32 +217,32 @@ export default function DIYPage() {
               />
             </div>
           </div>
-          {/* <div className="w-full rounded-lg bg-white p-4">
-                        <div className="flex justify-between items-center">
-                            <span>{t("productFee")}:</span>
-                            <span className="font-medium">
-                                {currency.symbol} {formatPrice(productTotal)}
-                            </span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                            <span>{t("shippingFee")}:</span>
-                            <span className="font-medium">
-                                {currency.symbol} {formatPrice(shipping)}
-                            </span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                            <span>{t("serviceFee")}:</span>
-                            <span className="font-medium">
-                                {currency.symbol} {serviceFee}
-                            </span>
-                        </div>
-                        <div className="flex justify-between items-center border-t pt-2 mt-1">
-                            <span className="font-semibold text-gray-800">{t("totalCost")}:</span>
-                            <span className="text-xl font-bold text-primary">
-                                {currency.symbol} {formatPrice(parseFloat(totalAmount))}
-                            </span>
-                        </div>
-                    </div> */}
+          <div className="w-full rounded-lg bg-white p-4">
+            <div className="flex items-center justify-between">
+              <span className="text-gray-600">{t("productFee")}</span>
+              <span className="font-medium">
+                {currency.symbol} {productFeeConverted.toFixed(2)}
+              </span>
+            </div>
+            <div className="mt-1 flex items-center justify-between">
+              <span className="text-gray-600">{t("shippingFee")}</span>
+              <span className="font-medium">
+                {currency.symbol} {shippingFeeConverted.toFixed(2)}
+              </span>
+            </div>
+            <div className="mt-1 flex items-center justify-between">
+              <span className="text-gray-600">{t("serviceFee")}</span>
+              <span className="font-medium">
+                {currency.symbol} {totalServiceFee}
+              </span>
+            </div>
+            <div className="mt-2 flex items-center justify-between border-t pt-3">
+              <span className="text-base font-semibold text-gray-800">{t("totalCost")}</span>
+              <span className="text-2xl font-bold text-primary">
+                {currency.symbol} {totalAmount}
+              </span>
+            </div>
+          </div>
         </Form>
       </div>
       <div className="bg-white p-4">
