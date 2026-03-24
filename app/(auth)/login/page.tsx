@@ -36,14 +36,15 @@ export default function LoginPage() {
       startContent: <IoLockClosed />,
     },
   ];
+
   return (
     <CommonForm
       confirmText={t("loginButton")}
       fields={loginFormFields}
       formData={formData}
+      isLoading={isLoggingIn}
       onChange={setFormData}
       onSubmit={handleSubmit}
-      isLoading={isLoggingIn}
     >
       <Button
         className="button-default"
@@ -53,8 +54,8 @@ export default function LoginPage() {
       </Button>
       <div className="mt-4 text-center">
         <span
-          role="button"
           className="cursor-pointer text-sm text-gray-500 hover:text-primary hover:underline"
+          role="button"
           onClick={() => router.push("/forget-password")}
         >
           {t("forgetPassword") || "Forget Password?"}

@@ -9,6 +9,7 @@ import {
 } from "react-icons/io5";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+
 import CommonForm from "@/components/form/common-form";
 import { FieldConfig } from "@/components/form/formItem-renderer";
 import { SignUpFormData } from "@/types";
@@ -70,8 +71,10 @@ export default function RegisterPage() {
   ];
   const handleSubmit = (formData: SignUpFormData) => {
     const { agreeToTerms, ...data } = formData;
+
     if (!agreeToTerms) {
       addToast({ title: t("mustAgree"), timeout: 1500, color: "danger" });
+
       return;
     }
     signUp(data);
@@ -93,9 +96,9 @@ export default function RegisterPage() {
             confirmText={t("registerButton")}
             fields={registerFormFields}
             formData={formData}
+            isLoading={isSigningUp}
             onChange={setFormData}
             onSubmit={handleSubmit}
-            isLoading={isSigningUp}
           />
           <div className="mt-2 text-center text-sm">
             <span>{t("loginHint")}</span>
@@ -121,9 +124,9 @@ export default function RegisterPage() {
           </div>
           <InputOtp
             className="m-auto"
+            isDisabled={isActivating}
             length={6}
             size="lg"
-            isDisabled={isActivating}
             onValueChange={handleInviteCode}
           />
         </div>

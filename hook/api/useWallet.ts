@@ -1,8 +1,8 @@
-import { useQuery, useInfiniteQuery, useMutation, } from "@tanstack/react-query";
+import { useQuery, useInfiniteQuery, useMutation } from "@tanstack/react-query";
+import { addToast } from "@heroui/react";
+
 import { walletApi } from "@/services/walletApi";
 import { queryClient } from "@/lib/react-query";
-import { addToast } from "@heroui/react";
-import { useRouter } from "next/navigation";
 
 // 钱包信息
 export const useWalletInfo = () => {
@@ -23,6 +23,7 @@ export function useWalletDetailList() {
       walletApi.listWalletDetail({ current: pageParam, size: 10 }),
     getNextPageParam: (lastPage) => {
       const loaded = lastPage.current * lastPage.size;
+
       return loaded < lastPage.total ? lastPage.current + 1 : undefined;
     },
     initialPageParam: 1,
@@ -72,10 +73,11 @@ export function usePay() {
       });
     },
   });
+
   return {
     pay: payMutation.mutate,
     isPayFetching: payMutation.isPending,
-  }
+  };
 }
 // 积分兑换优惠券
 export const usePointExchangeCoupon = () => {
@@ -92,10 +94,11 @@ export const usePointExchangeCoupon = () => {
       queryClient.invalidateQueries({ queryKey: ["pointsList"] });
     },
   });
+
   return {
     pointExchangeCoupon: pointExchangeCouponMutation.mutateAsync,
     isChanging: pointExchangeCouponMutation.isPending,
-  }
+  };
 };
 // 兑换码兑换优惠券
 export const useCodeExchangeCoupon = () => {
@@ -116,10 +119,11 @@ export const useCodeExchangeCoupon = () => {
       });
     },
   });
+
   return {
     codeExchangeCoupon: codeExchangeCouponMutation.mutate,
     isChanging: codeExchangeCouponMutation.isPending,
-  }
+  };
 };
 
 // 申请提现
@@ -136,15 +140,17 @@ export const useApplyWithdrawal = () => {
     },
     onError: (error) => {
       addToast({
-        title: error?.message || "Withdrawal application failed, please try again",
+        title:
+          error?.message || "Withdrawal application failed, please try again",
         color: "danger",
       });
     },
   });
+
   return {
     applyWithdrawal: mutation.mutate,
     isApplying: mutation.isPending,
-  }
+  };
 };
 
 // 提现流水
@@ -155,6 +161,7 @@ export function useWithdrawalList() {
       walletApi.listWithdrawalHistory({ current: pageParam, size: 10 }),
     getNextPageParam: (lastPage) => {
       const loaded = lastPage.current * lastPage.size;
+
       return loaded < lastPage.total ? lastPage.current + 1 : undefined;
     },
     initialPageParam: 1,

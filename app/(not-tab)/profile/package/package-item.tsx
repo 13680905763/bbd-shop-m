@@ -256,13 +256,26 @@ export default function PackageItem({
           ))}
         </div>
       )}
+      {/* 购买保险提示 */}
+      {!!pack?.insurance && (
+        <div className="flex items-center gap-1 rounded bg-orange-50 px-2 py-1 text-xs text-orange-500 ">
+          {t("hasInsurance")}
+        </div>
+      )}
       {/* 金额 + 按钮 */}
-      <div className="text-right text-base font-bold text-gray-700">
+      <div className="text-right text-sm font-bold text-gray-700">
         <p>
           {t("serviceFee")}
           {currency.symbol}
           {pack?.totalServiceFee || 0}
         </p>
+        {!!pack?.insurance && (
+          <p>
+            {t("insuranceFee")}
+            {currency.symbol}
+            {pack?.insuranceFee || 0}
+          </p>
+        )}
         <p>
           {t("totalFee")}
           {currency.symbol}

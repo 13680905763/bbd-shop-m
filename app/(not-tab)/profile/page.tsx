@@ -9,7 +9,11 @@ import { useTranslations } from "next-intl";
 import CommonForm from "@/components/form/common-form";
 import { FieldConfig } from "@/components/form/formItem-renderer";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
-import { useUpdateUserInfo, useUploadAvatar, useUserInfo } from "@/hook/business";
+import {
+  useUpdateUserInfo,
+  useUploadAvatar,
+  useUserInfo,
+} from "@/hook/business";
 import { queryClient } from "@/lib/react-query";
 
 export default function Settingpage() {
@@ -110,9 +114,9 @@ export default function Settingpage() {
           confirmText={t("saveButton")}
           fields={fields}
           formData={formData}
+          isLoading={isUpdating}
           onChange={setFormData}
           onSubmit={updateUserInfo}
-          isLoading={isUpdating}
         />
       </div>
     </>

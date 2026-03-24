@@ -58,14 +58,16 @@ export default function Cart() {
       },
     });
   };
-  const handleQuantityChange = async (data: UpdateCartData) => { await updateItem(data) };
+  const handleQuantityChange = async (data: UpdateCartData) => {
+    await updateItem(data);
+  };
   const handleRemarkChange = async (data: UpdateCartData) => {
     await confirm({
       content: (
         <Textarea
-          placeholder={t("remarkModal.placeholder")}
           defaultValue={data.remark || ""}
-          onChange={(e) => remarkRef.current = e.target.value}
+          placeholder={t("remarkModal.placeholder")}
+          onChange={(e) => (remarkRef.current = e.target.value)}
         />
       ),
       title: t("remarkModal.title"),
@@ -78,7 +80,9 @@ export default function Cart() {
     if (isEdit) return handleDelete(selectedIds);
     await submitCart({ previewList });
   };
+
   if (isLoading) return <FullscreenLoader />;
+
   return (
     <>
       <div className="flex justify-between p-2">
@@ -117,9 +121,9 @@ export default function Cart() {
         isAllSelected={isAllSelected}
         isLoading={isSubmitting || isDeleting}
         selectedCount={selectedIds.length}
+        togglePrice={togglePrice}
         onPress={handleSubmit}
         onToggleSelectAll={onToggleSelectAll}
-        togglePrice={togglePrice}
       />
     </>
   );

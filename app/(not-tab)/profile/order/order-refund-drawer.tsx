@@ -1,10 +1,10 @@
 import { Card, CardBody } from "@heroui/react";
 import { useTranslations } from "next-intl";
+import { useEffect } from "react";
 
 import { CommonDrawer } from "@/components/drawer";
 import { useEnhancedSelection } from "@/hook/common";
 import ProductItem from "@/components/common/product-item";
-import { useEffect } from "react";
 
 interface OrderRefundDrawerProps {
   products: any[];
@@ -25,14 +25,16 @@ export default function OrderRefundDrawer({
     updateQuantity: onUpdateQuantity,
     updateRemark,
     getSelectedItems,
-    selectAll
+    selectAll,
   } = useEnhancedSelection(products || []);
 
   const handleConfirm = async () => {
     const selected = getSelectedItems();
+
     if (selected.length === 0) return;
     await onConfirm(selected);
   };
+
   useEffect(() => {
     if (products?.length > 0) {
       selectAll();
@@ -54,10 +56,11 @@ export default function OrderRefundDrawer({
         {items.map((product: any, index: number) => (
           <Card
             key={index}
-            className={`rounded-lg border shadow-sm transition-all duration-150 ${product.isSelected
-              ? "border-primary bg-primary/5"
-              : "border-gray-200 bg-white"
-              }`}
+            className={`rounded-lg border shadow-sm transition-all duration-150 ${
+              product.isSelected
+                ? "border-primary bg-primary/5"
+                : "border-gray-200 bg-white"
+            }`}
             isPressable={false}
           >
             <CardBody className="flex flex-col gap-3 p-4">

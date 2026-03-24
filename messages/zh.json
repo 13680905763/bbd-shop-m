@@ -56,7 +56,7 @@
         },
         "drawer": {
             "selectionService": {
-                "title": "额外服务",
+                "title": "附加服务",
                 "free": "免费",
                 "add": "添加",
                 "remark": "备注",
@@ -465,6 +465,7 @@
                 "shipping": "运输中",
                 "received": "已收货"
             },
+            "hasInsurance": "已购买保险服务",
             "selectAll": "全选",
             "submitPay": "批量支付",
             "noOrders": "暂无包裹",
@@ -486,6 +487,7 @@
             "weight": "重量：",
             "size": "尺寸：",
             "serviceFee": "服务费：",
+            "insuranceFee": "保险费：",
             "totalFee": "总费用：",
             "shippingCode": "运输号：",
             "cancelModal": {
@@ -718,7 +720,8 @@
             "shippingAddress": "收货地址",
             "addAddress": "添加地址",
             "commodityList": "商品列表",
-            "packagingMethod": "打包方式",
+            "additionalService": "附加服务",
+            "insuranceService": "保险服务",
             "deliveryRoute": "物流路线",
             "routesMessage": "请选择运输路线",
             "textareaPlaceholder": "如有特殊要求请在此备注",
@@ -739,6 +742,7 @@
             "estimating": "费用估算中",
             "estimatedShipping": "预估运费",
             "estimatedService": "预估服务费",
+            "estimatedInsurance": "预估保险费",
             "estimatedTotal": "预估总计",
             "estimatedTip": "具体费用将在包裹完成打包之后展示",
             "toast": {

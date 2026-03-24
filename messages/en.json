@@ -62,7 +62,7 @@
         },
         "drawer": {
             "selectionService": {
-                "title": "Extra Services",
+                "title": "Additional Services",
                 "free": "Free",
                 "add": "Add",
                 "remark": "Remark",
@@ -465,6 +465,7 @@
                 "shipping": "In Transit",
                 "received": "Received"
             },
+            "hasInsurance": "Insurance Service Purchased",
             "selectAll": "Select All",
             "submitPay": "Batch Payment",
             "noOrders": "No packages yet",
@@ -486,6 +487,7 @@
             "weight": "Weight:",
             "size": "Dimensions:",
             "serviceFee": "Service Fee:",
+            "insuranceFee": "Insurance Fee:",
             "totalFee": "Total Fee:",
             "shippingCode": "Tracking Number:",
             "cancelModal": {
@@ -718,7 +720,8 @@
             "shippingAddress": "Shipping Address",
             "addAddress": "Add Address",
             "commodityList": "Commodity List",
-            "packagingMethod": "Packaging Method",
+            "additionalService": "Additional Service",
+            "insuranceService": "Insurance Service",
             "deliveryRoute": "Delivery Route",
             "routesMessage": "Please select a delivery route",
             "textareaPlaceholder": "If you have any special requirements, please leave a note here",
@@ -739,6 +742,7 @@
             "estimating": "Estimating fee...",
             "estimatedShipping": "Estimated Shipping",
             "estimatedService": "Estimated Service Fee",
+            "estimatedInsurance": "Estimated Insurance Fee",
             "estimatedTotal": "Estimated Total",
             "estimatedTip": "Final cost will be displayed after packages are packed",
             "toast": {

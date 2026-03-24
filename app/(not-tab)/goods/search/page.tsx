@@ -64,7 +64,11 @@ export default function Searchpage() {
 
     const res: any = await getGoodsId({ url: data.url });
 
-    router.push(`/goods/${res.source}/${res.sourceProductId}`);
+    if (res.keyword) {
+      router.push(`/goods/list?keyword=${encodeURIComponent(data.url)}`);
+    } else {
+      router.push(`/goods/${res.source}/${res.sourceProductId}`);
+    }
   };
 
   return (

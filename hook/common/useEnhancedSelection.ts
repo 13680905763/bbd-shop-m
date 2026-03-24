@@ -152,16 +152,19 @@ export default function useEnhancedSelection<T extends BaseSelectionItem>(
   const selectAll = useCallback(() => {
     setSelectionState((prev) => {
       const nextState: Record<string, SelectionStateItem> = {};
+
       dataList.forEach((item) => {
         const current = prev[item.id] || {
           quantity: 1,
           remark: "",
         };
+
         nextState[item.id] = {
           ...current,
           isSelected: true,
         };
       });
+
       return { ...prev, ...nextState };
     });
   }, [dataList]);

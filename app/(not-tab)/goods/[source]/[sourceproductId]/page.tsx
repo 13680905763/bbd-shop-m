@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import { IoCart, IoStar } from "react-icons/io5";
 import {
+  addToast,
   Button,
   Drawer,
   DrawerBody,
@@ -160,7 +161,13 @@ export default function GoodsDetails() {
       });
 
       router.push("/submit/order?type=product&key=" + key);
-    } catch (err: any) {
+    } catch (error: any) {
+      if (!error) {
+        addToast({
+          title: 'please login first',
+          color: "danger",
+        });
+      }
     } finally {
       setissub(false);
     }
@@ -664,8 +671,8 @@ export default function GoodsDetails() {
       </Drawer>
 
       <CommonModal
-        hideCloseButton={true}
         confirmText={t("continueShopping")}
+        hideCloseButton={true}
         isDismissable={false}
         isKeyboardDismissDisabled={false}
         isOpen={isOpen1}

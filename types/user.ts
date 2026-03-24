@@ -31,4 +31,3 @@ export interface UserInfo {
   inviteCount: number; // 邀请人数
   myBonus: number; // 邀请奖励
 }
-

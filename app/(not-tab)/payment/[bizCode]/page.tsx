@@ -16,6 +16,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { IoWallet } from "react-icons/io5";
 
+import SelectionCouponDrawer from "./selection-coupon-drawer";
+
 import { useBillingAddressActions } from "@/hook/business";
 import { useBillingAddress, usePay } from "@/hook/api";
 import { useWalletInfo, usePaymentMethodList } from "@/hook/api";
@@ -25,7 +27,6 @@ import BillingAddress from "@/components/block/billing-address";
 import { EditBillingAddressDrawer } from "@/components/drawer";
 import SelectionBlock from "@/components/common/selection-block";
 import { CouponItem } from "@/components/item-list";
-import SelectionCouponDrawer from "./selection-coupon-drawer";
 
 // 自定义 Radio 组件
 const CustomRadio = (props: RadioProps) => {
@@ -123,7 +124,8 @@ export default function PayOrder() {
     bizCode: params.bizCode,
     customerCouponId: confirmedCouponId,
   });
-  console.log('data', data);
+
+  console.log("data", data);
 
   const { pay, isPayFetching } = usePay();
   const paymentList = useMemo(() => data?.paymentAndFeeList || [], [data]);
@@ -143,6 +145,7 @@ export default function PayOrder() {
         timeout: 1000,
         color: "danger",
       });
+
       return;
     }
     pay({
@@ -151,8 +154,6 @@ export default function PayOrder() {
       addressId: billingAddress?.id as string,
       customerCouponId: selectedCoupon?.id,
     });
-
-
   };
   const currentPayMethod = useMemo(() => {
     return (
@@ -161,7 +162,6 @@ export default function PayOrder() {
         .find((item: any) => item.id === paymentId) ?? {}
     );
   }, [paymentId, paymentList]);
-
 
   useEffect(() => {
     if (!paymentId && paymentList?.length > 0) {
@@ -172,7 +172,6 @@ export default function PayOrder() {
       }
     }
   }, [paymentList, paymentId]);
-
 
   const selectedCoupon = useMemo(() => {
     return couponList.find((c: any) => c.id === confirmedCouponId);
@@ -205,9 +204,9 @@ export default function PayOrder() {
 
         <div className="flex w-full flex-col gap-1">
           <SelectionBlock
-            title={t("coupon")}
-            isEmpty={!selectedCoupon}
             emptyText={t("selectCoupon")}
+            isEmpty={!selectedCoupon}
+            title={t("coupon")}
             onClick={() => setShowCouponDrawer(true)}
           >
             {selectedCoupon && <CouponItem coupon={selectedCoupon} />}
@@ -280,10 +279,10 @@ export default function PayOrder() {
         onOpenChange={handleOpenChange}
       />
       <SelectionCouponDrawer
-        isOpen={showCouponDrawer}
-        onOpenChange={setShowCouponDrawer}
         couponList={couponList}
+        isOpen={showCouponDrawer}
         selectedCouponId={confirmedCouponId}
+        onOpenChange={setShowCouponDrawer}
         onSelect={(coupon) => setConfirmedCouponId(coupon.id)}
       />
     </>

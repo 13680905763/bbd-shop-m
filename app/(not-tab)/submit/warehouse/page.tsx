@@ -19,12 +19,14 @@ import {
   useAddressList,
   useLineByWaybill,
   useCreateWaybill,
+  useWarehouseServicesList1,
 } from "@/hook/api";
 import { useEnhancedSelection } from "@/hook/common";
 import { useGlobalStore } from "@/store";
 import SelectionBlock from "@/components/common/selection-block";
 import { SelectedServiceItem } from "@/components/item-list";
 import { SelectionServiceDrawer } from "@/components/drawer";
+import SelectionServiceDrawer1 from "@/components/drawer/selection-service-drawer1";
 
 export default function SubmitWarehouse() {
   const t = useTranslations("submit.warehouse");
@@ -38,6 +40,7 @@ export default function SubmitWarehouse() {
 
   // 附加服务相关
   const { data: serviceList } = useWarehouseServicesList();
+  const { data: serviceList1 } = useWarehouseServicesList1();
   const {
     items: services, // 渲染数据（包含 isSelected 和 quantity）
     toggleSelection, // 切换选中状态
@@ -45,15 +48,30 @@ export default function SubmitWarehouse() {
     updateRemark, // 更新备注
     getSelectedItems, // 获取选中结果
   } = useEnhancedSelection(serviceList);
+  const {
+    items: services1, // 渲染数据（包含 isSelected 和 quantity）
+    toggleSelection: toggleSelection1, // 切换选中状态
+    updateQuantity: updateQuantity1, // 更新数量
+    updateRemark: updateRemark1, // 更新备注
+    getSelectedItems: getSelectedItems1, // 获取选中结果
+  } = useEnhancedSelection(serviceList1);
 
+  // const getSelectedServices = useCallback(() => {
+  //   return getSelectedItems().map((item) => ({
+  //     serviceId: item.id,
+  //     quantity: item.quantity,
+  //     remark: item.remark,
+  //   }));
+  // }, [getSelectedItems]);
   const getSelectedServices = useCallback(() => {
-    return getSelectedItems().map((item) => ({
+    return [...getSelectedItems(), ...getSelectedItems1()].map((item) => ({
       serviceId: item.id,
       quantity: item.quantity,
       remark: item.remark,
     }));
-  }, [getSelectedItems]);
+  }, [getSelectedItems, getSelectedItems1]);
   const [showServiceModal, setShowServiceModal] = useState(false);
+  const [showServiceModal1, setShowServiceModal1] = useState(false);
 
   // 地址相关
   const { data: addressData, isLoading: addressLoading } = useAddressList();
@@ -68,6 +86,7 @@ export default function SubmitWarehouse() {
       const defaultAddr = addressData.find(
         (addr: any) => addr.defaultAddress === 1,
       );
+
       if (defaultAddr) setSelectedAddressId(defaultAddr.id);
     }
   }, [addressData, selectedAddressId]);
@@ -84,16 +103,16 @@ export default function SubmitWarehouse() {
     isError: islineError,
     error: lineError,
   } = useLineByWaybill(
-    countryId &&
-      packageItemList.map((item: any) => item?.categoryId).length 
+    countryId && packageItemList.map((item: any) => item?.categoryId).length
       ? {
-        categoryIds: packageItemList.map((item: any) => item?.categoryId),
-        countryId,
-        weight: estimateTotalWeight,
-        volume: estimateTotalVolume,
-      }
+          categoryIds: packageItemList.map((item: any) => item?.categoryId),
+          countryId,
+          weight: estimateTotalWeight,
+          volume: estimateTotalVolume,
+        }
       : null,
   );
+
   // 在组件里处理错误提示
   useEffect(() => {
     if (islineError && lineError) {
@@ -180,7 +199,7 @@ export default function SubmitWarehouse() {
       // 调接口
       await createWaybill(payload);
       router.push(`/profile/package`);
-    } catch { }
+    } catch {}
   };
 
   return (
@@ -211,8 +230,20 @@ export default function SubmitWarehouse() {
           renderItem={(service: any) => (
             <SelectedServiceItem key={service.id} service={service} />
           )}
-          title={t("packagingMethod")}
+          title={t("additionalService")}
           onClick={() => setShowServiceModal(true)}
+        />
+        <SelectionBlock
+          data={services1.filter((s) => s.isSelected)}
+          renderItem={(service: any) => (
+            <SelectedServiceItem
+              key={service.id}
+              service={service}
+              type="insurance"
+            />
+          )}
+          title={t("insuranceService")}
+          onClick={() => setShowServiceModal1(true)}
         />
 
         <SelectionBlock
@@ -275,6 +306,15 @@ export default function SubmitWarehouse() {
                     {feeEstimate.outbound.serviceFee}
                   </span>
                 </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-500">
+                    {t("estimatedInsurance")}
+                  </span>
+                  <span className="font-medium">
+                    {currency.symbol}
+                    {feeEstimate.outbound?.insuranceFee || 0}
+                  </span>
+                </div>
                 <div className="mt-2 flex items-center justify-between border-t border-gray-100 pt-2">
                   <span className="font-semibold text-gray-900">
                     {t("estimatedTotal")}
@@ -294,8 +334,8 @@ export default function SubmitWarehouse() {
         <Textarea
           fullWidth
           classNames={{
-            inputWrapper: "bg-white  ",
-            input: "text-base",
+            inputWrapper: "!bg-white",
+            input: "text-base ",
           }}
           placeholder={t("textareaPlaceholder")}
           size="lg"
@@ -327,6 +367,23 @@ export default function SubmitWarehouse() {
         onToggleSelection={toggleSelection}
         onUpdateQuantity={updateQuantity}
         onUpdateRemark={updateRemark}
+      />
+      <SelectionServiceDrawer1
+        isOpen={showServiceModal1}
+        items={services1}
+        selectedIds={services1.filter((s) => s.isSelected).map((s) => s.id)}
+        onConfirm={(selectedIds) => {
+          // 先取消所有已选中的保险服务
+          services1.forEach((s) => {
+            if (s.isSelected) toggleSelection1(s.id);
+          });
+          // 然后选中传入的 selectedIds
+          selectedIds.forEach((id) => {
+            toggleSelection1(id);
+          });
+          setShowServiceModal1(false);
+        }}
+        onOpenChange={setShowServiceModal1}
       />
 
       <SelectionAddressDrawer

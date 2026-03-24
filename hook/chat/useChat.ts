@@ -2,8 +2,9 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { addToast } from "@heroui/react";
 import { useTranslations } from "next-intl";
 
-import { fetchChatHistory, uploadChatImage } from "@/services";
 import { useUserInfo } from "../business";
+
+import { fetchChatHistory, uploadChatImage } from "@/services";
 
 export interface Message {
   id: number | string;
@@ -17,7 +18,7 @@ export interface Message {
 export function useChat(isOpen: boolean) {
   const t = useTranslations("components.chatbox");
   const { data: user } = useUserInfo();
-  
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [receiverId, setReceiverId] = useState<number | null>(null);
   const [hasAgent, setHasAgent] = useState(false);
@@ -40,6 +41,7 @@ export function useChat(isOpen: boolean) {
         socketRef.current.close();
         socketRef.current = null;
       }
+
       return;
     }
 
@@ -54,8 +56,10 @@ export function useChat(isOpen: boolean) {
       if (!allowReconnect) return;
 
       const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
+
       if (!apiBase) {
         console.error("❌ 缺少 NEXT_PUBLIC_API_BASE_URL");
+
         return;
       }
 
@@ -157,6 +161,7 @@ export function useChat(isOpen: boolean) {
           shouldScrollRef.current = true;
 
           const hisM = records.find((item: any) => item.sender === "SERVER");
+
           if (hisM) {
             receiverIdRef.current = hisM.userId;
             setReceiverId(hisM.userId);
@@ -165,7 +170,7 @@ export function useChat(isOpen: boolean) {
           setMessages((prev) => [...newMessages, ...prev]);
           setPage((prev) => prev + 1);
           setHasMoreHistory(currentPage < lastPage);
-          shouldScrollRef.current = false; 
+          shouldScrollRef.current = false;
         }
       } catch (err) {
         console.error("获取历史消息失败", err);
@@ -173,7 +178,7 @@ export function useChat(isOpen: boolean) {
         setIsLoadingHistory(false);
       }
     },
-    [user?.id, page, hasMoreHistory, isLoadingHistory]
+    [user?.id, page, hasMoreHistory, isLoadingHistory],
   );
 
   // --- Initial Load Effect ---
@@ -199,6 +204,7 @@ export function useChat(isOpen: boolean) {
     const hours = String(now.getHours()).padStart(2, "0");
     const minutes = String(now.getMinutes()).padStart(2, "0");
     const seconds = String(now.getSeconds()).padStart(2, "0");
+
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   };
 
@@ -209,6 +215,7 @@ export function useChat(isOpen: boolean) {
 
       if (!socket || socket.readyState !== WebSocket.OPEN) {
         addToast({ title: t("connectionLost"), color: "danger" });
+
         return;
       }
 
@@ -224,11 +231,17 @@ export function useChat(isOpen: boolean) {
 
       setMessages((prev) => [
         ...prev,
-        { id: `local-${Date.now()}`, sender: "user", text: msgText, type, createTime: getCurrentFormattedTime() },
+        {
+          id: `local-${Date.now()}`,
+          sender: "user",
+          text: msgText,
+          type,
+          createTime: getCurrentFormattedTime(),
+        },
       ]);
       shouldScrollRef.current = true;
     },
-    [t]
+    [t],
   );
 
   // --- Upload & Send Image ---
@@ -241,7 +254,14 @@ export function useChat(isOpen: boolean) {
 
       setMessages((prev) => [
         ...prev,
-        { id: tempId, sender: "user", type: "IMAGE", sending: true, text: tempUrl, createTime: getCurrentFormattedTime() },
+        {
+          id: tempId,
+          sender: "user",
+          type: "IMAGE",
+          sending: true,
+          text: tempUrl,
+          createTime: getCurrentFormattedTime(),
+        },
       ]);
       shouldScrollRef.current = true;
 
@@ -259,27 +279,30 @@ export function useChat(isOpen: boolean) {
               sendTime: new Date().toISOString(),
             };
 
-            if (receiverIdRef.current) payload.receiverId = receiverIdRef.current;
+            if (receiverIdRef.current)
+              payload.receiverId = receiverIdRef.current;
             socket.send(JSON.stringify(payload));
           }
 
           setMessages((prev) =>
             prev.map((msg) =>
-              msg.id === tempId ? { ...msg, sending: false, text: url } : msg
-            )
+              msg.id === tempId ? { ...msg, sending: false, text: url } : msg,
+            ),
           );
         }
       } catch (err) {
         setMessages((prev) =>
           prev.map((msg) =>
-            msg.id === tempId ? { ...msg, sending: false, text: t("imageSendFail") } : msg
-          )
+            msg.id === tempId
+              ? { ...msg, sending: false, text: t("imageSendFail") }
+              : msg,
+          ),
         );
       } finally {
         URL.revokeObjectURL(tempUrl);
       }
     },
-    [user?.id, t]
+    [user?.id, t],
   );
 
   return {

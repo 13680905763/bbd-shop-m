@@ -54,15 +54,17 @@ export default function InvitedUser() {
                     {item.createTime}
                   </span>
                 </div>
-                <div className="flex items-center justify-between mt-1">
+                <div className="mt-1 flex items-center justify-between">
                   <div className="truncate text-sm text-gray-500">
                     {item.email}
                   </div>
-                  <div className={`text-xs px-2 py-0.5 rounded-full ${
-                    item.status === 1 
-                      ? "bg-[#f0700c] text-white" 
-                      : "bg-gray-100 text-gray-500"
-                  }`}>
+                  <div
+                    className={`rounded-full px-2 py-0.5 text-xs ${
+                      item.status === 1
+                        ? "bg-[#f0700c] text-white"
+                        : "bg-gray-100 text-gray-500"
+                    }`}
+                  >
                     {item.status === 1 ? t("active") : t("inactive")}
                   </div>
                 </div>

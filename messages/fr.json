@@ -62,7 +62,7 @@
         },
         "drawer": {
             "selectionService": {
-                "title": "Services Supplémentaires",
+                "title": "Service Additionnel",
                 "free": "Gratuit",
                 "add": "Ajouter",
                 "remark": "Remarque",
@@ -465,6 +465,7 @@
                 "shipping": "En transit",
                 "received": "Reçus"
             },
+            "hasInsurance": "Service d'assurance acheté",
             "selectAll": "Tout sélectionner",
             "submitPay": "Paiement groupé",
             "noOrders": "Aucun colis pour le moment",
@@ -486,6 +487,7 @@
             "weight": "Poids :",
             "size": "Dimensions :",
             "serviceFee": "Frais de service :",
+            "insuranceFee": "Frais d'assurance :",
             "totalFee": "Frais totaux :",
             "shippingCode": "Numéro de suivi :",
             "cancelModal": {
@@ -718,7 +720,8 @@
             "shippingAddress": "Adresse de Livraison",
             "addAddress": "Ajouter une Adresse",
             "commodityList": "Liste des Marchandises",
-            "packagingMethod": "Méthode d'Emballage",
+            "additionalService": "Service Additionnel",
+            "insuranceService": "Service d'Inspection",
             "deliveryRoute": "Itinéraire de Livraison",
             "routesMessage": "Veuillez sélectionner un itinéraire de livraison",
             "textareaPlaceholder": "Si vous avez des exigences particulières, veuillez laisser une note ici",
@@ -739,6 +742,7 @@
             "estimating": "Estimation des frais en cours...",
             "estimatedShipping": "Frais d'expédition estimés",
             "estimatedService": "Frais de service estimés",
+            "estimatedInsurance": "Frais d'inspection estimés",
             "estimatedTotal": "Total estimé",
             "estimatedTip": "Le coût final sera affiché après l'emballage des colis",
             "toast": {

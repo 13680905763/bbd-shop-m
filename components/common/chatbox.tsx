@@ -11,24 +11,20 @@ import {
   addToast,
   Avatar,
 } from "@heroui/react";
-import {
-  FaComments,
-  FaImage,
-  FaTimes,
-  FaExpand,
-  FaCompress,
-  FaShoppingBag,
-} from "react-icons/fa";
+import { FaComments, FaImage, FaTimes, FaShoppingBag } from "react-icons/fa";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 
-import { useChat } from "@/hook/chat/useChat";
 import OrderListModal from "./order-list-modal";
+
+import { useChat } from "@/hook/chat/useChat";
+import { useGlobalStore } from "@/store";
 
 export default function ChatBox() {
   const t = useTranslations("components.chatbox");
+  const { currency } = useGlobalStore();
 
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
@@ -98,6 +94,7 @@ export default function ChatBox() {
 
   const handleSend = () => {
     const msgText = input.trim();
+
     if (!msgText) return;
     sendMessage(msgText, "TEXT");
     setInput("");
@@ -106,6 +103,7 @@ export default function ChatBox() {
   const insertEmoji = (emoji: string) => {
     if (!textareaRef.current) {
       setInput((prev) => prev + emoji);
+
       return;
     }
     const textarea = textareaRef.current;
@@ -123,13 +121,21 @@ export default function ChatBox() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+
     if (!file) return;
 
     // Check file size (e.g., 5MB limit)
     const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
     if (file.size > MAX_FILE_SIZE) {
-      addToast({ title: t("imageTooLarge", { defaultMessage: "Image size cannot exceed 5MB" }), color: "danger" });
+      addToast({
+        title: t("imageTooLarge", {
+          defaultMessage: "Image size cannot exceed 5MB",
+        }),
+        color: "danger",
+      });
       if (fileInputRef.current) fileInputRef.current.value = "";
+
       return;
     }
 
@@ -148,7 +154,7 @@ export default function ChatBox() {
       >
         <Button
           isIconOnly
-          className="w-10 h-10 shadow-lg"
+          className="h-10 w-10 shadow-lg"
           color="primary"
           radius="full"
           onPress={() => {
@@ -159,40 +165,45 @@ export default function ChatBox() {
                 timeout: 1000,
                 color: "danger",
               });
+
               return;
             }
             setIsOpen(true);
           }}
         >
-          <FaComments className="w-6 h-6" />
+          <FaComments className="h-6 w-6" />
         </Button>
       </motion.div>
 
       <Modal
         // className={"!fixed bottom-20 right-6 !m-0"}
-        size={'full'}
-        placement='center'
         backdrop="opaque"
-        radius="none"
-        scrollBehavior='inside'
         isOpen={isOpen}
+        placement="center"
+        radius="none"
+        scrollBehavior="inside"
+        size={"full"}
         onOpenChange={setIsOpen}
       >
         <ModalContent
-          className={`p-0 m-0 fixed  overflow-hidden transition-all duration-300 `}
+          className={`fixed m-0 overflow-hidden p-0 transition-all duration-300`}
         >
-          <Card className="flex h-full w-full flex-col"  radius="none">
+          <Card className="flex h-full w-full flex-col" radius="none">
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-4  text-white">
+            <div className="flex items-center justify-between px-4 py-4 text-white">
               <div className="flex items-center gap-2">
-                <img alt="logo" className="w-15 h-6 rounded " src="/m/logo.png" />
+                <img
+                  alt="logo"
+                  className="w-15 h-6 rounded"
+                  src="/m/logo.png"
+                />
                 <span className="text-sm font-semibold text-[#f0700c]">
                   {t("onlineSupport")}
                 </span>
               </div>
               <div className="flex items-center gap-2 text-[#f0700c]">
                 <button
-                  className="rounded p-1 hover:bg-white/20 transition-colors"
+                  className="rounded p-1 transition-colors hover:bg-white/20"
                   onClick={() => setIsOpen(false)}
                 >
                   <FaTimes />
@@ -218,31 +229,41 @@ export default function ChatBox() {
               {messages.map((msg) => (
                 <div
                   key={msg.id}
-                  className={`flex gap-2 w-full ${msg.sender === "user" ? "flex-row-reverse" : "flex-row"
-                    }`}
+                  className={`flex w-full gap-2 ${
+                    msg.sender === "user" ? "flex-row-reverse" : "flex-row"
+                  }`}
                 >
                   {/* Avatar */}
                   <div className="flex-shrink-0">
                     {msg.sender === "bot" ? (
-                      <Avatar src="/logo.png" size="sm" className="bg-white border p-1" />
+                      <Avatar
+                        className="border bg-white p-1"
+                        size="sm"
+                        src="/logo.png"
+                      />
                     ) : (
-                      <Avatar src={user?.avatarUrl || ""} name={user?.nickname?.[0] || "U"} size="sm" />
+                      <Avatar
+                        name={user?.nickname?.[0] || "U"}
+                        size="sm"
+                        src={user?.avatarUrl || ""}
+                      />
                     )}
                   </div>
 
                   {/* Message Bubble */}
                   <div
-                    className={`w-fit max-w-[75%] break-words rounded-lg p-2 ${msg.sender === "user"
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-200 text-black"
-                      }`}
+                    className={`w-fit max-w-[75%] break-words rounded-lg p-2 ${
+                      msg.sender === "user"
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200 text-black"
+                    }`}
                   >
                     <div className="flex flex-col gap-1">
                       {msg.type === "IMAGE" && msg.text ? (
                         <div className="relative inline-block">
                           <Image
                             alt="image"
-                            className="max-w-[200px] max-h-[200px] object-contain rounded"
+                            className="max-h-[200px] max-w-[200px] rounded object-contain"
                             src={msg.text}
                           />
                           {msg.sending && (
@@ -252,33 +273,46 @@ export default function ChatBox() {
                           )}
                         </div>
                       ) : msg.type === "ORDER" ? (
-                        <div className="rounded bg-orange-100 p-2 font-mono text-sm text-black w-full">
+                        <div className="w-full rounded bg-orange-100 p-2 font-mono text-sm text-black">
                           {(() => {
                             try {
                               const order = JSON.parse(msg.text || "{}");
+
                               return (
                                 <div className="flex flex-col gap-2">
-                                  <div className="font-semibold border-b border-yellow-200 pb-1">
-                                    {t("orderNo")}{order.orderCode}
+                                  <div className="border-b border-yellow-200 pb-1 font-semibold">
+                                    {t("orderNo")}
+                                    {order.orderCode}
                                   </div>
-                                  <div className="flex flex-col gap-2 max-h-40 overflow-y-auto">
-                                    {order.products?.map((product: any, idx: number) => (
-                                      <div key={idx} className="flex gap-2 items-start">
-                                        <Image
-                                          src={product.picUrl}
-                                          alt="product"
-                                          className="w-12 h-12 object-cover rounded shrink-0"
-                                        />
-                                        <div className="flex-1 min-w-0">
-                                          <div className="text-xs line-clamp-2 leading-tight">
-                                            {product.productTitle}
-                                          </div>
-                                          <div className="text-xs text-gray-500 mt-1">
-                                            {t("price")}{product.price} x {product.quantity}
+                                  <div className="flex max-h-40 flex-col gap-2 overflow-y-auto">
+                                    {order.products?.map(
+                                      (product: any, idx: number) => (
+                                        <div
+                                          key={idx}
+                                          className="flex items-start gap-2"
+                                        >
+                                          <Image
+                                            alt="product"
+                                            className="h-10 w-10 flex-shrink-0 rounded object-cover"
+                                            referrerPolicy="no-referrer"
+                                            src={
+                                              product.skuPicUrl ||
+                                              product.picUrl
+                                            }
+                                          />
+                                          <div className="flex-1 text-xs">
+                                            <div className="line-clamp-2">
+                                              {product.productTitle}
+                                            </div>
+                                            <div className="mt-1 text-gray-500">
+                                              {t("price")}
+                                              {product.price} x{" "}
+                                              {product.quantity}
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                    ))}
+                                      ),
+                                    )}
                                   </div>
                                 </div>
                               );
@@ -291,10 +325,13 @@ export default function ChatBox() {
                         msg.text
                       )}
                       <span
-                        className={`text-[10px] self-end ${msg.sender === "user" ? "text-blue-100" : "text-gray-500"
-                          }`}
+                        className={`self-end text-[10px] ${
+                          msg.sender === "user"
+                            ? "text-blue-100"
+                            : "text-gray-500"
+                        }`}
                       >
-                        {(msg?.createTime)}
+                        {msg?.createTime}
                       </span>
                     </div>
                   </div>
@@ -387,7 +424,15 @@ export default function ChatBox() {
           isOpen={showOrderModal}
           onClose={() => setShowOrderModal(false)}
           onSendOrder={(order) => {
-            sendMessage(JSON.stringify(order), "ORDER");
+            const orderWithCurrency = {
+              ...order,
+              products: order.products?.map((p: any) => ({
+                ...p,
+                price: `${currency.symbol}${p.price}`,
+              })),
+            };
+
+            sendMessage(JSON.stringify(orderWithCurrency), "ORDER");
             setShowOrderModal(false);
           }}
         />

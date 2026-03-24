@@ -6,6 +6,7 @@ import { Divider, Button } from "@heroui/react";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useTranslations } from "next-intl";
 import { FaGoogle } from "react-icons/fa";
+
 import { Logo } from "@/components/ui/icons";
 import { useGoogleLoginFlow } from "@/hook/business";
 export default function AuthLayout({
@@ -27,6 +28,7 @@ export default function AuthLayout({
       });
     },
   });
+
   return (
     <div className="bg h-[100dvh] p-2">
       <button onClick={() => router.back()}>
@@ -44,8 +46,8 @@ export default function AuthLayout({
       <div className="flex justify-center">
         <Button
           className="w-full border border-gray-300 bg-white font-semibold"
-          startContent={<FaGoogle />}
           isLoading={isLoggingIn}
+          startContent={<FaGoogle />}
           onPress={() => handleGoogleLogin()}
         >
           Sign in with Google

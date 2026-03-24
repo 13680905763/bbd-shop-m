@@ -34,6 +34,7 @@ export default function SelectionCouponDrawer({
 
   const handleConfirm = () => {
     const selectedCoupon = couponList.find((c) => c.id === tempSelectedId);
+
     onSelect(selectedCoupon);
     onOpenChange(false);
   };
@@ -52,11 +53,12 @@ export default function SelectionCouponDrawer({
       <div className="space-y-3 py-2">
         {couponList?.map((coupon) => {
           const isSelected = tempSelectedId === coupon.id;
+
           return (
             <div
-              role="button"
               key={coupon.id}
               className="relative cursor-pointer"
+              role="button"
               onClick={() => handleToggle(coupon.id)}
             >
               <div className="flex items-center gap-2 p-2">

@@ -33,11 +33,13 @@ export default function VerificationCodeItem({
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
+
     if (countdown > 0) {
       timer = setInterval(() => {
         setCountdown((prev) => prev - 1);
       }, 1000);
     }
+
     return () => clearInterval(timer);
   }, [countdown]);
 
@@ -56,8 +58,9 @@ export default function VerificationCodeItem({
   };
 
   return (
-    <div className="flex gap-2 w-full items-start">
+    <div className="flex w-full items-start gap-2">
       <Input
+        className="flex-1"
         classNames={{
           input: "text-base",
           inputWrapper: "bg-white",
@@ -72,11 +75,12 @@ export default function VerificationCodeItem({
         value={value}
         variant="bordered"
         onValueChange={onChange}
-        className="flex-1"
       />
       <Button
         className="w-32 flex-shrink-0"
-        color={countdown > 0 || isSending || isSendDisabled ? "default" : "primary"}
+        color={
+          countdown > 0 || isSending || isSendDisabled ? "default" : "primary"
+        }
         isDisabled={countdown > 0 || isSending || isDisabled || isSendDisabled}
         isLoading={isSending}
         size={size}

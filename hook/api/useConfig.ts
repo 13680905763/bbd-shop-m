@@ -46,6 +46,14 @@ export function useWarehouseServicesList() {
     staleTime: 5 * 10 * 1000,
   });
 }
+/** 保险服务*/
+export function useWarehouseServicesList1() {
+  return useQuery({
+    queryKey: ["warehouseServicesList1"],
+    queryFn: () => configApi.listWarehouseServices1(),
+    staleTime: 5 * 10 * 1000,
+  });
+}
 export function useOrderServicesList() {
   return useQuery({
     queryKey: ["orderServicesList"],

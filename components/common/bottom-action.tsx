@@ -1,7 +1,8 @@
-import { useGlobalStore } from "@/store";
 import { Button, Checkbox } from "@heroui/react";
 import { useTranslations } from "next-intl";
 import React from "react";
+
+import { useGlobalStore } from "@/store";
 
 interface BottomActionProps {
   isAllSelected: boolean;

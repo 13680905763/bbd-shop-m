@@ -8,10 +8,7 @@ import { NavBar } from "antd-mobile";
 import ForwardAddress from "./forward-address";
 
 import { SelectionServiceDrawer } from "@/components/drawer";
-import {
-  useForwardingOrder,
-  useOrderServicesList,
-} from "@/hook/api";
+import { useForwardingOrder, useOrderServicesList } from "@/hook/api";
 import { useUserInfo } from "@/hook/business";
 import useEnhancedSelection from "@/hook/common/useEnhancedSelection";
 import FormItemRenderer, {
@@ -76,6 +73,7 @@ export default function ForwardingPage() {
       receivePhone: "13602579223",
       receiveAddress: "中国广东省惠州市水口街道荔城工业园胜豪科技大厦8A-801",
     };
+
     forwardingOrder(payload);
   };
 

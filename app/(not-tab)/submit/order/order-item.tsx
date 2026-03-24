@@ -8,7 +8,11 @@ import SourceIcon from "@/components/common/source-icon";
 import { useGlobalStore } from "@/store";
 import { ProductItem } from "@/components/common";
 
-export default function OrderItem({ order, openServiceModal, isExpired = false, }: any) {
+export default function OrderItem({
+  order,
+  openServiceModal,
+  isExpired = false,
+}: any) {
   const t = useTranslations("submit.order");
 
   const { currency } = useGlobalStore();
@@ -21,8 +25,8 @@ export default function OrderItem({ order, openServiceModal, isExpired = false, 
       </div>
       {order.products.map((product: any) => (
         <React.Fragment key={product?.propAndValue?.propId_valueId}>
-          <ProductItem product={product} isDisabled={isExpired} />
-          {!isExpired &&
+          <ProductItem isDisabled={isExpired} product={product} />
+          {!isExpired && (
             <div className="rounded-lg bg-[#f8f8f8] p-2">
               <div className="flex items-center justify-between">
                 <div className="flex flex-wrap items-center gap-2">
@@ -60,12 +64,10 @@ export default function OrderItem({ order, openServiceModal, isExpired = false, 
                 </Button>
               </div>
             </div>
-          }
+          )}
         </React.Fragment>
       ))}
-      {
-        !isExpired &&
-
+      {!isExpired && (
         <div className="text-right">
           <div>
             {t("shippingFee")}
@@ -88,7 +90,7 @@ export default function OrderItem({ order, openServiceModal, isExpired = false, 
             {order?.totalFee}
           </div>
         </div>
-      }
+      )}
     </div>
   );
 }

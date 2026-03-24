@@ -11,13 +11,17 @@ export interface SignUpRequest extends LoginRequest {
 }
 export const authApi = {
   /** 注册 */
-  signUp: (data: SignUpRequest): Promise<string> => request.post("/customer/sign-up", data),
+  signUp: (data: SignUpRequest): Promise<string> =>
+    request.post("/customer/sign-up", data),
   /** 注册邮箱验证 */
-  activateEmail: (data: any): Promise<string> => request.post("/customer/active", data,),
+  activateEmail: (data: any): Promise<string> =>
+    request.post("/customer/active", data),
   /** 登录 */
-  login: (data: LoginRequest): Promise<string> => request.post("/customer/login", data),
+  login: (data: LoginRequest): Promise<string> =>
+    request.post("/customer/login", data),
   /** 谷歌登录 */
-  loginWithGoogle: (data: any): Promise<string> => request.post("/customer/google/code", data),
+  loginWithGoogle: (data: any): Promise<string> =>
+    request.post("/customer/google/code", data),
   /** 退出登录 */
   logout: (): Promise<void> => request.get("/customer/logout"),
   /** 忘记密码 */

@@ -16,7 +16,7 @@ export default function CouponRedemption() {
   };
 
   return (
-    <div className="bg-white px-4 shrink-0">
+    <div className="shrink-0 bg-white px-4">
       <div className="flex gap-2">
         <Input
           classNames={{
@@ -27,11 +27,7 @@ export default function CouponRedemption() {
           value={couponCode}
           onValueChange={setCouponCode}
         />
-        <Button
-          color="primary"
-          isLoading={isChanging}
-          onPress={handleExchange}
-        >
+        <Button color="primary" isLoading={isChanging} onPress={handleExchange}>
           {t("redeem")}
         </Button>
       </div>

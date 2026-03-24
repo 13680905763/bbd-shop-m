@@ -1,10 +1,10 @@
 "use client";
 import { Checkbox } from "@heroui/react";
+import { FaTrashAlt } from "react-icons/fa";
+import { useTranslations } from "next-intl";
 
 import SourceIcon from "@/components/common/source-icon";
 import { ProductItem } from "@/components/common";
-import { FaTrashAlt } from "react-icons/fa";
-import { useTranslations } from "next-intl";
 
 export default function CartItem({
   cart,
@@ -14,7 +14,7 @@ export default function CartItem({
   toggle,
   onQuantityChange,
   onRemark,
-  onDelete
+  onDelete,
 }: any) {
   const t = useTranslations("cart");
 
@@ -31,36 +31,37 @@ export default function CartItem({
         <SourceIcon source={cart.cartList[0]?.source} />
         <div className="text-title">{cart?.shopName}</div>
       </div>
-      {
-        cart.cartList.map((p: any) => (
-          <div key={p.id} className="relative group">
-            <ProductItem
-              isDisabled={p.status === 3}
-              isOperated={true}
-              isSelected={isSelected}
-              product={p}
-              type="cart"
-              onRemark={(id: string, remark: string) => onRemark({ id, remark })}
-              onToggle={() => toggle(p.id)}
-              onUpdateQuantity={(id: string, quantity: number) => onQuantityChange({ id, quantity })}
-            />
-            {p.status === 3 && (
-              <div className="absolute inset-0 bg-gray-50/80 flex items-center justify-center z-10 rounded-lg backdrop-blur-[1px]">
-                <div className="flex items-center gap-4 p-3 rounded-xl ">
-                  <span className="text-gray-500 font-medium">
-                    {t("itemExpired")}
-                  </span>
-                  <button
-                    className="text-gray-400 hover:text-red-500 transition-colors p-1"
-                    onClick={() => onDelete([p.id])}
-                  >
-                    <FaTrashAlt className="w-4 h-4" />
-                  </button>
-                </div>
+      {cart.cartList.map((p: any) => (
+        <div key={p.id} className="group relative">
+          <ProductItem
+            isDisabled={p.status === 3}
+            isOperated={true}
+            isSelected={isSelected}
+            product={p}
+            type="cart"
+            onRemark={(id: string, remark: string) => onRemark({ id, remark })}
+            onToggle={() => toggle(p.id)}
+            onUpdateQuantity={(id: string, quantity: number) =>
+              onQuantityChange({ id, quantity })
+            }
+          />
+          {p.status === 3 && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center rounded-lg bg-gray-50/80 backdrop-blur-[1px]">
+              <div className="flex items-center gap-4 rounded-xl p-3">
+                <span className="font-medium text-gray-500">
+                  {t("itemExpired")}
+                </span>
+                <button
+                  className="p-1 text-gray-400 transition-colors hover:text-red-500"
+                  onClick={() => onDelete([p.id])}
+                >
+                  <FaTrashAlt className="h-4 w-4" />
+                </button>
               </div>
-            )}
-          </div>
-        ))}
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   );
 }

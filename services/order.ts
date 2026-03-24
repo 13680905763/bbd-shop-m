@@ -4,7 +4,6 @@ import {
   createOrderByRechargeParams,
   CreateOrderPreviewKeyByCartParams,
   createOrderPreviewKeyByProductParams,
-  createPayOrderParams,
   OrderPreviewByCart,
 } from "@/types";
 
@@ -41,4 +40,3 @@ export const updateOrderPreviewCart = (
 export const updateOrderPreviewProduct = (
   data: any,
 ): Promise<OrderPreviewByCart> => request.post("/orders/preview", data);
-

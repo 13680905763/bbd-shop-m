@@ -7,7 +7,6 @@ import React, { useState } from "react";
 import { IoWallet } from "react-icons/io5";
 import { useTranslations } from "next-intl";
 
-import { walletApi } from "@/services/walletApi";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
 import { useGlobalStore } from "@/store";
 import { useWalletInfo } from "@/hook/api";
@@ -36,6 +35,7 @@ export default function WalletRechargePage() {
         currencyAmount: Number(currentPrice),
         currencyCode: currency.label,
       });
+
       router.push(`/payment/${bizCode}`);
       // const res: any = await walletApi.payPaypel(
       //   `amount=${currentPrice}&returnUrl=${window.location.origin + "/payment/result?paymentMethod=PAYPAL"}`,
@@ -76,7 +76,7 @@ export default function WalletRechargePage() {
             {wallet?.availabalBalance}
           </div>
           <Button
-            className="w-full button-default"
+            className="button-default w-full"
             onPress={() => router.push("/wallet/withdrawal")}
           >
             {t("withdraw")}
@@ -90,10 +90,11 @@ export default function WalletRechargePage() {
             {priceList.map((item) => (
               <button
                 key={item}
-                className={`flex items-center justify-center rounded-lg bg-white py-3 ${Number(currentPrice) === item
-                  ? "border border-orange-500 font-semibold text-orange-600"
-                  : ""
-                  }`}
+                className={`flex items-center justify-center rounded-lg bg-white py-3 ${
+                  Number(currentPrice) === item
+                    ? "border border-orange-500 font-semibold text-orange-600"
+                    : ""
+                }`}
                 onClick={() => setCurrentPrice(item)}
               >
                 {currency.symbol} {item}

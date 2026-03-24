@@ -1,5 +1,6 @@
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { addToast } from "@heroui/react";
+
 import { ApiResponse } from "@/types";
 import { useGlobalStore } from "@/store";
 
@@ -16,9 +17,11 @@ export const request = axios.create({
 request.interceptors.request.use(
   (config) => {
     const { language, currency } = useGlobalStore.getState();
+
     config.headers["X-Language"] = language;
     config.headers["X-Currency"] = currency.value;
     config.headers["X-Timezone"] = "Asia/Shanghai";
+
     return config;
   },
   (error) => Promise.reject(error),
@@ -27,23 +30,23 @@ request.interceptors.request.use(
 request.interceptors.response.use(
   (response: AxiosResponse<ApiResponse<any>>) => {
     const res = response.data;
+    console.log('res');
+
     // 业务逻辑失败
     if (!res.success) {
       return Promise.reject(new Error(res.msg || "请求失败"));
     }
+
     // 成功直接返回数据
     return res.data || res.msg;
   },
   (error: AxiosError<any>) => {
     // 先获取 config，并扩展类型
-    const config = error.config as any;
-    const showToast = config?.showToast ?? false;
     const status = error.response?.status;
-    if (status === 401) {
-      if (showToast) {
-        addToast({ title: "未登录", color: "danger" });
-      }
-      return null;
+
+    if (status == 401) {
+        // addToast({ title: "please login first", color: "danger" });
+      return Promise.reject(null);
     }
     return Promise.reject(error);
   },

@@ -28,4 +28,7 @@ export const goodsApi = {
   /** 搜索商品 */
   listSearch: (data: any): Promise<any> =>
     request.post("/product/search/image", data),
+  /** 关键字搜索商品 */
+  searchKeyword: (data: any): Promise<any> =>
+    request.post("/product/search/keyword", data),
 };

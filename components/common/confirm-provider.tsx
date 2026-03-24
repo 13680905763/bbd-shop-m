@@ -29,7 +29,17 @@ export interface ConfirmOptions {
   showConfirm?: boolean; // 新增控制是否显示确认按钮的选项
   isLoading?: boolean; // 外部控制 loading
   hideCloseButton?: boolean; // 新增控制是否隐藏关闭按钮的选项
-  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";  // 新增控制弹窗大小的选项
+  size?:
+    | "xs"
+    | "sm"
+    | "md"
+    | "lg"
+    | "xl"
+    | "2xl"
+    | "3xl"
+    | "4xl"
+    | "5xl"
+    | "full"; // 新增控制弹窗大小的选项
 }
 
 // 2. 定义 Context
@@ -50,7 +60,6 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
   const [options, setOptions] = useState<ConfirmOptions | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-
   // 使用 ref 存储 resolve 函数，以便在 confirm 中调用
   const resolveRef = useRef<((value: boolean) => void) | null>(null);
   const confirm = useCallback((opts: ConfirmOptions) => {
@@ -67,8 +76,6 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
       resolveRef.current = resolve;
     });
   }, []);
-
-
 
   const close = useCallback(() => {
     resolveRef.current?.(false);
@@ -87,6 +94,7 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
         await Promise.resolve(options.onConfirm?.());
       } catch (error) {
         console.error("Confirm action failed:", error);
+
         return; // 出错时不关闭弹窗
       } finally {
         setIsLoading(false);
@@ -101,14 +109,17 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
     resolveRef.current?.(false);
     close();
   };
-  console.log('modal渲染');
+
+  console.log("modal渲染");
 
   return (
     <ConfirmContext.Provider value={{ confirm, close }}>
       {children}
       {options && (
         <Modal
-          hideCloseButton={options.hideCloseButton || isLoading || options.isLoading}
+          hideCloseButton={
+            options.hideCloseButton || isLoading || options.isLoading
+          }
           isDismissable={false}
           isOpen={isOpen}
           placement="center"

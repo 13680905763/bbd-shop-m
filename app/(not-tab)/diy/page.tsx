@@ -54,10 +54,13 @@ export default function DIYPage() {
 
   // ✅ 计算所有服务费的总和
   const totalServiceFee = useMemo(() => {
-    return getSelectedItems().reduce((acc, item) => {
-      const fee = parseFloat(item.price || "0") * item.quantity;
-      return acc + fee;
-    }, 0).toFixed(2);
+    return getSelectedItems()
+      .reduce((acc, item) => {
+        const fee = parseFloat(item.price || "0") * item.quantity;
+
+        return acc + fee;
+      }, 0)
+      .toFixed(2);
   }, [servicesList]);
 
   const productFeeConverted = currency.rate
@@ -166,9 +169,6 @@ export default function DIYPage() {
     }
   };
 
-
-
-
   return (
     <>
       <NavBar className="bg-white" onBack={() => router.push("/")}>
@@ -237,7 +237,9 @@ export default function DIYPage() {
               </span>
             </div>
             <div className="mt-2 flex items-center justify-between border-t pt-3">
-              <span className="text-base font-semibold text-gray-800">{t("totalCost")}</span>
+              <span className="text-base font-semibold text-gray-800">
+                {t("totalCost")}
+              </span>
               <span className="text-2xl font-bold text-primary">
                 {currency.symbol} {totalAmount}
               </span>

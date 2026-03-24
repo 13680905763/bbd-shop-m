@@ -3,8 +3,38 @@ import React from "react";
 
 import { useGlobalStore } from "@/store";
 
-export default function SelectedServiceItem({ service }: any) {
+export default function SelectedServiceItem({
+  service,
+  type = "normal",
+}: {
+  service: any;
+  type?: "normal" | "insurance";
+}) {
   const { currency } = useGlobalStore();
+
+  if (type === "insurance") {
+    return (
+      <div className="flex items-start justify-between rounded-lg border border-gray-100 bg-gray-50 p-3 transition hover:bg-gray-100/50">
+        <div className="flex min-w-0 flex-1 gap-3">
+          <Image
+            alt={service.serviceName}
+            className="flex-shrink-0 rounded-md object-cover ring-1 ring-gray-100"
+            height={56}
+            src={service.sample?.[0] || service.sample}
+            width={56}
+          />
+          <div className="flex min-w-0 flex-1 flex-col gap-1">
+            <span className="text-sm font-semibold text-gray-900">
+              {service.serviceName}
+            </span>
+            <div className="line-clamp-4 text-xs text-gray-500">
+              {service.introduction}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex items-start justify-between rounded-lg border border-gray-100 bg-gray-50 p-2.5 transition hover:bg-gray-100/50">

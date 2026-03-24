@@ -4,12 +4,13 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 
+import CouponRedemption from "./coupon-redemption";
+
 import { CommonTabs } from "@/components/common";
 import { useUserCoupon } from "@/hook/api";
 import { Coupon } from "@/types/wallet";
 import { BlockSpinner, EmptyState } from "@/components/ui";
 import { CouponItem } from "@/components/item-list";
-import CouponRedemption from "./coupon-redemption";
 
 const tabKeyToStatusCode: Record<string, string> = {
   unused: "1", // 可用
@@ -22,12 +23,13 @@ export default function CouponPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("unused");
 
-  const { data, isFetching, } = useUserCoupon({
+  const { data, isFetching } = useUserCoupon({
     status: tabKeyToStatusCode[activeTab],
   });
 
   const renderCouponContent = () => {
     if (!data?.length && !isFetching) return <EmptyState />;
+
     return (
       <>
         {isFetching && <BlockSpinner />}
@@ -56,9 +58,10 @@ export default function CouponPage() {
       content: renderCouponContent(),
     },
   ];
+
   return (
     <>
-      <NavBar className="bg-white shrink-0" onBack={() => router.back()}>
+      <NavBar className="shrink-0 bg-white" onBack={() => router.back()}>
         <span className="navbar-title">{t("title")}</span>
       </NavBar>
       <CouponRedemption />

@@ -21,12 +21,17 @@ export default function Estimation() {
     useCategoryOptions();
 
   const [searchParams, setSearchParams] = useState<any>(null);
-  const { data: lineEstimate = [], isFetching: isSearching, isError, error } =
-    useLineEstimate(searchParams);
+  const {
+    data: lineEstimate = [],
+    isFetching: isSearching,
+    isError,
+    error,
+  } = useLineEstimate(searchParams);
 
   const routes = Array.isArray(lineEstimate) ? lineEstimate : [];
 
   const router = useRouter();
+
   // 在组件里处理错误提示
   useEffect(() => {
     if (isError && error) {

@@ -43,12 +43,17 @@ export default function ChangeAddressModal({
     text: string;
   } | null>(null);
 
-  const { data: lineData, isPending: isRouteLoading, isError, error } = usePreviewChangeLine1(
+  const {
+    data: lineData,
+    isPending: isRouteLoading,
+    isError,
+    error,
+  } = usePreviewChangeLine1(
     currentWaybill && selectedAddressId
       ? {
-        waybillId: currentWaybill.id,
-        addressId: selectedAddressId,
-      }
+          waybillId: currentWaybill.id,
+          addressId: selectedAddressId,
+        }
       : null,
   );
   const [showRouteModal, setShowRouteModal] = useState(false);
@@ -119,12 +124,13 @@ export default function ChangeAddressModal({
       >
         {resultMessage ? (
           <div
-            className={`rounded-lg border p-4 text-center ${resultMessage.type === "success"
-              ? "border-green-200 bg-green-50 text-green-700"
-              : resultMessage.type === "warning"
-                ? "border-yellow-200 bg-yellow-50 text-yellow-700"
-                : "border-blue-200 bg-blue-50 text-blue-700"
-              }`}
+            className={`rounded-lg border p-4 text-center ${
+              resultMessage.type === "success"
+                ? "border-green-200 bg-green-50 text-green-700"
+                : resultMessage.type === "warning"
+                  ? "border-yellow-200 bg-yellow-50 text-yellow-700"
+                  : "border-blue-200 bg-blue-50 text-blue-700"
+            }`}
           >
             {resultMessage.text}
           </div>

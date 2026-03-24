@@ -25,11 +25,21 @@ export const waybillApi = {
   },
   /** 运单更换路线预览 */
   previewChangeLine(waybillId: string, addressId?: string): Promise<any> {
-    return request.get(`/waybill/change/line/fee?id=${waybillId}${addressId ? `&addressId=${addressId}` : ""}`);
+    return request.get(
+      `/waybill/change/line/fee?id=${waybillId}${addressId ? `&addressId=${addressId}` : ""}`,
+    );
   },
   /** 运单更换路线预览 */
-  previewChangeLine1({ waybillId, addressId }: { waybillId: string, addressId?: string }): Promise<any> {
-    return request.get(`/waybill/change/line/fee?id=${waybillId}${addressId ? `&addressId=${addressId}` : ""}`);
+  previewChangeLine1({
+    waybillId,
+    addressId,
+  }: {
+    waybillId: string;
+    addressId?: string;
+  }): Promise<any> {
+    return request.get(
+      `/waybill/change/line/fee?id=${waybillId}${addressId ? `&addressId=${addressId}` : ""}`,
+    );
   },
   /** 包裹物流查询 */
   trackDetail(params: any): Promise<any> {

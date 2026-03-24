@@ -11,7 +11,7 @@ import {
   Spinner,
 } from "@heroui/react";
 import { useTranslations } from "next-intl";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { IoChevronBack } from "react-icons/io5";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FaRegImage } from "react-icons/fa";
@@ -31,8 +31,19 @@ export default function Searchpage() {
   const searchParams = useSearchParams();
   const taobaoId = searchParams.get("TAOBAO") as string;
   const alibabaId = searchParams.get("1688") as string;
+  const keyword = searchParams.get("keyword") as string;
 
-  const [selectedTab, setSelectedTab] = useState<"TAOBAO" | "1688">("TAOBAO");
+  const [selectedTab, setSelectedTab] = useState<"TAOBAO" | "1688" | "WEIDIAN">(
+    keyword ? "WEIDIAN" : "TAOBAO",
+  );
+
+  useEffect(() => {
+    if (keyword) {
+      setSelectedTab("WEIDIAN");
+    } else {
+      setSelectedTab("TAOBAO");
+    }
+  }, [keyword]);
 
   // 根据当前 tab 选择 id
   const currentId = selectedTab === "TAOBAO" ? taobaoId : alibabaId;
@@ -45,10 +56,11 @@ export default function Searchpage() {
     fetchNextPage,
     hasNextPage,
   } = useSearchList({
-    imageId: currentId,
+    imageId: keyword ? undefined : currentId,
+    keyword: keyword ? keyword : undefined,
     source: selectedTab,
     size: 20,
-    enabled: !!currentId,
+    enabled: !!keyword || !!currentId,
   });
 
   console.log("data", data);
@@ -101,9 +113,11 @@ export default function Searchpage() {
     const data: any = Object.fromEntries(new FormData(e.currentTarget));
     const res: any = await getGoodsId({ url: data.url });
 
-    router.push(
-      `/goods/${res.source}/${res.sourceProductId}`, // 目标路由
-    );
+    if (res.keyword) {
+      router.push(`/goods/list?keyword=${encodeURIComponent(data.url)}`);
+    } else {
+      router.push(`/goods/${res.source}/${res.sourceProductId}`);
+    }
   };
   const renderSearchContent = () => {
     if (!list?.length && !loading) return <EmptyState />;
@@ -130,6 +144,7 @@ export default function Searchpage() {
                       alt={item.title}
                       className="h-[200px] w-full object-fill"
                       radius="none"
+                      referrerPolicy="no-referrer"
                       src={item.imageUrl}
                       width="100%"
                     />
@@ -157,18 +172,36 @@ export default function Searchpage() {
       </>
     );
   };
-  const tabs = [
-    {
-      key: "TAOBAO",
-      title: t("taobao"),
-      content: renderSearchContent(),
-    },
-    {
-      key: "1688",
-      title: t("1688"),
-      content: renderSearchContent(),
-    },
-  ];
+  const tabs = keyword
+    ? [
+      {
+        key: "TAOBAO",
+        title: t("taobao"),
+        content: renderSearchContent(),
+      },
+      {
+        key: "1688",
+        title: t("1688"),
+        content: renderSearchContent(),
+      },
+      {
+        key: "WEIDIAN",
+        title: "Weidian",
+        content: renderSearchContent(),
+      },
+    ]
+    : [
+      {
+        key: "TAOBAO",
+        title: t("taobao"),
+        content: renderSearchContent(),
+      },
+      {
+        key: "1688",
+        title: t("1688"),
+        content: renderSearchContent(),
+      },
+    ];
 
   return (
     <>
@@ -183,6 +216,7 @@ export default function Searchpage() {
               inputWrapper: "bg-white",
               input: "text-base",
             }}
+            defaultValue={keyword || ""}
             endContent={
               <div className="flex items-center gap-2">
                 {uploading ? (
@@ -236,7 +270,9 @@ export default function Searchpage() {
       </div>
       <CommonTabs
         tabs={tabs}
-        onSelectionChange={(key) => setSelectedTab(key as "TAOBAO" | "1688")}
+        onSelectionChange={(key) =>
+          setSelectedTab(key as "TAOBAO" | "1688" | "WEIDIAN")
+        }
       />
     </>
   );

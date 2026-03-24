@@ -96,7 +96,9 @@ export default function WaybillPage() {
     try {
       const bizCode = await cancelWaybill(waybillId);
 
-      if (bizCode) router.push("/payment/" + bizCode);
+      if (typeof bizCode === "string" && /^OBD\d+$/.test(bizCode)) {
+        router.push("/payment/" + bizCode);
+      }
     } catch {
     } finally {
       setModalType(null);

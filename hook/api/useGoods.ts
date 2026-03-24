@@ -49,7 +49,16 @@ export const useSearchList = (params: any) => {
   return useInfiniteQuery({
     queryKey: ["searchList", params],
     queryFn: ({ pageParam = 1 }) => {
-      const { enabled, ...restParams } = params;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { enabled, keyword, ...restParams } = params;
+
+      if (keyword) {
+        return goodsApi.searchKeyword({
+          ...restParams,
+          keyword,
+          current: pageParam,
+        });
+      }
 
       return goodsApi.listSearch({
         ...restParams,

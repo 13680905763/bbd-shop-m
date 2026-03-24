@@ -4,13 +4,17 @@ import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
 import { IoInformationCircleOutline } from "react-icons/io5";
-import { Button, Input, addToast } from "@heroui/react";
-
-import { useGlobalStore } from "@/store";
-import { useApplyWithdrawal, useWalletInfo, useWithdrawalList } from "@/hook/api";
-import { BlockSpinner, EmptyState, FullscreenLoader } from "@/components/ui";
+import { Button, Input } from "@heroui/react";
 import { useTranslations } from "next-intl";
 import { InfiniteScroll } from "antd-mobile";
+
+import { useGlobalStore } from "@/store";
+import {
+  useApplyWithdrawal,
+  useWalletInfo,
+  useWithdrawalList,
+} from "@/hook/api";
+import { BlockSpinner, EmptyState, FullscreenLoader } from "@/components/ui";
 
 export default function Settingpage() {
   const router = useRouter();
@@ -33,29 +37,33 @@ export default function Settingpage() {
 
   const { fee, finalAmount } = useMemo(() => {
     const num = parseFloat(amount);
+
     if (isNaN(num) || num <= 0) {
       return { fee: 0, finalAmount: 0 };
     }
     const calculatedFee = num * feeRate;
     const calculatedFinalAmount = num - calculatedFee;
+
     return { fee: calculatedFee, finalAmount: calculatedFinalAmount };
   }, [amount]);
 
   const handleConfirm = async () => {
     if (!amount) {
       setErrorMessage(t("placeholder"));
+
       return;
     }
     const num = parseFloat(amount);
+
     if (isNaN(num) || num <= 0) {
       setErrorMessage(t("placeholder"));
+
       return;
     }
     applyWithdrawal({
       currencyAmount: num,
       currencyCode: currency.label,
     });
-
   };
 
   const handleMaxClick = () => {
@@ -63,7 +71,8 @@ export default function Settingpage() {
     setErrorMessage("");
   };
 
-  const withdrawalList = withdrawalData?.pages?.flatMap((page: any) => page?.records) || [];
+  const withdrawalList =
+    withdrawalData?.pages?.flatMap((page: any) => page?.records) || [];
 
   if (isLoading) return <FullscreenLoader />;
 
@@ -111,7 +120,7 @@ export default function Settingpage() {
             }}
           />
 
-          <div className="-mt-2 flex justify-end text-small text-default-500 bg-white p-2 rounded-medium">
+          <div className="-mt-2 flex justify-end rounded-medium bg-white p-2 text-small text-default-500">
             <span>
               {t("available")}:{" "}
               <span className="font-medium text-default-700">
@@ -124,7 +133,7 @@ export default function Settingpage() {
           <div className="rounded-medium bg-white p-4">
             <div className="mb-2 flex items-center justify-between">
               <span className="text-small text-default-500">{t("fee")}:</span>
-              <span className="text-small font-medium ">
+              <span className="text-small font-medium">
                 -{currency.symbol}
                 {fee.toFixed(2)}
               </span>
@@ -133,13 +142,13 @@ export default function Settingpage() {
               <span className="font-semibold text-default-700">
                 {t("receive")}:
               </span>
-              <span className="text-xl  font-bold">
+              <span className="text-xl font-bold">
                 {currency.symbol}
                 {finalAmount.toFixed(2)}
               </span>
             </div>
 
-            <div className="mt-3 flex items-center gap-1 rounded-lg text-sm text-[#f0700c]   ">
+            <div className="mt-3 flex items-center gap-1 rounded-lg text-sm text-[#f0700c]">
               <IoInformationCircleOutline className="h-4 w-4 flex-shrink-0" />
               <span>{t("tip")}</span>
             </div>
@@ -170,33 +179,38 @@ export default function Settingpage() {
                       <span className="text-sm text-gray-500">
                         {item.createTime}
                       </span>
-                      <span>
-                        {item.status}
-                      </span>
+                      <span>{item.status}</span>
                     </div>
                     <div className="space-y-1 text-sm">
                       <div className="flex justify-between">
                         <span className="text-gray-500">{t("amount")}:</span>
                         <span className="font-medium">
-                          {currency.symbol}{item.amount}
+                          {currency.symbol}
+                          {item.amount}
                         </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-500">{t("fee")}:</span>
                         <span>
-                          {currency.symbol}{item.feeAmount}
+                          {currency.symbol}
+                          {item.feeAmount}
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-500">{t("actualAmount")}:</span>
+                        <span className="text-gray-500">
+                          {t("actualAmount")}:
+                        </span>
                         <span className="font-bold text-primary">
-                          {currency.symbol}{item.payAmount}
+                          {currency.symbol}
+                          {item.payAmount}
                         </span>
                       </div>
                       {item.remark && (
                         <div className="flex justify-between">
-                          <span className="text-gray-500 flex-shrink-0 mr-2">{t("remark")}:</span>
-                          <span className="text-right text-gray-600 break-all">
+                          <span className="mr-2 flex-shrink-0 text-gray-500">
+                            {t("remark")}:
+                          </span>
+                          <span className="break-all text-right text-gray-600">
                             {item.remark}
                           </span>
                         </div>

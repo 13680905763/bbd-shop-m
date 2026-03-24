@@ -25,7 +25,7 @@ export default memo(function ProductItem({
 
   return (
     <>
-      <div className="flex items-center gap-2 mb-2">
+      <div className="mb-2 flex items-center gap-2">
         {isOperated && (
           <Checkbox
             className="m-0 p-0"
@@ -63,25 +63,22 @@ export default memo(function ProductItem({
             </div>
           </button>
           <div className="flex items-center justify-between">
-            {
-              product?.price &&
+            {product?.price && (
               <span className="text-base font-bold">
                 {currency.symbol}
                 {product?.price}
               </span>
-            }
-            {
-              product.quantity &&
-                isOperated ? (
-                <Stepper
-                  max={type === "refund" ? product?.canRefundQty : undefined}
-                  min={1}
-                  value={product.quantity}
-                  onChange={(value) => onUpdateQuantity!(product.id, value)}
-                />
-              ) : (
-                <span className="text-base font-bold">x{product.quantity}</span>
-              )}
+            )}
+            {product.quantity && isOperated ? (
+              <Stepper
+                max={type === "refund" ? product?.canRefundQty : undefined}
+                min={1}
+                value={product.quantity}
+                onChange={(value) => onUpdateQuantity!(product.id, value)}
+              />
+            ) : (
+              <span className="text-base font-bold">x{product.quantity}</span>
+            )}
           </div>
         </div>
       </div>

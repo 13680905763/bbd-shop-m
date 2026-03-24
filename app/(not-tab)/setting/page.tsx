@@ -5,6 +5,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { IoChevronForwardSharp } from "react-icons/io5";
 import { useTranslations } from "next-intl";
+
 import { useLogoutFlow } from "@/hook/business";
 
 export default function Settingpage() {
@@ -21,7 +22,6 @@ export default function Settingpage() {
       path: "/setting/changepwd",
     },
   ];
-
 
   return (
     <>

@@ -1,9 +1,9 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { addToast } from "@heroui/react";
+import { useRouter } from "next/navigation";
 
 import { userApi } from "@/services/userApi";
 import { queryClient } from "@/lib/react-query";
-import { addToast } from "@heroui/react";
-import { useRouter } from "next/navigation";
 
 /** 获取用户信息 */
 export const useUserInfo = () => {
@@ -34,10 +34,11 @@ export const useUpdateUserInfo = () => {
       });
     },
   });
+
   return {
     updateUserInfo: updateUserInfoMutation.mutate,
     isUpdating: updateUserInfoMutation.isPending,
-  }
+  };
 };
 /** 上传用户头像 */
 export const useUploadAvatar = () => {
@@ -54,10 +55,11 @@ export const useUploadAvatar = () => {
       });
     },
   });
+
   return {
     uploadAvatar: uploadAvatarMutation.mutate,
     isUploading: uploadAvatarMutation.isPending,
-  }
+  };
 };
 export const useChangePassword = () => {
   const router = useRouter();
@@ -80,10 +82,11 @@ export const useChangePassword = () => {
       });
     },
   });
+
   return {
     changePassword: changePasswordMutation.mutate,
     isChanging: changePasswordMutation.isPending,
-  }
+  };
 };
 export const useUserExperience = () => {
   return useQuery({

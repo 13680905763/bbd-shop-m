@@ -44,17 +44,17 @@ export default function Settingpage() {
     // 校验两次密码一致性
     if (formData.newPassword !== formData.confirmPassword) {
       addToast({
-        title: t('tip'),
+        title: t("tip"),
         timeout: 1000,
         color: "danger",
       });
+
       return;
     }
     changePassword({
       oldPassword: formData.oldPassword,
       newPassword: formData.newPassword,
     });
-
   };
 
   return (
@@ -69,9 +69,9 @@ export default function Settingpage() {
             confirmText={t("form.submit")}
             fields={registerFormFields}
             formData={formData}
+            isLoading={isChanging}
             onChange={setFormData}
             onSubmit={handleSubmit}
-            isLoading={isChanging}
           />
         </div>
       </div>

@@ -1,9 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
-import { authApi, LoginRequest, SignUpRequest } from "@/services";
-import { queryClient } from "@/lib/react-query";
 import { addToast } from "@heroui/react";
 import { useState } from "react";
+
+import { authApi, LoginRequest, SignUpRequest } from "@/services";
+import { queryClient } from "@/lib/react-query";
 // 注册验证
 export const useSignUpFlow = () => {
   const router = useRouter();
@@ -57,17 +58,19 @@ export const useLoginFlow = () => {
     },
     onError: (error: any) => {
       const message = error?.message || "Login failed, please try again";
+
       addToast({
         title: message,
         timeout: 1000,
-        color: "danger"
+        color: "danger",
       });
     },
   });
+
   return {
     login: login.mutate,
     isLoggingIn: login.isPending,
-  }
+  };
 };
 export const useGoogleLoginFlow = () => {
   const router = useRouter();
@@ -77,6 +80,7 @@ export const useGoogleLoginFlow = () => {
       authApi.loginWithGoogle(data),
     onSuccess: () => {
       const redirect = searchParams?.get("redirect") || "/dashboard";
+
       queryClient.invalidateQueries({ queryKey: ["userInfo"] });
       queryClient.invalidateQueries({ queryKey: ["walletInfo"] });
       router.push(redirect);
@@ -89,6 +93,7 @@ export const useGoogleLoginFlow = () => {
       });
     },
   });
+
   return {
     login: googleLogin.mutate,
     isLoggingIn: googleLogin.isPending,
@@ -110,6 +115,7 @@ export const useLogoutFlow = () => {
       });
     },
   });
+
   return {
     logout: logoutMutation.mutate,
     isLoggingOut: logoutMutation.isPending,

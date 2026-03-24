@@ -5,12 +5,10 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { useGlobalStore } from "@/store";
-import { } from "@/hook/api";
+import {} from "@/hook/api";
 import { FullscreenLoader } from "@/components/ui";
 import { useWalletInfo } from "@/hook/api";
 import { useUserInfo } from "@/hook/business";
-
-
 
 export default function Dashboard() {
   const t = useTranslations("dashboard");
@@ -18,7 +16,6 @@ export default function Dashboard() {
   const { currency } = useGlobalStore();
 
   const { data: user, isLoading, error } = useUserInfo();
-
 
   const {
     data: wallet,
@@ -57,7 +54,7 @@ export default function Dashboard() {
     },
     {
       title: t("activeUsersCount"),
-      value: user?.activeUsersCount || '0',
+      value: user?.activeUsersCount || "0",
       // to: "/promotion/experience",
     },
   ];
@@ -124,7 +121,9 @@ export default function Dashboard() {
       <div className="home-card flex justify-between bg-[url('/m/images/coupon.png')] bg-cover bg-no-repeat py-2 pl-6 pr-2 text-white">
         <div className="items-center">
           <div className="my-1 text-sm font-bold">{t("coupon.title")}</div>
-          <div className="text-xs">{t("coupon.available", { count: user?.couponCount || 0 })}</div>
+          <div className="text-xs">
+            {t("coupon.available", { count: user?.couponCount || 0 })}
+          </div>
         </div>
         <button
           className="flex items-center gap-2"

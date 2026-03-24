@@ -1,30 +1,28 @@
-import { request, } from "./request";
+import { request } from "./request";
 
 import { WalletInfo } from "@/types";
 
 export const walletApi = {
   /** 获取钱包信息 */
-  getWalletInfo: (): Promise<WalletInfo> => request.get("/customer/wallet/info"),
+  getWalletInfo: (): Promise<WalletInfo> =>
+    request.get("/customer/wallet/info"),
   /** 获取钱包明细 */
-  listWalletDetail: (params: {
-    current: number;
-    size: number;
-  }): Promise<any> => request.get(`/customer/wallet/detail/page`, { params }),
+  listWalletDetail: (params: { current: number; size: number }): Promise<any> =>
+    request.get(`/customer/wallet/detail/page`, { params }),
   /** 获取积分列表 */
-  listPoints: (params: {
-    current: number;
-    size: number;
-  }): Promise<any> => request.post(`/customer-points-detail`, params),
+  listPoints: (params: { current: number; size: number }): Promise<any> =>
+    request.post(`/customer-points-detail`, params),
   /** 获取优惠券列表 */
-  listCoupon: (params: { status?: number | string }): Promise<any> => request.get(`/customer-coupon`, { params }),
+  listCoupon: (params: { status?: number | string }): Promise<any> =>
+    request.get(`/customer-coupon`, { params }),
   /** 兑换优惠券 */
-  pointExchangeCoupon: (couponId: number | string): Promise<any> => request.post(
-    `/customer-coupon/exchange?couponId=${couponId}`,
-  ),
+  pointExchangeCoupon: (couponId: number | string): Promise<any> =>
+    request.post(`/customer-coupon/exchange?couponId=${couponId}`),
   /** 兑换码兑换优惠券 */
-  codeExchangeCoupon: (redemptionCode: string): Promise<any> => request.post(
-    `/customer-coupon/redemptionCodeCoupons?redemptionCode=${redemptionCode}`,
-  ),
+  codeExchangeCoupon: (redemptionCode: string): Promise<any> =>
+    request.post(
+      `/customer-coupon/redemptionCodeCoupons?redemptionCode=${redemptionCode}`,
+    ),
   /** 获取支付方式列表 */
   listPaymentMethod: (params: {
     bizCode: string;
@@ -39,9 +37,7 @@ export const walletApi = {
     paymentId: string | number;
     addressId: number | string;
     customerCouponId?: string;
-  }): Promise<any> =>
-    request.post(`/customer/pay-order/create`, params,)
-  ,
+  }): Promise<any> => request.post(`/customer/pay-order/create`, params),
   /** 支付回调 */
   payNotice: (param: any): Promise<any> => {
     return request.get("/onlypay/callback/redirect?" + param);
