@@ -6,7 +6,7 @@ import { queryClient } from "@/lib/react-query";
 export function useAddressList() {
   return useQuery({
     queryKey: ["addressList"],
-    queryFn: () => addressApi.listAddress(),
+    queryFn: () => addressApi.getAddressList(),
     staleTime: 5 * 60 * 1000, // 缓存 5 分钟
     placeholderData: keepPreviousData,
     refetchOnWindowFocus: false,
@@ -17,7 +17,7 @@ export const useBillingAddress = () => {
   return useQuery({
     queryKey: ["billingAddress"],
     queryFn: async () => {
-      const res = await addressApi.listBillingAddress();
+      const res = await addressApi.getInvoiceAddressList();
 
       return res[0] || {};
     },
@@ -36,7 +36,7 @@ export const useAddAddress = () => {
 export const useAddBillingAddress = () => {
   return useMutation({
     mutationKey: ["addBillingAddress"],
-    mutationFn: (data: any) => addressApi.addBillingAddress(data),
+    mutationFn: (data: any) => addressApi.addInvoiceAddress(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["billingAddress"] });
     },

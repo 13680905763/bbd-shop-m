@@ -6,7 +6,7 @@ import { configApi } from "@/services/configApi";
 export const useCategoryOptions = () => {
   return useQuery({
     queryKey: ["categoryOptions"],
-    queryFn: configApi.listCategories,
+    queryFn: configApi.getCategories,
     staleTime: 50 * 1000,
     refetchOnWindowFocus: true,
   });
@@ -15,7 +15,7 @@ export const useCategoryOptions = () => {
 export const useCurrencyOptions = () => {
   return useQuery({
     queryKey: ["currencyOptions"],
-    queryFn: configApi.listCurrencies,
+    queryFn: configApi.getCurrencies,
     staleTime: 50 * 1000,
     refetchOnWindowFocus: true,
   });
@@ -34,7 +34,7 @@ export const useBonusConfig = () => {
 export const useCouponsConfig = () => {
   return useQuery({
     queryKey: ["couponsConfig"],
-    queryFn: () => configApi.listCoupons(),
+    queryFn: () => configApi.getCoupons(),
     staleTime: 10 * 60 * 100 * 1000, // 10 秒内认为是新鲜的
   });
 };
@@ -42,7 +42,7 @@ export const useCouponsConfig = () => {
 export function useWarehouseServicesList() {
   return useQuery({
     queryKey: ["warehouseServicesList"],
-    queryFn: () => configApi.listWarehouseServices(),
+    queryFn: () => configApi.getWarehouseServices(),
     staleTime: 5 * 10 * 1000,
   });
 }
@@ -50,14 +50,14 @@ export function useWarehouseServicesList() {
 export function useWarehouseServicesList1() {
   return useQuery({
     queryKey: ["warehouseServicesList1"],
-    queryFn: () => configApi.listWarehouseServices1(),
+    queryFn: () => configApi.getInsuranceServices(),
     staleTime: 5 * 10 * 1000,
   });
 }
 export function useOrderServicesList() {
   return useQuery({
     queryKey: ["orderServicesList"],
-    queryFn: () => configApi.listOrderServices(),
+    queryFn: () => configApi.getOrderServices(),
     staleTime: 5 * 10 * 1000,
   });
 }
@@ -66,7 +66,7 @@ export function useOrderServicesList() {
 export const useCountries = () => {
   return useQuery({
     queryKey: ["countries"],
-    queryFn: () => configApi.listCountries(),
+    queryFn: () => configApi.getCountries(),
     staleTime: 5 * 60 * 1000,
   });
 };
@@ -75,7 +75,7 @@ export const useCountries = () => {
 export const useProvinces = (countryId?: string) => {
   return useQuery({
     queryKey: ["provinces", countryId],
-    queryFn: () => configApi.listProvinces(countryId as string),
+    queryFn: () => configApi.getProvinces(countryId as string),
     enabled: !!countryId, // 只有 countryId 存在才请求
     staleTime: 5 * 60 * 1000,
   });
@@ -85,7 +85,7 @@ export const useProvinces = (countryId?: string) => {
 export const useCities = (stateId?: string) => {
   return useQuery({
     queryKey: ["cities", stateId],
-    queryFn: () => configApi.listCities(stateId as string),
+    queryFn: () => configApi.getCities(stateId as string),
     enabled: !!stateId,
     staleTime: 5 * 60 * 1000,
   });

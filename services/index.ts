@@ -1,7 +1,7 @@
 export * from "./authApi";
 export * from "./goods";
 export * from "./order";
-export * from "./chat";
+export * from "./chatApi";
 export * from "./walletApi";
 
 export * from "./configApi";

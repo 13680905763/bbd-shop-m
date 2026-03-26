@@ -1,5 +1,4 @@
 import axios, { AxiosResponse, AxiosError } from "axios";
-import { addToast } from "@heroui/react";
 
 import { ApiResponse } from "@/types";
 import { useGlobalStore } from "@/store";
@@ -30,7 +29,8 @@ request.interceptors.request.use(
 request.interceptors.response.use(
   (response: AxiosResponse<ApiResponse<any>>) => {
     const res = response.data;
-    console.log('res');
+
+    console.log("res");
 
     // 业务逻辑失败
     if (!res.success) {
@@ -45,9 +45,10 @@ request.interceptors.response.use(
     const status = error.response?.status;
 
     if (status == 401) {
-        // addToast({ title: "please login first", color: "danger" });
+      // addToast({ title: "please login first", color: "danger" });
       return Promise.reject(null);
     }
+
     return Promise.reject(error);
   },
 );

@@ -22,7 +22,7 @@ import ProgressBar from "./progress-bar";
 import DisclaimerDrawer from "./disclaimer-drawer";
 
 import { Stepper } from "@/components/ui";
-import { getGoodsInfo } from "@/services/goods";
+import { getGoodsInfoById } from "@/hook/api";
 import { createOrderPreviewKeyByProduct } from "@/services";
 import { source } from "@/types";
 import CommonModal from "@/components/modal/common-modal";
@@ -164,7 +164,7 @@ export default function GoodsDetails() {
     } catch (error: any) {
       if (!error) {
         addToast({
-          title: 'please login first',
+          title: "please login first",
           color: "danger",
         });
       }
@@ -175,12 +175,12 @@ export default function GoodsDetails() {
   const handleFavorite = async () => {
     try {
       await favoriteProduct({
-        source: params.source as source,
+        source: params.source as string,
         sourceProductId: params.sourceProductId as string,
         collection: isFavorite ? 0 : 1,
       });
       setIsFavorite(!isFavorite);
-    } catch (e) { }
+    } catch (e) {}
   };
   const add = async () => {
     if (isAddingCart) return;
@@ -198,7 +198,7 @@ export default function GoodsDetails() {
 
     try {
       await addCartItem(data);
-    } catch (e) { }
+    } catch (e) {}
   };
 
   // 切换选择状态
@@ -321,7 +321,7 @@ export default function GoodsDetails() {
 
   useEffect(() => {
     setisLoading(true);
-    getGoodsInfo({ ...params })
+    getGoodsInfoById({ ...params })
       .then((data: any) => {
         // 数据初始化
         console.log("data", data);

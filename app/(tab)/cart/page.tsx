@@ -14,7 +14,7 @@ import {
   useUpdateCartItem,
 } from "@/hook/api";
 import { calculateTotalPrice } from "@/lib/price";
-import { SubmitCartData, UpdateCartData } from "@/services";
+import { CheckoutParams, UpdateCartParams } from "@/services";
 import { BottomAction } from "@/components/common";
 
 export default function Cart() {
@@ -43,7 +43,7 @@ export default function Cart() {
     return calculateTotalPrice(selectedItems, "totalFee" as any);
   }, [selectedItems]);
   const previewList = useMemo(() => {
-    return selectedIds.map((cartId): SubmitCartData["previewList"][number] => ({
+    return selectedIds.map((cartId): CheckoutParams["previewList"][number] => ({
       cartId,
       serviceList: [],
     }));
@@ -58,10 +58,10 @@ export default function Cart() {
       },
     });
   };
-  const handleQuantityChange = async (data: UpdateCartData) => {
+  const handleQuantityChange = async (data: UpdateCartParams) => {
     await updateItem(data);
   };
-  const handleRemarkChange = async (data: UpdateCartData) => {
+  const handleRemarkChange = async (data: UpdateCartParams) => {
     await confirm({
       content: (
         <Textarea

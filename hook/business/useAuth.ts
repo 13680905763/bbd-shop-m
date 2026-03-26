@@ -3,7 +3,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { addToast } from "@heroui/react";
 import { useState } from "react";
 
-import { authApi, LoginRequest, SignUpRequest } from "@/services";
+import { authApi, LoginParams, RegisterParams } from "@/services";
 import { queryClient } from "@/lib/react-query";
 // 注册验证
 export const useSignUpFlow = () => {
@@ -11,7 +11,7 @@ export const useSignUpFlow = () => {
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [registeredEmail, setRegisteredEmail] = useState("");
   const signUp = useMutation({
-    mutationFn: (data: SignUpRequest) => authApi.signUp(data),
+    mutationFn: (data: RegisterParams) => authApi.register(data),
     onSuccess: (_, variables) => {
       setRegisteredEmail(variables.email);
       setIsEmailVerified(true);
@@ -22,7 +22,6 @@ export const useSignUpFlow = () => {
   });
   const activateEmail = useMutation({
     mutationFn: (data: any) => authApi.activateEmail(data),
-    // mutationFn: (data: ActivateEmailRequest) => authApi.activateEmail(data),
     onSuccess: () => {
       router.push("/dashboard");
     },
@@ -50,7 +49,7 @@ export const useSignUpFlow = () => {
 export const useLoginFlow = () => {
   const router = useRouter();
   const login = useMutation({
-    mutationFn: (data: LoginRequest) => authApi.login(data),
+    mutationFn: (data: LoginParams) => authApi.login(data),
     onSuccess: () => {
       router.push("/dashboard");
       queryClient.invalidateQueries({ queryKey: ["userInfo"] });
@@ -77,7 +76,7 @@ export const useGoogleLoginFlow = () => {
   const searchParams = useSearchParams(); // 注意：这需要在客户端组件中使用
   const googleLogin = useMutation({
     mutationFn: (data: { authorizationCode: string; inviteCode?: string }) =>
-      authApi.loginWithGoogle(data),
+      authApi.googleLogin(data),
     onSuccess: () => {
       const redirect = searchParams?.get("redirect") || "/dashboard";
 

@@ -258,7 +258,7 @@ export default function PackageItem({
       )}
       {/* 购买保险提示 */}
       {!!pack?.insurance && (
-        <div className="flex items-center gap-1 rounded bg-orange-50 px-2 py-1 text-xs text-orange-500 ">
+        <div className="flex items-center gap-1 rounded bg-orange-50 px-2 py-1 text-xs text-orange-500">
           {t("hasInsurance")}
         </div>
       )}

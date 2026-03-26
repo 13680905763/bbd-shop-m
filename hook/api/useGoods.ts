@@ -1,18 +1,18 @@
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 
 import { queryClient } from "@/lib/react-query";
-import { goodsApi } from "@/services";
+import { goodsApi, ToggleFavoriteParams } from "@/services";
 
 export const useHistory = () => {
   return useQuery({
     queryKey: ["history"],
-    queryFn: () => goodsApi.listHistory(),
+    queryFn: () => goodsApi.getHistoryList(),
     staleTime: 0,
   });
 };
 export const useDelHistory = () => {
   return useMutation({
-    mutationFn: (data: string[]) => goodsApi.delHistory(data),
+    mutationFn: (data: string[]) => goodsApi.deleteHistory(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["history"] });
     },
@@ -21,13 +21,13 @@ export const useDelHistory = () => {
 export const useFavorite = () => {
   return useQuery({
     queryKey: ["favorite"],
-    queryFn: () => goodsApi.listFavorite(),
+    queryFn: () => goodsApi.getFavoriteList(),
     staleTime: 0,
   });
 };
 export const useDelFavorite = () => {
   return useMutation({
-    mutationFn: (data: string[]) => goodsApi.delFavorite(data),
+    mutationFn: (data: string[]) => goodsApi.deleteFavorite(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["favorite"] });
     },
@@ -35,32 +35,42 @@ export const useDelFavorite = () => {
 };
 export const useFavoriteProduct = () => {
   return useMutation({
-    mutationFn: (data: {
-      source: string;
-      sourceProductId: string;
-      collection: number;
-    }) => goodsApi.favoriteProduct(data),
+    mutationFn: (data: ToggleFavoriteParams) => goodsApi.toggleFavorite(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["favorite"] });
     },
+  });
+};
+export const getGoodsInfoById = (data: any) => {
+  return goodsApi.getGoodsInfoById(data);
+};
+
+export const getGoodsId = (data: any) => {
+  return goodsApi.smartSearch(data);
+};
+
+export const useUploadSearchImage = () => {
+  return useMutation({
+    mutationFn: (file: File) => goodsApi.uploadSearchImage(file),
   });
 };
 export const useSearchList = (params: any) => {
   return useInfiniteQuery({
     queryKey: ["searchList", params],
     queryFn: ({ pageParam = 1 }) => {
+
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { enabled, keyword, ...restParams } = params;
 
       if (keyword) {
-        return goodsApi.searchKeyword({
+        return goodsApi.searchByKeyword({
           ...restParams,
           keyword,
           current: pageParam,
         });
       }
 
-      return goodsApi.listSearch({
+      return goodsApi.searchByImage({
         ...restParams,
         current: pageParam,
       });

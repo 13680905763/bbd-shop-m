@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Button } from "@heroui/react";
 
-import { LoginRequest } from "@/services";
+import { LoginParams } from "@/services";
 import CommonForm from "@/components/form/common-form";
 import { FieldConfig } from "@/components/form/formItem-renderer";
 import { useLoginFlow } from "@/hook/business";
@@ -14,7 +14,7 @@ export default function LoginPage() {
   const t = useTranslations("auth.login");
   const router = useRouter();
   const { login: handleSubmit, isLoggingIn } = useLoginFlow();
-  const [formData, setFormData] = useState<LoginRequest>({
+  const [formData, setFormData] = useState<LoginParams>({
     email: "",
     password: "",
   });
@@ -44,7 +44,7 @@ export default function LoginPage() {
       formData={formData}
       isLoading={isLoggingIn}
       onChange={setFormData}
-      onSubmit={handleSubmit}
+      onSubmit={() => handleSubmit(formData)}
     >
       <Button
         className="button-default"

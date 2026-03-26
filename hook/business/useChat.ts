@@ -1,10 +1,17 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { addToast } from "@heroui/react";
 import { useTranslations } from "next-intl";
+import { useMutation } from "@tanstack/react-query";
 
 import { useUserInfo } from "../business";
 
-import { fetchChatHistory, uploadChatImage } from "@/services";
+import { chatApi } from "@/services";
+
+export function useUploadChatImage() {
+  return useMutation({
+    mutationFn: (file: File) => chatApi.uploadImage(file),
+  });
+}
 
 export interface Message {
   id: number | string;
@@ -18,6 +25,7 @@ export interface Message {
 export function useChat(isOpen: boolean) {
   const t = useTranslations("components.chatbox");
   const { data: user } = useUserInfo();
+  const { mutateAsync: uploadImageAsync } = useUploadChatImage();
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [receiverId, setReceiverId] = useState<number | null>(null);
@@ -142,7 +150,7 @@ export function useChat(isOpen: boolean) {
 
       try {
         const currentPage = initialLoad ? 1 : page;
-        const res: any = await fetchChatHistory(user.id, currentPage);
+        const res: any = await chatApi.getHistory(user.id, currentPage);
         const records: any = res.records || [];
         const lastPage: number = res.pages ?? 1;
 
@@ -266,7 +274,7 @@ export function useChat(isOpen: boolean) {
       shouldScrollRef.current = true;
 
       try {
-        const url: any = await uploadChatImage(file);
+        const url: any = await uploadImageAsync(file);
 
         if (url) {
           const socket = socketRef.current;

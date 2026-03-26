@@ -20,7 +20,13 @@ export default function Promotion() {
     useUserExperience();
   const { data: bonusConfig, isLoading: isLoadingBonusConfig } =
     useBonusConfig();
+  const [origin, setOrigin] = React.useState("");
 
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      setOrigin(window.location.origin);
+    }
+  }, []);
   const process = [t("process1"), t("process2"), t("process3")];
   const faq = [
     {
@@ -69,12 +75,12 @@ export default function Promotion() {
           <div className="flex flex-col items-center gap-2 rounded-xl bg-white p-2">
             <div className="flex w-full cursor-pointer items-center justify-between rounded-xl bg-[#f4f4f5] px-4 py-2.5 text-[#11181C] transition-colors hover:bg-[#e4e4e7]">
               <span className="break-all font-mono text-sm">
-                {`https://www.bbdbuy1.com/register?inviteCode=${user?.inviteCode || ""}`}
+                {`${origin}/register?inviteCode=${user?.inviteCode || ""}`}
               </span>
             </div>
             <CopyText
               className="w-full"
-              text={`https://www.bbdbuy1.com/register?inviteCode=${user?.inviteCode || ""}`}
+              text={`${origin}/register?inviteCode=${user?.inviteCode || ""}`}
             >
               <button className="w-full rounded-lg bg-[#f0700c] py-2.5 text-sm font-medium text-white">
                 {t("copy")}

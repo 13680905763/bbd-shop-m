@@ -174,34 +174,34 @@ export default function Searchpage() {
   };
   const tabs = keyword
     ? [
-      {
-        key: "TAOBAO",
-        title: t("taobao"),
-        content: renderSearchContent(),
-      },
-      {
-        key: "1688",
-        title: t("1688"),
-        content: renderSearchContent(),
-      },
-      {
-        key: "WEIDIAN",
-        title: "Weidian",
-        content: renderSearchContent(),
-      },
-    ]
+        {
+          key: "TAOBAO",
+          title: t("taobao"),
+          content: renderSearchContent(),
+        },
+        {
+          key: "1688",
+          title: t("1688"),
+          content: renderSearchContent(),
+        },
+        {
+          key: "WEIDIAN",
+          title: "Weidian",
+          content: renderSearchContent(),
+        },
+      ]
     : [
-      {
-        key: "TAOBAO",
-        title: t("taobao"),
-        content: renderSearchContent(),
-      },
-      {
-        key: "1688",
-        title: t("1688"),
-        content: renderSearchContent(),
-      },
-    ];
+        {
+          key: "TAOBAO",
+          title: t("taobao"),
+          content: renderSearchContent(),
+        },
+        {
+          key: "1688",
+          title: t("1688"),
+          content: renderSearchContent(),
+        },
+      ];
 
   return (
     <>

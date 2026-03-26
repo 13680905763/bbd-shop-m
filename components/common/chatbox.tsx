@@ -19,7 +19,7 @@ import { motion } from "framer-motion";
 
 import OrderListModal from "./order-list-modal";
 
-import { useChat } from "@/hook/chat/useChat";
+import { useChat } from "@/hook/business/useChat";
 import { useGlobalStore } from "@/store";
 
 export default function ChatBox() {
@@ -29,7 +29,6 @@ export default function ChatBox() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false); // 控制是否展开/全屏
   const [showOrderModal, setShowOrderModal] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);

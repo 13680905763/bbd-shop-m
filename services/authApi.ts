@@ -1,30 +1,49 @@
 import { request } from "./request";
+
 /** 登录请求参数 */
-export interface LoginRequest {
+export interface LoginParams {
   email: string;
   password: string;
 }
+
 /** 注册请求参数 */
-export interface SignUpRequest extends LoginRequest {
+export interface RegisterParams extends LoginParams {
   inviteCode?: string;
   agreeToTerms?: boolean;
 }
+
+/** 邮箱激活参数 */
+export interface ActivateEmailParams {
+  // 根据实际字段定义
+  code?: string;
+  email?: string;
+}
+
+/** 谷歌登录参数 */
+export interface GoogleLoginParams {
+  // 根据实际字段定义
+  code?: string;
+  authorizationCode?: string;
+  inviteCode?: string;
+  // 或其他字段
+}
+
 export const authApi = {
   /** 注册 */
-  signUp: (data: SignUpRequest): Promise<string> =>
+  register: (data: RegisterParams): Promise<string> =>
     request.post("/customer/sign-up", data),
-  /** 注册邮箱验证 */
-  activateEmail: (data: any): Promise<string> =>
+  /** 激活邮箱 */
+  activateEmail: (data: ActivateEmailParams): Promise<string> =>
     request.post("/customer/active", data),
   /** 登录 */
-  login: (data: LoginRequest): Promise<string> =>
+  login: (data: LoginParams): Promise<string> =>
     request.post("/customer/login", data),
   /** 谷歌登录 */
-  loginWithGoogle: (data: any): Promise<string> =>
+  googleLogin: (data: GoogleLoginParams): Promise<string> =>
     request.post("/customer/google/code", data),
   /** 退出登录 */
   logout: (): Promise<void> => request.get("/customer/logout"),
   /** 忘记密码 */
-  forgetPassword: (data: { email: string }): Promise<string> =>
+  forgotPassword: (data: { email: string }): Promise<string> =>
     request.post("/customer/forget-password", data),
 };

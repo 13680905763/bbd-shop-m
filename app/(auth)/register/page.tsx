@@ -1,4 +1,6 @@
 "use client";
+import type { SignUpFormData } from "@/types";
+
 import { addToast, InputOtp } from "@heroui/react";
 import React, { useState } from "react";
 import {
@@ -12,7 +14,6 @@ import { useTranslations } from "next-intl";
 
 import CommonForm from "@/components/form/common-form";
 import { FieldConfig } from "@/components/form/formItem-renderer";
-import { SignUpFormData } from "@/types";
 import { useSignUpFlow } from "@/hook/business";
 
 export default function RegisterPage() {
@@ -70,14 +71,24 @@ export default function RegisterPage() {
     },
   ];
   const handleSubmit = (formData: SignUpFormData) => {
-    const { agreeToTerms, ...data } = formData;
-
-    if (!agreeToTerms) {
-      addToast({ title: t("mustAgree"), timeout: 1500, color: "danger" });
+    if (!formData.agreeToTerms) {
+      addToast({
+        title: t("mustAgree"),
+        color: "warning",
+      });
 
       return;
     }
-    signUp(data);
+    const submitData: any = {
+      email: formData.email,
+      password: formData.password,
+    };
+
+    if (formData.inviteCode) {
+      submitData.inviteCode = formData.inviteCode;
+    }
+
+    signUp(submitData);
   };
   const handleInviteCode = (code: string) => {
     if (code.length === 6) {
@@ -98,7 +109,7 @@ export default function RegisterPage() {
             formData={formData}
             isLoading={isSigningUp}
             onChange={setFormData}
-            onSubmit={handleSubmit}
+            onSubmit={() => handleSubmit(formData)}
           />
           <div className="mt-2 text-center text-sm">
             <span>{t("loginHint")}</span>

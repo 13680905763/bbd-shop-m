@@ -4,16 +4,16 @@ import { useRouter } from "next/navigation";
 
 import {
   cartApi,
-  DeleteCartData,
-  SubmitCartData,
-  UpdateCartData,
+  DeleteCartParams,
+  CheckoutParams,
+  UpdateCartParams,
 } from "@/services/cartApi";
 import { queryClient } from "@/lib/react-query";
 // 获取购物车列表
 export function useCartList() {
   const query = useQuery({
     queryKey: ["cartList"],
-    queryFn: () => cartApi.list(),
+    queryFn: () => cartApi.getCart(),
     staleTime: 5 * 60 * 1000, // 缓存 5 分钟
     placeholderData: keepPreviousData,
     refetchOnWindowFocus: false,
@@ -30,9 +30,9 @@ export function useCartList() {
 // 添加商品到购物车
 export function useAddCartItem() {
   return useMutation({
-    mutationFn: (data: any) => cartApi.add(data),
+    mutationFn: (data: any) => cartApi.addItem(data),
     onSuccess: (res) => {
-      console.log('success');
+      console.log("success");
       addToast({
         title: res,
         timeout: 1000,
@@ -41,10 +41,10 @@ export function useAddCartItem() {
       queryClient.invalidateQueries({ queryKey: ["cartList"] });
     },
     onError: (error) => {
-      console.log('error', error);
+      console.log("error", error);
       if (!error) {
         addToast({
-          title: 'please login first',
+          title: "please login first",
           color: "danger",
         });
       }
@@ -54,7 +54,7 @@ export function useAddCartItem() {
 // 更新购物车商品（数量/备注）
 export function useUpdateCartItem() {
   const mutation = useMutation({
-    mutationFn: (data: UpdateCartData) => cartApi.update([data]),
+    mutationFn: (data: UpdateCartParams) => cartApi.updateItem([data]),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cartList"] });
     },
@@ -74,7 +74,7 @@ export function useUpdateCartItem() {
 // 删除购物车商品
 export function useDeleteCart() {
   const mutation = useMutation({
-    mutationFn: (data: DeleteCartData) => cartApi.delete(data),
+    mutationFn: (data: DeleteCartParams) => cartApi.deleteItem(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cartList"] });
     },
@@ -88,7 +88,7 @@ export function useDeleteCart() {
 export function useSubmitCart() {
   const router = useRouter();
   const mutation = useMutation({
-    mutationFn: (data: SubmitCartData) => cartApi.submit(data),
+    mutationFn: (data: CheckoutParams) => cartApi.checkout(data),
     onSuccess: (key) => {
       router.push(`/submit/order?type=cart&key=${key}`);
     },
