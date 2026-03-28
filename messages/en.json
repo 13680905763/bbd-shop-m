@@ -210,7 +210,12 @@
             "noOrdersFound": "No orders found",
             "orderNo": "Order No:",
             "price": "Price:",
-            "close": "Close"
+            "close": "Close",
+            "waybillNo": "Waybill No:",
+            "weight": "Weight:",
+            "size": "Size: ",
+            "selectWaybill": "Select Waybill",
+            "noWaybillsFound": "No waybills found"
         },
         "billingAddress": {
             "edit": "Edit",
@@ -427,7 +432,8 @@
                 "cancel": "Cancel Order",
                 "batchPay": "Batch Payment",
                 "withdraw": "Cancel request",
-                "refund": "Request Refund"
+                "refund": "Request Refund",
+                "consult": "Consult"
             },
             "cancelTitle": "Cancel Order",
             "cancelContent": "Are you sure you want to cancel this order?",

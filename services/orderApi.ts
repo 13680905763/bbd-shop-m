@@ -38,6 +38,8 @@ export const OrderApi = {
     request.post("/orders/page", data),
   listChatOrder: (data: OrderListParams): Promise<any> =>
     request.post("/orders/myOrders", data),
+  listWaybillOrder: (data: OrderListParams): Promise<any> =>
+    request.post("/waybill/myWaybills", data),
   listRefundOrder: (data: any): Promise<any> => {
     return request.post("/order-refund/list", data);
   },

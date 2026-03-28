@@ -12,12 +12,16 @@ export function useUploadChatImage() {
     mutationFn: (file: File) => chatApi.uploadImage(file),
   });
 }
-
+export function useReadMessages() {
+  return useMutation({
+    mutationFn: (data: any) => chatApi.readMessages(data),
+  });
+}
 export interface Message {
   id: number | string;
   sender: "user" | "bot";
   text?: string;
-  type?: "TEXT" | "IMAGE" | "ORDER";
+  type?: "TEXT" | "IMAGE" | "ORDER" | "WAYBILL";
   sending?: boolean;
   createTime?: number | string;
 }
@@ -26,6 +30,7 @@ export function useChat(isOpen: boolean) {
   const t = useTranslations("components.chatbox");
   const { data: user } = useUserInfo();
   const { mutateAsync: uploadImageAsync } = useUploadChatImage();
+  const { mutateAsync: readMessagesAsync } = useReadMessages();
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [receiverId, setReceiverId] = useState<number | null>(null);
@@ -164,6 +169,7 @@ export function useChat(isOpen: boolean) {
 
         if (initialLoad) {
           setMessages(newMessages);
+          // await readMessagesAsync(newMessages.map((item: Message) => item.id));
           setPage(2);
           setHasMoreHistory(1 < lastPage);
           shouldScrollRef.current = true;
@@ -222,9 +228,12 @@ export function useChat(isOpen: boolean) {
       const socket = socketRef.current;
 
       if (!socket || socket.readyState !== WebSocket.OPEN) {
-        addToast({ title: t("connectionLost"), color: "danger" });
-
-        return;
+        // Only show toast if it's a manual user action, not for auto-send pending items
+        // to avoid spamming the user when the connection is just initializing
+        if (type !== "ORDER" && type !== "WAYBILL") {
+          addToast({ title: t("connectionLost"), color: "danger" });
+        }
+        return false;
       }
 
       const payload: any = {
@@ -248,6 +257,7 @@ export function useChat(isOpen: boolean) {
         },
       ]);
       shouldScrollRef.current = true;
+      return true;
     },
     [t],
   );

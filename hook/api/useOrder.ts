@@ -148,3 +148,11 @@ export function useChatOrderList(params: any) {
     refetchOnWindowFocus: false, // ⚠️ 禁止切回 Tab 时自动请求
   });
 }
+export function useWaybillOrderList(params: any) {
+  return useQuery({
+    queryKey: ["chatWaybillOrderList", params],
+    queryFn: () => OrderApi.listWaybillOrder(params),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: false, // ⚠️ 禁止切回 Tab 时自动请求
+  });
+}

@@ -24,4 +24,7 @@ export const chatApi = {
     request.get(
       `/service-chat/chatRecord?customerId=${customerId}&current=${current}`,
     ),
+  /** 读取聊天历史 */
+  readMessages: (data: any) =>
+    request.put('/service-chat/read', data),
 };

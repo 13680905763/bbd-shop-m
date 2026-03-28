@@ -11,7 +11,7 @@ import {
   addToast,
   Avatar,
 } from "@heroui/react";
-import { FaComments, FaImage, FaTimes, FaShoppingBag } from "react-icons/fa";
+import { FaComments, FaImage, FaTimes, FaShoppingBag, FaBoxOpen } from "react-icons/fa";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { useTranslations } from "next-intl";
@@ -20,16 +20,19 @@ import { motion } from "framer-motion";
 import OrderListModal from "./order-list-modal";
 
 import { useChat } from "@/hook/business/useChat";
-import { useGlobalStore } from "@/store";
+import { useChatStore, useGlobalStore } from "@/store";
+import WaybillListModal from "./chat-waybill";
 
 export default function ChatBox() {
   const t = useTranslations("components.chatbox");
   const { currency } = useGlobalStore();
 
-  const [isOpen, setIsOpen] = useState(false);
+  const { isOpen, setIsOpen, pendingOrder, setPendingOrder } = useChatStore();
+
   const [input, setInput] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showOrderModal, setShowOrderModal] = useState(false);
+  const [showWaybillModal, setShowWaybillModal] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -49,6 +52,29 @@ export default function ChatBox() {
     hasAgent,
     user,
   } = useChat(isOpen);
+
+  // Handle pending order from store
+  useEffect(() => {
+    if (isOpen && pendingOrder && user?.id && !firstLoading) {
+      // Delay to ensure websocket is ready and messages are loaded
+      const timer = setTimeout(() => {
+        const orderWithCurrency = {
+          ...pendingOrder,
+          products: pendingOrder.products?.map((p: any) => ({
+            ...p,
+            price: `${currency.symbol}${p.price}`
+          }))
+        };
+
+        // Try to send, if it returns true (success), clear the pending order
+        const success = sendMessage(JSON.stringify(orderWithCurrency), "ORDER");
+        if (success) {
+          setPendingOrder(null);
+        }
+      }, 1000); // Increased delay to ensure connection is stable
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, pendingOrder, user?.id, sendMessage, setPendingOrder, currency.symbol, firstLoading]);
 
   // Handle scroll for history loading
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
@@ -228,9 +254,8 @@ export default function ChatBox() {
               {messages.map((msg) => (
                 <div
                   key={msg.id}
-                  className={`flex w-full gap-2 ${
-                    msg.sender === "user" ? "flex-row-reverse" : "flex-row"
-                  }`}
+                  className={`flex w-full gap-2 ${msg.sender === "user" ? "flex-row-reverse" : "flex-row"
+                    }`}
                 >
                   {/* Avatar */}
                   <div className="flex-shrink-0">
@@ -251,11 +276,10 @@ export default function ChatBox() {
 
                   {/* Message Bubble */}
                   <div
-                    className={`w-fit max-w-[75%] break-words rounded-lg p-2 ${
-                      msg.sender === "user"
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-200 text-black"
-                    }`}
+                    className={`w-fit max-w-[75%] break-words rounded-lg p-2 ${msg.sender === "user"
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-200 text-black"
+                      }`}
                   >
                     <div className="flex flex-col gap-1">
                       {msg.type === "IMAGE" && msg.text ? (
@@ -320,15 +344,49 @@ export default function ChatBox() {
                             }
                           })()}
                         </div>
+                      ) : msg.type === "WAYBILL" ? (
+                        <div className="rounded bg-blue-100 p-2 font-mono text-sm text-black w-full">
+                          {(() => {
+                            try {
+                              const waybill = JSON.parse(msg.text || "{}");
+                              return (
+                                <div className="flex flex-col gap-2">
+                                  <div className="font-semibold border-b border-blue-200 pb-1">
+                                    {t("waybillNo", { defaultMessage: "Waybill No: " })}{waybill.packingPackageCode}
+                                  </div>
+                                  <div className="flex flex-col gap-1 text-xs">
+                                    {waybill.shippingCode && (
+                                      <div>
+                                        <span className="text-gray-500">{t("trackingNo", { defaultMessage: "Tracking No: " })}</span>
+                                        {waybill.shippingCode}
+                                      </div>
+                                    )}
+                                    <div className="grid grid-cols-2 gap-1 mt-1">
+                                      <div>
+                                        <span className="text-gray-500">{t("weight", { defaultMessage: "Weight" })}: </span>
+                                        {waybill.weight}g
+                                      </div>
+                                      <div>
+                                        <span className="text-gray-500">{t("size", { defaultMessage: "Size" })}: </span>
+                                        {waybill.length}*{waybill.width}*{waybill.height}cm
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            } catch (e) {
+                              return <div>{msg.text}</div>;
+                            }
+                          })()}
+                        </div>
                       ) : (
                         msg.text
                       )}
                       <span
-                        className={`self-end text-[10px] ${
-                          msg.sender === "user"
-                            ? "text-blue-100"
-                            : "text-gray-500"
-                        }`}
+                        className={`self-end text-[10px] ${msg.sender === "user"
+                          ? "text-blue-100"
+                          : "text-gray-500"
+                          }`}
                       >
                         {msg?.createTime}
                       </span>
@@ -368,10 +426,11 @@ export default function ChatBox() {
               )}
 
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center  flex-1">
                   <Button
-                    className="flex h-8 w-8 items-center justify-center"
+                    className="flex  items-center justify-center"
                     color="primary"
+                    isIconOnly={true}
                     radius="full"
                     variant="light"
                     onPress={() => setShowEmojiPicker((prev) => !prev)}
@@ -379,27 +438,42 @@ export default function ChatBox() {
                     😀
                   </Button>
                   <Button
-                    className="flex h-8 w-8 items-center justify-center"
+                    className="flex items-center justify-center"
                     color="primary"
                     radius="full"
+                    isIconOnly={true}
+
                     variant="light"
                     onPress={() => fileInputRef.current?.click()}
                   >
                     <FaImage />
                   </Button>
                   <Button
-                    className="flex h-8 w-8 items-center justify-center"
+                    className="flex  items-center justify-center"
                     color="primary"
                     radius="full"
+                    isIconOnly={true}
+
                     variant="light"
                     onPress={() => setShowOrderModal(true)}
                   >
                     <FaShoppingBag />
                   </Button>
+                  <Button
+                    className="flex  items-center justify-center"
+                    color="primary"
+                    isIconOnly={true}
+
+                    radius="full"
+                    variant="light"
+                    onPress={() => setShowWaybillModal(true)}
+                  >
+                    <FaBoxOpen />
+                  </Button>
                 </div>
 
                 <Button
-                  className="px-4 py-2"
+                  className="px-4 py-2 flex-1 "
                   color="primary"
                   onPress={handleSend}
                 >
@@ -433,6 +507,16 @@ export default function ChatBox() {
 
             sendMessage(JSON.stringify(orderWithCurrency), "ORDER");
             setShowOrderModal(false);
+          }}
+        />
+      )}
+      {showWaybillModal && (
+        <WaybillListModal
+          isOpen={showWaybillModal}
+          onClose={() => setShowWaybillModal(false)}
+          onSendWaybill={(waybill) => {
+            sendMessage(JSON.stringify(waybill), "WAYBILL");
+            setShowWaybillModal(false);
           }}
         />
       )}

@@ -210,7 +210,12 @@
             "noOrdersFound": "暂无订单",
             "orderNo": "订单号：",
             "price": "价格：",
-            "close": "关闭"
+            "close": "关闭",
+            "waybillNo": "包裹号：",
+            "weight": "重量：",
+            "size": "尺寸：",
+            "selectWaybill": "选择包裹",
+            "noWaybillsFound": "暂无包裹"
         },
         "billingAddress": {
             "edit": "编辑",
@@ -427,7 +432,8 @@
                 "cancel": "取消订单",
                 "batchPay": "批量支付",
                 "withdraw": "撤回申请",
-                "refund": "申请退款"
+                "refund": "申请退款",
+                "consult": "咨询"
             },
             "cancelTitle": "取消订单",
             "cancelContent": "确定要取消此订单吗？",
