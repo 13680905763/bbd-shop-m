@@ -80,6 +80,11 @@ export default memo(function ProductItem({
               <span className="text-base font-bold">x{product.quantity}</span>
             )}
           </div>
+          {!product?.withdrawRefundFlag && product?.abnormalInfo &&
+            <div className="my-2 flex items-center justify-end text-sm font-semibold text-red-500">
+              {product?.abnormalInfo}
+            </div>
+          }
         </div>
       </div>
       {type === "cart" ? (

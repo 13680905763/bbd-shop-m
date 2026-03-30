@@ -1,5 +1,6 @@
 import { Button, Checkbox, Image } from "@heroui/react";
 import { FiSearch } from "react-icons/fi";
+import { FaComments } from "react-icons/fa";
 import { useTranslations } from "next-intl";
 import { ImageViewer } from "antd-mobile";
 import { useState } from "react";
@@ -7,7 +8,7 @@ import { useState } from "react";
 import MediaPreviewGroup, {
   MediaItem,
 } from "@/components/common/media-preview";
-import { useGlobalStore } from "@/store";
+import { useGlobalStore, useChatStore } from "@/store";
 
 export default function PackageItem({
   pack,
@@ -23,6 +24,7 @@ export default function PackageItem({
 }: any) {
   const t = useTranslations("profile.package");
   const { currency } = useGlobalStore();
+  const { setPendingWaybill, setIsOpen } = useChatStore();
   const [isCancelLoading, setIsCancelLoading] = useState(false);
   const [isTrackLoading, setIsTrackLoading] = useState(false);
   const [isPayLoading, setIsPayLoading] = useState(false);
@@ -150,108 +152,6 @@ export default function PackageItem({
                 {service.serviceName}
               </div>
               <MediaPreviewGroup fileList={service.fileList as MediaItem[]} />
-              {/* <MediaPreviewGroup fileList={[
-                {
-                  "id": "2016419585951141890",
-                  "createTime": "2026-01-28 15:54:27",
-                  "updateTime": "2026-01-28 15:54:27",
-                  "bizId": "2016418536016187393",
-                  "bizCode": "OBD20260128075013310333",
-                  "biz": "OUTBOUND SERVICE",
-                  "serviceCode": "Protective angle",
-                  "serviceName": "防护角",
-                  "fileName": "1769586858942.jpg",
-                  "ossKey": "OUTBOUND/SERVICE/Protective angle/2026/01/28/46F931A571294B968C68713F823A9F62.jpg",
-                  "fileUrl": "https://bucket-demo-bbd.oss-cn-shenzhen.aliyuncs.com/OUTBOUND/SERVICE/Protective angle/2026/01/28/46F931A571294B968C68713F823A9F62.jpg",
-                  "fileType": "image/jpeg",
-                  "fileSize": 72732,
-                  "sort": 0,
-                  "inUse": 1,
-                  "uploadId": "1",
-                  "uploadName": "admin",
-                  "uploadTime": "2026-01-28 23:54:27"
-                },
-                {
-                  "id": "2016419643257917441",
-                  "createTime": "2026-01-28 15:54:41",
-                  "updateTime": "2026-01-28 15:54:41",
-                  "bizId": "2016418536016187393",
-                  "bizCode": "OBD20260128075013310333",
-                  "biz": "OUTBOUND SERVICE",
-                  "serviceCode": "Protective angle",
-                  "serviceName": "防护角",
-                  "fileName": "1769586869232.jpg",
-                  "ossKey": "OUTBOUND/SERVICE/Protective angle/2026/01/28/232E7E08556848F483B2E9FD9B10A429.jpg",
-                  "fileUrl": "https://bucket-demo-bbd.oss-cn-shenzhen.aliyuncs.com/OUTBOUND/SERVICE/Protective angle/2026/01/28/232E7E08556848F483B2E9FD9B10A429.jpg",
-                  "fileType": "image/jpeg",
-                  "fileSize": 246678,
-                  "sort": 0,
-                  "inUse": 1,
-                  "uploadId": "1",
-                  "uploadName": "admin",
-                  "uploadTime": "2026-01-28 23:54:41"
-                },
-                {
-                  "id": "2016419643257917441",
-                  "createTime": "2026-01-28 15:54:41",
-                  "updateTime": "2026-01-28 15:54:41",
-                  "bizId": "2016418536016187393",
-                  "bizCode": "OBD20260128075013310333",
-                  "biz": "OUTBOUND SERVICE",
-                  "serviceCode": "Protective angle",
-                  "serviceName": "防护角",
-                  "fileName": "1769586869232.jpg",
-                  "ossKey": "OUTBOUND/SERVICE/Protective angle/2026/01/28/232E7E08556848F483B2E9FD9B10A429.jpg",
-                  "fileUrl": "https://bucket-demo-bbd.oss-cn-shenzhen.aliyuncs.com/OUTBOUND/SERVICE/Protective angle/2026/01/28/232E7E08556848F483B2E9FD9B10A429.jpg",
-                  "fileType": "image/jpeg",
-                  "fileSize": 246678,
-                  "sort": 0,
-                  "inUse": 1,
-                  "uploadId": "1",
-                  "uploadName": "admin",
-                  "uploadTime": "2026-01-28 23:54:41"
-                },
-                {
-                  "id": "2016419643257917441",
-                  "createTime": "2026-01-28 15:54:41",
-                  "updateTime": "2026-01-28 15:54:41",
-                  "bizId": "2016418536016187393",
-                  "bizCode": "OBD20260128075013310333",
-                  "biz": "OUTBOUND SERVICE",
-                  "serviceCode": "Protective angle",
-                  "serviceName": "防护角",
-                  "fileName": "1769586869232.jpg",
-                  "ossKey": "OUTBOUND/SERVICE/Protective angle/2026/01/28/232E7E08556848F483B2E9FD9B10A429.jpg",
-                  "fileUrl": "https://bucket-demo-bbd.oss-cn-shenzhen.aliyuncs.com/OUTBOUND/SERVICE/Protective angle/2026/01/28/232E7E08556848F483B2E9FD9B10A429.jpg",
-                  "fileType": "image/jpeg",
-                  "fileSize": 246678,
-                  "sort": 0,
-                  "inUse": 1,
-                  "uploadId": "1",
-                  "uploadName": "admin",
-                  "uploadTime": "2026-01-28 23:54:41"
-                },
-                {
-                  "id": "2016419643257917441",
-                  "createTime": "2026-01-28 15:54:41",
-                  "updateTime": "2026-01-28 15:54:41",
-                  "bizId": "2016418536016187393",
-                  "bizCode": "OBD20260128075013310333",
-                  "biz": "OUTBOUND SERVICE",
-                  "serviceCode": "Protective angle",
-                  "serviceName": "防护角",
-                  "fileName": "1769586869232.jpg",
-                  "ossKey": "OUTBOUND/SERVICE/Protective angle/2026/01/28/232E7E08556848F483B2E9FD9B10A429.jpg",
-                  "fileUrl": "https://bucket-demo-bbd.oss-cn-shenzhen.aliyuncs.com/OUTBOUND/SERVICE/Protective angle/2026/01/28/232E7E08556848F483B2E9FD9B10A429.jpg",
-                  "fileType": "image/jpeg",
-                  "fileSize": 246678,
-                  "sort": 0,
-                  "inUse": 1,
-                  "uploadId": "1",
-                  "uploadName": "admin",
-                  "uploadTime": "2026-01-28 23:54:41"
-                }
-              ]} /> */}
             </div>
           ))}
         </div>
@@ -282,8 +182,24 @@ export default function PackageItem({
           {pack?.totalFee}
         </p>
       </div>
-      <div className="flex justify-end gap-1">
-        {(pack?.changeFlag || pack?.addressFlag) && (
+      <div className="flex justify-between items-center mt-2">
+        <div>
+          <Button
+            color="primary"
+            size="sm"
+            variant="light"
+            onPress={() => {
+              const pic = pack?.packageItemList?.map((item: any) => item.orderProduct?.skuPicUrl || item.orderProduct?.picUrl).filter(Boolean);
+              setPendingWaybill({ ...pack, pic });
+              setIsOpen(true);
+            }}
+          >
+            <FaComments className="h-5 w-5" />
+            {t("buttons.consult") || "Consult"}
+          </Button>
+        </div>
+        <div className="flex justify-end gap-1">
+          {(pack?.changeFlag || pack?.addressFlag) && (
           <Button
             className="button-default"
             radius="sm"
@@ -349,6 +265,7 @@ export default function PackageItem({
             {t("buttons.receipt")}
           </Button>
         )}
+        </div>
       </div>
     </div>
   );

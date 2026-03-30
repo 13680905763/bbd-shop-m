@@ -180,7 +180,7 @@ export default function GoodsDetails() {
         collection: isFavorite ? 0 : 1,
       });
       setIsFavorite(!isFavorite);
-    } catch (e) {}
+    } catch (e) { }
   };
   const add = async () => {
     if (isAddingCart) return;
@@ -198,7 +198,7 @@ export default function GoodsDetails() {
 
     try {
       await addCartItem(data);
-    } catch (e) {}
+    } catch (e) { }
   };
 
   // 切换选择状态
@@ -251,6 +251,8 @@ export default function GoodsDetails() {
 
     setGoodsInfo(cloned);
   };
+  console.log('goodINfo', goodsInfo);
+
   const currentSku = useMemo(() => {
     if (!goodsInfo) return;
     const selectedValues = getSelectedValues(goodsInfo.productInfo.skuPropList);
@@ -627,6 +629,8 @@ export default function GoodsDetails() {
                   <div className="text-sm font-bold">{t("quantity")}</div>
                   <Stepper
                     value={quantity}
+                    min={goodsInfo?.productInfo
+                      ?.minNum || 1}
                     onChange={(value) => setQuantity(value)}
                   />
                 </div>

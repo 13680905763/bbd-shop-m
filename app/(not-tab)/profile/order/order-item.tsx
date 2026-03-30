@@ -1,13 +1,13 @@
 import { Button, Checkbox } from "@heroui/react";
 import { useTranslations } from "next-intl";
 import React from "react";
+import { FaComments } from "react-icons/fa";
 
 import { useChatStore, useGlobalStore } from "@/store";
 import SourceIcon from "@/components/common/source-icon";
 import CopyButton from "@/components/common/copy-button";
 import { ProductItem } from "@/components/common";
 import RefundCountdown from "@/components/ui/refund-countdown";
-import { FaComments } from "react-icons/fa";
 
 export default function OrderItem({
   order,
@@ -28,7 +28,7 @@ export default function OrderItem({
   return (
     <div className="space-y-3 rounded-xl bg-white p-3">
       <div className="flex justify-between">
-        <div className="flex  gap-2 text-sm font-medium text-gray-800">
+        <div className="flex gap-2 text-sm font-medium text-gray-800">
           {showCheckbox && (
             <Checkbox
               classNames={{
@@ -50,13 +50,11 @@ export default function OrderItem({
         </div>
         <div className="self-start text-right text-sm font-bold text-[#f0700c]">
           {order?.status}
-          {
-            order?.remark && (
-              <div className="text-xs text-gray-500  px-2 py-1 rounded">
-                {order?.remark}
-              </div>
-            )
-          }
+          {order?.remark && (
+            <div className="rounded px-2 py-1 text-xs text-gray-500">
+              {order?.remark}
+            </div>
+          )}
         </div>
       </div>
 
@@ -96,24 +94,21 @@ export default function OrderItem({
       ))}
       <div className="flex items-center justify-between">
         <Button
-          variant="light"
           color="primary"
           size="sm"
+          variant="light"
           onPress={() => {
             setPendingOrder(order);
             setIsOpen(true);
           }}
         >
-          <FaComments className="w-5 h-5" />
+          <FaComments className="h-5 w-5" />
           {t("consult")}
         </Button>
         <div>
-
-          <p className="text-sm text-gray-700 text-center">
-            <span className="text-base font-bold">
-              {currency.symbol}
-              {order?.totalFee}
-            </span>
+          <p className="text-base font-bold text-right">
+            {currency.symbol}
+            {order?.totalFee}
           </p>
           {order?.canCancelFlag && (
             <div className="space-x-2">

@@ -488,7 +488,8 @@
                 "edit": "Plus d'actions",
                 "pay": "Payer",
                 "payCancel": "Frais d'annulation de paiement",
-                "receipt": "Confirmer la réception"
+                "receipt": "Confirmer la réception",
+                "consult": "Consulter"
             },
             "weight": "Poids :",
             "size": "Dimensions :",
@@ -964,5 +965,57 @@
         "serviceFee": "Frais de service:",
         "totalCost": "Coût total:",
         "shippingFee": "Frais de port:"
+    },
+    "helpGuide": {
+        "title": "Comment acheter via bbdbuy",
+        "step1": {
+            "title": "Étape 1: Choisir les produits",
+            "content1": "Méthode 1: Copiez un lien de produit de Taobao / Tmall / 1688 et collez-le dans la barre de recherche bbdbuy.",
+            "content2": "Méthode 2: Recherchez par nom de produit et sélectionnez les articles recommandés.",
+            "content3": "Méthode 3: Utilisez la recherche par image pour trouver des produits similaires.",
+            "tip": "Si le lien ouvre une page de commande personnalisée, le produit nécessite un achat manuel. Remplissez les détails et cliquez sur «Acheter maintenant» ou «Ajouter au panier»."
+        },
+        "step2": {
+            "title": "Étape 2: Soumettre la commande",
+            "content1": "bbdbuy prend en charge la récupération automatique des détails de produits pour la plupart des plateformes.",
+            "content2": "Sélectionnez les options, la quantité, puis ajoutez au panier ou achetez directement.",
+            "content3": "Vous pouvez également soumettre des commandes depuis le panier."
+        },
+        "step3": {
+            "title": "Étape 3: Payer la commande",
+            "content1": "Payez le produit et les frais de port nationaux en Chine après avoir soumis la commande.",
+            "tip": "Plusieurs devises prises en charge. Choisissez le pays de destination, les services et soumettez."
+        },
+        "step4": {
+            "title": "Étape 4: Achat par bbdbuy",
+            "content1": "L'équipe d'achat de bbdbuy contactera le vendeur pour acheter le produit.",
+            "tip": "Statut de la commande: En attente d'achat → Commandé → Expédié → En cours de livraison → Livré → En entrepôt."
+        },
+        "step5": {
+            "title": "Étape 5: Inspection et stockage",
+            "content1": "Les produits sont inspectés, pesés et photographiés à leur arrivée.",
+            "content2": "3 photos gratuites incluses, 90 jours de stockage gratuit.",
+            "tip": "Les articles stockés plus de 180 jours seront automatiquement détruits."
+        },
+        "step6": {
+            "title": "Étape 6: Soumettre le colis",
+            "content1": "Allez sur la page Entrepôt, sélectionnez les articles, soumettez le colis et remplissez les informations d'expédition.",
+            "tip": "Les itinéraires d'expédition dépendent des restrictions des articles et de la destination."
+        },
+        "step7": {
+            "title": "Étape 7: Payer l'acompte de livraison internationale",
+            "content1": "Payez l'acompte de livraison internationale comprenant les frais de douane et de service.",
+            "tip": "Les frais de livraison seront recalculés ; les différences seront remboursées ou facturées."
+        },
+        "step8": {
+            "title": "Étape 8: bbdbuy expédie le colis",
+            "content1": "L'entrepôt emballe, pèse, étiquette et expédie le colis.",
+            "tip": "Suivez l'état du colis sur la page Détails du colis."
+        },
+        "step9": {
+            "title": "Étape 9: Confirmer la réception et les récompenses",
+            "content1": "Confirmez la réception après la livraison pour gagner des points de fidélité.",
+            "tip": "Atteignez 500 points pour échanger des récompenses. Contactez le service client pour obtenir de l'aide."
+        }
     }
 }

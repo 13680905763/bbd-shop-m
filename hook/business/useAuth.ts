@@ -68,6 +68,7 @@ export const useLoginFlow = () => {
 
   return {
     login: login.mutate,
+    loginAsync: login.mutateAsync,
     isLoggingIn: login.isPending,
   };
 };
@@ -80,9 +81,9 @@ export const useGoogleLoginFlow = () => {
     onSuccess: () => {
       const redirect = searchParams?.get("redirect") || "/dashboard";
 
-      queryClient.invalidateQueries({ queryKey: ["userInfo"] });
-      queryClient.invalidateQueries({ queryKey: ["walletInfo"] });
       router.push(redirect);
+      // queryClient.invalidateQueries({ queryKey: ["userInfo"] });
+      // queryClient.invalidateQueries({ queryKey: ["walletInfo"] });
     },
     onError: (error: any) => {
       addToast({

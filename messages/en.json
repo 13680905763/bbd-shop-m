@@ -488,7 +488,8 @@
                 "edit": "More Actions",
                 "pay": "Pay",
                 "payCancel": "Payment Cancellation Fee",
-                "receipt": "Confirm Receipt"
+                "receipt": "Confirm Receipt",
+                "consult": "Consult"
             },
             "weight": "Weight:",
             "size": "Dimensions:",
@@ -964,5 +965,57 @@
         "serviceFee": "Service Fee:",
         "totalCost": "Total Cost:",
         "shippingFee": "Shipping Fee:"
+    },
+    "helpGuide": {
+        "title": "How to Purchase via bbdbuy",
+        "step1": {
+            "title": "Step 1: Choose Products",
+            "content1": "Method 1: Copy a product link from Taobao / Tmall / 1688 and paste it into the bbdbuy search bar.",
+            "content2": "Method 2: Search by product name and select recommended items.",
+            "content3": "Method 3: Use image search to find similar products.",
+            "tip": "If the link opens a DIY order page, the product requires manual purchase. Fill in details and click “Buy Now” or “Add to Cart”."
+        },
+        "step2": {
+            "title": "Step 2: Submit Order",
+            "content1": "bbdbuy supports auto-fetching product details for most platforms.",
+            "content2": "Select options, quantity, then add to cart or buy directly.",
+            "content3": "You can also submit orders from the cart."
+        },
+        "step3": {
+            "title": "Step 3: Pay for the Order",
+            "content1": "Pay for the product and domestic shipping within China after submitting the order.",
+            "tip": "Multiple currencies supported. Choose destination country, services, and submit."
+        },
+        "step4": {
+            "title": "Step 4: Purchasing by bbdbuy",
+            "content1": "The bbdbuy purchasing team will contact the seller and buy the product.",
+            "tip": "Order status: Pending Purchase → Ordered → Shipped → Delivered → Arrived → Warehoused."
+        },
+        "step5": {
+            "title": "Step 5: Inspection and Storage",
+            "content1": "Products are inspected, weighed, and photographed upon arrival.",
+            "content2": "3 free photos included, 90 days free storage.",
+            "tip": "Items stored over 180 days will be discarded automatically."
+        },
+        "step6": {
+            "title": "Step 6: Submit Parcel",
+            "content1": "Go to the Warehouse page, select items, submit parcel, and fill in shipping details.",
+            "tip": "Shipping routes depend on item restrictions and destination."
+        },
+        "step7": {
+            "title": "Step 7: Pay International Shipping Deposit",
+            "content1": "Pay international shipping deposit including customs and service fees.",
+            "tip": "Shipping cost will be recalculated; differences will be refunded or charged."
+        },
+        "step8": {
+            "title": "Step 8: bbdbuy Ships the Parcel",
+            "content1": "The warehouse packs, weighs, labels, and ships the parcel.",
+            "tip": "Track parcel status in the Package Details page."
+        },
+        "step9": {
+            "title": "Step 9: Confirm Receipt & Rewards",
+            "content1": "Confirm receipt after delivery to earn reward points.",
+            "tip": "Reach 500 points to redeem rewards. Contact customer service for help."
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   FiSearch,
   FiShoppingCart,
@@ -21,138 +22,101 @@ type StepItem = {
 
 export default function BeginnerGuide() {
   const router = useRouter();
+  const t = useTranslations("helpGuide");
 
   const steps: StepItem[] = [
     {
-      title: "Step 1: Choose Products",
+      title: t("step1.title"),
       icon: <FiSearch />,
       content: (
         <>
-          <p>
-            Method 1: Copy a product link from Taobao / Tmall / 1688 and paste
-            it into the bbdbuy search bar.
-          </p>
-          <p>Method 2: Search by product name and select recommended items.</p>
-          <p>Method 3: Use image search to find similar products.</p>
+          <p>{t("step1.content1")}</p>
+          <p>{t("step1.content2")}</p>
+          <p>{t("step1.content3")}</p>
 
-          <div className="tip">
-            If the link opens a DIY order page, the product requires manual
-            purchase. Fill in details and click “Buy Now” or “Add to Cart”.
-          </div>
+          <div className="tip">{t("step1.tip")}</div>
         </>
       ),
     },
     {
-      title: "Step 2: Submit Order",
+      title: t("step2.title"),
       icon: <FiShoppingCart />,
       content: (
         <>
-          <p>
-            bbdbuy supports auto-fetching product details for most platforms.
-          </p>
-          <p>Select options, quantity, then add to cart or buy directly.</p>
-          <p>You can also submit orders from the cart.</p>
+          <p>{t("step2.content1")}</p>
+          <p>{t("step2.content2")}</p>
+          <p>{t("step2.content3")}</p>
         </>
       ),
     },
     {
-      title: "Step 3: Pay for the Order",
+      title: t("step3.title"),
       icon: <FiCreditCard />,
       content: (
         <>
-          <p>
-            Pay for the product and domestic shipping within China after
-            submitting the order.
-          </p>
-          <div className="tip">
-            Multiple currencies supported. Choose destination country, services,
-            and submit.
-          </div>
+          <p>{t("step3.content1")}</p>
+          <div className="tip">{t("step3.tip")}</div>
         </>
       ),
     },
     {
-      title: "Step 4: Purchasing by bbdbuy",
+      title: t("step4.title"),
       icon: <FiUsers />,
       content: (
         <>
-          <p>
-            The bbdbuy purchasing team will contact the seller and buy the
-            product.
-          </p>
-          <div className="tip">
-            Order status: Pending Purchase → Ordered → Shipped → Delivered →
-            Arrived → Warehoused.
-          </div>
+          <p>{t("step4.content1")}</p>
+          <div className="tip">{t("step4.tip")}</div>
         </>
       ),
     },
     {
-      title: "Step 5: Inspection and Storage",
+      title: t("step5.title"),
       icon: <FiPackage />,
       content: (
         <>
-          <p>Products are inspected, weighed, and photographed upon arrival.</p>
-          <p>3 free photos included, 90 days free storage.</p>
-          <div className="tip">
-            Items stored over 180 days will be discarded automatically.
-          </div>
+          <p>{t("step5.content1")}</p>
+          <p>{t("step5.content2")}</p>
+          <div className="tip">{t("step5.tip")}</div>
         </>
       ),
     },
     {
-      title: "Step 6: Submit Parcel",
+      title: t("step6.title"),
       icon: <FiBox />,
       content: (
         <>
-          <p>
-            Go to the Warehouse page, select items, submit parcel, and fill in
-            shipping details.
-          </p>
-          <div className="tip">
-            Shipping routes depend on item restrictions and destination.
-          </div>
+          <p>{t("step6.content1")}</p>
+          <div className="tip">{t("step6.tip")}</div>
         </>
       ),
     },
     {
-      title: "Step 7: Pay International Shipping Deposit",
+      title: t("step7.title"),
       icon: <FiCreditCard />,
       content: (
         <>
-          <p>
-            Pay international shipping deposit including customs and service
-            fees.
-          </p>
-          <div className="tip">
-            Shipping cost will be recalculated; differences will be refunded or
-            charged.
-          </div>
+          <p>{t("step7.content1")}</p>
+          <div className="tip">{t("step7.tip")}</div>
         </>
       ),
     },
     {
-      title: "Step 8: bbdbuy Ships the Parcel",
+      title: t("step8.title"),
       icon: <FiTruck />,
       content: (
         <>
-          <p>The warehouse packs, weighs, labels, and ships the parcel.</p>
-          <div className="tip">
-            Track parcel status in the Package Details page.
-          </div>
+          <p>{t("step8.content1")}</p>
+          <div className="tip">{t("step8.tip")}</div>
         </>
       ),
     },
     {
-      title: "Step 9: Confirm Receipt & Rewards",
+      title: t("step9.title"),
       icon: <FiGift />,
       content: (
         <>
-          <p>Confirm receipt after delivery to earn reward points.</p>
-          <div className="tip">
-            Reach 500 points to redeem rewards. Contact customer service for
-            help.
-          </div>
+          <p>{t("step9.content1")}</p>
+          <div className="tip">{t("step9.tip")}</div>
         </>
       ),
     },
@@ -161,7 +125,7 @@ export default function BeginnerGuide() {
   return (
     <>
       <NavBar className="bg-white" onBack={() => router.push("/")}>
-        <span className="navbar-title">How to Purchase via bbdbuy</span>
+        <span className="navbar-title">{t("title")}</span>
       </NavBar>
       <div className="flex-1 overflow-auto p-2">
         <div className="flex flex-col gap-4">

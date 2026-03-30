@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button } from "@heroui/react";
+import { Button, Image } from "@heroui/react";
 import { useTranslations } from "next-intl";
 
 import { BlockSpinner, EmptyState } from "../ui";
@@ -50,23 +50,38 @@ export default function WaybillListModal({
             <div className="flex flex-col gap-4">
               {orders.map((waybill: any) => (
                 <div key={waybill.packingPackageCode} className="border rounded-lg p-4 flex flex-col gap-2 shadow-sm">
-                  <div className="flex justify-between items-center border-b pb-2">
+                  <div className="flex justify-between items-center ">
                     <div className="flex flex-col">
                       <span className="font-semibold text-sm">
                         {t("waybillNo")}
                         {waybill.packingPackageCode}
                       </span>
-                      {waybill.shippingCode && (
+                      {/* {waybill.shippingCode && (
                         <span className="text-xs text-gray-500">
                           {t("trackingNo")}
                           {waybill.shippingCode}
                         </span>
-                      )}
+                      )} */}
                     </div>
                     <Button size="sm" color="primary" onPress={() => onSendWaybill(waybill)}>
                       {t("send")}
                     </Button>
                   </div>
+
+                  {waybill.pic && waybill.pic.length > 0 && (
+                    <div className="flex gap-2 overflow-x-auto no-scrollbar flex-wrap">
+                      {waybill.pic.map((url: string, index: number) => (
+                        <Image
+                          key={index}
+                          src={url}
+                          referrerPolicy="no-referrer"
+                          alt="waybill pic"
+                          className="w-16 h-16 object-cover rounded flex-shrink-0"
+                        />
+                      ))}
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-2 gap-2 mt-2 text-sm text-gray-600">
                     <div>{t("weight")}: {waybill.weight}g</div>
                     <div>{t("size")}: {waybill.length}*{waybill.width}*{waybill.height}cm</div>
