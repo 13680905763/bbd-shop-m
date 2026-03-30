@@ -23,12 +23,15 @@ import OrderListModal from "./order-list-modal";
 import { useChat } from "@/hook/business/useChat";
 import { useChatStore, useGlobalStore } from "@/store";
 import WaybillListModal from "./chat-waybill";
+import { useVisualViewport } from "@/hook/common";
 
 export default function ChatBox() {
   const t = useTranslations("components.chatbox");
   const { currency } = useGlobalStore();
 
   const { isOpen, setIsOpen, pendingOrder, setPendingOrder, pendingWaybill, setPendingWaybill } = useChatStore();
+
+  useVisualViewport();
 
   const [input, setInput] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -133,6 +136,23 @@ export default function ChatBox() {
     }
   }, [messages, shouldScrollRef]);
 
+  // Handle visual viewport height changes (e.g. keyboard appearing)
+  useEffect(() => {
+    if (isOpen) {
+      const handleResize = () => {
+        if (scrollContainerRef.current) {
+          scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
+        }
+      };
+
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", handleResize);
+
+        return () => window.visualViewport?.removeEventListener("resize", handleResize);
+      }
+    }
+  }, [isOpen]);
+
   const handleSend = () => {
     const msgText = input.trim();
 
@@ -235,8 +255,17 @@ export default function ChatBox() {
       >
         <ModalContent
           className={`fixed m-0 overflow-hidden p-0 transition-all duration-300`}
+          style={{
+            height: "var(--visual-viewport-height, 100vh)",
+          }}
         >
-          <Card className="flex h-full w-full flex-col" radius="none">
+          <Card
+            className="flex h-full w-full flex-col"
+            radius="none"
+            style={{
+              height: "100%",
+            }}
+          >
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-4 text-white">
               <div className="flex items-center gap-2">
