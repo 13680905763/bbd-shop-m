@@ -23,8 +23,7 @@ export default function RefundCountdown({ timestamp }: RefundCountdownProps) {
 
   return (
     <span style={{ fontSize: "12px", color: "inherit", lineHeight: "inherit" }}>
-      ({days} {t("day")} {hours} {t("hour")} {minutes} {t("minute")} {seconds}{" "}
-      {t("second")})
+      ({days} {t("day")} {hours} {t("hour")})
     </span>
   );
 }

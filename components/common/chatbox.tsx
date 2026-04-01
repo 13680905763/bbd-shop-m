@@ -11,6 +11,8 @@ import {
   addToast,
   Avatar,
   Badge,
+  Drawer,
+  DrawerContent,
 } from "@heroui/react";
 import { FaComments, FaImage, FaTimes, FaShoppingBag, FaBoxOpen } from "react-icons/fa";
 import data from "@emoji-mart/data";
@@ -23,7 +25,6 @@ import OrderListModal from "./order-list-modal";
 import { useChat } from "@/hook/business/useChat";
 import { useChatStore, useGlobalStore } from "@/store";
 import WaybillListModal from "./chat-waybill";
-import { useVisualViewport } from "@/hook/common";
 
 export default function ChatBox() {
   const t = useTranslations("components.chatbox");
@@ -31,7 +32,6 @@ export default function ChatBox() {
 
   const { isOpen, setIsOpen, pendingOrder, setPendingOrder, pendingWaybill, setPendingWaybill } = useChatStore();
 
-  useVisualViewport();
 
   const [input, setInput] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -43,6 +43,8 @@ export default function ChatBox() {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const isDraggingRef = useRef(false);
 
+  // 1. 定义 Ref
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   // Use the custom hook
   const {
     messages,
@@ -136,22 +138,22 @@ export default function ChatBox() {
     }
   }, [messages, shouldScrollRef]);
 
-  // Handle visual viewport height changes (e.g. keyboard appearing)
+  const scrollToBottom = () => {
+    // block: "end" 会强制将该元素对齐到滚动容器的底部
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  };
+
   useEffect(() => {
     if (isOpen) {
+      const viewport = window.visualViewport;
       const handleResize = () => {
-        if (scrollContainerRef.current) {
-          scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
-        }
+        setTimeout(scrollToBottom, 250); // 等键盘弹完
       };
-
-      if (window.visualViewport) {
-        window.visualViewport.addEventListener("resize", handleResize);
-
-        return () => window.visualViewport?.removeEventListener("resize", handleResize);
-      }
+      viewport?.addEventListener("resize", handleResize);
+      return () => viewport?.removeEventListener("resize", handleResize);
     }
   }, [isOpen]);
+
 
   const handleSend = () => {
     const msgText = input.trim();
@@ -243,320 +245,319 @@ export default function ChatBox() {
         </Badge>
       </motion.div>
 
-      <Modal
-        // className={"!fixed bottom-20 right-6 !m-0"}
+      <Drawer
         backdrop="opaque"
         isOpen={isOpen}
-        placement="center"
         radius="none"
         scrollBehavior="inside"
         size={"full"}
         onOpenChange={setIsOpen}
       >
-        <ModalContent
-          className={`fixed m-0 overflow-hidden p-0 transition-all duration-300`}
+        <DrawerContent
           style={{
-            height: "var(--visual-viewport-height, 100vh)",
+            // 强制让容器高度等于“露出来的视口高度”
+            // 这样底部输入框才会被顶上去，而不是被盖住
+            height: window.visualViewport ? `${window.visualViewport.height}px` : "100dvh",
+            maxHeight: "100dvh",
+            transition: "height 0.2s ease-out", // 增加平滑过渡
           }}
         >
-          <Card
-            className="flex h-full w-full flex-col"
-            radius="none"
-            style={{
-              height: "100%",
-            }}
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between px-4 py-4 text-white">
-              <div className="flex items-center gap-2">
-                <img
-                  alt="logo"
-                  className="w-15 h-6 rounded"
-                  src="/m/logo.png"
-                />
-                <span className="text-sm font-semibold text-[#f0700c]">
-                  {t("onlineSupport")}
-                </span>
-              </div>
-              <div className="flex items-center gap-2 text-[#f0700c]">
-                <button
-                  className="rounded p-1 transition-colors hover:bg-white/20"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <FaTimes />
-                </button>
-              </div>
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 py-4 text-white">
+            <div className="flex items-center gap-2">
+              <img
+                alt="logo"
+                className="w-15 h-6 rounded"
+                src="/m/logo.png"
+              />
+              <span className="text-sm font-semibold text-[#f0700c]">
+                {t("onlineSupport")}
+              </span>
             </div>
+            {/* <div className="flex items-center gap-2 text-[#f0700c]">
+              <button
+                className="rounded p-1 transition-colors hover:bg-white/20"
+                onClick={() => setIsOpen(false)}
+              >
+                <FaTimes />
+              </button>
+            </div> */}
+          </div>
 
-            <div
-              ref={scrollContainerRef}
-              className="flex-1 space-y-2 overflow-y-auto bg-gray-50 p-3"
-              onScroll={handleScroll}
-            >
-              {firstLoading && (
-                <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-50/70">
-                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-500" />
+          <div
+            ref={scrollContainerRef}
+            className="flex-1 space-y-2 overflow-y-auto bg-gray-50 p-3"
+            onScroll={handleScroll}
+          >
+            {firstLoading && (
+              <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-50/70">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-500" />
+              </div>
+            )}
+            {isLoadingHistory && !firstLoading && (
+              <div className="flex justify-center py-2">
+                <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-blue-500" />
+              </div>
+            )}
+            {messages.map((msg) => (
+              <div
+                key={msg.id}
+                className={`flex w-full gap-2 ${msg.sender === "user" ? "flex-row-reverse" : "flex-row"
+                  }`}
+              >
+                {/* Avatar */}
+                <div className="flex-shrink-0">
+                  {msg.sender === "bot" ? (
+                    <Avatar
+                      className="border bg-white p-1"
+                      size="sm"
+                      src="/m/logo.png"
+                    />
+                  ) : (
+                    <Avatar
+                      name={user?.nickname?.[0] || "U"}
+                      size="sm"
+                      src={user?.avatarUrl || ""}
+                    />
+                  )}
                 </div>
-              )}
-              {isLoadingHistory && !firstLoading && (
-                <div className="flex justify-center py-2">
-                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-blue-500" />
-                </div>
-              )}
-              {messages.map((msg) => (
+
+                {/* Message Bubble */}
                 <div
-                  key={msg.id}
-                  className={`flex w-full gap-2 ${msg.sender === "user" ? "flex-row-reverse" : "flex-row"
+                  className={`w-fit max-w-[75%] break-words rounded-lg p-2 ${msg.sender === "user"
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200 text-black"
                     }`}
                 >
-                  {/* Avatar */}
-                  <div className="flex-shrink-0">
-                    {msg.sender === "bot" ? (
-                      <Avatar
-                        className="border bg-white p-1"
-                        size="sm"
-                        src="/m/logo.png"
-                      />
-                    ) : (
-                      <Avatar
-                        name={user?.nickname?.[0] || "U"}
-                        size="sm"
-                        src={user?.avatarUrl || ""}
-                      />
-                    )}
-                  </div>
+                  <div className="flex flex-col gap-1">
+                    {msg.type === "IMAGE" && msg.text ? (
+                      <div className="relative inline-block">
+                        <Image
+                          alt="image"
+                          className="max-h-[200px] max-w-[200px] rounded object-contain"
+                          src={msg.text}
+                        />
+                        {msg.sending && (
+                          <div className="absolute inset-0 flex items-center justify-center rounded bg-black/20">
+                            <div className="h-6 w-6 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                          </div>
+                        )}
+                      </div>
+                    ) : msg.type === "ORDER" ? (
+                      <div className="w-full rounded bg-orange-100 p-2 font-mono text-sm text-black">
+                        {(() => {
+                          try {
+                            const order = JSON.parse(msg.text || "{}");
 
-                  {/* Message Bubble */}
-                  <div
-                    className={`w-fit max-w-[75%] break-words rounded-lg p-2 ${msg.sender === "user"
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-200 text-black"
-                      }`}
-                  >
-                    <div className="flex flex-col gap-1">
-                      {msg.type === "IMAGE" && msg.text ? (
-                        <div className="relative inline-block">
-                          <Image
-                            alt="image"
-                            className="max-h-[200px] max-w-[200px] rounded object-contain"
-                            src={msg.text}
-                          />
-                          {msg.sending && (
-                            <div className="absolute inset-0 flex items-center justify-center rounded bg-black/20">
-                              <div className="h-6 w-6 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                            </div>
-                          )}
-                        </div>
-                      ) : msg.type === "ORDER" ? (
-                        <div className="w-full rounded bg-orange-100 p-2 font-mono text-sm text-black">
-                          {(() => {
-                            try {
-                              const order = JSON.parse(msg.text || "{}");
-
-                              return (
-                                <div className="flex flex-col gap-2">
-                                  <div className="border-b border-yellow-200 pb-1 font-semibold">
-                                    {t("orderNo")}
-                                    {order.orderCode}
-                                  </div>
-                                  <div className="flex max-h-40 flex-col gap-2 overflow-y-auto">
-                                    {order.products?.map(
-                                      (product: any, idx: number) => (
-                                        <div
-                                          key={idx}
-                                          className="flex items-start gap-2"
-                                        >
-                                          <Image
-                                            alt="product"
-                                            className="h-10 w-10 flex-shrink-0 rounded object-cover"
-                                            referrerPolicy="no-referrer"
-                                            src={
-                                              product.skuPicUrl ||
-                                              product.picUrl
-                                            }
-                                          />
-                                          <div className="flex-1 text-xs">
-                                            <div className="line-clamp-2">
-                                              {product.productTitle}
-                                            </div>
-                                            <div className="mt-1 text-gray-500">
-                                              {t("price")}
-                                              {product.price} x{" "}
-                                              {product.quantity}
-                                            </div>
+                            return (
+                              <div className="flex flex-col gap-2">
+                                <div className="border-b border-yellow-200 pb-1 font-semibold">
+                                  {t("orderNo")}
+                                  {order.orderCode}
+                                </div>
+                                <div className="flex max-h-40 flex-col gap-2 overflow-y-auto">
+                                  {order.products?.map(
+                                    (product: any, idx: number) => (
+                                      <div
+                                        key={idx}
+                                        className="flex items-start gap-2"
+                                      >
+                                        <Image
+                                          alt="product"
+                                          className="h-10 w-10 flex-shrink-0 rounded object-cover"
+                                          referrerPolicy="no-referrer"
+                                          src={
+                                            product.skuPicUrl ||
+                                            product.picUrl
+                                          }
+                                        />
+                                        <div className="flex-1 text-xs">
+                                          <div className="line-clamp-2">
+                                            {product.productTitle}
+                                          </div>
+                                          <div className="mt-1 text-gray-500">
+                                            {t("price")}
+                                            {product.price} x{" "}
+                                            {product.quantity}
                                           </div>
                                         </div>
-                                      ),
-                                    )}
-                                  </div>
+                                      </div>
+                                    ),
+                                  )}
                                 </div>
-                              );
-                            } catch (e) {
-                              return <div>{msg.text}</div>;
-                            }
-                          })()}
-                        </div>
-                      ) : msg.type === "WAYBILL" ? (
-                        <div className="rounded bg-blue-100 p-2 font-mono text-sm text-black w-full">
-                          {(() => {
-                            try {
-                              const waybill = JSON.parse(msg.text || "{}");
-                              return (
-                                <div className="flex flex-col gap-2">
-                                  <div className="font-semibold border-b border-blue-200 pb-1">
-                                    {t("waybillNo", { defaultMessage: "Waybill No: " })}{waybill.packingPackageCode}
-                                  </div>
-                                  <div className="flex flex-col gap-1 text-xs">
-                                    {waybill.shippingCode && (
-                                      <div>
-                                        <span className="text-gray-500">{t("trackingNo", { defaultMessage: "Tracking No: " })}</span>
-                                        {waybill.shippingCode}
-                                      </div>
-                                    )}
-                                    {waybill.pic && waybill.pic.length > 0 && (
-                                      <div className="flex gap-2 mt-1 overflow-x-auto no-scrollbar flex-wrap">
-                                        {waybill.pic.map((url: string, index: number) => (
-                                          <Image
-                                            key={index}
-                                            src={url}
-                                            referrerPolicy="no-referrer"
-                                            alt="waybill pic"
-                                            className="w-12 h-12 object-cover rounded flex-shrink-0"
-                                          />
-                                        ))}
-                                      </div>
-                                    )}
-                                    <div className="grid grid-cols-2 gap-1 mt-1">
-                                      <div>
-                                        <span className="text-gray-500">{t("weight", { defaultMessage: "Weight" })}: </span>
-                                        {waybill.weight}g
-                                      </div>
-                                      <div>
-                                        <span className="text-gray-500">{t("size", { defaultMessage: "Size" })}: </span>
-                                        {waybill.length}*{waybill.width}*{waybill.height}cm
-                                      </div>
+                              </div>
+                            );
+                          } catch (e) {
+                            return <div>{msg.text}</div>;
+                          }
+                        })()}
+                      </div>
+                    ) : msg.type === "WAYBILL" ? (
+                      <div className="rounded bg-blue-100 p-2 font-mono text-sm text-black w-full">
+                        {(() => {
+                          try {
+                            const waybill = JSON.parse(msg.text || "{}");
+                            return (
+                              <div className="flex flex-col gap-2">
+                                <div className="font-semibold border-b border-blue-200 pb-1">
+                                  {t("waybillNo", { defaultMessage: "Waybill No: " })}{waybill.packingPackageCode}
+                                </div>
+                                <div className="flex flex-col gap-1 text-xs">
+                                  {waybill.shippingCode && (
+                                    <div>
+                                      <span className="text-gray-500">{t("trackingNo", { defaultMessage: "Tracking No: " })}</span>
+                                      {waybill.shippingCode}
+                                    </div>
+                                  )}
+                                  {waybill.pic && waybill.pic.length > 0 && (
+                                    <div className="flex gap-2 mt-1 overflow-x-auto no-scrollbar flex-wrap">
+                                      {waybill.pic.map((url: string, index: number) => (
+                                        <Image
+                                          key={index}
+                                          src={url}
+                                          referrerPolicy="no-referrer"
+                                          alt="waybill pic"
+                                          className="w-12 h-12 object-cover rounded flex-shrink-0"
+                                        />
+                                      ))}
+                                    </div>
+                                  )}
+                                  <div className="grid grid-cols-2 gap-1 mt-1">
+                                    <div>
+                                      <span className="text-gray-500">{t("weight", { defaultMessage: "Weight" })}: </span>
+                                      {waybill.weight}g
+                                    </div>
+                                    <div>
+                                      <span className="text-gray-500">{t("size", { defaultMessage: "Size" })}: </span>
+                                      {waybill.length}*{waybill.width}*{waybill.height}cm
                                     </div>
                                   </div>
                                 </div>
-                              );
-                            } catch (e) {
-                              return <div>{msg.text}</div>;
-                            }
-                          })()}
-                        </div>
-                      ) : (
-                        msg.text
-                      )}
-                      <span
-                        className={`self-end text-[10px] ${msg.sender === "user"
-                          ? "text-blue-100"
-                          : "text-gray-500"
-                          }`}
-                      >
-                        {msg?.createTime}
-                      </span>
-                    </div>
+                              </div>
+                            );
+                          } catch (e) {
+                            return <div>{msg.text}</div>;
+                          }
+                        })()}
+                      </div>
+                    ) : (
+                      msg.text
+                    )}
+                    <span
+                      className={`self-end text-[10px] ${msg.sender === "user"
+                        ? "text-blue-100"
+                        : "text-gray-500"
+                        }`}
+                    >
+                      {msg?.createTime}
+                    </span>
                   </div>
                 </div>
-              ))}
-            </div>
-            <div className="relative flex flex-col gap-2 border-t bg-white p-3">
-              <Textarea
-                ref={textareaRef}
-                classNames={{
-                  inputWrapper:
-                    "w-full border border-gray-300 rounded-md px-3 py-2",
-                  input: "text-base",
-                }}
-                placeholder={t("inputPlaceholder")}
-                rows={2}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSend();
-                  }
-                }}
-              />
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
+          </div>
+          <div className="relative flex flex-col gap-2 border-t bg-white p-3">
+            <Textarea
+              ref={textareaRef}
+              classNames={{
+                inputWrapper:
+                  "w-full border border-gray-300 rounded-md px-3 py-2",
+                input: "text-base",
+              }}
+              placeholder={t("inputPlaceholder")}
+              rows={2}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSend();
+                }
+              }}
+              onFocus={() => {
+                setTimeout(() => {
+                  messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+                }, 500);
+              }}
+            />
 
-              {showEmojiPicker && (
-                <div className="absolute bottom-20 left-3 z-50">
-                  <Picker
-                    data={data}
-                    theme="light"
-                    onEmojiSelect={(e: any) => insertEmoji(e.native)}
-                  />
-                </div>
-              )}
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center  flex-1">
-                  <Button
-                    className="flex  items-center justify-center"
-                    color="primary"
-                    isIconOnly={true}
-                    radius="full"
-                    variant="light"
-                    onPress={() => setShowEmojiPicker((prev) => !prev)}
-                  >
-                    😀
-                  </Button>
-                  <Button
-                    className="flex items-center justify-center"
-                    color="primary"
-                    radius="full"
-                    isIconOnly={true}
-
-                    variant="light"
-                    onPress={() => fileInputRef.current?.click()}
-                  >
-                    <FaImage />
-                  </Button>
-                  <Button
-                    className="flex  items-center justify-center"
-                    color="primary"
-                    radius="full"
-                    isIconOnly={true}
-
-                    variant="light"
-                    onPress={() => setShowOrderModal(true)}
-                  >
-                    <FaShoppingBag />
-                  </Button>
-                  <Button
-                    className="flex  items-center justify-center"
-                    color="primary"
-                    isIconOnly={true}
-
-                    radius="full"
-                    variant="light"
-                    onPress={() => setShowWaybillModal(true)}
-                  >
-                    <FaBoxOpen />
-                  </Button>
-                </div>
-
-                <Button
-                  className="px-4 py-2 flex-1 "
-                  color="primary"
-                  onPress={handleSend}
-                >
-                  {t("send")}
-                </Button>
-
-                <input
-                  ref={fileInputRef}
-                  hidden
-                  accept="image/*"
-                  type="file"
-                  onChange={handleFileChange}
+            {showEmojiPicker && (
+              <div className="absolute bottom-20 left-3 z-50">
+                <Picker
+                  data={data}
+                  theme="light"
+                  onEmojiSelect={(e: any) => insertEmoji(e.native)}
                 />
               </div>
+            )}
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center  flex-1">
+                <Button
+                  className="flex  items-center justify-center"
+                  color="primary"
+                  isIconOnly={true}
+                  radius="full"
+                  variant="light"
+                  onPress={() => setShowEmojiPicker((prev) => !prev)}
+                >
+                  😀
+                </Button>
+                <Button
+                  className="flex items-center justify-center"
+                  color="primary"
+                  radius="full"
+                  isIconOnly={true}
+
+                  variant="light"
+                  onPress={() => fileInputRef.current?.click()}
+                >
+                  <FaImage />
+                </Button>
+                <Button
+                  className="flex  items-center justify-center"
+                  color="primary"
+                  radius="full"
+                  isIconOnly={true}
+
+                  variant="light"
+                  onPress={() => setShowOrderModal(true)}
+                >
+                  <FaShoppingBag />
+                </Button>
+                <Button
+                  className="flex  items-center justify-center"
+                  color="primary"
+                  isIconOnly={true}
+
+                  radius="full"
+                  variant="light"
+                  onPress={() => setShowWaybillModal(true)}
+                >
+                  <FaBoxOpen />
+                </Button>
+              </div>
+
+              <Button
+                className="px-4 py-2 flex-1 "
+                color="primary"
+                onPress={handleSend}
+              >
+                {t("send")}
+              </Button>
+
+              <input
+                ref={fileInputRef}
+                hidden
+                accept="image/*"
+                type="file"
+                onChange={handleFileChange}
+              />
             </div>
-          </Card>
-        </ModalContent>
-      </Modal>
+          </div>
+        </DrawerContent>
+      </Drawer>
       {showOrderModal && (
         <OrderListModal
           isOpen={showOrderModal}

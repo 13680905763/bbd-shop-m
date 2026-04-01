@@ -57,42 +57,53 @@ export default function LoginPage() {
     if (btn) btn.click();
   };
 
+
   React.useEffect(() => {
     // 设置验证码配置
     (window as any).AliyunCaptchaConfig = { region: "cn", prefix: "esa-ky973v1gyr" };
+
+    const initCaptcha = () => {
+      if ((window as any).initAliyunCaptcha) {
+        (window as any).initAliyunCaptcha({
+          SceneId: "gekek24p",
+          mode: "popup",
+          element: "#captcha-element",
+          button: "#captcha-trigger-btn",
+          language: language === "zh" ? "cn" : language,
+          success: function (captchaVerifyParam: string) {
+            handleCaptchaSuccess(captchaVerifyParam);
+          },
+          fail: function (result: any) {
+            console.error("Captcha fail", result);
+          },
+          getInstance: function (instance: any) {
+            captchaInstanceRef.current = instance;
+          },
+          server: ['captcha-esa-open.aliyuncs.com', 'captcha-esa-open-b.aliyuncs.com'],
+          slideStyle: { width: 360, height: 40 },
+        });
+      }
+    };
 
     if (!document.getElementById("aliyun-captcha-script")) {
       const script = document.createElement("script");
       script.id = "aliyun-captcha-script";
       script.src = "https://o.alicdn.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js";
       script.async = true;
-      script.onload = () => {
-        if ((window as any).initAliyunCaptcha) {
-          (window as any).initAliyunCaptcha({
-            SceneId: "gekek24p",
-            mode: "popup",
-            element: "#captcha-element",
-            button: "#captcha-trigger-btn",
-            language: language === "zh" ? "cn" : language,
-            success: function (captchaVerifyParam: string) {
-              handleCaptchaSuccess(captchaVerifyParam);
-            },
-            fail: function (result: any) {
-              console.error("Captcha fail", result);
-            },
-            getInstance: function (instance: any) {
-              captchaInstanceRef.current = instance;
-            },
-            server: ['captcha-esa-open.aliyuncs.com', 'captcha-esa-open-b.aliyuncs.com'],
-            slideStyle: { width: 360, height: 40 },
-          });
-        }
-      };
+      script.onload = initCaptcha;
       document.body.appendChild(script);
+    } else {
+      if ((window as any).initAliyunCaptcha) {
+        initCaptcha();
+      } else {
+        const existingScript = document.getElementById("aliyun-captcha-script");
+        if (existingScript) {
+          existingScript.addEventListener("load", initCaptcha);
+        }
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   const handleCaptchaSuccess = async (captchaVerifyParam: string) => {
     if (!submitDataRef.current) return;
     try {

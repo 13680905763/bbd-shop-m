@@ -140,6 +140,10 @@ export default function GoodsDetails() {
   const [visible, setVisible] = useState(false);
   const [qcVisible, setQcVisible] = useState(false);
   const [qcIndex, setQcIndex] = useState(0);
+
+
+  const [currentImg, setCurrentImg] = useState<string>();
+
   const { mutateAsync: addCartItem, isPending: isAddingCart } =
     useAddCartItem();
   const { mutateAsync: favoriteProduct } = useFavoriteProduct();
@@ -545,7 +549,7 @@ export default function GoodsDetails() {
                     height={70}
                     referrerPolicy="no-referrer"
                     src={
-                      currentSku?.imgUrl ?? goodsInfo?.productInfo.imgList[0]
+                      currentSku?.imgUrl ?? currentImg ?? goodsInfo?.productInfo.imgList[0]
                     }
                     width={70}
                     onClick={() => {
@@ -554,7 +558,7 @@ export default function GoodsDetails() {
                   />
                   <ImageViewer.Multi
                     images={[
-                      currentSku?.imgUrl ?? goodsInfo?.productInfo.imgList[0],
+                      currentSku?.imgUrl ?? currentImg ?? goodsInfo?.productInfo.imgList[0],
                     ]}
                     visible={visible}
                     onClose={() => {
@@ -600,9 +604,10 @@ export default function GoodsDetails() {
                                     radius="sm"
                                     size={spec.imageUrl ? "md" : "sm"}
                                     variant="bordered"
-                                    onPress={() =>
+                                    onPress={() => {
+                                      setCurrentImg(spec.imageUrl)
                                       changeSelectedStatus(index, indey)
-                                    }
+                                    }}
                                   >
                                     {spec.imageUrl && (
                                       <Image

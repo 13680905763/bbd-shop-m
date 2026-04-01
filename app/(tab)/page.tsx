@@ -19,7 +19,7 @@ export default function Home() {
   const toolTab = [
     {
       image: "/m/images/home/tab1.png",
-      href: "https://discord.gg/N34Q27Vts8",
+      href: "https://discord.gg/tERd3KZRMh",
     },
     {
       image: "/m/images/home/tab2.png",

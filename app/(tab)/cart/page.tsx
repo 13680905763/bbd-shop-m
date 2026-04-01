@@ -26,6 +26,7 @@ export default function Cart() {
   const { submitCart, isSubmitting } = useSubmitCart();
   const [isEdit, setIsEdit] = useState(false);
   const remarkRef = useRef("");
+
   const {
     selectedIds,
     isSelected,
@@ -98,7 +99,7 @@ export default function Cart() {
       </div>
       <div className="flex-1 space-y-2 overflow-auto px-2 pb-2 scrollbar-hide">
         {(isFetching || isUpdating) && <BlockSpinner />}
-        {!flatList.length ? (
+        {!data.length ? (
           <EmptyState desc={t("emptyDesc")} title={t("emptyTitle")} />
         ) : (
           data?.map((c: any) => (

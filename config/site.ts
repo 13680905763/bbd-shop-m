@@ -1,6 +1,6 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "bbdbuy",
-  description: "Make beautiful websites regardless of your design experience.",
+  name: "BBDBUY",
+  description: "BBDBUY is taobao agent, 1688 agent, weidianagent, taobao agent in china, taobaoshopping service, shopping in china, shoppingservice in china, shopping agent in china.",
 };
