@@ -1,8 +1,9 @@
 "use client";
 import { NavBar, Swiper, Image, ImageViewer } from "antd-mobile";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
-import { IoCart, IoStar } from "react-icons/io5";
+import { IoCart, IoStar, IoShareSocialOutline } from "react-icons/io5";
+import CopyText from "@/components/ui/copy-text";
 import {
   addToast,
   Button,
@@ -23,6 +24,7 @@ import DisclaimerDrawer from "./disclaimer-drawer";
 
 import { Stepper } from "@/components/ui";
 import { getGoodsInfoById } from "@/hook/api";
+import { useUserInfo } from "@/hook/business";
 import { createOrderPreviewKeyByProduct } from "@/services";
 import { source } from "@/types";
 import CommonModal from "@/components/modal/common-modal";
@@ -121,9 +123,19 @@ function getAllCombinations(
 export default function GoodsDetails() {
   const t = useTranslations("goods.details");
   const { currency } = useGlobalStore();
+  const { data: user } = useUserInfo();
 
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const inviteCode = searchParams.get("inviteCode");
+    if (inviteCode && typeof window !== "undefined") {
+      localStorage.setItem("inviteCode", inviteCode);
+    }
+  }, [searchParams]);
+
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [remark, setRemark] = useState<string>();
   const [quantity, setQuantity] = useState<number>(1);
@@ -494,7 +506,7 @@ export default function GoodsDetails() {
           </div>
 
           <div className="flex items-center justify-between gap-8 bg-white p-2">
-            <div className="flex gap-4">
+            <div className="flex gap-2">
               <div className="flex flex-col items-center justify-center">
                 <button onClick={() => router.push("/cart")}>
                   <IoCart className="h-[30px] w-[30px]" />
@@ -507,11 +519,29 @@ export default function GoodsDetails() {
                   />
                 </button>
               </div>
+              <div className="flex flex-col items-center justify-center">
+                <CopyText
+                  text={
+                    typeof window !== "undefined"
+                      ? `${window.location.href}${
+                          user?.inviteCode
+                            ? (window.location.href.includes("?") ? "&" : "?") +
+                              "inviteCode=" +
+                              user.inviteCode
+                            : ""
+                        }`
+                      : ""
+                  }
+                >
+                  <IoShareSocialOutline className="h-[28px] w-[28px] text-gray-700 hover:text-primary transition-colors" />
+                </CopyText>
+              </div>
             </div>
             <div className="flex flex-1 gap-2">
               <Button
                 className="flex-1 bg-[linear-gradient(to_right,#ffd01e,#ff8917)] text-white"
                 onPress={() => {
+                  if (!user) return router.push("/login");
                   setDrawerType("addCart");
                   onOpen();
                 }}
@@ -522,6 +552,7 @@ export default function GoodsDetails() {
                 className="flex-1"
                 color="primary"
                 onPress={() => {
+                  if (!user) return router.push("/login");
                   setDrawerType("buyNow");
                   onOpen();
                 }}

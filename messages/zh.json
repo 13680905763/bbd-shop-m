@@ -1,1021 +1,1025 @@
 {
-    "components": {
-        "ui": {
-            "copy": {
-                "success": "复制成功",
-                "fail": "复制失败"
-            },
-            "refundCountdown": {
-                "day": "天",
-                "hour": "时",
-                "minute": "分",
-                "second": "秒",
-                "expired": "已过期"
-            },
-            "empty": {
-                "desc": "暂无数据"
-            }
-        },
-        "form": {
-            "save": "确认",
-            "cancel": "取消",
-            "specification": {
-                "s1": "颜色",
-                "s2": "尺寸",
-                "quantity": "数量",
-                "add": "添加规格"
-            },
-            "uploadImages": {
-                "tip": "最多上传5张图片"
-            }
-        },
-        "common": {
-            "selectBlock": {
-                "title": "默认标题",
-                "emptyText": "暂未选择",
-                "select": "去选择"
-            },
-            "bottomAction": {
-                "selectAll": "全选",
-                "submit": "提交"
-            },
-            "confirmModal": {
-                "title": "操作确认",
-                "confirm": "确认",
-                "cancel": "取消"
-            },
-            "productItem": {
-                "remark": "商品备注",
-                "placeholder": "输入商品备注",
-                "noRemark": "暂无备注"
-            },
-            "expandableList": {
-                "expand": "展开",
-                "collapse": "收起"
-            }
-        },
-        "drawer": {
-            "selectionService": {
-                "title": "附加服务",
-                "free": "免费",
-                "add": "添加",
-                "remark": "备注",
-                "noRemark": "暂无备注"
-            },
-            "selectionServiceDetailDrawer": {
-                "serviceIntro": "服务介绍",
-                "noIntro": "无介绍",
-                "sample": "样品",
-                "serviceFee": "服务费",
-                "remarkPlaceholder": "请输入备注（可选）",
-                "remark": "备注",
-                "confirm": "确认"
-            }
-        },
-        "block": {
-            "warehouseProductItem": {
-                "weight": "重量",
-                "size": "尺寸"
-            }
-        },
-        "modal": {
-            "confirm": "确认",
-            "cancel": "取消",
-            "confirmModalTitle": "操作确认",
-            "address": {
-                "addTitle": "添加地址",
-                "editTitle": "编辑地址",
-                "fields": {
-                    "recipient": {
-                        "label": "收件人",
-                        "placeholder": "输入收件人姓名",
-                        "errorMessage": "收件人不能为空"
-                    },
-                    "phone": {
-                        "label": "电话",
-                        "placeholder": "输入电话号码",
-                        "errorMessage": "电话不能为空"
-                    },
-                    "area": {
-                        "label": "地区",
-                        "placeholder": "选择地区",
-                        "errorMessage": "地区不能为空"
-                    },
-                    "address": {
-                        "label": "地址",
-                        "placeholder": "输入完整地址",
-                        "errorMessage": "地址不能为空"
-                    },
-                    "doorNo": {
-                        "label": "门牌号",
-                        "placeholder": "输入门牌号",
-                        "errorMessage": "门牌号不能为空"
-                    },
-                    "postcode": {
-                        "label": "邮编",
-                        "placeholder": "输入邮政编码",
-                        "errorMessage": "邮编不能为空"
-                    },
-                    "defaultAddress": {
-                        "label": "设为默认地址"
-                    }
-                }
-            },
-            "billingAddress": {
-                "addTitle": "添加账单地址",
-                "editTitle": "编辑账单地址",
-                "fields": {
-                    "familyName": {
-                        "label": "姓",
-                        "placeholder": "输入姓",
-                        "errorMessage": "姓不能为空"
-                    },
-                    "givenName": {
-                        "label": "名",
-                        "placeholder": "输入名",
-                        "errorMessage": "名不能为空"
-                    },
-                    "phone": {
-                        "label": "电话",
-                        "placeholder": "输入电话号码",
-                        "errorMessage": "电话不能为空"
-                    },
-                    "area": {
-                        "label": "地区",
-                        "placeholder": "选择地区",
-                        "errorMessage": "地区不能为空"
-                    },
-                    "address": {
-                        "label": "地址",
-                        "placeholder": "输入完整地址",
-                        "errorMessage": "地址不能为空"
-                    },
-                    "doorNo": {
-                        "label": "门牌号",
-                        "placeholder": "输入门牌号",
-                        "errorMessage": "门牌号不能为空"
-                    },
-                    "postcode": {
-                        "label": "邮编",
-                        "placeholder": "输入邮政编码",
-                        "errorMessage": "邮编不能为空"
-                    },
-                    "defaultAddress": {
-                        "label": "设为默认地址"
-                    }
-                }
-            },
-            "recharge": {
-                "title": "充值",
-                "placeholder": "请输入充值金额"
-            }
-        },
-        "areaSelector": {
-            "country": {
-                "label": "国家",
-                "placeholder": "选择国家",
-                "errorMessage": "请选择国家"
-            },
-            "state": {
-                "label": "省份",
-                "placeholder": "选择省份",
-                "errorMessage": "请选择省份"
-            },
-            "city": {
-                "label": "城市",
-                "placeholder": "选择城市",
-                "errorMessage": "请选择城市"
-            }
-        },
-        "confirmModal": {
-            "title": "操作确认",
-            "content": "确定要执行这个操作吗？",
-            "confirmText": "确认",
-            "cancelText": "取消"
-        },
-        "copyButton": {
-            "success": "已复制到剪贴板",
-            "fail": "复制失败",
-            "title": "点击复制"
-        },
-        "chatbox": {
-            "loginFirst": "请先登录",
-            "onlineSupport": "在线客服",
-            "inputPlaceholder": "请输入消息...",
-            "send": "发送",
-            "connectionLost": "连接断开，请稍后重试",
-            "imageSendFail": "图片发送失败",
-            "imageTooLarge": "图片大小不能超过 5MB",
-            "selectOrder": "选择订单",
-            "noOrdersFound": "暂无订单",
-            "orderNo": "订单号：",
-            "price": "价格：",
-            "close": "关闭",
-            "waybillNo": "包裹号：",
-            "weight": "重量：",
-            "size": "尺寸：",
-            "selectWaybill": "选择包裹",
-            "noWaybillsFound": "暂无包裹"
-        },
-        "billingAddress": {
-            "edit": "编辑",
-            "delete": "删除"
-        },
-        "itemList": {
-            "addressItem": {
-                "edit": "编辑",
-                "delete": "删除",
-                "default": "默认"
-            },
-            "couponItem": {
-                "minSpend": "满{amount}可用",
-                "discount": "优惠",
-                "restriction": "限制",
-                "shippingExcludingCustoms": "运费（不含关税）",
-                "usage": "用途",
-                "internationalPackage": "国际包裹",
-                "countries": "地区",
-                "all": "全部国家",
-                "redeem": "兑换",
-                "type": "类型",
-                "validity": "有效期",
-                "days": "{count}天",
-                "points": "积分",
-                "src": "来源",
-                "usedFor": "用途"
-            },
-            "exchangeCouponItem": {
-                "minSpend": "满{amount}可用",
-                "discount": "优惠",
-                "restriction": "限制",
-                "shippingExcludingCustoms": "运费（不含关税）",
-                "usage": "用途",
-                "internationalPackage": "国际包裹",
-                "countries": "地区",
-                "all": "全部国家",
-                "redeem": "兑换",
-                "type": "类型",
-                "validity": "有效期",
-                "days": "{count}天",
-                "points": "积分",
-                "src": "来源",
-                "usedFor": "用途"
-            }
-        }
+  "components": {
+    "ui": {
+      "copy": {
+        "success": "复制成功",
+        "fail": "复制失败"
+      },
+      "refundCountdown": {
+        "day": "天",
+        "hour": "时",
+        "minute": "分",
+        "second": "秒",
+        "expired": "已过期"
+      },
+      "empty": {
+        "desc": "暂无数据"
+      }
     },
-    "auth": {
-        "sloganTitle": "提供一站式服务",
-        "sloganDesc": "轻松从中国购物，专业运输全球",
-        "login": {
-            "loginButton": "登录",
-            "registerButton": "注册",
-            "forgetPassword": "忘记密码",
-            "fields": {
-                "email": {
-                    "errorMessage": "邮箱不能为空",
-                    "placeholder": "请输入邮箱"
-                },
-                "password": {
-                    "errorMessage": "密码不能为空",
-                    "placeholder": "请输入密码"
-                }
-            }
-        },
-        "forgetPassword": {
-            "title": "忘记密码",
-            "desc": "请输入您的邮箱以重置密码",
-            "emailPlaceholder": "请输入邮箱",
-            "codePlaceholder": "验证码",
-            "sendCode": "发送验证码",
-            "submit": "提交",
-            "hasAccount": "已有账号？",
-            "login": "去登录",
-            "emailError": "请输入邮箱",
-            "emailInvalid": "请输入有效的邮箱格式",
-            "fillAll": "请填写所有字段",
-            "successMessage": "密码重置成功",
-            "sendCodeSuccess": "验证码已发送",
-            "fields": {
-                "email": {
-                    "placeholder": "请输入邮箱",
-                    "errorMessage": "请输入有效的邮箱"
-                },
-                "code": {
-                    "placeholder": "验证码",
-                    "errorMessage": "请输入验证码"
-                }
-            }
-        },
-        "register": {
-            "registerButton": "注册",
-            "loginHint": "已经有账号？",
-            "goLogin": "去登录",
-            "mustAgree": "请先勾选同意网站条款",
-            "verifyTitle": "验证你的电子邮箱（请勿离开此页面）",
-            "otpTitle": "验证您的邮箱",
-            "otpDescription": "我们已向{email}发送了验证码，请输入验证码完成验证。",
-            "fields": {
-                "email": {
-                    "errorMessage": "邮箱不能为空",
-                    "placeholder": "输入您的邮箱"
-                },
-                "password": {
-                    "errorMessage": "密码不能为空",
-                    "placeholder": "请输入密码"
-                },
-                "inviteCode": {
-                    "placeholder": "输入邀请码，如果没有请留空"
-                },
-                "isChecked": {
-                    "label": "我已阅读并同意网站条款和条件"
-                }
-            }
-        }
+    "form": {
+      "save": "确认",
+      "cancel": "取消",
+      "specification": {
+        "s1": "颜色",
+        "s2": "尺寸",
+        "quantity": "数量",
+        "add": "添加规格"
+      },
+      "uploadImages": {
+        "tip": "最多上传5张图片"
+      }
     },
-    "home": {
-        "search": {
-            "placeholder": "搜索..."
-        },
-        "toast": {
-            "uploadFail": "上传失败，请重试"
-        },
-        "toolList": {
-            "guide": "指南",
-            "community": "社区",
-            "forwarding": "转运",
-            "fillBuy": "代填&代购"
-        },
-        "shipping": {
-            "title": "运费预估",
-            "placeholder": "法国 /1000g /1...",
-            "lineFast": "DHL 快线",
-            "price": "71"
-        }
+    "common": {
+      "selectBlock": {
+        "title": "默认标题",
+        "emptyText": "暂未选择",
+        "select": "去选择"
+      },
+      "bottomAction": {
+        "selectAll": "全选",
+        "submit": "提交"
+      },
+      "confirmModal": {
+        "title": "操作确认",
+        "confirm": "确认",
+        "cancel": "取消"
+      },
+      "productItem": {
+        "remark": "商品备注",
+        "placeholder": "输入商品备注",
+        "noRemark": "暂无备注"
+      },
+      "expandableList": {
+        "expand": "展开",
+        "collapse": "收起"
+      },
+      "additionalServices": "附加服务",
+      "noImagesToDownload": "暂无图片可供下载"
     },
-    "dashboard": {
-        "balance": "余额",
+    "drawer": {
+      "selectionService": {
+        "title": "附加服务",
+        "free": "免费",
+        "add": "添加",
+        "remark": "备注",
+        "noRemark": "暂无备注"
+      },
+      "selectionServiceDetailDrawer": {
+        "serviceIntro": "服务介绍",
+        "noIntro": "无介绍",
+        "sample": "样品",
+        "serviceFee": "服务费",
+        "remarkPlaceholder": "请输入备注（可选）",
+        "remark": "备注",
+        "confirm": "确认"
+      }
+    },
+    "block": {
+      "warehouseProductItem": {
+        "weight": "重量",
+        "size": "尺寸"
+      }
+    },
+    "modal": {
+      "confirm": "确认",
+      "cancel": "取消",
+      "confirmModalTitle": "操作确认",
+      "address": {
+        "addTitle": "添加地址",
+        "editTitle": "编辑地址",
+        "fields": {
+          "recipient": {
+            "label": "收件人",
+            "placeholder": "输入收件人姓名",
+            "errorMessage": "收件人不能为空"
+          },
+          "phone": {
+            "label": "电话",
+            "placeholder": "输入电话号码",
+            "errorMessage": "电话不能为空"
+          },
+          "area": {
+            "label": "地区",
+            "placeholder": "选择地区",
+            "errorMessage": "地区不能为空"
+          },
+          "address": {
+            "label": "地址",
+            "placeholder": "输入完整地址",
+            "errorMessage": "地址不能为空"
+          },
+          "doorNo": {
+            "label": "门牌号",
+            "placeholder": "输入门牌号",
+            "errorMessage": "门牌号不能为空"
+          },
+          "postcode": {
+            "label": "邮编",
+            "placeholder": "输入邮政编码",
+            "errorMessage": "邮编不能为空"
+          },
+          "defaultAddress": {
+            "label": "设为默认地址"
+          }
+        }
+      },
+      "billingAddress": {
+        "addTitle": "添加账单地址",
+        "editTitle": "编辑账单地址",
+        "fields": {
+          "familyName": {
+            "label": "姓",
+            "placeholder": "输入姓",
+            "errorMessage": "姓不能为空"
+          },
+          "givenName": {
+            "label": "名",
+            "placeholder": "输入名",
+            "errorMessage": "名不能为空"
+          },
+          "phone": {
+            "label": "电话",
+            "placeholder": "输入电话号码",
+            "errorMessage": "电话不能为空"
+          },
+          "area": {
+            "label": "地区",
+            "placeholder": "选择地区",
+            "errorMessage": "地区不能为空"
+          },
+          "address": {
+            "label": "地址",
+            "placeholder": "输入完整地址",
+            "errorMessage": "地址不能为空"
+          },
+          "doorNo": {
+            "label": "门牌号",
+            "placeholder": "输入门牌号",
+            "errorMessage": "门牌号不能为空"
+          },
+          "postcode": {
+            "label": "邮编",
+            "placeholder": "输入邮政编码",
+            "errorMessage": "邮编不能为空"
+          },
+          "defaultAddress": {
+            "label": "设为默认地址"
+          }
+        }
+      },
+      "recharge": {
+        "title": "充值",
+        "placeholder": "请输入充值金额"
+      }
+    },
+    "areaSelector": {
+      "country": {
+        "label": "国家",
+        "placeholder": "选择国家",
+        "errorMessage": "请选择国家"
+      },
+      "state": {
+        "label": "省份",
+        "placeholder": "选择省份",
+        "errorMessage": "请选择省份"
+      },
+      "city": {
+        "label": "城市",
+        "placeholder": "选择城市",
+        "errorMessage": "请选择城市"
+      }
+    },
+    "confirmModal": {
+      "title": "操作确认",
+      "content": "确定要执行这个操作吗？",
+      "confirmText": "确认",
+      "cancelText": "取消"
+    },
+    "copyButton": {
+      "success": "已复制到剪贴板",
+      "fail": "复制失败",
+      "title": "点击复制"
+    },
+    "chatbox": {
+      "loginFirst": "请先登录",
+      "onlineSupport": "在线客服",
+      "inputPlaceholder": "请输入消息...",
+      "send": "发送",
+      "connectionLost": "连接断开，请稍后重试",
+      "imageSendFail": "图片发送失败",
+      "imageTooLarge": "图片大小不能超过 5MB",
+      "selectOrder": "选择订单",
+      "noOrdersFound": "暂无订单",
+      "orderNo": "订单号：",
+      "price": "价格：",
+      "close": "关闭",
+      "waybillNo": "包裹号：",
+      "weight": "重量：",
+      "size": "尺寸：",
+      "selectWaybill": "选择包裹",
+      "noWaybillsFound": "暂无包裹"
+    },
+    "billingAddress": {
+      "edit": "编辑",
+      "delete": "删除"
+    },
+    "itemList": {
+      "addressItem": {
+        "edit": "编辑",
+        "delete": "删除",
+        "default": "默认"
+      },
+      "couponItem": {
+        "minSpend": "满{amount}可用",
+        "discount": "优惠",
+        "restriction": "限制",
+        "shippingExcludingCustoms": "运费（不含关税）",
+        "usage": "用途",
+        "internationalPackage": "国际包裹",
+        "countries": "地区",
+        "all": "全部国家",
+        "redeem": "兑换",
+        "type": "类型",
+        "validity": "有效期",
+        "days": "{count}天",
         "points": "积分",
-        "coupon": {
-            "title": "我的优惠券",
-            "available": "{count}张可用优惠券",
-            "viewAll": "查看全部",
-            "tabs": {
-                "all": "全部",
-                "unused": "可用",
-                "used": "已用",
-                "expired": "过期"
-            },
-            "couponRedemption": {
-                "title": "优惠券兑换",
-                "inputPlaceholder": "输入优惠券代码",
-                "redeem": "兑换"
-            }
-        },
-        "menuOrder": "购买订单",
-        "menuWarehouse": "我的仓库",
-        "menuPackage": "我的包裹",
-        "inviteTitle": "联盟邀请",
-        "TotalReward": "总奖励",
-        "inviteCount": "邀请人数",
-        "activeUsersCount": "活跃用户数",
-        "myExperience": "我的经验",
-        "servicesTitle": "更多服务",
-        "servicesMessage": "消息通知",
-        "servicesFavorite": "我的收藏",
-        "servicesAddress": "收货地址",
-        "servicesBillingAddress": "账单地址",
-        "servicesHistory": "浏览历史"
-    },
-    "cart": {
-        "title": "购物车",
-        "manage": "管理",
-        "cancel": "取消",
-        "selectAll": "全选",
-        "delete": "删除",
-        "checkout": "结算",
-        "loading": "加载中...",
-        "error": "出错了",
-        "toast": {
-            "noSelect": "请先选择商品"
-        },
-        "deleteTitle": "从购物车删除",
-        "deleteContent": "确定要删除选中的商品吗？",
-        "emptyTitle": "您的购物车是空的",
-        "emptyDesc": "去挑选您喜欢的商品吧！",
-        "itemExpired": "商品已过期",
-        "itemExpiredContent": "此商品已过期，无法购买。",
-        "back": "重新选择",
-        "remarkModal": {
-            "title": "备注",
-            "placeholder": "输入备注"
-        }
-    },
-    "profile": {
-        "profilePage": {
-            "title": "个人信息",
-            "nameLabel": "用户名",
-            "mobileLabel": "手机号码",
-            "saveButton": "保存",
-            "edit": "编辑",
-            "uploading": "头像上传中..."
-        },
-        "order": {
-            "title": "我的订单",
-            "tabs": {
-                "all": "全部",
-                "waitPay": "待付款",
-                "paid": "已付款",
-                "refund": "退款"
-            },
-            "buttons": {
-                "pay": "支付",
-                "cancel": "取消订单",
-                "batchPay": "批量支付",
-                "withdraw": "撤回申请",
-                "refund": "申请退款",
-                "consult": "咨询"
-            },
-            "cancelTitle": "取消订单",
-            "cancelContent": "确定要取消此订单吗？",
-            "withdrawTitle": "撤回申请",
-            "withdrawContent": "确定要撤回当前申请吗？",
-            "refundModal": {
-                "title": "申请退款",
-                "placeholder": "请输入备注（可选）",
-                "refundable": "可退款",
-                "unrefundable": "不可退款"
-            },
-            "refundReason": "退款原因",
-            "reviewReason": "审核原因",
-            "refundAmount": "退款金额",
-            "reviewTime": "审核时间",
-            "promptCard": {
-                "title": "订单QC与包裹管理",
-                "description": "请前往仓库页面查看质检照片和提交包裹",
-                "button": "前往仓库"
-            }
-        },
-        "warehouse": {
-            "title": "仓库",
-            "tabs": {
-                "all": "全部",
-                "submit": "可提交"
-            },
-            "sumbit": "提交包裹"
-        },
-        "package": {
-            "title": "包裹",
-            "tabs": {
-                "all": "全部",
-                "pay": "待付款",
-                "shipping": "运输中",
-                "received": "已收货"
-            },
-            "hasInsurance": "已购买保险服务",
-            "selectAll": "全选",
-            "submitPay": "批量支付",
-            "noOrders": "暂无包裹",
-            "noMoreRecords": "没有更多记录",
-            "withdrawTitle": "撤回申请",
-            "withdrawContent": "确定要撤回当前申请吗？",
-            "receiptTitle": "确认收货",
-            "receiptContent": "确认完整该商品的收货？",
-            "refundTitle": "申请退款",
-            "buttons": {
-                "cancel": "取消",
-                "withdraw": "撤回申请",
-                "change": "更换路线",
-                "edit": "更多操作",
-                "pay": "支付",
-                "payCancel": "支付取消手续费",
-                "receipt": "确认收货",
-                "consult": "咨询"
-            },
-            "weight": "重量：",
-            "size": "尺寸：",
-            "serviceFee": "服务费：",
-            "insuranceFee": "保险费：",
-            "totalFee": "总费用：",
-            "shippingCode": "运输号：",
-            "cancelModal": {
-                "title": "取消",
-                "cancelCard": {
-                    "title": "确认取消",
-                    "subtitle": "取消此订单",
-                    "submittingTitle": "取消中...",
-                    "submittingSubtitle": "请稍候",
-                    "serviceFee": "服务费",
-                    "packingFee": "包装费",
-                    "totalFee": "总费用",
-                    "feeNotice": "由于库内作业已经进行，本次取消包裹需要缴纳 {amount}，具体费用如下：",
-                    "freeNotice": "本次取消包裹无需缴纳费用"
-                },
-                "changeRouteCard": {
-                    "title": "更换路线",
-                    "subtitle": "重新选择运输路线"
-                }
-            },
-            "changeTitle": "更换路线",
-            "lineModal": {
-                "title": "物流轨迹",
-                "mainWaybillTitle": "主运单轨迹",
-                "subWaybillTitle": "子运单：",
-                "waybillNumber": "运单号：",
-                "currentStatus": "当前状态：",
-                "location": "地点：",
-                "mainTimeline": "主运单轨迹："
-            },
-            "moreActions": {
-                "title": "更多操作",
-                "changeLine": {
-                    "title": "更换路线",
-                    "description": "重新选择更合适的运输路线"
-                },
-                "changeAddress": {
-                    "title": "更换地址",
-                    "description": "修改收货地址信息"
-                }
-            },
-            "changeAddress": {
-                "title": "更换地址",
-                "selectAddress": "收货地址",
-                "selectLine": "运输路线",
-                "remark": "备注",
-                "result": {
-                    "noChange": "修改成功，运费无变化",
-                    "payExtra": "修改成功，需补缴运费 {amount}",
-                    "refund": "修改成功，将退还运费 {amount} 至您的余额"
-                }
-            }
-        },
-        "address": {
-            "title": "地址",
-            "addButton": "添加",
-            "deleteContent": "确定要删除该地址吗？"
-        },
-        "billingAddress": {
-            "title": "账单地址",
-            "addButton": "添加",
-            "deleteContent": "确定要删除该地址吗？"
-        },
-        "message": {
-            "title": "消息",
-            "manage": "管理",
-            "cancel": "取消",
-            "tabs": {
-                "all": "全部",
-                "unread": "未读",
-                "read": "已读"
-            },
-            "deleteTitle": "删除消息",
-            "deleteContent": "确定删除选中的 {count} 条消息吗？",
-            "selectAll": "全选",
-            "delete": "删除",
-            "detailCancel": "关闭",
-            "detailConfirm": "标记为已读",
-            "unread": "未读",
-            "read": "已读",
-            "noOrders": "暂无包裹",
-            "noMoreRecords": "没有更多记录"
-        }
-    },
-    "setting": {
-        "page": {
-            "title": "设置",
-            "menuLanguage": "语言",
-            "menuCurrency": "货币",
-            "menuChangePassword": "修改密码",
-            "logout": "退出登录"
-        },
-        "currencyPage": {
-            "title": "货币",
-            "save": "保存"
-        },
-        "languagePage": {
-            "title": "语言",
-            "save": "保存"
-        },
-        "changePassword": {
-            "title": "修改密码",
-            "form": {
-                "oldPassword": "旧密码",
-                "newPassword": "新密码",
-                "confirmPassword": "确认密码",
-                "submit": "修改密码"
-            },
-            "tip": "两次输入的新密码不一致"
-        }
-    },
-    "wallet": {
-        "page": {
-            "title": "我的账户",
-            "record": "记录",
-            "totalBalance": "总余额",
-            "withdraw": "提现",
-            "selectAmount": "选择金额",
-            "otherAmount": "其他金额",
-            "enterOtherAmount": "输入其他金额",
-            "recharge": "充值",
-            "enterValidAmount": "请输入有效金额"
-        },
-        "balanceRecord": {
-            "title": "余额记录",
-            "noMoreRecords": "没有更多记录"
-        },
-        "points": {
-            "title": "积分",
-            "tabs": {
-                "detail": "积分明细",
-                "change": "积分兑换"
-            },
-            "myPoints": "我的积分",
-            "exchangeConfirm": {
-                "title": "确认兑换",
-                "content": "确认兑换 {points} 积分的 {name} 吗？"
-            }
-        },
-        "withdraw": {
-            "title": "提现",
-            "placeholder": "请输入提现金额",
-            "fee": "手续费 (1%)",
-            "receive": "实际到账",
-            "available": "可用余额",
-            "tip": "提现金额将先进入冻结余额，待管理员审核通过后，将自动原路返回您的付款账号，预计时常1-3个工作日",
-            "successTitle": "提现申请已提交",
-            "successMessage": "您的提现申请已成功提交。",
-            "failTitle": "提现失败",
-            "failMessage": "提现申请提交失败，请重试。",
-            "submit": "提交",
-            "historyTitle": "提现记录",
-            "amount": "提现金额",
-            "actualAmount": "实际到账",
-            "remark": "备注",
-            "status": "状态",
-            "pending": "待审核",
-            "success": "已提现",
-            "failed": "提现失败"
-        }
-    },
-    "goods": {
-        "details": {
-            "title": "商品详情",
-            "originalLink": "原链接",
-            "refresh": "刷新",
-            "progressBar": {
-                "step1": "付款产品",
-                "step2": "提交包裹",
-                "step3": "包裹收到",
-                "tipText": "我们免费提供3-7张高清质检照片",
-                "fromSellerToBBD": "从卖家到BBD",
-                "fromBBDToYou": "从BBD到您"
-            },
-            "disclaimerDrawer": {
-                "title": "免责声明",
-                "buttonLabel": "免责声明",
-                "content": "BBDbuy上展示的所有代购商品均来自第三方代购平台，非BBDbuy直接销售。因此，BBDbuy对侵犯知识产权和侵犯商品著作权所引起的问题不承担任何责任和法律责任。使用BBDbuy代购服务即表示您默认接受上述风险。"
-            },
-            "quantity": "数量",
-            "remark": "备注",
-            "enterDescription": "请输入备注",
-            "buyNow": "立即购买",
-            "addToCart": "加入购物车",
-            "productDescription": "商品详情",
-            "stock": "库存：",
-            "shippingFee": "运费：",
-            "singleItemSalesTitle": "单个商品销量",
-            "avgArrivalTime": "平均到达仓库",
-            "salesVolume": "商品销量",
-            "weightWithUnit": "重量(g)",
-            "volumeWithUnit": "体积 (cm)",
-            "continueShopping": "返回首页",
-            "riskNotice": "提示",
-            "riskDescription": "十分抱歉,您所浏览的商品已售空或已下架，暂不支持购买。详情请咨询在线客服。"
-        },
-        "search": {
-            "searchPlaceholder": "Search...",
-            "uploadFailed": "上传失败，请重试",
-            "invalidUrl": "请输入有效的 URL",
-            "searchButton": "搜索",
-            "historyTitle": "历史记录",
-            "noResult": "暂无匹配结果",
-            "taobao": "淘宝",
-            "1688": "1688"
-        }
-    },
-    "submit": {
-        "order": {
-            "title": "订单确认",
-            "total": "总计",
-            "submitOrder": "提交订单",
-            "valueAddedService": "增值服务",
-            "noService": "暂无服务",
-            "free": "免费",
-            "add": "添加",
-            "remark": "备注：",
-            "delete": "删除",
-            "serviceIntro": "服务介绍",
-            "noIntro": "暂无介绍",
-            "sample": "示例",
-            "serviceFee": "服务费：",
-            "remarkPlaceholder": "请输入备注",
-            "shippingFee": "运费：",
-            "productFee": "商品费：",
-            "shopTotal": "店铺合计："
-        },
-        "warehouse": {
-            "title": "包裹提交",
-            "shippingAddress": "收货地址",
-            "addAddress": "添加地址",
-            "commodityList": "商品列表",
-            "additionalService": "附加服务",
-            "insuranceService": "保险服务",
-            "deliveryRoute": "物流路线",
-            "routesMessage": "请选择运输路线",
-            "textareaPlaceholder": "如有特殊要求请在此备注",
-            "agreement": "我已阅读并同意 bbdbuy 包裹寄送协议",
-            "submitPackage": "提交包裹",
-            "defaultMessage": "请先选择地址",
-            "selectService": "选择服务",
-            "select": "去选择",
-            "noServiceSelected": "暂未选择服务，点击选择",
-            "noServices": "暂无可用服务",
-            "noAddressSelected": "暂未选择地址，点击选择",
-            "noAddress": "暂无可用地址",
-            "noRouteSelected": "暂未选择路线，点击选择",
-            "noRoutes": "暂无可用路线",
-            "confirm": "确认",
-            "totalWeight": "总重量",
-            "totalVolume": "总体积",
-            "estimating": "费用估算中",
-            "estimatedShipping": "预估运费",
-            "estimatedService": "预估服务费",
-            "estimatedInsurance": "预估保险费",
-            "estimatedTotal": "预估总计",
-            "estimatedTip": "具体费用将在包裹完成打包之后展示",
-            "toast": {
-                "checkAgreement": "请勾选免责声明",
-                "selectAddress": "请选择收货地址",
-                "selectRoute": "请选择运输路线",
-                "submitSuccess": "提交成功"
-            },
-            "addressModal": {
-                "addAddress": "添加地址",
-                "editAddress": "编辑地址",
-                "fields": {
-                    "recipient": {
-                        "label": "收件人",
-                        "placeholder": "输入收件人姓名"
-                    },
-                    "phone": {
-                        "label": "电话",
-                        "placeholder": "输入电话号码"
-                    },
-                    "area": {
-                        "label": "地区",
-                        "placeholder": "选择地区"
-                    },
-                    "address": {
-                        "label": "地址",
-                        "placeholder": "输入完整地址"
-                    },
-                    "doorNo": {
-                        "label": "门牌号",
-                        "placeholder": "输入门牌号"
-                    },
-                    "postcode": {
-                        "label": "邮编",
-                        "placeholder": "输入邮政编码"
-                    },
-                    "defaultAddress": {
-                        "label": "设为默认地址"
-                    }
-                },
-                "tableEmpty": "暂无地址信息"
-            }
-        }
-    },
-    "payment": {
-        "title": "确认订单",
-        "total": "总计",
-        "handlingFee": "手续费",
-        "billingAddress": "账单地址",
-        "coupon": "优惠券",
-        "selectCoupon": "请选择优惠券",
-        "submit": "提交",
-        "balance": "余额",
-        "recharge": "充值",
-        "pleaseAddBillingAddress": "请添加账单地址",
-        "result": {
-            "loading": "正在确认支付结果",
-            "successTitle": "支付成功",
-            "successNotice": "我们已收到您的付款，订单正在处理中。",
-            "transactionId": "交易号：",
-            "amount": "支付金额：",
-            "time": "支付时间：",
-            "failTitle": "支付失败",
-            "failNotice": "支付未完成，请检查订单或重新尝试付款。",
-            "viewOrder": "查看订单",
-            "backHome": "返回首页"
-        }
-    },
-    "promotion": {
-        "title": "邀请联盟",
-        "process1": "分享您的联盟代码",
-        "process2": "您邀请的朋友确认收到您的联盟代码",
-        "process3": "收到您的联盟佣金",
-        "copy": "复制",
-        "processTip": "复制此 URL 并使用它将用户重定向到您的联盟 lD 的主页",
-        "title1": "我的联盟",
-        "totalReward": "总奖励",
-        "inviteUsers": "邀请用户",
-        "experience": "我的经验",
-        "title2": "我的等级",
-        "bonusRate": "奖金比例",
-        "experienceRange": "经验",
-        "activeUsersCount": "活跃用户数",
-        "title3": "权益FAQ",
-        "question1": "什么是联盟会员计划？",
-        "answer1": "联盟会员计划是一种合作伙伴营销模式。当您通过您的专属邀请链接或邀请码推荐新用户注册并使用我们的服务时，您可以获得相应的佣金奖励。这相当于成为我们的品牌推广伙伴，通过分享我们的服务来获得额外收入。",
-        "question2": "我的奖金是如何计算的？",
-        "answer2": "您的奖金主要基于您邀请的用户消费金额计算，具体包含以下几个方面： 1. 直接邀请奖励：您直接邀请的用户完成首单消费，您将获得订单金额的固定比例作为奖励 2. 间接邀请奖励：您邀请的用户再邀请其他人消费，您也可以获得一定比例的二级奖励 3. 阶梯式奖金：随着您邀请人数的增加，您的奖金比例会相应提高 4. 额外成就奖励：完成特定推广目标可获得额外奖金",
-        "question3": "如何免费推广？",
-        "answer3": "您可以通过以下方式进行免费推广： 1. 社交媒体分享：在朋友圈、微博、小红书等平台分享您的专属邀请链接 2. 内容创作：通过写评测文章、制作使用教程视频等方式分享使用体验 3. 口碑推荐：向朋友、家人或同事直接推荐，分享您的邀请码 4. 社区参与：在相关论坛、社群中分享有价值的内容并附带您的邀请信息 5. 个人网络：利用您的职业圈、兴趣团体等社交网络进行推广",
-        "invitedUser": {
-            "title": "被邀请用户",
-            "active": "已激活",
-            "inactive": "未激活",
-            "tableColumns": {
-                "name": "被邀请人",
-                "email": "被邀请人邮箱",
-                "createTime": "时间"
-            },
-            "noData": "暂无被邀请用户"
-        },
-        "experiencePage": {
-            "title": "经验明细",
-            "currentExperience": "当前经验",
-            "createTime": "时间",
-            "noData": "暂无经验明细"
-        },
-        "bonus": {
-            "title": "奖金明细",
-            "tableColumns": {
-                "bizType": "来源",
-                "amount": "数量",
-                "currentBalance": "可用奖金",
-                "createTime": "时间"
-            },
-            "noData": "暂无奖金明细"
-        }
-    },
-    "estimation": {
-        "fillWeightOrSize": "请输入重量或尺寸（长、宽、高）！",
-        "title": "运费估算",
-        "warehouse": "仓库至",
-        "weight": "重量 (克)",
-        "length": "长度 (厘米)",
-        "width": "宽度 (厘米)",
-        "height": "高度 (厘米)",
-        "search": "立即查询",
-        "selectCountry": "请选择国家",
-        "selectCategory": "请选择货物类别",
-        "price": "价格",
-        "time": "时效",
-        "pricingStandard": "计价标准",
-        "firstWeightFee": "首重费用",
-        "additionalWeightFee": "续重费用",
-        "customsFee": "关税",
-        "shippingLimit": "运输限制",
-        "routeFeature": "路线特点",
-        "category": "货物类别"
-    },
-    "forwarding": {
-        "title": "转运订单",
-        "forwardAddress": "仓库地址",
-        "forwardingPackage": "转运包裹",
-        "fields": {
-            "trackingNo": {
-                "label": "物流单号",
-                "placeholder": "输入您的物流单号",
-                "errorMessage": "请输入有效的物流单号"
-            },
-            "packageName": {
-                "label": "商品名称",
-                "placeholder": "输入您的商品名称",
-                "errorMessage": "请输入有效的商品名称"
-            }
-        },
-        "extraServices": "额外服务",
-        "submit": "提交",
-        "acceptAgreement": "我已阅读并接受《代发包裹检查规则与服务协议》"
-    },
-    "history": {
-        "title": "历史记录",
-        "manage": "管理",
-        "cancel": "取消",
-        "selectAll": "全选",
-        "delete": "删除",
-        "deleteConfirmTitle": "删除历史记录",
-        "deleteConfirmContent": "确定要删除选中的历史记录吗？",
-        "empty": "暂无浏览记录"
-    },
-    "favorite": {
-        "title": "我的收藏",
-        "manage": "管理",
-        "cancel": "取消",
-        "selectAll": "全选",
-        "delete": "删除",
-        "deleteConfirmTitle": "删除收藏",
-        "deleteConfirmContent": "确定要删除当前收藏商品吗？",
-        "empty": "暂无收藏商品"
-    },
-    "diy": {
-        "title": "DIY订单",
-        "productDetails": "商品详情",
-        "extraServices": "额外服务",
-        "fee": "费用",
-        "submit": "提交",
-        "fields": {
-            "productLink": {
-                "label": "商品链接",
-                "placeholder": "请输入商品链接",
-                "errorMessage": "商品链接不能为空"
-            },
-            "productName": {
-                "label": "商品名称",
-                "placeholder": "请输入商品名称",
-                "errorMessage": "商品名称不能为空"
-            },
-            "remark": {
-                "label": "留言",
-                "placeholder": "请输入留言"
-            },
-            "productPrice": {
-                "label": "商品价格",
-                "placeholder": "请输入商品价格",
-                "errorMessage": "商品价格不能为空"
-            },
-            "postage": {
-                "label": "运费",
-                "placeholder": "请输入运费",
-                "errorMessage": "运费不能为空"
-            }
-        },
-        "productFee": "商品费用:",
-        "serviceFee": "服务费用:",
-        "totalCost": "总费用:",
-        "shippingFee": "运输费用:"
-    },
-    "helpGuide": {
-        "title": "如何通过 bbdbuy 购买",
-        "step1": {
-            "title": "第一步：挑选商品",
-            "content1": "方法1：复制淘宝/天猫/1688等平台的商品链接，粘贴至 bbdbuy 搜索栏。",
-            "content2": "方法2：通过商品名称搜索，选择推荐的商品。",
-            "content3": "方法3：使用图片搜索寻找同款商品。",
-            "tip": "如果打开链接为自定义订单页面，则该商品需要手动代购。请填写信息并点击“立即购买”或“加入购物车”。"
-        },
-        "step2": {
-            "title": "第二步：提交订单",
-            "content1": "bbdbuy 支持自动抓取大部分平台的商品详情。",
-            "content2": "选择规格、数量，随后加购或直接购买。",
-            "content3": "您也可以在购物车合并提交订单。"
-        },
-        "step3": {
-            "title": "第三步：支付订单费用",
-            "content1": "提交订单后，需支付商品费用以及中国国内运费。",
-            "tip": "支持多种货币支付。选择目的国家与服务后完成支付。"
-        },
-        "step4": {
-            "title": "第四步：bbdbuy 为您采购",
-            "content1": "bbdbuy 采购团队将联系卖家为您采买商品。",
-            "tip": "订单状态：待采购 → 已订购 → 已发货 → 正在派送 → 已送达 → 已入库。"
-        },
-        "step5": {
-            "title": "第五步：入库与质检",
-            "content1": "商品到达仓库后，将进行质检、称重并拍照。",
-            "content2": "提供3张免费照片，尊享90天免费周转仓储服务。",
-            "tip": "超过180天未处理的商品将被自动销毁。"
-        },
-        "step6": {
-            "title": "第六步：提交国际包裹",
-            "content1": "在“我的仓库”勾选需要发送的商品，提交包裹并填写海外收货信息。",
-            "tip": "可选物流路线将根据商品的特殊属性和目的国家自动筛选匹配。"
-        },
-        "step7": {
-            "title": "第七步：支付国际运费定金",
-            "content1": "支付国际物流运费定金，包括可能的关税及服务费。",
-            "tip": "系统会重新称重计费，费用遵循“多退少补”原则进行调整。"
-        },
-        "step8": {
-            "title": "第八步：bbdbuy 发货与追踪",
-            "content1": "仓库打包完毕并贴单后发出您的包裹。",
-            "tip": "您可以在“包裹详情”页面实时追踪物流状态。"
-        },
-        "step9": {
-            "title": "第九步：确认收货与奖励",
-            "content1": "在您收到包裹后进行确认收货即可获得积分奖励。",
-            "tip": "满500积分可兑换丰厚福利。如有任何疑问可联系在线客服寻求帮助。"
-        }
+        "src": "来源",
+        "usedFor": "用途"
+      },
+      "exchangeCouponItem": {
+        "minSpend": "满{amount}可用",
+        "discount": "优惠",
+        "restriction": "限制",
+        "shippingExcludingCustoms": "运费（不含关税）",
+        "usage": "用途",
+        "internationalPackage": "国际包裹",
+        "countries": "地区",
+        "all": "全部国家",
+        "redeem": "兑换",
+        "type": "类型",
+        "validity": "有效期",
+        "days": "{count}天",
+        "points": "积分",
+        "src": "来源",
+        "usedFor": "用途"
+      }
     }
+  },
+  "auth": {
+    "sloganTitle": "提供一站式服务",
+    "sloganDesc": "轻松从中国购物，专业运输全球",
+    "login": {
+      "loginButton": "登录",
+      "registerButton": "注册",
+      "forgetPassword": "忘记密码",
+      "fields": {
+        "email": {
+          "errorMessage": "邮箱不能为空",
+          "placeholder": "请输入邮箱"
+        },
+        "password": {
+          "errorMessage": "密码不能为空",
+          "placeholder": "请输入密码"
+        }
+      }
+    },
+    "forgetPassword": {
+      "title": "忘记密码",
+      "desc": "请输入您的邮箱以重置密码",
+      "emailPlaceholder": "请输入邮箱",
+      "codePlaceholder": "验证码",
+      "sendCode": "发送验证码",
+      "submit": "提交",
+      "hasAccount": "已有账号？",
+      "login": "去登录",
+      "emailError": "请输入邮箱",
+      "emailInvalid": "请输入有效的邮箱格式",
+      "fillAll": "请填写所有字段",
+      "successMessage": "密码重置成功",
+      "sendCodeSuccess": "验证码已发送",
+      "fields": {
+        "email": {
+          "placeholder": "请输入邮箱",
+          "errorMessage": "请输入有效的邮箱"
+        },
+        "code": {
+          "placeholder": "验证码",
+          "errorMessage": "请输入验证码"
+        }
+      }
+    },
+    "register": {
+      "registerButton": "注册",
+      "loginHint": "已经有账号？",
+      "goLogin": "去登录",
+      "mustAgree": "请先勾选同意网站条款",
+      "verifyTitle": "验证你的电子邮箱（请勿离开此页面）",
+      "otpTitle": "验证您的邮箱",
+      "otpDescription": "我们已向{email}发送了验证码，请输入验证码完成验证。",
+      "fields": {
+        "email": {
+          "errorMessage": "邮箱不能为空",
+          "placeholder": "输入您的邮箱"
+        },
+        "password": {
+          "errorMessage": "密码不能为空",
+          "placeholder": "请输入密码"
+        },
+        "inviteCode": {
+          "placeholder": "输入邀请码，如果没有请留空"
+        },
+        "isChecked": {
+          "label": "我已阅读并同意网站条款和条件"
+        }
+      }
+    }
+  },
+  "home": {
+    "search": {
+      "placeholder": "搜索..."
+    },
+    "toast": {
+      "uploadFail": "上传失败，请重试"
+    },
+    "toolList": {
+      "guide": "指南",
+      "community": "社区",
+      "forwarding": "转运",
+      "fillBuy": "代填&代购"
+    },
+    "shipping": {
+      "title": "运费预估",
+      "placeholder": "法国 /1000g /1...",
+      "lineFast": "DHL 快线",
+      "price": "71"
+    }
+  },
+  "dashboard": {
+    "balance": "余额",
+    "points": "积分",
+    "coupon": {
+      "title": "我的优惠券",
+      "available": "{count}张可用优惠券",
+      "viewAll": "查看全部",
+      "tabs": {
+        "all": "全部",
+        "unused": "可用",
+        "used": "已用",
+        "expired": "过期"
+      },
+      "couponRedemption": {
+        "title": "优惠券兑换",
+        "inputPlaceholder": "输入优惠券代码",
+        "redeem": "兑换"
+      }
+    },
+    "menuOrder": "购买订单",
+    "menuWarehouse": "我的仓库",
+    "menuPackage": "我的包裹",
+    "inviteTitle": "联盟邀请",
+    "TotalReward": "总奖励",
+    "inviteCount": "邀请人数",
+    "activeUsersCount": "活跃用户数",
+    "myExperience": "我的经验",
+    "servicesTitle": "更多服务",
+    "servicesMessage": "消息通知",
+    "servicesFavorite": "我的收藏",
+    "servicesAddress": "收货地址",
+    "servicesBillingAddress": "账单地址",
+    "servicesHistory": "浏览历史"
+  },
+  "cart": {
+    "title": "购物车",
+    "manage": "管理",
+    "cancel": "取消",
+    "selectAll": "全选",
+    "delete": "删除",
+    "checkout": "结算",
+    "loading": "加载中...",
+    "error": "出错了",
+    "toast": {
+      "noSelect": "请先选择商品"
+    },
+    "deleteTitle": "从购物车删除",
+    "deleteContent": "确定要删除选中的商品吗？",
+    "emptyTitle": "您的购物车是空的",
+    "emptyDesc": "去挑选您喜欢的商品吧！",
+    "itemExpired": "商品已过期",
+    "itemExpiredContent": "此商品已过期，无法购买。",
+    "back": "重新选择",
+    "remarkModal": {
+      "title": "备注",
+      "placeholder": "输入备注"
+    }
+  },
+  "profile": {
+    "profilePage": {
+      "title": "个人信息",
+      "nameLabel": "用户名",
+      "mobileLabel": "手机号码",
+      "saveButton": "保存",
+      "edit": "编辑",
+      "uploading": "头像上传中..."
+    },
+    "order": {
+      "title": "我的订单",
+      "tabs": {
+        "all": "全部",
+        "waitPay": "待付款",
+        "paid": "已付款",
+        "refund": "退款"
+      },
+      "buttons": {
+        "pay": "支付",
+        "cancel": "取消订单",
+        "batchPay": "批量支付",
+        "withdraw": "撤回申请",
+        "refund": "申请退款",
+        "consult": "咨询"
+      },
+      "cancelTitle": "取消订单",
+      "cancelContent": "确定要取消此订单吗？",
+      "withdrawTitle": "撤回申请",
+      "withdrawContent": "确定要撤回当前申请吗？",
+      "refundModal": {
+        "title": "申请退款",
+        "placeholder": "请输入备注（可选）",
+        "refundable": "可退款",
+        "unrefundable": "不可退款"
+      },
+      "refundReason": "退款原因",
+      "reviewReason": "审核原因",
+      "refundAmount": "退款金额",
+      "reviewTime": "审核时间",
+      "promptCard": {
+        "title": "订单QC与包裹管理",
+        "description": "请前往仓库页面查看质检照片和提交包裹",
+        "button": "前往仓库"
+      }
+    },
+    "warehouse": {
+      "title": "仓库",
+      "tabs": {
+        "all": "全部",
+        "submit": "可提交"
+      },
+      "sumbit": "提交包裹",
+      "additionalServices": "附加服务"
+    },
+    "package": {
+      "title": "包裹",
+      "tabs": {
+        "all": "全部",
+        "pay": "待付款",
+        "shipping": "运输中",
+        "received": "已收货"
+      },
+      "hasInsurance": "已购买保险服务",
+      "selectAll": "全选",
+      "submitPay": "批量支付",
+      "noOrders": "暂无包裹",
+      "noMoreRecords": "没有更多记录",
+      "withdrawTitle": "撤回申请",
+      "withdrawContent": "确定要撤回当前申请吗？",
+      "receiptTitle": "确认收货",
+      "receiptContent": "确认完整该商品的收货？",
+      "refundTitle": "申请退款",
+      "buttons": {
+        "cancel": "取消",
+        "withdraw": "撤回申请",
+        "change": "更换路线",
+        "edit": "更多操作",
+        "pay": "支付",
+        "payCancel": "支付取消手续费",
+        "receipt": "确认收货",
+        "consult": "咨询"
+      },
+      "weight": "重量：",
+      "size": "尺寸：",
+      "serviceFee": "服务费：",
+      "insuranceFee": "保险费：",
+      "totalFee": "总费用：",
+      "shippingCode": "运输号：",
+      "cancelModal": {
+        "title": "取消",
+        "cancelCard": {
+          "title": "确认取消",
+          "subtitle": "取消此订单",
+          "submittingTitle": "取消中...",
+          "submittingSubtitle": "请稍候",
+          "serviceFee": "服务费",
+          "packingFee": "包装费",
+          "totalFee": "总费用",
+          "feeNotice": "由于库内作业已经进行，本次取消包裹需要缴纳 {amount}，具体费用如下：",
+          "freeNotice": "本次取消包裹无需缴纳费用"
+        },
+        "changeRouteCard": {
+          "title": "更换路线",
+          "subtitle": "重新选择运输路线"
+        }
+      },
+      "changeTitle": "更换路线",
+      "lineModal": {
+        "title": "物流轨迹",
+        "mainWaybillTitle": "主运单轨迹",
+        "subWaybillTitle": "子运单：",
+        "waybillNumber": "运单号：",
+        "currentStatus": "当前状态：",
+        "location": "地点：",
+        "mainTimeline": "主运单轨迹："
+      },
+      "moreActions": {
+        "title": "更多操作",
+        "changeLine": {
+          "title": "更换路线",
+          "description": "重新选择更合适的运输路线"
+        },
+        "changeAddress": {
+          "title": "更换地址",
+          "description": "修改收货地址信息"
+        }
+      },
+      "changeAddress": {
+        "title": "更换地址",
+        "selectAddress": "收货地址",
+        "selectLine": "运输路线",
+        "remark": "备注",
+        "result": {
+          "noChange": "修改成功，运费无变化",
+          "payExtra": "修改成功，需补缴运费 {amount}",
+          "refund": "修改成功，将退还运费 {amount} 至您的余额"
+        }
+      },
+      "additionalServices": "附加服务"
+    },
+    "address": {
+      "title": "地址",
+      "addButton": "添加",
+      "deleteContent": "确定要删除该地址吗？"
+    },
+    "billingAddress": {
+      "title": "账单地址",
+      "addButton": "添加",
+      "deleteContent": "确定要删除该地址吗？"
+    },
+    "message": {
+      "title": "消息",
+      "manage": "管理",
+      "cancel": "取消",
+      "tabs": {
+        "all": "全部",
+        "unread": "未读",
+        "read": "已读"
+      },
+      "deleteTitle": "删除消息",
+      "deleteContent": "确定删除选中的 {count} 条消息吗？",
+      "selectAll": "全选",
+      "delete": "删除",
+      "detailCancel": "关闭",
+      "detailConfirm": "标记为已读",
+      "unread": "未读",
+      "read": "已读",
+      "noOrders": "暂无包裹",
+      "noMoreRecords": "没有更多记录"
+    }
+  },
+  "setting": {
+    "page": {
+      "title": "设置",
+      "menuLanguage": "语言",
+      "menuCurrency": "货币",
+      "menuChangePassword": "修改密码",
+      "logout": "退出登录"
+    },
+    "currencyPage": {
+      "title": "货币",
+      "save": "保存"
+    },
+    "languagePage": {
+      "title": "语言",
+      "save": "保存"
+    },
+    "changePassword": {
+      "title": "修改密码",
+      "form": {
+        "oldPassword": "旧密码",
+        "newPassword": "新密码",
+        "confirmPassword": "确认密码",
+        "submit": "修改密码"
+      },
+      "tip": "两次输入的新密码不一致"
+    }
+  },
+  "wallet": {
+    "page": {
+      "title": "我的账户",
+      "record": "记录",
+      "totalBalance": "总余额",
+      "withdraw": "提现",
+      "selectAmount": "选择金额",
+      "otherAmount": "其他金额",
+      "enterOtherAmount": "输入其他金额",
+      "recharge": "充值",
+      "enterValidAmount": "请输入有效金额"
+    },
+    "balanceRecord": {
+      "title": "余额记录",
+      "noMoreRecords": "没有更多记录"
+    },
+    "points": {
+      "title": "积分",
+      "tabs": {
+        "detail": "积分明细",
+        "change": "积分兑换"
+      },
+      "myPoints": "我的积分",
+      "exchangeConfirm": {
+        "title": "确认兑换",
+        "content": "确认兑换 {points} 积分的 {name} 吗？"
+      }
+    },
+    "withdraw": {
+      "title": "提现",
+      "placeholder": "请输入提现金额",
+      "fee": "手续费 (1%)",
+      "receive": "实际到账",
+      "available": "可用余额",
+      "tip": "提现金额将先进入冻结余额，待管理员审核通过后，将自动原路返回您的付款账号，预计时常1-3个工作日",
+      "successTitle": "提现申请已提交",
+      "successMessage": "您的提现申请已成功提交。",
+      "failTitle": "提现失败",
+      "failMessage": "提现申请提交失败，请重试。",
+      "submit": "提交",
+      "historyTitle": "提现记录",
+      "amount": "提现金额",
+      "actualAmount": "实际到账",
+      "remark": "备注",
+      "status": "状态",
+      "pending": "待审核",
+      "success": "已提现",
+      "failed": "提现失败"
+    }
+  },
+  "goods": {
+    "details": {
+      "title": "商品详情",
+      "originalLink": "原链接",
+      "refresh": "刷新",
+      "progressBar": {
+        "step1": "付款产品",
+        "step2": "提交包裹",
+        "step3": "包裹收到",
+        "tipText": "我们免费提供3-7张高清质检照片",
+        "fromSellerToBBD": "从卖家到BBD",
+        "fromBBDToYou": "从BBD到您"
+      },
+      "disclaimerDrawer": {
+        "title": "免责声明",
+        "buttonLabel": "免责声明",
+        "content": "BBDbuy上展示的所有代购商品均来自第三方代购平台，非BBDbuy直接销售。因此，BBDbuy对侵犯知识产权和侵犯商品著作权所引起的问题不承担任何责任和法律责任。使用BBDbuy代购服务即表示您默认接受上述风险。"
+      },
+      "quantity": "数量",
+      "remark": "备注",
+      "enterDescription": "请输入备注",
+      "buyNow": "立即购买",
+      "addToCart": "加入购物车",
+      "productDescription": "商品详情",
+      "stock": "库存：",
+      "shippingFee": "运费：",
+      "singleItemSalesTitle": "单个商品销量",
+      "avgArrivalTime": "平均到达仓库",
+      "salesVolume": "商品销量",
+      "weightWithUnit": "重量(g)",
+      "volumeWithUnit": "体积 (cm)",
+      "continueShopping": "返回首页",
+      "riskNotice": "提示",
+      "riskDescription": "十分抱歉,您所浏览的商品已售空或已下架，暂不支持购买。详情请咨询在线客服。"
+    },
+    "search": {
+      "1688": "1688",
+      "searchPlaceholder": "Search...",
+      "uploadFailed": "上传失败，请重试",
+      "invalidUrl": "请输入有效的 URL",
+      "searchButton": "搜索",
+      "historyTitle": "历史记录",
+      "noResult": "暂无匹配结果",
+      "taobao": "淘宝"
+    }
+  },
+  "submit": {
+    "order": {
+      "title": "订单确认",
+      "total": "总计",
+      "submitOrder": "提交订单",
+      "valueAddedService": "增值服务",
+      "noService": "暂无服务",
+      "free": "免费",
+      "add": "添加",
+      "remark": "备注：",
+      "delete": "删除",
+      "serviceIntro": "服务介绍",
+      "noIntro": "暂无介绍",
+      "sample": "示例",
+      "serviceFee": "服务费：",
+      "remarkPlaceholder": "请输入备注",
+      "shippingFee": "运费：",
+      "productFee": "商品费：",
+      "shopTotal": "店铺合计："
+    },
+    "warehouse": {
+      "title": "包裹提交",
+      "shippingAddress": "收货地址",
+      "addAddress": "添加地址",
+      "commodityList": "商品列表",
+      "additionalService": "附加服务",
+      "insuranceService": "保险服务",
+      "deliveryRoute": "物流路线",
+      "routesMessage": "请选择运输路线",
+      "textareaPlaceholder": "如有特殊要求请在此备注",
+      "agreement": "我已阅读并同意 bbdbuy 包裹寄送协议",
+      "submitPackage": "提交包裹",
+      "defaultMessage": "请先选择地址",
+      "selectService": "选择服务",
+      "select": "去选择",
+      "noServiceSelected": "暂未选择服务，点击选择",
+      "noServices": "暂无可用服务",
+      "noAddressSelected": "暂未选择地址，点击选择",
+      "noAddress": "暂无可用地址",
+      "noRouteSelected": "暂未选择路线，点击选择",
+      "noRoutes": "暂无可用路线",
+      "confirm": "确认",
+      "totalWeight": "总重量",
+      "totalVolume": "总体积",
+      "estimating": "费用估算中",
+      "estimatedShipping": "预估运费",
+      "estimatedService": "预估服务费",
+      "estimatedInsurance": "预估保险费",
+      "estimatedTotal": "预估总计",
+      "estimatedTip": "具体费用将在包裹完成打包之后展示",
+      "toast": {
+        "checkAgreement": "请勾选免责声明",
+        "selectAddress": "请选择收货地址",
+        "selectRoute": "请选择运输路线",
+        "submitSuccess": "提交成功"
+      },
+      "addressModal": {
+        "addAddress": "添加地址",
+        "editAddress": "编辑地址",
+        "fields": {
+          "recipient": {
+            "label": "收件人",
+            "placeholder": "输入收件人姓名"
+          },
+          "phone": {
+            "label": "电话",
+            "placeholder": "输入电话号码"
+          },
+          "area": {
+            "label": "地区",
+            "placeholder": "选择地区"
+          },
+          "address": {
+            "label": "地址",
+            "placeholder": "输入完整地址"
+          },
+          "doorNo": {
+            "label": "门牌号",
+            "placeholder": "输入门牌号"
+          },
+          "postcode": {
+            "label": "邮编",
+            "placeholder": "输入邮政编码"
+          },
+          "defaultAddress": {
+            "label": "设为默认地址"
+          }
+        },
+        "tableEmpty": "暂无地址信息"
+      }
+    }
+  },
+  "payment": {
+    "title": "确认订单",
+    "total": "总计",
+    "handlingFee": "手续费",
+    "billingAddress": "账单地址",
+    "coupon": "优惠券",
+    "selectCoupon": "请选择优惠券",
+    "submit": "提交",
+    "balance": "余额",
+    "recharge": "充值",
+    "pleaseAddBillingAddress": "请添加账单地址",
+    "result": {
+      "loading": "正在确认支付结果",
+      "successTitle": "支付成功",
+      "successNotice": "我们已收到您的付款，订单正在处理中。",
+      "transactionId": "交易号：",
+      "amount": "支付金额：",
+      "time": "支付时间：",
+      "failTitle": "支付失败",
+      "failNotice": "支付未完成，请检查订单或重新尝试付款。",
+      "viewOrder": "查看订单",
+      "backHome": "返回首页"
+    }
+  },
+  "promotion": {
+    "title": "邀请联盟",
+    "process1": "分享您的联盟代码",
+    "process2": "您邀请的朋友确认收到您的联盟代码",
+    "process3": "收到您的联盟佣金",
+    "copy": "复制",
+    "processTip": "复制此 URL 并使用它将用户重定向到您的联盟 lD 的主页",
+    "title1": "我的联盟",
+    "totalReward": "总奖励",
+    "inviteUsers": "邀请用户",
+    "experience": "我的经验",
+    "title2": "我的等级",
+    "bonusRate": "奖金比例",
+    "experienceRange": "经验",
+    "activeUsersCount": "活跃用户数",
+    "title3": "权益FAQ",
+    "question1": "什么是联盟会员计划？",
+    "answer1": "联盟会员计划是一种合作伙伴营销模式。当您通过您的专属邀请链接或邀请码推荐新用户注册并使用我们的服务时，您可以获得相应的佣金奖励。这相当于成为我们的品牌推广伙伴，通过分享我们的服务来获得额外收入。",
+    "question2": "我的奖金是如何计算的？",
+    "answer2": "您的奖金主要基于您邀请的用户消费金额计算，具体包含以下几个方面： 1. 直接邀请奖励：您直接邀请的用户完成首单消费，您将获得订单金额的固定比例作为奖励 2. 间接邀请奖励：您邀请的用户再邀请其他人消费，您也可以获得一定比例的二级奖励 3. 阶梯式奖金：随着您邀请人数的增加，您的奖金比例会相应提高 4. 额外成就奖励：完成特定推广目标可获得额外奖金",
+    "question3": "如何免费推广？",
+    "answer3": "您可以通过以下方式进行免费推广： 1. 社交媒体分享：在朋友圈、微博、小红书等平台分享您的专属邀请链接 2. 内容创作：通过写评测文章、制作使用教程视频等方式分享使用体验 3. 口碑推荐：向朋友、家人或同事直接推荐，分享您的邀请码 4. 社区参与：在相关论坛、社群中分享有价值的内容并附带您的邀请信息 5. 个人网络：利用您的职业圈、兴趣团体等社交网络进行推广",
+    "invitedUser": {
+      "title": "被邀请用户",
+      "active": "已激活",
+      "inactive": "未激活",
+      "tableColumns": {
+        "name": "被邀请人",
+        "email": "被邀请人邮箱",
+        "createTime": "时间"
+      },
+      "noData": "暂无被邀请用户"
+    },
+    "experiencePage": {
+      "title": "经验明细",
+      "currentExperience": "当前经验",
+      "createTime": "时间",
+      "noData": "暂无经验明细"
+    },
+    "bonus": {
+      "title": "奖金明细",
+      "tableColumns": {
+        "bizType": "来源",
+        "amount": "数量",
+        "currentBalance": "可用奖金",
+        "createTime": "时间"
+      },
+      "noData": "暂无奖金明细"
+    }
+  },
+  "estimation": {
+    "fillWeightOrSize": "请输入重量或尺寸（长、宽、高）！",
+    "title": "运费估算",
+    "warehouse": "仓库至",
+    "weight": "重量 (克)",
+    "length": "长度 (厘米)",
+    "width": "宽度 (厘米)",
+    "height": "高度 (厘米)",
+    "search": "立即查询",
+    "selectCountry": "请选择国家",
+    "selectCategory": "请选择货物类别",
+    "price": "价格",
+    "time": "时效",
+    "pricingStandard": "计价标准",
+    "firstWeightFee": "首重费用",
+    "additionalWeightFee": "续重费用",
+    "customsFee": "关税",
+    "shippingLimit": "运输限制",
+    "routeFeature": "路线特点",
+    "category": "货物类别"
+  },
+  "forwarding": {
+    "title": "转运订单",
+    "forwardAddress": "仓库地址",
+    "forwardingPackage": "转运包裹",
+    "fields": {
+      "trackingNo": {
+        "label": "物流单号",
+        "placeholder": "输入您的物流单号",
+        "errorMessage": "请输入有效的物流单号"
+      },
+      "packageName": {
+        "label": "商品名称",
+        "placeholder": "输入您的商品名称",
+        "errorMessage": "请输入有效的商品名称"
+      }
+    },
+    "extraServices": "额外服务",
+    "submit": "提交",
+    "acceptAgreement": "我已阅读并接受《代发包裹检查规则与服务协议》"
+  },
+  "history": {
+    "title": "历史记录",
+    "manage": "管理",
+    "cancel": "取消",
+    "selectAll": "全选",
+    "delete": "删除",
+    "deleteConfirmTitle": "删除历史记录",
+    "deleteConfirmContent": "确定要删除选中的历史记录吗？",
+    "empty": "暂无浏览记录"
+  },
+  "favorite": {
+    "title": "我的收藏",
+    "manage": "管理",
+    "cancel": "取消",
+    "selectAll": "全选",
+    "delete": "删除",
+    "deleteConfirmTitle": "删除收藏",
+    "deleteConfirmContent": "确定要删除当前收藏商品吗？",
+    "empty": "暂无收藏商品"
+  },
+  "diy": {
+    "title": "DIY订单",
+    "productDetails": "商品详情",
+    "extraServices": "额外服务",
+    "fee": "费用",
+    "submit": "提交",
+    "fields": {
+      "productLink": {
+        "label": "商品链接",
+        "placeholder": "请输入商品链接",
+        "errorMessage": "商品链接不能为空"
+      },
+      "productName": {
+        "label": "商品名称",
+        "placeholder": "请输入商品名称",
+        "errorMessage": "商品名称不能为空"
+      },
+      "remark": {
+        "label": "留言",
+        "placeholder": "请输入留言"
+      },
+      "productPrice": {
+        "label": "商品价格",
+        "placeholder": "请输入商品价格",
+        "errorMessage": "商品价格不能为空"
+      },
+      "postage": {
+        "label": "运费",
+        "placeholder": "请输入运费",
+        "errorMessage": "运费不能为空"
+      }
+    },
+    "productFee": "商品费用:",
+    "serviceFee": "服务费用:",
+    "totalCost": "总费用:",
+    "shippingFee": "运输费用:"
+  },
+  "helpGuide": {
+    "title": "如何通过 bbdbuy 购买",
+    "step1": {
+      "title": "第一步：挑选商品",
+      "content1": "方法1：复制淘宝/天猫/1688等平台的商品链接，粘贴至 bbdbuy 搜索栏。",
+      "content2": "方法2：通过商品名称搜索，选择推荐的商品。",
+      "content3": "方法3：使用图片搜索寻找同款商品。",
+      "tip": "如果打开链接为自定义订单页面，则该商品需要手动代购。请填写信息并点击“立即购买”或“加入购物车”。"
+    },
+    "step2": {
+      "title": "第二步：提交订单",
+      "content1": "bbdbuy 支持自动抓取大部分平台的商品详情。",
+      "content2": "选择规格、数量，随后加购或直接购买。",
+      "content3": "您也可以在购物车合并提交订单。"
+    },
+    "step3": {
+      "title": "第三步：支付订单费用",
+      "content1": "提交订单后，需支付商品费用以及中国国内运费。",
+      "tip": "支持多种货币支付。选择目的国家与服务后完成支付。"
+    },
+    "step4": {
+      "title": "第四步：bbdbuy 为您采购",
+      "content1": "bbdbuy 采购团队将联系卖家为您采买商品。",
+      "tip": "订单状态：待采购 → 已订购 → 已发货 → 正在派送 → 已送达 → 已入库。"
+    },
+    "step5": {
+      "title": "第五步：入库与质检",
+      "content1": "商品到达仓库后，将进行质检、称重并拍照。",
+      "content2": "提供3张免费照片，尊享90天免费周转仓储服务。",
+      "tip": "超过180天未处理的商品将被自动销毁。"
+    },
+    "step6": {
+      "title": "第六步：提交国际包裹",
+      "content1": "在“我的仓库”勾选需要发送的商品，提交包裹并填写海外收货信息。",
+      "tip": "可选物流路线将根据商品的特殊属性和目的国家自动筛选匹配。"
+    },
+    "step7": {
+      "title": "第七步：支付国际运费定金",
+      "content1": "支付国际物流运费定金，包括可能的关税及服务费。",
+      "tip": "系统会重新称重计费，费用遵循“多退少补”原则进行调整。"
+    },
+    "step8": {
+      "title": "第八步：bbdbuy 发货与追踪",
+      "content1": "仓库打包完毕并贴单后发出您的包裹。",
+      "tip": "您可以在“包裹详情”页面实时追踪物流状态。"
+    },
+    "step9": {
+      "title": "第九步：确认收货与奖励",
+      "content1": "在您收到包裹后进行确认收货即可获得积分奖励。",
+      "tip": "满500积分可兑换丰厚福利。如有任何疑问可联系在线客服寻求帮助。"
+    }
+  }
 }

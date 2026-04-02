@@ -1,10 +1,9 @@
 import { Checkbox } from "@heroui/react";
+import { useTranslations } from "next-intl";
 
-import MediaPreviewGroup, {
-  MediaItem,
-} from "@/components/common/media-preview";
 import SourceIcon from "@/components/common/source-icon";
 import { WarehouseProductItem } from "@/components/item-list";
+import AdditionalServicesGroup from "@/components/common/additional-services";
 
 export default function WarehouseItem({
   warehouse,
@@ -12,6 +11,7 @@ export default function WarehouseItem({
   onChange,
   isSelected,
 }: any) {
+  const t = useTranslations("profile.warehouse");
   const product = warehouse?.orderProduct;
 
   return (
@@ -40,16 +40,10 @@ export default function WarehouseItem({
       </div>
       <WarehouseProductItem product={product} warehouse={warehouse} />
       {/* 增值服务 */}
-      <div className="flex flex-col gap-2 rounded-lg bg-[#fafafa] p-2">
-        {product?.orderServiceList.map((service: any) => (
-          <div key={service.id} className="flex gap-2">
-            <div className="text-sm text-[#acacac]">
-              {service.serviceName}*{service.quantity}
-            </div>
-            <MediaPreviewGroup fileList={service.fileList as MediaItem[]} />
-          </div>
-        ))}
-      </div>
+      <AdditionalServicesGroup
+        services={product?.orderServiceList}
+        prefix={warehouse?.orderCode || warehouse?.packageCode}
+      />
     </div>
   );
 }

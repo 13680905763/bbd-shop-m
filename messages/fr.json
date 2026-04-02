@@ -1,1021 +1,1025 @@
 {
-    "components": {
-        "ui": {
-            "copy": {
-                "success": "Copy success",
-                "fail": "Copy fail"
-            },
-            "refundCountdown": {
-                "day": "jour",
-                "hour": "h",
-                "minute": "min",
-                "second": "sec",
-                "expired": "Expiré"
-            },
-            "empty": {
-                "desc": "Aucune donnée disponible"
-            }
-        },
-        "form": {
-            "save": "Confirmer",
-            "cancel": "Annuler",
-            "specification": {
-                "s1": "Couleur",
-                "s2": "Taille",
-                "quantity": "Quantité",
-                "add": "Ajouter une spécification"
-            },
-            "uploadImages": {
-                "tip": "Télécharger jusqu'à 5 images"
-            }
-        },
-        "block": {
-            "warehouseProductItem": {
-                "weight": "Masse",
-                "size": "Dimensions"
-            }
-        },
-        "common": {
-            "selectBlock": {
-                "title": "Titre par défaut",
-                "emptyText": "Aucune sélection effectuée",
-                "select": "Sélectionner"
-            },
-            "bottomAction": {
-                "selectAll": "Tout sélectionner",
-                "submit": "Soumettre"
-            },
-            "confirmModal": {
-                "title": "Confirmation de l'opération",
-                "confirm": "Confirmer",
-                "cancel": "Annuler"
-            },
-            "productItem": {
-                "remark": "Remarques produit",
-                "placeholder": "Saisir des remarques sur le produit",
-                "noRemark": "Aucune remarque"
-            },
-            "expandableList": {
-                "expand": "Étendre",
-                "collapse": "Réduire"
-            }
-        },
-        "drawer": {
-            "selectionService": {
-                "title": "Service Additionnel",
-                "free": "Gratuit",
-                "add": "Ajouter",
-                "remark": "Remarque",
-                "noRemark": "Aucune remarque"
-            },
-            "selectionServiceDetailDrawer": {
-                "serviceIntro": "Introduction du Service",
-                "noIntro": "Aucune introduction",
-                "sample": "Exemple",
-                "serviceFee": "Frais de Service",
-                "remarkPlaceholder": "Entrez une remarque (facultatif)",
-                "remark": "Remarque",
-                "confirm": "Confirmer"
-            }
-        },
-        "modal": {
-            "confirm": "Confirmer",
-            "cancel": "Annuler",
-            "confirmModalTitle": "Confirmer l'Action",
-            "address": {
-                "addTitle": "Ajouter une Adresse",
-                "editTitle": "Modifier l'Adresse",
-                "fields": {
-                    "recipient": {
-                        "label": "Destinataire",
-                        "placeholder": "Entrez le nom du destinataire",
-                        "errorMessage": "Le destinataire ne peut pas être vide"
-                    },
-                    "phone": {
-                        "label": "Téléphone",
-                        "placeholder": "Entrez le numéro de téléphone",
-                        "errorMessage": "Le téléphone ne peut pas être vide"
-                    },
-                    "area": {
-                        "label": "Région",
-                        "placeholder": "Sélectionnez la région",
-                        "errorMessage": "La région ne peut pas être vide"
-                    },
-                    "address": {
-                        "label": "Adresse",
-                        "placeholder": "Entrez l'adresse complète",
-                        "errorMessage": "L'adresse ne peut pas être vide"
-                    },
-                    "doorNo": {
-                        "label": "Numéro de Porte",
-                        "placeholder": "Entrez le numéro de porte",
-                        "errorMessage": "Le numéro de porte ne peut pas être vide"
-                    },
-                    "postcode": {
-                        "label": "Code Postal",
-                        "placeholder": "Entrez le code postal",
-                        "errorMessage": "Le code postal ne peut pas être vide"
-                    },
-                    "defaultAddress": {
-                        "label": "Définir comme adresse par défaut"
-                    }
-                }
-            },
-            "billingAddress": {
-                "addTitle": "Ajouter une Adresse de Facturation",
-                "editTitle": "Modifier l'Adresse de Facturation",
-                "fields": {
-                    "familyName": {
-                        "label": "Nom de Famille",
-                        "placeholder": "Entrez le nom de famille",
-                        "errorMessage": "Le nom de famille ne peut pas être vide"
-                    },
-                    "givenName": {
-                        "label": "Prénom",
-                        "placeholder": "Entrez le prénom",
-                        "errorMessage": "Le prénom ne peut pas être vide"
-                    },
-                    "phone": {
-                        "label": "Téléphone",
-                        "placeholder": "Entrez le numéro de téléphone",
-                        "errorMessage": "Le téléphone ne peut pas être vide"
-                    },
-                    "area": {
-                        "label": "Région",
-                        "placeholder": "Sélectionnez la région",
-                        "errorMessage": "La région ne peut pas être vide"
-                    },
-                    "address": {
-                        "label": "Adresse",
-                        "placeholder": "Entrez l'adresse complète",
-                        "errorMessage": "L'adresse ne peut pas être vide"
-                    },
-                    "doorNo": {
-                        "label": "Numéro de Porte",
-                        "placeholder": "Entrez le numéro de porte",
-                        "errorMessage": "Le numéro de porte ne peut pas être vide"
-                    },
-                    "postcode": {
-                        "label": "Code Postal",
-                        "placeholder": "Entrez le code postal",
-                        "errorMessage": "Le code postal ne peut pas être vide"
-                    },
-                    "defaultAddress": {
-                        "label": "Définir comme adresse par défaut"
-                    }
-                }
-            },
-            "recharge": {
-                "title": "Recharger",
-                "placeholder": "Veuillez saisir le montant"
-            }
-        },
-        "areaSelector": {
-            "country": {
-                "label": "Pays",
-                "placeholder": "Sélectionner un pays",
-                "errorMessage": "Veuillez sélectionner un pays"
-            },
-            "state": {
-                "label": "État / Province",
-                "placeholder": "Sélectionner un état",
-                "errorMessage": "Veuillez sélectionner un état"
-            },
-            "city": {
-                "label": "Ville",
-                "placeholder": "Sélectionner une ville",
-                "errorMessage": "Veuillez sélectionner une ville"
-            }
-        },
-        "confirmModal": {
-            "title": "Confirmation d'action",
-            "content": "Êtes-vous sûr de vouloir effectuer cette action ?",
-            "confirmText": "Confirmer",
-            "cancelText": "Annuler"
-        },
-        "copyButton": {
-            "success": "Copié dans le presse-papiers",
-            "fail": "Échec de la copie",
-            "title": "Cliquez pour copier"
-        },
-        "chatbox": {
-            "loginFirst": "Veuillez vous connecter d'abord",
-            "onlineSupport": "Support en ligne",
-            "inputPlaceholder": "Entrez votre message...",
-            "send": "Envoyer",
-            "connectionLost": "Connexion perdue, veuillez réessayer plus tard",
-            "imageSendFail": "Échec de l'envoi de l'image",
-            "imageTooLarge": "Image size cannot exceed 5MB",
-            "selectOrder": "Select Order",
-            "noOrdersFound": "No orders found",
-            "orderNo": "Order No:",
-            "price": "Price:",
-            "close": "Close",
-            "waybillNo": "Waybill No:",
-            "weight": "Weight:",
-            "size": "Size: ",
-            "selectWaybill": "Select Waybill",
-            "noWaybillsFound": "No waybills found"
-        },
-        "billingAddress": {
-            "edit": "Modifier",
-            "delete": "Supprimer"
-        },
-        "itemList": {
-            "addressItem": {
-                "edit": "Modifier",
-                "delete": "Supprimer",
-                "default": "Par défaut"
-            },
-            "couponItem": {
-                "minSpend": "Min. {amount} d'achat",
-                "discount": "Réduction",
-                "restriction": "Restrictions",
-                "shippingExcludingCustoms": "Frais de port (hors douane)",
-                "usage": "Utilisation",
-                "internationalPackage": "Colis international",
-                "countries": "Pays/Régions",
-                "all": "Tous les pays",
-                "redeem": "Échanger",
-                "type": "Type",
-                "validity": "Validité",
-                "days": "{count} jours",
-                "points": "Points",
-                "src": "Source",
-                "usedFor": "Utilisation"
-            },
-            "exchangeCouponItem": {
-                "minSpend": "Min. {amount} d'achat",
-                "discount": "Réduction",
-                "restriction": "Restrictions",
-                "shippingExcludingCustoms": "Frais de port (hors douane)",
-                "usage": "Utilisation",
-                "internationalPackage": "Colis international",
-                "countries": "Pays/Régions",
-                "all": "Tous les pays",
-                "redeem": "Échanger",
-                "type": "Type",
-                "validity": "Validité",
-                "days": "{count} jours",
-                "points": "Points",
-                "src": "Source",
-                "usedFor": "Utilisation"
-            }
-        }
+  "components": {
+    "ui": {
+      "copy": {
+        "success": "Copy success",
+        "fail": "Copy fail"
+      },
+      "refundCountdown": {
+        "day": "jour",
+        "hour": "h",
+        "minute": "min",
+        "second": "sec",
+        "expired": "Expiré"
+      },
+      "empty": {
+        "desc": "Aucune donnée disponible"
+      }
     },
-    "auth": {
-        "sloganTitle": "Service Tout-en-Un",
-        "sloganDesc": "Achetez en Chine Facilement, Expédiez dans le Monde Entier Professionnellement",
-        "login": {
-            "loginButton": "Se connecter",
-            "registerButton": "S'inscrire",
-            "forgetPassword": "Mot de passe oublié",
-            "fields": {
-                "email": {
-                    "errorMessage": "L'email ne peut pas être vide",
-                    "placeholder": "Veuillez saisir votre email"
-                },
-                "password": {
-                    "errorMessage": "Le mot de passe ne peut pas être vide",
-                    "placeholder": "Veuillez saisir votre mot de passe"
-                }
-            }
-        },
-        "forgetPassword": {
-            "title": "Mot de passe oublié",
-            "desc": "Veuillez saisir votre adresse e-mail pour réinitialiser votre mot de passe",
-            "emailPlaceholder": "Entrez votre e-mail",
-            "codePlaceholder": "Code de vérification",
-            "sendCode": "Envoyer le code",
-            "submit": "Valider",
-            "hasAccount": "Déjà un compte ?",
-            "login": "Se connecter",
-            "emailError": "Veuillez saisir votre e-mail",
-            "emailInvalid": "Veuillez saisir une adresse e-mail valide",
-            "fillAll": "Veuillez remplir tous les champs",
-            "successMessage": "Réinitialisation du mot de passe réussie",
-            "sendCodeSuccess": "Code de vérification envoyé",
-            "fields": {
-                "email": {
-                    "placeholder": "Entrez votre e-mail",
-                    "errorMessage": "Veuillez saisir un e-mail valide"
-                },
-                "code": {
-                    "placeholder": "Code de vérification",
-                    "errorMessage": "Veuillez saisir le code de vérification"
-                }
-            }
-        },
-        "register": {
-            "registerButton": "S'inscrire",
-            "loginHint": "Vous avez déjà un compte ?",
-            "goLogin": "Se connecter",
-            "mustAgree": "Veuillez d'abord accepter les conditions du site",
-            "verifyTitle": "Vérifiez votre email (Ne quittez pas cette page)",
-            "otpTitle": "Vérifiez votre email",
-            "otpDescription": "Nous avons envoyé un code de vérification à {email}. Veuillez saisir le code pour finaliser la vérification.",
-            "fields": {
-                "email": {
-                    "errorMessage": "L'email ne peut pas être vide",
-                    "placeholder": "Saisissez votre email"
-                },
-                "password": {
-                    "errorMessage": "Le mot de passe ne peut pas être vide",
-                    "placeholder": "Veuillez saisir votre mot de passe"
-                },
-                "inviteCode": {
-                    "placeholder": "Saisissez le code d'invitation (laissez vide si aucun)"
-                },
-                "isChecked": {
-                    "label": "J'ai lu et j'accepte les conditions générales du site"
-                }
-            }
-        }
+    "form": {
+      "save": "Confirmer",
+      "cancel": "Annuler",
+      "specification": {
+        "s1": "Couleur",
+        "s2": "Taille",
+        "quantity": "Quantité",
+        "add": "Ajouter une spécification"
+      },
+      "uploadImages": {
+        "tip": "Télécharger jusqu'à 5 images"
+      }
     },
-    "home": {
-        "search": {
-            "placeholder": "Rechercher..."
-        },
-        "toast": {
-            "uploadFail": "Échec du téléversement, veuillez réessayer"
-        },
-        "toolList": {
-            "guide": "Guide",
-            "community": "Communauté",
-            "forwarding": "Transfert",
-            "fillBuy": "Remplissage "
-        },
-        "shipping": {
-            "title": "Estimation des frais d’expédition",
-            "placeholder": "France / 1000g / 1...",
-            "lineFast": "DHL Express",
-            "price": "71"
-        }
+    "block": {
+      "warehouseProductItem": {
+        "weight": "Masse",
+        "size": "Dimensions"
+      }
     },
-    "dashboard": {
-        "balance": "Solde",
+    "common": {
+      "selectBlock": {
+        "title": "Titre par défaut",
+        "emptyText": "Aucune sélection effectuée",
+        "select": "Sélectionner"
+      },
+      "bottomAction": {
+        "selectAll": "Tout sélectionner",
+        "submit": "Soumettre"
+      },
+      "confirmModal": {
+        "title": "Confirmation de l'opération",
+        "confirm": "Confirmer",
+        "cancel": "Annuler"
+      },
+      "productItem": {
+        "remark": "Remarques produit",
+        "placeholder": "Saisir des remarques sur le produit",
+        "noRemark": "Aucune remarque"
+      },
+      "expandableList": {
+        "expand": "Étendre",
+        "collapse": "Réduire"
+      },
+      "additionalServices": "Services supplémentaires",
+      "noImagesToDownload": "Aucune image disponible pour le téléchargement"
+    },
+    "drawer": {
+      "selectionService": {
+        "title": "Service Additionnel",
+        "free": "Gratuit",
+        "add": "Ajouter",
+        "remark": "Remarque",
+        "noRemark": "Aucune remarque"
+      },
+      "selectionServiceDetailDrawer": {
+        "serviceIntro": "Introduction du Service",
+        "noIntro": "Aucune introduction",
+        "sample": "Exemple",
+        "serviceFee": "Frais de Service",
+        "remarkPlaceholder": "Entrez une remarque (facultatif)",
+        "remark": "Remarque",
+        "confirm": "Confirmer"
+      }
+    },
+    "modal": {
+      "confirm": "Confirmer",
+      "cancel": "Annuler",
+      "confirmModalTitle": "Confirmer l'Action",
+      "address": {
+        "addTitle": "Ajouter une Adresse",
+        "editTitle": "Modifier l'Adresse",
+        "fields": {
+          "recipient": {
+            "label": "Destinataire",
+            "placeholder": "Entrez le nom du destinataire",
+            "errorMessage": "Le destinataire ne peut pas être vide"
+          },
+          "phone": {
+            "label": "Téléphone",
+            "placeholder": "Entrez le numéro de téléphone",
+            "errorMessage": "Le téléphone ne peut pas être vide"
+          },
+          "area": {
+            "label": "Région",
+            "placeholder": "Sélectionnez la région",
+            "errorMessage": "La région ne peut pas être vide"
+          },
+          "address": {
+            "label": "Adresse",
+            "placeholder": "Entrez l'adresse complète",
+            "errorMessage": "L'adresse ne peut pas être vide"
+          },
+          "doorNo": {
+            "label": "Numéro de Porte",
+            "placeholder": "Entrez le numéro de porte",
+            "errorMessage": "Le numéro de porte ne peut pas être vide"
+          },
+          "postcode": {
+            "label": "Code Postal",
+            "placeholder": "Entrez le code postal",
+            "errorMessage": "Le code postal ne peut pas être vide"
+          },
+          "defaultAddress": {
+            "label": "Définir comme adresse par défaut"
+          }
+        }
+      },
+      "billingAddress": {
+        "addTitle": "Ajouter une Adresse de Facturation",
+        "editTitle": "Modifier l'Adresse de Facturation",
+        "fields": {
+          "familyName": {
+            "label": "Nom de Famille",
+            "placeholder": "Entrez le nom de famille",
+            "errorMessage": "Le nom de famille ne peut pas être vide"
+          },
+          "givenName": {
+            "label": "Prénom",
+            "placeholder": "Entrez le prénom",
+            "errorMessage": "Le prénom ne peut pas être vide"
+          },
+          "phone": {
+            "label": "Téléphone",
+            "placeholder": "Entrez le numéro de téléphone",
+            "errorMessage": "Le téléphone ne peut pas être vide"
+          },
+          "area": {
+            "label": "Région",
+            "placeholder": "Sélectionnez la région",
+            "errorMessage": "La région ne peut pas être vide"
+          },
+          "address": {
+            "label": "Adresse",
+            "placeholder": "Entrez l'adresse complète",
+            "errorMessage": "L'adresse ne peut pas être vide"
+          },
+          "doorNo": {
+            "label": "Numéro de Porte",
+            "placeholder": "Entrez le numéro de porte",
+            "errorMessage": "Le numéro de porte ne peut pas être vide"
+          },
+          "postcode": {
+            "label": "Code Postal",
+            "placeholder": "Entrez le code postal",
+            "errorMessage": "Le code postal ne peut pas être vide"
+          },
+          "defaultAddress": {
+            "label": "Définir comme adresse par défaut"
+          }
+        }
+      },
+      "recharge": {
+        "title": "Recharger",
+        "placeholder": "Veuillez saisir le montant"
+      }
+    },
+    "areaSelector": {
+      "country": {
+        "label": "Pays",
+        "placeholder": "Sélectionner un pays",
+        "errorMessage": "Veuillez sélectionner un pays"
+      },
+      "state": {
+        "label": "État / Province",
+        "placeholder": "Sélectionner un état",
+        "errorMessage": "Veuillez sélectionner un état"
+      },
+      "city": {
+        "label": "Ville",
+        "placeholder": "Sélectionner une ville",
+        "errorMessage": "Veuillez sélectionner une ville"
+      }
+    },
+    "confirmModal": {
+      "title": "Confirmation d'action",
+      "content": "Êtes-vous sûr de vouloir effectuer cette action ?",
+      "confirmText": "Confirmer",
+      "cancelText": "Annuler"
+    },
+    "copyButton": {
+      "success": "Copié dans le presse-papiers",
+      "fail": "Échec de la copie",
+      "title": "Cliquez pour copier"
+    },
+    "chatbox": {
+      "loginFirst": "Veuillez vous connecter d'abord",
+      "onlineSupport": "Support en ligne",
+      "inputPlaceholder": "Entrez votre message...",
+      "send": "Envoyer",
+      "connectionLost": "Connexion perdue, veuillez réessayer plus tard",
+      "imageSendFail": "Échec de l'envoi de l'image",
+      "imageTooLarge": "Image size cannot exceed 5MB",
+      "selectOrder": "Select Order",
+      "noOrdersFound": "No orders found",
+      "orderNo": "Order No:",
+      "price": "Price:",
+      "close": "Close",
+      "waybillNo": "Waybill No:",
+      "weight": "Weight:",
+      "size": "Size: ",
+      "selectWaybill": "Select Waybill",
+      "noWaybillsFound": "No waybills found"
+    },
+    "billingAddress": {
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    },
+    "itemList": {
+      "addressItem": {
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "default": "Par défaut"
+      },
+      "couponItem": {
+        "minSpend": "Min. {amount} d'achat",
+        "discount": "Réduction",
+        "restriction": "Restrictions",
+        "shippingExcludingCustoms": "Frais de port (hors douane)",
+        "usage": "Utilisation",
+        "internationalPackage": "Colis international",
+        "countries": "Pays/Régions",
+        "all": "Tous les pays",
+        "redeem": "Échanger",
+        "type": "Type",
+        "validity": "Validité",
+        "days": "{count} jours",
         "points": "Points",
-        "coupon": {
-            "title": "Mes Coupons",
-            "available": "{count} coupons disponibles",
-            "viewAll": "Voir tout",
-            "tabs": {
-                "all": "Tous",
-                "unused": "Disponible",
-                "used": "Utilisé",
-                "expired": "Expiré"
-            },
-            "couponRedemption": {
-                "title": "Échange de coupon",
-                "inputPlaceholder": "Saisir le code promo",
-                "redeem": "Échanger"
-            }
-        },
-        "menuOrder": "Commandes",
-        "menuWarehouse": "Entrepôt",
-        "menuPackage": "Colis",
-        "inviteTitle": "Invitation affiliée",
-        "TotalReward": "Récompenses totales",
-        "inviteCount": "Compte d'invitation",
-        "activeUsersCount": "Nombre d'utilisateurs actifs",
-        "myExperience": "Mon expérience",
-        "servicesTitle": "Plus de services",
-        "servicesMessage": "Messages",
-        "servicesFavorite": "Favoris",
-        "servicesAddress": "Adresse",
-        "servicesBillingAddress": "Adresse de facturation",
-        "servicesHistory": "Historique"
-    },
-    "cart": {
-        "title": "Panier",
-        "manage": "Gérer",
-        "cancel": "Annuler",
-        "selectAll": "Tout sélectionner",
-        "delete": "Supprimer",
-        "checkout": "Commander",
-        "loading": "Chargement...",
-        "error": "Erreur",
-        "toast": {
-            "noSelect": "Veuillez d'abord sélectionner des articles"
-        },
-        "deleteTitle": "Supprimer du panier",
-        "deleteContent": "Êtes-vous sûr de vouloir supprimer les articles sélectionnés?",
-        "emptyTitle": "Votre panier est vide",
-        "emptyDesc": "Allez trouver vos articles préférés!",
-        "itemExpired": "Article expiré",
-        "itemExpiredContent": "Ce produit a expiré et ne peut pas être acheté.",
-        "back": "Resélectionner",
-        "remarkModal": {
-            "title": "Remarques",
-            "placeholder": "Saisir des remarques"
-        }
-    },
-    "profile": {
-        "profilePage": {
-            "title": "Informations du profil",
-            "nameLabel": "Nom d'utilisateur",
-            "mobileLabel": "Numéro de mobile",
-            "saveButton": "Enregistrer",
-            "edit": "Modifier",
-            "uploading": "Téléchargement de l'avatar..."
-        },
-        "order": {
-            "title": "Mes Commandes",
-            "tabs": {
-                "all": "Toutes",
-                "waitPay": "À payer",
-                "paid": "Payée",
-                "refund": "Remboursements"
-            },
-            "buttons": {
-                "pay": "Payer",
-                "cancel": "Annuler",
-                "batchPay": "Payer en lot",
-                "withdraw": "Se rétracter",
-                "refund": "Remboursement",
-                "consult": "Consultation"
-            },
-            "cancelTitle": "Annulation commande",
-            "cancelContent": "Confirmez-vous l'annulation?",
-            "withdrawTitle": "Rétractation",
-            "withdrawContent": "Confirmez-vous la rétractation?",
-            "refundModal": {
-                "title": "Demande de remboursement",
-                "placeholder": "Remarques (optionnel)",
-                "refundable": "Remboursable",
-                "unrefundable": "Non remboursable"
-            },
-            "refundReason": "Motif remboursement",
-            "reviewReason": "Motif vérification",
-            "refundAmount": "Montant remboursé",
-            "reviewTime": "Date vérification",
-            "promptCard": {
-                "title": "QC & Gestion des colis",
-                "description": "Accédez à l'entrepôt pour les photos QC et soumission des colis",
-                "button": "Vers l'entrepôt"
-            }
-        },
-        "warehouse": {
-            "title": "Entrepôt",
-            "tabs": {
-                "all": "Tous les colis",
-                "submit": "À soumettre"
-            },
-            "submit": "Soumettre les colis"
-        },
-        "package": {
-            "title": "Colis",
-            "tabs": {
-                "all": "Tous",
-                "pay": "En attente de paiement",
-                "shipping": "En transit",
-                "received": "Reçus"
-            },
-            "hasInsurance": "Service d'assurance acheté",
-            "selectAll": "Tout sélectionner",
-            "submitPay": "Paiement groupé",
-            "noOrders": "Aucun colis pour le moment",
-            "noMoreRecords": "Aucun autre enregistrement",
-            "withdrawTitle": "Retirer la demande",
-            "withdrawContent": "Êtes-vous sûr de vouloir retirer la demande actuelle ?",
-            "receiptTitle": "Confirmer la réception",
-            "receiptContent": "Confirmez-vous avoir reçu ce colis ?",
-            "refundTitle": "Demander un remboursement",
-            "buttons": {
-                "cancel": "Annuler",
-                "withdraw": "Retirer la demande",
-                "change": "Changer d'itinéraire",
-                "edit": "Plus d'actions",
-                "pay": "Payer",
-                "payCancel": "Frais d'annulation de paiement",
-                "receipt": "Confirmer la réception",
-                "consult": "Consulter"
-            },
-            "weight": "Poids :",
-            "size": "Dimensions :",
-            "serviceFee": "Frais de service :",
-            "insuranceFee": "Frais d'assurance :",
-            "totalFee": "Frais totaux :",
-            "shippingCode": "Numéro de suivi :",
-            "cancelModal": {
-                "title": "Annuler",
-                "cancelCard": {
-                    "title": "Confirmer l'annulation",
-                    "subtitle": "Annuler cette commande",
-                    "submittingTitle": "Annulation en cours...",
-                    "submittingSubtitle": "Veuillez patienter",
-                    "serviceFee": "Frais de service",
-                    "packingFee": "Frais d'emballage",
-                    "totalFee": "Frais totaux",
-                    "feeNotice": "Étant donné que le traitement en entrepôt a déjà commencé, l'annulation de ce colis nécessite des frais de {amount}. Les détails sont les suivants :",
-                    "freeNotice": "Aucun frais n'est requis pour annuler ce colis"
-                },
-                "changeRouteCard": {
-                    "title": "Changer d'itinéraire",
-                    "subtitle": "Resélectionner l'itinéraire d'expédition"
-                }
-            },
-            "changeTitle": "Changer d'itinéraire",
-            "lineModal": {
-                "title": "Suivi logistique",
-                "mainWaybillTitle": "Suivi de la lettre de voiture principale",
-                "subWaybillTitle": "Sous-lettre de voiture :",
-                "waybillNumber": "Numéro de lettre de voiture :",
-                "currentStatus": "Statut actuel :",
-                "location": "Emplacement :",
-                "mainTimeline": "Chronologie de la lettre de voiture principale :"
-            },
-            "moreActions": {
-                "title": "Plus d'actions",
-                "changeLine": {
-                    "title": "Changer d'itinéraire",
-                    "description": "Resélectionner un itinéraire d'expédition plus approprié"
-                },
-                "changeAddress": {
-                    "title": "Changer d'adresse",
-                    "description": "Modifier les informations d'adresse de livraison"
-                }
-            },
-            "changeAddress": {
-                "title": "Changer d'adresse",
-                "selectAddress": "Adresse de livraison",
-                "selectLine": "Itinéraire d'expédition",
-                "remark": "Remarques",
-                "result": {
-                    "noChange": "Modification réussie, les frais d'expédition restent inchangés",
-                    "payExtra": "Modification réussie, des frais d'expédition supplémentaires de {amount} sont requis",
-                    "refund": "Modification réussie, les frais d'expédition de {amount} seront remboursés sur votre solde"
-                }
-            }
-        },
-        "address": {
-            "title": "Adresse",
-            "addButton": "Ajouter",
-            "deleteContent": "Confirmer la suppression de cette adresse ?"
-        },
-        "billingAddress": {
-            "title": "Adresse de facturation",
-            "addButton": "Ajouter",
-            "deleteContent": "Confirmer la suppression de cette adresse ?"
-        },
-        "message": {
-            "title": "Messages",
-            "manage": "Gérer",
-            "cancel": "Annuler",
-            "tabs": {
-                "all": "Tous",
-                "unread": "Non lus",
-                "read": "Lus"
-            },
-            "deleteTitle": "Supprimer les messages",
-            "deleteContent": "Êtes-vous sûr de vouloir supprimer les {count} message(s) sélectionné(s) ?",
-            "selectAll": "Tout sélectionner",
-            "delete": "Supprimer",
-            "detailCancel": "Fermer",
-            "detailConfirm": "Marquer comme lu",
-            "unread": "Non lu",
-            "read": "Lu",
-            "noOrders": "Aucun colis",
-            "noMoreRecords": "Plus d'enregistrements"
-        }
-    },
-    "setting": {
-        "page": {
-            "title": "Paramètres",
-            "menuLanguage": "Langue",
-            "menuCurrency": "Devise",
-            "menuChangePassword": "Changer le mot de passe",
-            "logout": "Déconnexion"
-        },
-        "currencyPage": {
-            "title": "Devise",
-            "save": "Enregistrer"
-        },
-        "languagePage": {
-            "title": "Langue",
-            "save": "Enregistrer"
-        },
-        "changePassword": {
-            "title": "Changer le mot de passe",
-            "form": {
-                "oldPassword": "Ancien mot de passe",
-                "newPassword": "Nouveau mot de passe",
-                "confirmPassword": "Confirmer le mot de passe",
-                "submit": "Changer le mot de passe"
-            },
-            "tip": "Les nouveaux mots de passe saisis ne correspondent pas"
-        }
-    },
-    "wallet": {
-        "page": {
-            "title": "Mon compte",
-            "record": "Historique",
-            "totalBalance": "Solde total",
-            "withdraw": "Retirer",
-            "selectAmount": "Sélectionner le montant",
-            "otherAmount": "Autre montant",
-            "enterOtherAmount": "Entrer un autre montant",
-            "recharge": "Recharger",
-            "enterValidAmount": "Veuillez saisir un montant valide"
-        },
-        "balanceRecord": {
-            "title": "Historique du solde",
-            "noMoreRecords": "Plus d'enregistrements"
-        },
-        "points": {
-            "title": "Points",
-            "tabs": {
-                "detail": "Détails des points",
-                "change": "Échange de points"
-            },
-            "myPoints": "Points",
-            "exchangeConfirm": {
-                "title": "Confirmer l'échange",
-                "content": "Confirmer l'échange de {name} contre {points} points ?"
-            }
-        },
-        "withdraw": {
-            "title": "Retrait",
-            "placeholder": "Veuillez saisir le montant",
-            "fee": "Frais (1%)",
-            "receive": "Vous recevrez",
-            "available": "Disponible",
-            "tip": "Le montant retiré sera d'abord placé dans le solde gelé. Une fois approuvé par l'administrateur, il sera automatiquement retourné sur votre compte de paiement. Le délai de traitement est de 1-3 jours.",
-            "successTitle": "Demande de retrait soumise",
-            "successMessage": "Votre demande de retrait a été soumise avec succès.",
-            "failTitle": "Échec du retrait",
-            "failMessage": "Échec de la soumission de la demande de retrait. Veuillez réessayer.",
-            "submit": "Soumettre",
-            "historyTitle": "Historique de retrait",
-            "amount": "Montant retiré",
-            "actualAmount": "Montant réel retiré",
-            "remark": "Remarque",
-            "status": "Statut",
-            "pending": "En attente",
-            "success": "Retiré",
-            "failed": "Échec"
-        }
-    },
-    "goods": {
-        "details": {
-            "title": "Détails du Produit",
-            "originalLink": "Lien Original",
-            "refresh": "Actualiser",
-            "progressBar": {
-                "step1": "Payer le Produit",
-                "step2": "Soumettre le Colis",
-                "step3": "Colis Reçu",
-                "tipText": "Nous fournissons gratuitement 3 à 7 photos d'inspection qualité haute définition",
-                "fromSellerToBBD": "Du Vendeur à BBD",
-                "fromBBDToYou": "De BBD à Vous"
-            },
-            "disclaimerDrawer": {
-                "title": "Avertissement Légal",
-                "buttonLabel": "Avertissement Légal",
-                "content": "Tous les produits d'achat représenté affichés sur BBDbuy proviennent de plateformes d'achat tierces et ne sont pas vendus directement par BBDbuy. Par conséquent, BBDbuy n'assume aucune responsabilité ni obligation légale pour les problèmes découlant de la violation de la propriété intellectuelle et des droits d'auteur des marchandises. En utilisant le service d'achat représenté de BBDbuy, vous reconnaissez et acceptez les risques mentionnés ci-dessus."
-            },
-            "quantity": "Quantité",
-            "remark": "Remarques",
-            "enterDescription": "Veuillez saisir des remarques",
-            "buyNow": "Acheter",
-            "addToCart": "Ajouter au Panier",
-            "productDescription": "Description du Produit",
-            "stock": "Stock :",
-            "shippingFee": "Frais d'Expédition :",
-            "singleItemSalesTitle": "Ventes à l'Unité",
-            "avgArrivalTime": "Temps Moyen d'Arrivée",
-            "salesVolume": "Volume des Ventes",
-            "weightWithUnit": "Poids (g)",
-            "volumeWithUnit": "Volume (cm)",
-            "continueShopping": "Retourner à l'Accueil",
-            "riskNotice": "Attention",
-            "riskDescription": "Désolé! Ce produit est soit discontinué, soit épuisé. Il n'est pas disponible à l'achat pour l'instant. Veuillez contacter le support en direct pour plus d'informations."
-        },
-        "search": {
-            "searchPlaceholder": "Rechercher...",
-            "uploadFailed": "Échec du téléchargement, veuillez réessayer",
-            "invalidUrl": "Veuillez saisir une URL valide",
-            "searchButton": "Rechercher",
-            "historyTitle": "Historique",
-            "noResult": "Aucun résultat correspondant",
-            "taobao": "Taobao",
-            "1688": "1688"
-        }
-    },
-    "submit": {
-        "order": {
-            "title": "Confirmation de Commande",
-            "total": "Total",
-            "submitOrder": "Soumettre la Commande",
-            "valueAddedService": "Service à Valeur Ajoutée",
-            "noService": "Aucun Service Disponible",
-            "free": "Gratuit",
-            "add": "Ajouter",
-            "remark": "Remarques :",
-            "delete": "Supprimer",
-            "serviceIntro": "Présentation du Service",
-            "noIntro": "Aucune Présentation Disponible",
-            "sample": "Exemple",
-            "serviceFee": "Frais de Service :",
-            "remarkPlaceholder": "Veuillez saisir des remarques",
-            "shippingFee": "Frais d'Expédition :",
-            "productFee": "Frais de Produit :",
-            "shopTotal": "Total Boutique :"
-        },
-        "warehouse": {
-            "title": "Soumission de Colis",
-            "shippingAddress": "Adresse de Livraison",
-            "addAddress": "Ajouter une Adresse",
-            "commodityList": "Liste des Marchandises",
-            "additionalService": "Service Additionnel",
-            "insuranceService": "Service d'Inspection",
-            "deliveryRoute": "Itinéraire de Livraison",
-            "routesMessage": "Veuillez sélectionner un itinéraire de livraison",
-            "textareaPlaceholder": "Si vous avez des exigences particulières, veuillez laisser une note ici",
-            "agreement": "J'ai lu et j'accepte la Convention d'Expédition de Colis bbdbuy",
-            "submitPackage": "Soumettre le Colis",
-            "defaultMessage": "Veuillez d'abord sélectionner une adresse",
-            "selectService": "Sélectionner un service",
-            "select": "Sélectionner",
-            "noServiceSelected": "Aucun service sélectionné, cliquez pour sélectionner",
-            "noServices": "Aucun service disponible",
-            "noAddressSelected": "Aucune adresse sélectionnée, cliquez pour sélectionner",
-            "noAddress": "Aucune adresse disponible",
-            "noRouteSelected": "Aucun itinéraire sélectionné, cliquez pour sélectionner",
-            "noRoutes": "Aucun itinéraire disponible",
-            "confirm": "Confirmer",
-            "totalWeight": "Poids total",
-            "totalVolume": "Volume total",
-            "estimating": "Estimation des frais en cours...",
-            "estimatedShipping": "Frais d'expédition estimés",
-            "estimatedService": "Frais de service estimés",
-            "estimatedInsurance": "Frais d'inspection estimés",
-            "estimatedTotal": "Total estimé",
-            "estimatedTip": "Le coût final sera affiché après l'emballage des colis",
-            "toast": {
-                "checkAgreement": "Veuillez accepter l'avertissement légal",
-                "selectAddress": "Veuillez sélectionner une adresse de livraison",
-                "selectRoute": "Veuillez sélectionner un itinéraire de livraison",
-                "submitSuccess": "Soumission réussie"
-            },
-            "addressModal": {
-                "addAddress": "Ajouter une Adresse",
-                "editAddress": "Modifier l'Adresse",
-                "fields": {
-                    "recipient": {
-                        "label": "Destinataire",
-                        "placeholder": "Entrez le nom du destinataire"
-                    },
-                    "phone": {
-                        "label": "Téléphone",
-                        "placeholder": "Entrez le numéro de téléphone"
-                    },
-                    "area": {
-                        "label": "Région",
-                        "placeholder": "Sélectionnez la région"
-                    },
-                    "address": {
-                        "label": "Adresse",
-                        "placeholder": "Entrez l'adresse complète"
-                    },
-                    "doorNo": {
-                        "label": "Numéro de Porte",
-                        "placeholder": "Entrez le numéro de porte"
-                    },
-                    "postcode": {
-                        "label": "Code Postal",
-                        "placeholder": "Entrez le code postal"
-                    },
-                    "defaultAddress": {
-                        "label": "Définir comme adresse par défaut"
-                    }
-                },
-                "tableEmpty": "Aucune information d'adresse disponible"
-            }
-        }
-    },
-    "payment": {
-        "title": "Confirmer la commande",
-        "total": "Total",
-        "handlingFee": "Frais de traitement",
-        "billingAddress": "Adresse de facturation",
-        "submit": "Soumettre",
-        "balance": "Solde",
-        "recharge": "Recharger",
-        "coupon": "Coupon",
-        "selectCoupon": "Veuillez sélectionner un coupon",
-        "pleaseAddBillingAddress": "Veuillez ajouter une adresse de facturation",
-        "result": {
-            "loading": "Confirmation du résultat du paiement",
-            "successTitle": "Paiement réussi",
-            "successNotice": "Nous avons reçu votre paiement, votre commande est en cours de traitement.",
-            "transactionId": "ID de transaction :",
-            "amount": "Montant payé :",
-            "time": "Heure du paiement :",
-            "failTitle": "Échec du paiement",
-            "failNotice": "Paiement non complété. Veuillez vérifier votre commande ou réessayer.",
-            "viewOrder": "Voir la commande",
-            "backHome": "Retour à l'accueil"
-        }
-    },
-    "promotion": {
-        "title": "Programme de Parrainage",
-        "process1": "Partagez votre code de parrainage",
-        "process2": "Votre ami invité confirme avoir reçu votre code",
-        "process3": "Recevez votre commission de parrainage",
-        "copy": "Copier",
-        "processTip": "Copiez cette URL et utilisez-la pour rediriger les utilisateurs vers votre page de parrainage",
-        "title1": "Mon Parrainage",
-        "totalReward": "Récompenses Totales",
-        "inviteUsers": "Utilisateurs Invités",
-        "experience": "Mon Expérience",
-        "title2": "Mon Niveau",
-        "bonusRate": "Taux de Bonus",
-        "experienceRange": "Expérience",
-        "activeUsersCount": "Utilisateurs Actifs",
-        "title3": "FAQ sur les Avantages",
-        "question1": "Qu'est-ce que le programme d'adhésion de parrainage?",
-        "answer1": "Le programme d'adhésion de parrainage est un modèle de marketing partenarial. Lorsque vous recommandez à de nouveaux utilisateurs de s'inscrire et d'utiliser nos services via votre lien d'invitation exclusif ou votre code de parrainage, vous pouvez gagner des commissions correspondantes. Cela équivaut à devenir notre partenaire de promotion de marque et à gagner un revenu supplémentaire en partageant nos services.",
-        "question2": "Comment mon bonus est-il calculé?",
-        "answer2": "Votre bonus est principalement calculé sur la base du montant des dépenses des utilisateurs que vous invitez, comprenant spécifiquement les aspects suivants : 1. Récompense d'invitation directe : Lorsque les utilisateurs que vous invitez directement effectuent leur premier achat, vous recevez un pourcentage fixe du montant de la commande comme récompense. 2. Récompense d'invitation indirecte : Lorsque les utilisateurs que vous invitez invitent d'autres personnes à faire des achats, vous pouvez également recevoir un certain pourcentage comme récompense secondaire. 3. Bonus progressifs : À mesure que le nombre de personnes que vous invitez augmente, votre pourcentage de bonus augmente en conséquence. 4. Récompenses de réussite supplémentaires : Atteignez des objectifs de promotion spécifiques pour gagner des bonus supplémentaires.",
-        "question3": "Comment promouvoir gratuitement?",
-        "answer3": "Vous pouvez promouvoir gratuitement par les méthodes suivantes : 1. Partage sur les réseaux sociaux : Partagez votre lien d'invitation exclusif sur des plateformes comme WeChat Moments, Weibo, Xiaohongshu, etc. 2. Création de contenu : Partagez vos expériences d'utilisation en écrivant des articles d'évaluation, en réalisant des vidéos tutoriels, etc. 3. Recommandations de bouche à oreille : Recommandez directement à des amis, à la famille ou à des collègues, en partageant votre code d'invitation. 4. Participation communautaire : Partagez du contenu précieux dans des forums et communautés pertinents avec vos informations d'invitation jointes. 5. Réseau personnel : Faites la promotion en utilisant vos cercles professionnels, groupes d'intérêt et autres réseaux sociaux.",
-        "invitedUser": {
-            "title": "Utilisateurs Invités",
-            "active": "Actif",
-            "inactive": "Inactif",
-            "tableColumns": {
-                "name": "Utilisateur Invité",
-                "email": "Email de l'Utilisateur Invité",
-                "createTime": "Date"
-            },
-            "noData": "Aucun utilisateur invité pour le moment"
-        },
-        "experiencePage": {
-            "title": "Détails d'Expérience",
-            "currentExperience": "Expérience Actuelle",
-            "createTime": "Date",
-            "noData": "Aucun détail d'expérience pour le moment"
-        },
-        "bonus": {
-            "title": "Détails des Bonus",
-            "tableColumns": {
-                "bizType": "Source",
-                "amount": "Montant",
-                "currentBalance": "Bonus Disponible",
-                "createTime": "Date"
-            },
-            "noData": "Aucun détail de bonus pour le moment"
-        }
-    },
-    "estimation": {
-        "fillWeightOrSize": "Veuillez saisir le poids ou les dimensions (L, l, H) !",
-        "title": "Estimation d'expédition",
-        "warehouse": "Depuis l'entrepôt",
-        "weight": "Poids (g)",
-        "length": "Longueur (cm)",
-        "width": "Largeur (cm)",
-        "height": "Hauteur (cm)",
-        "search": "Rechercher maintenant",
-        "selectCountry": "Veuillez sélectionner un pays",
-        "selectCategory": "Veuillez sélectionner une catégorie de marchandise",
-        "price": "Prix",
-        "time": "Délai de transit",
-        "pricingStandard": "Standard de tarification",
-        "firstWeightFee": "Frais premier poids",
-        "additionalWeightFee": "Frais poids supplémentaire",
-        "customsFee": "Frais de douane",
-        "shippingLimit": "Limite d'expédition",
-        "routeFeature": "Caractéristiques de la route",
-        "category": "Catégorie de marchandise"
-    },
-    "forwarding": {
-        "title": "Commande de réexpédition",
-        "forwardAddress": "Adresse de l'entrepôt",
-        "forwardingPackage": "Colis de réexpédition",
-        "fields": {
-            "trackingNo": {
-                "label": "Numéro de suivi",
-                "placeholder": "Saisissez votre numéro de suivi",
-                "errorMessage": "Veuillez saisir un numéro de suivi valide"
-            },
-            "packageName": {
-                "label": "Nom du produit",
-                "placeholder": "Saisissez le nom de votre produit",
-                "errorMessage": "Veuillez saisir un nom de produit valide"
-            }
-        },
-        "extraServices": "Services supplémentaires",
-        "submit": "Soumettre",
-        "acceptAgreement": "J'ai lu et j'accepte les 'Règles d'inspection des colis et accord de service'"
-    },
-    "history": {
-        "title": "Historique",
-        "manage": "Gérer",
-        "cancel": "Annuler",
-        "selectAll": "Tout",
-        "delete": "Supprimer",
-        "deleteConfirmTitle": "Supprimer l'historique",
-        "deleteConfirmContent": "Êtes-vous sûr de vouloir supprimer les éléments sélectionnés de l'historique ?",
-        "empty": "Aucun historique de navigation"
-    },
-    "favorite": {
-        "title": "Favoris",
-        "manage": "Gérer",
-        "cancel": "Annuler",
-        "selectAll": "Tout sélectionner",
-        "delete": "Supprimer",
-        "deleteConfirmTitle": "Supprimer des favoris",
-        "deleteConfirmContent": "Êtes-vous sûr de vouloir supprimer ce produit des favoris ?",
-        "empty": "Aucun produit favori"
-    },
-    "diy": {
-        "title": "Commande DIY",
-        "productDetails": "Détails du produit",
-        "extraServices": "Services supplémentaires",
-        "fee": "Frais",
-        "submit": "Soumettre",
-        "fields": {
-            "productLink": {
-                "label": "Lien du produit",
-                "placeholder": "Veuillez saisir le lien du produit",
-                "errorMessage": "Le lien du produit ne peut pas être vide"
-            },
-            "productName": {
-                "label": "Nom du produit",
-                "placeholder": "Veuillez saisir le nom du produit",
-                "errorMessage": "Le nom du produit ne peut pas être vide"
-            },
-            "remark": {
-                "label": "Remarque",
-                "placeholder": "Veuillez saisir une remarque"
-            },
-            "productPrice": {
-                "label": "Prix du produit",
-                "placeholder": "Veuillez saisir le prix du produit",
-                "errorMessage": "Le prix du produit ne peut pas être vide"
-            },
-            "postage": {
-                "label": "Frais de port",
-                "placeholder": "Veuillez saisir les frais de port",
-                "errorMessage": "Les frais de port ne peuvent pas être vides"
-            }
-        },
-        "productFee": "Frais de produit:",
-        "serviceFee": "Frais de service:",
-        "totalCost": "Coût total:",
-        "shippingFee": "Frais de port:"
-    },
-    "helpGuide": {
-        "title": "Comment acheter via bbdbuy",
-        "step1": {
-            "title": "Étape 1: Choisir les produits",
-            "content1": "Méthode 1: Copiez un lien de produit de Taobao / Tmall / 1688 et collez-le dans la barre de recherche bbdbuy.",
-            "content2": "Méthode 2: Recherchez par nom de produit et sélectionnez les articles recommandés.",
-            "content3": "Méthode 3: Utilisez la recherche par image pour trouver des produits similaires.",
-            "tip": "Si le lien ouvre une page de commande personnalisée, le produit nécessite un achat manuel. Remplissez les détails et cliquez sur «Acheter maintenant» ou «Ajouter au panier»."
-        },
-        "step2": {
-            "title": "Étape 2: Soumettre la commande",
-            "content1": "bbdbuy prend en charge la récupération automatique des détails de produits pour la plupart des plateformes.",
-            "content2": "Sélectionnez les options, la quantité, puis ajoutez au panier ou achetez directement.",
-            "content3": "Vous pouvez également soumettre des commandes depuis le panier."
-        },
-        "step3": {
-            "title": "Étape 3: Payer la commande",
-            "content1": "Payez le produit et les frais de port nationaux en Chine après avoir soumis la commande.",
-            "tip": "Plusieurs devises prises en charge. Choisissez le pays de destination, les services et soumettez."
-        },
-        "step4": {
-            "title": "Étape 4: Achat par bbdbuy",
-            "content1": "L'équipe d'achat de bbdbuy contactera le vendeur pour acheter le produit.",
-            "tip": "Statut de la commande: En attente d'achat → Commandé → Expédié → En cours de livraison → Livré → En entrepôt."
-        },
-        "step5": {
-            "title": "Étape 5: Inspection et stockage",
-            "content1": "Les produits sont inspectés, pesés et photographiés à leur arrivée.",
-            "content2": "3 photos gratuites incluses, 90 jours de stockage gratuit.",
-            "tip": "Les articles stockés plus de 180 jours seront automatiquement détruits."
-        },
-        "step6": {
-            "title": "Étape 6: Soumettre le colis",
-            "content1": "Allez sur la page Entrepôt, sélectionnez les articles, soumettez le colis et remplissez les informations d'expédition.",
-            "tip": "Les itinéraires d'expédition dépendent des restrictions des articles et de la destination."
-        },
-        "step7": {
-            "title": "Étape 7: Payer l'acompte de livraison internationale",
-            "content1": "Payez l'acompte de livraison internationale comprenant les frais de douane et de service.",
-            "tip": "Les frais de livraison seront recalculés ; les différences seront remboursées ou facturées."
-        },
-        "step8": {
-            "title": "Étape 8: bbdbuy expédie le colis",
-            "content1": "L'entrepôt emballe, pèse, étiquette et expédie le colis.",
-            "tip": "Suivez l'état du colis sur la page Détails du colis."
-        },
-        "step9": {
-            "title": "Étape 9: Confirmer la réception et les récompenses",
-            "content1": "Confirmez la réception après la livraison pour gagner des points de fidélité.",
-            "tip": "Atteignez 500 points pour échanger des récompenses. Contactez le service client pour obtenir de l'aide."
-        }
+        "src": "Source",
+        "usedFor": "Utilisation"
+      },
+      "exchangeCouponItem": {
+        "minSpend": "Min. {amount} d'achat",
+        "discount": "Réduction",
+        "restriction": "Restrictions",
+        "shippingExcludingCustoms": "Frais de port (hors douane)",
+        "usage": "Utilisation",
+        "internationalPackage": "Colis international",
+        "countries": "Pays/Régions",
+        "all": "Tous les pays",
+        "redeem": "Échanger",
+        "type": "Type",
+        "validity": "Validité",
+        "days": "{count} jours",
+        "points": "Points",
+        "src": "Source",
+        "usedFor": "Utilisation"
+      }
     }
+  },
+  "auth": {
+    "sloganTitle": "Service Tout-en-Un",
+    "sloganDesc": "Achetez en Chine Facilement, Expédiez dans le Monde Entier Professionnellement",
+    "login": {
+      "loginButton": "Se connecter",
+      "registerButton": "S'inscrire",
+      "forgetPassword": "Mot de passe oublié",
+      "fields": {
+        "email": {
+          "errorMessage": "L'email ne peut pas être vide",
+          "placeholder": "Veuillez saisir votre email"
+        },
+        "password": {
+          "errorMessage": "Le mot de passe ne peut pas être vide",
+          "placeholder": "Veuillez saisir votre mot de passe"
+        }
+      }
+    },
+    "forgetPassword": {
+      "title": "Mot de passe oublié",
+      "desc": "Veuillez saisir votre adresse e-mail pour réinitialiser votre mot de passe",
+      "emailPlaceholder": "Entrez votre e-mail",
+      "codePlaceholder": "Code de vérification",
+      "sendCode": "Envoyer le code",
+      "submit": "Valider",
+      "hasAccount": "Déjà un compte ?",
+      "login": "Se connecter",
+      "emailError": "Veuillez saisir votre e-mail",
+      "emailInvalid": "Veuillez saisir une adresse e-mail valide",
+      "fillAll": "Veuillez remplir tous les champs",
+      "successMessage": "Réinitialisation du mot de passe réussie",
+      "sendCodeSuccess": "Code de vérification envoyé",
+      "fields": {
+        "email": {
+          "placeholder": "Entrez votre e-mail",
+          "errorMessage": "Veuillez saisir un e-mail valide"
+        },
+        "code": {
+          "placeholder": "Code de vérification",
+          "errorMessage": "Veuillez saisir le code de vérification"
+        }
+      }
+    },
+    "register": {
+      "registerButton": "S'inscrire",
+      "loginHint": "Vous avez déjà un compte ?",
+      "goLogin": "Se connecter",
+      "mustAgree": "Veuillez d'abord accepter les conditions du site",
+      "verifyTitle": "Vérifiez votre email (Ne quittez pas cette page)",
+      "otpTitle": "Vérifiez votre email",
+      "otpDescription": "Nous avons envoyé un code de vérification à {email}. Veuillez saisir le code pour finaliser la vérification.",
+      "fields": {
+        "email": {
+          "errorMessage": "L'email ne peut pas être vide",
+          "placeholder": "Saisissez votre email"
+        },
+        "password": {
+          "errorMessage": "Le mot de passe ne peut pas être vide",
+          "placeholder": "Veuillez saisir votre mot de passe"
+        },
+        "inviteCode": {
+          "placeholder": "Saisissez le code d'invitation (laissez vide si aucun)"
+        },
+        "isChecked": {
+          "label": "J'ai lu et j'accepte les conditions générales du site"
+        }
+      }
+    }
+  },
+  "home": {
+    "search": {
+      "placeholder": "Rechercher..."
+    },
+    "toast": {
+      "uploadFail": "Échec du téléversement, veuillez réessayer"
+    },
+    "toolList": {
+      "guide": "Guide",
+      "community": "Communauté",
+      "forwarding": "Transfert",
+      "fillBuy": "Remplissage "
+    },
+    "shipping": {
+      "title": "Estimation des frais d’expédition",
+      "placeholder": "France / 1000g / 1...",
+      "lineFast": "DHL Express",
+      "price": "71"
+    }
+  },
+  "dashboard": {
+    "balance": "Solde",
+    "points": "Points",
+    "coupon": {
+      "title": "Mes Coupons",
+      "available": "{count} coupons disponibles",
+      "viewAll": "Voir tout",
+      "tabs": {
+        "all": "Tous",
+        "unused": "Disponible",
+        "used": "Utilisé",
+        "expired": "Expiré"
+      },
+      "couponRedemption": {
+        "title": "Échange de coupon",
+        "inputPlaceholder": "Saisir le code promo",
+        "redeem": "Échanger"
+      }
+    },
+    "menuOrder": "Commandes",
+    "menuWarehouse": "Entrepôt",
+    "menuPackage": "Colis",
+    "inviteTitle": "Invitation affiliée",
+    "TotalReward": "Récompenses totales",
+    "inviteCount": "Compte d'invitation",
+    "activeUsersCount": "Nombre d'utilisateurs actifs",
+    "myExperience": "Mon expérience",
+    "servicesTitle": "Plus de services",
+    "servicesMessage": "Messages",
+    "servicesFavorite": "Favoris",
+    "servicesAddress": "Adresse",
+    "servicesBillingAddress": "Adresse de facturation",
+    "servicesHistory": "Historique"
+  },
+  "cart": {
+    "title": "Panier",
+    "manage": "Gérer",
+    "cancel": "Annuler",
+    "selectAll": "Tout sélectionner",
+    "delete": "Supprimer",
+    "checkout": "Commander",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "toast": {
+      "noSelect": "Veuillez d'abord sélectionner des articles"
+    },
+    "deleteTitle": "Supprimer du panier",
+    "deleteContent": "Êtes-vous sûr de vouloir supprimer les articles sélectionnés?",
+    "emptyTitle": "Votre panier est vide",
+    "emptyDesc": "Allez trouver vos articles préférés!",
+    "itemExpired": "Article expiré",
+    "itemExpiredContent": "Ce produit a expiré et ne peut pas être acheté.",
+    "back": "Resélectionner",
+    "remarkModal": {
+      "title": "Remarques",
+      "placeholder": "Saisir des remarques"
+    }
+  },
+  "profile": {
+    "profilePage": {
+      "title": "Informations du profil",
+      "nameLabel": "Nom d'utilisateur",
+      "mobileLabel": "Numéro de mobile",
+      "saveButton": "Enregistrer",
+      "edit": "Modifier",
+      "uploading": "Téléchargement de l'avatar..."
+    },
+    "order": {
+      "title": "Mes Commandes",
+      "tabs": {
+        "all": "Toutes",
+        "waitPay": "À payer",
+        "paid": "Payée",
+        "refund": "Remboursements"
+      },
+      "buttons": {
+        "pay": "Payer",
+        "cancel": "Annuler",
+        "batchPay": "Payer en lot",
+        "withdraw": "Se rétracter",
+        "refund": "Remboursement",
+        "consult": "Consultation"
+      },
+      "cancelTitle": "Annulation commande",
+      "cancelContent": "Confirmez-vous l'annulation?",
+      "withdrawTitle": "Rétractation",
+      "withdrawContent": "Confirmez-vous la rétractation?",
+      "refundModal": {
+        "title": "Demande de remboursement",
+        "placeholder": "Remarques (optionnel)",
+        "refundable": "Remboursable",
+        "unrefundable": "Non remboursable"
+      },
+      "refundReason": "Motif remboursement",
+      "reviewReason": "Motif vérification",
+      "refundAmount": "Montant remboursé",
+      "reviewTime": "Date vérification",
+      "promptCard": {
+        "title": "QC & Gestion des colis",
+        "description": "Accédez à l'entrepôt pour les photos QC et soumission des colis",
+        "button": "Vers l'entrepôt"
+      }
+    },
+    "warehouse": {
+      "title": "Entrepôt",
+      "tabs": {
+        "all": "Tous les colis",
+        "submit": "À soumettre"
+      },
+      "submit": "Soumettre les colis",
+      "additionalServices": "Services supplémentaires"
+    },
+    "package": {
+      "title": "Colis",
+      "tabs": {
+        "all": "Tous",
+        "pay": "En attente de paiement",
+        "shipping": "En transit",
+        "received": "Reçus"
+      },
+      "hasInsurance": "Service d'assurance acheté",
+      "selectAll": "Tout sélectionner",
+      "submitPay": "Paiement groupé",
+      "noOrders": "Aucun colis pour le moment",
+      "noMoreRecords": "Aucun autre enregistrement",
+      "withdrawTitle": "Retirer la demande",
+      "withdrawContent": "Êtes-vous sûr de vouloir retirer la demande actuelle ?",
+      "receiptTitle": "Confirmer la réception",
+      "receiptContent": "Confirmez-vous avoir reçu ce colis ?",
+      "refundTitle": "Demander un remboursement",
+      "buttons": {
+        "cancel": "Annuler",
+        "withdraw": "Retirer la demande",
+        "change": "Changer d'itinéraire",
+        "edit": "Plus d'actions",
+        "pay": "Payer",
+        "payCancel": "Frais d'annulation de paiement",
+        "receipt": "Confirmer la réception",
+        "consult": "Consulter"
+      },
+      "weight": "Poids :",
+      "size": "Dimensions :",
+      "serviceFee": "Frais de service :",
+      "insuranceFee": "Frais d'assurance :",
+      "totalFee": "Frais totaux :",
+      "shippingCode": "Numéro de suivi :",
+      "cancelModal": {
+        "title": "Annuler",
+        "cancelCard": {
+          "title": "Confirmer l'annulation",
+          "subtitle": "Annuler cette commande",
+          "submittingTitle": "Annulation en cours...",
+          "submittingSubtitle": "Veuillez patienter",
+          "serviceFee": "Frais de service",
+          "packingFee": "Frais d'emballage",
+          "totalFee": "Frais totaux",
+          "feeNotice": "Étant donné que le traitement en entrepôt a déjà commencé, l'annulation de ce colis nécessite des frais de {amount}. Les détails sont les suivants :",
+          "freeNotice": "Aucun frais n'est requis pour annuler ce colis"
+        },
+        "changeRouteCard": {
+          "title": "Changer d'itinéraire",
+          "subtitle": "Resélectionner l'itinéraire d'expédition"
+        }
+      },
+      "changeTitle": "Changer d'itinéraire",
+      "lineModal": {
+        "title": "Suivi logistique",
+        "mainWaybillTitle": "Suivi de la lettre de voiture principale",
+        "subWaybillTitle": "Sous-lettre de voiture :",
+        "waybillNumber": "Numéro de lettre de voiture :",
+        "currentStatus": "Statut actuel :",
+        "location": "Emplacement :",
+        "mainTimeline": "Chronologie de la lettre de voiture principale :"
+      },
+      "moreActions": {
+        "title": "Plus d'actions",
+        "changeLine": {
+          "title": "Changer d'itinéraire",
+          "description": "Resélectionner un itinéraire d'expédition plus approprié"
+        },
+        "changeAddress": {
+          "title": "Changer d'adresse",
+          "description": "Modifier les informations d'adresse de livraison"
+        }
+      },
+      "changeAddress": {
+        "title": "Changer d'adresse",
+        "selectAddress": "Adresse de livraison",
+        "selectLine": "Itinéraire d'expédition",
+        "remark": "Remarques",
+        "result": {
+          "noChange": "Modification réussie, les frais d'expédition restent inchangés",
+          "payExtra": "Modification réussie, des frais d'expédition supplémentaires de {amount} sont requis",
+          "refund": "Modification réussie, les frais d'expédition de {amount} seront remboursés sur votre solde"
+        }
+      },
+      "additionalServices": "Services supplémentaires"
+    },
+    "address": {
+      "title": "Adresse",
+      "addButton": "Ajouter",
+      "deleteContent": "Confirmer la suppression de cette adresse ?"
+    },
+    "billingAddress": {
+      "title": "Adresse de facturation",
+      "addButton": "Ajouter",
+      "deleteContent": "Confirmer la suppression de cette adresse ?"
+    },
+    "message": {
+      "title": "Messages",
+      "manage": "Gérer",
+      "cancel": "Annuler",
+      "tabs": {
+        "all": "Tous",
+        "unread": "Non lus",
+        "read": "Lus"
+      },
+      "deleteTitle": "Supprimer les messages",
+      "deleteContent": "Êtes-vous sûr de vouloir supprimer les {count} message(s) sélectionné(s) ?",
+      "selectAll": "Tout sélectionner",
+      "delete": "Supprimer",
+      "detailCancel": "Fermer",
+      "detailConfirm": "Marquer comme lu",
+      "unread": "Non lu",
+      "read": "Lu",
+      "noOrders": "Aucun colis",
+      "noMoreRecords": "Plus d'enregistrements"
+    }
+  },
+  "setting": {
+    "page": {
+      "title": "Paramètres",
+      "menuLanguage": "Langue",
+      "menuCurrency": "Devise",
+      "menuChangePassword": "Changer le mot de passe",
+      "logout": "Déconnexion"
+    },
+    "currencyPage": {
+      "title": "Devise",
+      "save": "Enregistrer"
+    },
+    "languagePage": {
+      "title": "Langue",
+      "save": "Enregistrer"
+    },
+    "changePassword": {
+      "title": "Changer le mot de passe",
+      "form": {
+        "oldPassword": "Ancien mot de passe",
+        "newPassword": "Nouveau mot de passe",
+        "confirmPassword": "Confirmer le mot de passe",
+        "submit": "Changer le mot de passe"
+      },
+      "tip": "Les nouveaux mots de passe saisis ne correspondent pas"
+    }
+  },
+  "wallet": {
+    "page": {
+      "title": "Mon compte",
+      "record": "Historique",
+      "totalBalance": "Solde total",
+      "withdraw": "Retirer",
+      "selectAmount": "Sélectionner le montant",
+      "otherAmount": "Autre montant",
+      "enterOtherAmount": "Entrer un autre montant",
+      "recharge": "Recharger",
+      "enterValidAmount": "Veuillez saisir un montant valide"
+    },
+    "balanceRecord": {
+      "title": "Historique du solde",
+      "noMoreRecords": "Plus d'enregistrements"
+    },
+    "points": {
+      "title": "Points",
+      "tabs": {
+        "detail": "Détails des points",
+        "change": "Échange de points"
+      },
+      "myPoints": "Points",
+      "exchangeConfirm": {
+        "title": "Confirmer l'échange",
+        "content": "Confirmer l'échange de {name} contre {points} points ?"
+      }
+    },
+    "withdraw": {
+      "title": "Retrait",
+      "placeholder": "Veuillez saisir le montant",
+      "fee": "Frais (1%)",
+      "receive": "Vous recevrez",
+      "available": "Disponible",
+      "tip": "Le montant retiré sera d'abord placé dans le solde gelé. Une fois approuvé par l'administrateur, il sera automatiquement retourné sur votre compte de paiement. Le délai de traitement est de 1-3 jours.",
+      "successTitle": "Demande de retrait soumise",
+      "successMessage": "Votre demande de retrait a été soumise avec succès.",
+      "failTitle": "Échec du retrait",
+      "failMessage": "Échec de la soumission de la demande de retrait. Veuillez réessayer.",
+      "submit": "Soumettre",
+      "historyTitle": "Historique de retrait",
+      "amount": "Montant retiré",
+      "actualAmount": "Montant réel retiré",
+      "remark": "Remarque",
+      "status": "Statut",
+      "pending": "En attente",
+      "success": "Retiré",
+      "failed": "Échec"
+    }
+  },
+  "goods": {
+    "details": {
+      "title": "Détails du Produit",
+      "originalLink": "Lien Original",
+      "refresh": "Actualiser",
+      "progressBar": {
+        "step1": "Payer le Produit",
+        "step2": "Soumettre le Colis",
+        "step3": "Colis Reçu",
+        "tipText": "Nous fournissons gratuitement 3 à 7 photos d'inspection qualité haute définition",
+        "fromSellerToBBD": "Du Vendeur à BBD",
+        "fromBBDToYou": "De BBD à Vous"
+      },
+      "disclaimerDrawer": {
+        "title": "Avertissement Légal",
+        "buttonLabel": "Avertissement Légal",
+        "content": "Tous les produits d'achat représenté affichés sur BBDbuy proviennent de plateformes d'achat tierces et ne sont pas vendus directement par BBDbuy. Par conséquent, BBDbuy n'assume aucune responsabilité ni obligation légale pour les problèmes découlant de la violation de la propriété intellectuelle et des droits d'auteur des marchandises. En utilisant le service d'achat représenté de BBDbuy, vous reconnaissez et acceptez les risques mentionnés ci-dessus."
+      },
+      "quantity": "Quantité",
+      "remark": "Remarques",
+      "enterDescription": "Veuillez saisir des remarques",
+      "buyNow": "Acheter",
+      "addToCart": "Ajouter au Panier",
+      "productDescription": "Description du Produit",
+      "stock": "Stock :",
+      "shippingFee": "Frais d'Expédition :",
+      "singleItemSalesTitle": "Ventes à l'Unité",
+      "avgArrivalTime": "Temps Moyen d'Arrivée",
+      "salesVolume": "Volume des Ventes",
+      "weightWithUnit": "Poids (g)",
+      "volumeWithUnit": "Volume (cm)",
+      "continueShopping": "Retourner à l'Accueil",
+      "riskNotice": "Attention",
+      "riskDescription": "Désolé! Ce produit est soit discontinué, soit épuisé. Il n'est pas disponible à l'achat pour l'instant. Veuillez contacter le support en direct pour plus d'informations."
+    },
+    "search": {
+      "1688": "1688",
+      "searchPlaceholder": "Rechercher...",
+      "uploadFailed": "Échec du téléchargement, veuillez réessayer",
+      "invalidUrl": "Veuillez saisir une URL valide",
+      "searchButton": "Rechercher",
+      "historyTitle": "Historique",
+      "noResult": "Aucun résultat correspondant",
+      "taobao": "Taobao"
+    }
+  },
+  "submit": {
+    "order": {
+      "title": "Confirmation de Commande",
+      "total": "Total",
+      "submitOrder": "Soumettre la Commande",
+      "valueAddedService": "Service à Valeur Ajoutée",
+      "noService": "Aucun Service Disponible",
+      "free": "Gratuit",
+      "add": "Ajouter",
+      "remark": "Remarques :",
+      "delete": "Supprimer",
+      "serviceIntro": "Présentation du Service",
+      "noIntro": "Aucune Présentation Disponible",
+      "sample": "Exemple",
+      "serviceFee": "Frais de Service :",
+      "remarkPlaceholder": "Veuillez saisir des remarques",
+      "shippingFee": "Frais d'Expédition :",
+      "productFee": "Frais de Produit :",
+      "shopTotal": "Total Boutique :"
+    },
+    "warehouse": {
+      "title": "Soumission de Colis",
+      "shippingAddress": "Adresse de Livraison",
+      "addAddress": "Ajouter une Adresse",
+      "commodityList": "Liste des Marchandises",
+      "additionalService": "Service Additionnel",
+      "insuranceService": "Service d'Inspection",
+      "deliveryRoute": "Itinéraire de Livraison",
+      "routesMessage": "Veuillez sélectionner un itinéraire de livraison",
+      "textareaPlaceholder": "Si vous avez des exigences particulières, veuillez laisser une note ici",
+      "agreement": "J'ai lu et j'accepte la Convention d'Expédition de Colis bbdbuy",
+      "submitPackage": "Soumettre le Colis",
+      "defaultMessage": "Veuillez d'abord sélectionner une adresse",
+      "selectService": "Sélectionner un service",
+      "select": "Sélectionner",
+      "noServiceSelected": "Aucun service sélectionné, cliquez pour sélectionner",
+      "noServices": "Aucun service disponible",
+      "noAddressSelected": "Aucune adresse sélectionnée, cliquez pour sélectionner",
+      "noAddress": "Aucune adresse disponible",
+      "noRouteSelected": "Aucun itinéraire sélectionné, cliquez pour sélectionner",
+      "noRoutes": "Aucun itinéraire disponible",
+      "confirm": "Confirmer",
+      "totalWeight": "Poids total",
+      "totalVolume": "Volume total",
+      "estimating": "Estimation des frais en cours...",
+      "estimatedShipping": "Frais d'expédition estimés",
+      "estimatedService": "Frais de service estimés",
+      "estimatedInsurance": "Frais d'inspection estimés",
+      "estimatedTotal": "Total estimé",
+      "estimatedTip": "Le coût final sera affiché après l'emballage des colis",
+      "toast": {
+        "checkAgreement": "Veuillez accepter l'avertissement légal",
+        "selectAddress": "Veuillez sélectionner une adresse de livraison",
+        "selectRoute": "Veuillez sélectionner un itinéraire de livraison",
+        "submitSuccess": "Soumission réussie"
+      },
+      "addressModal": {
+        "addAddress": "Ajouter une Adresse",
+        "editAddress": "Modifier l'Adresse",
+        "fields": {
+          "recipient": {
+            "label": "Destinataire",
+            "placeholder": "Entrez le nom du destinataire"
+          },
+          "phone": {
+            "label": "Téléphone",
+            "placeholder": "Entrez le numéro de téléphone"
+          },
+          "area": {
+            "label": "Région",
+            "placeholder": "Sélectionnez la région"
+          },
+          "address": {
+            "label": "Adresse",
+            "placeholder": "Entrez l'adresse complète"
+          },
+          "doorNo": {
+            "label": "Numéro de Porte",
+            "placeholder": "Entrez le numéro de porte"
+          },
+          "postcode": {
+            "label": "Code Postal",
+            "placeholder": "Entrez le code postal"
+          },
+          "defaultAddress": {
+            "label": "Définir comme adresse par défaut"
+          }
+        },
+        "tableEmpty": "Aucune information d'adresse disponible"
+      }
+    }
+  },
+  "payment": {
+    "title": "Confirmer la commande",
+    "total": "Total",
+    "handlingFee": "Frais de traitement",
+    "billingAddress": "Adresse de facturation",
+    "submit": "Soumettre",
+    "balance": "Solde",
+    "recharge": "Recharger",
+    "coupon": "Coupon",
+    "selectCoupon": "Veuillez sélectionner un coupon",
+    "pleaseAddBillingAddress": "Veuillez ajouter une adresse de facturation",
+    "result": {
+      "loading": "Confirmation du résultat du paiement",
+      "successTitle": "Paiement réussi",
+      "successNotice": "Nous avons reçu votre paiement, votre commande est en cours de traitement.",
+      "transactionId": "ID de transaction :",
+      "amount": "Montant payé :",
+      "time": "Heure du paiement :",
+      "failTitle": "Échec du paiement",
+      "failNotice": "Paiement non complété. Veuillez vérifier votre commande ou réessayer.",
+      "viewOrder": "Voir la commande",
+      "backHome": "Retour à l'accueil"
+    }
+  },
+  "promotion": {
+    "title": "Programme de Parrainage",
+    "process1": "Partagez votre code de parrainage",
+    "process2": "Votre ami invité confirme avoir reçu votre code",
+    "process3": "Recevez votre commission de parrainage",
+    "copy": "Copier",
+    "processTip": "Copiez cette URL et utilisez-la pour rediriger les utilisateurs vers votre page de parrainage",
+    "title1": "Mon Parrainage",
+    "totalReward": "Récompenses Totales",
+    "inviteUsers": "Utilisateurs Invités",
+    "experience": "Mon Expérience",
+    "title2": "Mon Niveau",
+    "bonusRate": "Taux de Bonus",
+    "experienceRange": "Expérience",
+    "activeUsersCount": "Utilisateurs Actifs",
+    "title3": "FAQ sur les Avantages",
+    "question1": "Qu'est-ce que le programme d'adhésion de parrainage?",
+    "answer1": "Le programme d'adhésion de parrainage est un modèle de marketing partenarial. Lorsque vous recommandez à de nouveaux utilisateurs de s'inscrire et d'utiliser nos services via votre lien d'invitation exclusif ou votre code de parrainage, vous pouvez gagner des commissions correspondantes. Cela équivaut à devenir notre partenaire de promotion de marque et à gagner un revenu supplémentaire en partageant nos services.",
+    "question2": "Comment mon bonus est-il calculé?",
+    "answer2": "Votre bonus est principalement calculé sur la base du montant des dépenses des utilisateurs que vous invitez, comprenant spécifiquement les aspects suivants : 1. Récompense d'invitation directe : Lorsque les utilisateurs que vous invitez directement effectuent leur premier achat, vous recevez un pourcentage fixe du montant de la commande comme récompense. 2. Récompense d'invitation indirecte : Lorsque les utilisateurs que vous invitez invitent d'autres personnes à faire des achats, vous pouvez également recevoir un certain pourcentage comme récompense secondaire. 3. Bonus progressifs : À mesure que le nombre de personnes que vous invitez augmente, votre pourcentage de bonus augmente en conséquence. 4. Récompenses de réussite supplémentaires : Atteignez des objectifs de promotion spécifiques pour gagner des bonus supplémentaires.",
+    "question3": "Comment promouvoir gratuitement?",
+    "answer3": "Vous pouvez promouvoir gratuitement par les méthodes suivantes : 1. Partage sur les réseaux sociaux : Partagez votre lien d'invitation exclusif sur des plateformes comme WeChat Moments, Weibo, Xiaohongshu, etc. 2. Création de contenu : Partagez vos expériences d'utilisation en écrivant des articles d'évaluation, en réalisant des vidéos tutoriels, etc. 3. Recommandations de bouche à oreille : Recommandez directement à des amis, à la famille ou à des collègues, en partageant votre code d'invitation. 4. Participation communautaire : Partagez du contenu précieux dans des forums et communautés pertinents avec vos informations d'invitation jointes. 5. Réseau personnel : Faites la promotion en utilisant vos cercles professionnels, groupes d'intérêt et autres réseaux sociaux.",
+    "invitedUser": {
+      "title": "Utilisateurs Invités",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "tableColumns": {
+        "name": "Utilisateur Invité",
+        "email": "Email de l'Utilisateur Invité",
+        "createTime": "Date"
+      },
+      "noData": "Aucun utilisateur invité pour le moment"
+    },
+    "experiencePage": {
+      "title": "Détails d'Expérience",
+      "currentExperience": "Expérience Actuelle",
+      "createTime": "Date",
+      "noData": "Aucun détail d'expérience pour le moment"
+    },
+    "bonus": {
+      "title": "Détails des Bonus",
+      "tableColumns": {
+        "bizType": "Source",
+        "amount": "Montant",
+        "currentBalance": "Bonus Disponible",
+        "createTime": "Date"
+      },
+      "noData": "Aucun détail de bonus pour le moment"
+    }
+  },
+  "estimation": {
+    "fillWeightOrSize": "Veuillez saisir le poids ou les dimensions (L, l, H) !",
+    "title": "Estimation d'expédition",
+    "warehouse": "Depuis l'entrepôt",
+    "weight": "Poids (g)",
+    "length": "Longueur (cm)",
+    "width": "Largeur (cm)",
+    "height": "Hauteur (cm)",
+    "search": "Rechercher maintenant",
+    "selectCountry": "Veuillez sélectionner un pays",
+    "selectCategory": "Veuillez sélectionner une catégorie de marchandise",
+    "price": "Prix",
+    "time": "Délai de transit",
+    "pricingStandard": "Standard de tarification",
+    "firstWeightFee": "Frais premier poids",
+    "additionalWeightFee": "Frais poids supplémentaire",
+    "customsFee": "Frais de douane",
+    "shippingLimit": "Limite d'expédition",
+    "routeFeature": "Caractéristiques de la route",
+    "category": "Catégorie de marchandise"
+  },
+  "forwarding": {
+    "title": "Commande de réexpédition",
+    "forwardAddress": "Adresse de l'entrepôt",
+    "forwardingPackage": "Colis de réexpédition",
+    "fields": {
+      "trackingNo": {
+        "label": "Numéro de suivi",
+        "placeholder": "Saisissez votre numéro de suivi",
+        "errorMessage": "Veuillez saisir un numéro de suivi valide"
+      },
+      "packageName": {
+        "label": "Nom du produit",
+        "placeholder": "Saisissez le nom de votre produit",
+        "errorMessage": "Veuillez saisir un nom de produit valide"
+      }
+    },
+    "extraServices": "Services supplémentaires",
+    "submit": "Soumettre",
+    "acceptAgreement": "J'ai lu et j'accepte les 'Règles d'inspection des colis et accord de service'"
+  },
+  "history": {
+    "title": "Historique",
+    "manage": "Gérer",
+    "cancel": "Annuler",
+    "selectAll": "Tout",
+    "delete": "Supprimer",
+    "deleteConfirmTitle": "Supprimer l'historique",
+    "deleteConfirmContent": "Êtes-vous sûr de vouloir supprimer les éléments sélectionnés de l'historique ?",
+    "empty": "Aucun historique de navigation"
+  },
+  "favorite": {
+    "title": "Favoris",
+    "manage": "Gérer",
+    "cancel": "Annuler",
+    "selectAll": "Tout sélectionner",
+    "delete": "Supprimer",
+    "deleteConfirmTitle": "Supprimer des favoris",
+    "deleteConfirmContent": "Êtes-vous sûr de vouloir supprimer ce produit des favoris ?",
+    "empty": "Aucun produit favori"
+  },
+  "diy": {
+    "title": "Commande DIY",
+    "productDetails": "Détails du produit",
+    "extraServices": "Services supplémentaires",
+    "fee": "Frais",
+    "submit": "Soumettre",
+    "fields": {
+      "productLink": {
+        "label": "Lien du produit",
+        "placeholder": "Veuillez saisir le lien du produit",
+        "errorMessage": "Le lien du produit ne peut pas être vide"
+      },
+      "productName": {
+        "label": "Nom du produit",
+        "placeholder": "Veuillez saisir le nom du produit",
+        "errorMessage": "Le nom du produit ne peut pas être vide"
+      },
+      "remark": {
+        "label": "Remarque",
+        "placeholder": "Veuillez saisir une remarque"
+      },
+      "productPrice": {
+        "label": "Prix du produit",
+        "placeholder": "Veuillez saisir le prix du produit",
+        "errorMessage": "Le prix du produit ne peut pas être vide"
+      },
+      "postage": {
+        "label": "Frais de port",
+        "placeholder": "Veuillez saisir les frais de port",
+        "errorMessage": "Les frais de port ne peuvent pas être vides"
+      }
+    },
+    "productFee": "Frais de produit:",
+    "serviceFee": "Frais de service:",
+    "totalCost": "Coût total:",
+    "shippingFee": "Frais de port:"
+  },
+  "helpGuide": {
+    "title": "Comment acheter via bbdbuy",
+    "step1": {
+      "title": "Étape 1: Choisir les produits",
+      "content1": "Méthode 1: Copiez un lien de produit de Taobao / Tmall / 1688 et collez-le dans la barre de recherche bbdbuy.",
+      "content2": "Méthode 2: Recherchez par nom de produit et sélectionnez les articles recommandés.",
+      "content3": "Méthode 3: Utilisez la recherche par image pour trouver des produits similaires.",
+      "tip": "Si le lien ouvre une page de commande personnalisée, le produit nécessite un achat manuel. Remplissez les détails et cliquez sur «Acheter maintenant» ou «Ajouter au panier»."
+    },
+    "step2": {
+      "title": "Étape 2: Soumettre la commande",
+      "content1": "bbdbuy prend en charge la récupération automatique des détails de produits pour la plupart des plateformes.",
+      "content2": "Sélectionnez les options, la quantité, puis ajoutez au panier ou achetez directement.",
+      "content3": "Vous pouvez également soumettre des commandes depuis le panier."
+    },
+    "step3": {
+      "title": "Étape 3: Payer la commande",
+      "content1": "Payez le produit et les frais de port nationaux en Chine après avoir soumis la commande.",
+      "tip": "Plusieurs devises prises en charge. Choisissez le pays de destination, les services et soumettez."
+    },
+    "step4": {
+      "title": "Étape 4: Achat par bbdbuy",
+      "content1": "L'équipe d'achat de bbdbuy contactera le vendeur pour acheter le produit.",
+      "tip": "Statut de la commande: En attente d'achat → Commandé → Expédié → En cours de livraison → Livré → En entrepôt."
+    },
+    "step5": {
+      "title": "Étape 5: Inspection et stockage",
+      "content1": "Les produits sont inspectés, pesés et photographiés à leur arrivée.",
+      "content2": "3 photos gratuites incluses, 90 jours de stockage gratuit.",
+      "tip": "Les articles stockés plus de 180 jours seront automatiquement détruits."
+    },
+    "step6": {
+      "title": "Étape 6: Soumettre le colis",
+      "content1": "Allez sur la page Entrepôt, sélectionnez les articles, soumettez le colis et remplissez les informations d'expédition.",
+      "tip": "Les itinéraires d'expédition dépendent des restrictions des articles et de la destination."
+    },
+    "step7": {
+      "title": "Étape 7: Payer l'acompte de livraison internationale",
+      "content1": "Payez l'acompte de livraison internationale comprenant les frais de douane et de service.",
+      "tip": "Les frais de livraison seront recalculés ; les différences seront remboursées ou facturées."
+    },
+    "step8": {
+      "title": "Étape 8: bbdbuy expédie le colis",
+      "content1": "L'entrepôt emballe, pèse, étiquette et expédie le colis.",
+      "tip": "Suivez l'état du colis sur la page Détails du colis."
+    },
+    "step9": {
+      "title": "Étape 9: Confirmer la réception et les récompenses",
+      "content1": "Confirmez la réception après la livraison pour gagner des points de fidélité.",
+      "tip": "Atteignez 500 points pour échanger des récompenses. Contactez le service client pour obtenir de l'aide."
+    }
+  }
 }

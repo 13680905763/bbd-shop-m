@@ -1,8 +1,8 @@
 #!/bin/bash
 # === 配置区 ===
 REMOTE_USER="root"
-REMOTE_HOST="47.91.72.123" # 线上
-# REMOTE_HOST="8.211.61.244"  # 测试
+# REMOTE_HOST="47.91.72.123" # 线上
+REMOTE_HOST="8.211.61.244"  # 测试
 
 # 部署配置
 PORT=${1:-3001}  # 从命令行参数获取端口，默认为3000

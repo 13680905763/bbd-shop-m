@@ -37,6 +37,18 @@ export default function RegisterPage() {
     inviteCode: searchParams.get("inviteCode") || "",
     agreeToTerms: false,
   });
+  const [hasCachedCode, setHasCachedCode] = useState(false);
+
+  React.useEffect(() => {
+    if (!searchParams.get("inviteCode") && typeof window !== "undefined") {
+      const code = localStorage.getItem("inviteCode");
+      if (code) {
+        setHasCachedCode(true);
+        setFormData((prev) => ({ ...prev, inviteCode: code }));
+      }
+    }
+  }, [searchParams]);
+
   const registerFormFields: FieldConfig[] = [
     {
       type: "input",
@@ -60,7 +72,7 @@ export default function RegisterPage() {
       key: "inviteCode",
       placeholder: t("fields.inviteCode.placeholder"),
       startContent: <IoPeopleSharp />,
-      isDisabled: searchParams.get("inviteCode") ? true : false,
+      isDisabled: searchParams.get("inviteCode") || hasCachedCode ? true : false,
     },
     {
       type: "checkbox",

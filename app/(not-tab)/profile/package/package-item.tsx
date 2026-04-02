@@ -5,9 +5,7 @@ import { useTranslations } from "next-intl";
 import { ImageViewer } from "antd-mobile";
 import { useState } from "react";
 
-import MediaPreviewGroup, {
-  MediaItem,
-} from "@/components/common/media-preview";
+import AdditionalServicesGroup from "@/components/common/additional-services";
 import { useGlobalStore, useChatStore } from "@/store";
 
 export default function PackageItem({
@@ -143,19 +141,10 @@ export default function PackageItem({
           </div>
         </div>
       </div>
-      {/* 服务列表 */}
-      {pack?.serviceList?.length > 0 && (
-        <div className="flex flex-col gap-2 rounded-lg bg-[#fafafa] p-2">
-          {pack?.serviceList.map((service: any) => (
-            <div key={service.serviceId} className="flex gap-2">
-              <div className="text-sm text-[#acacac]">
-                {service.serviceName}
-              </div>
-              <MediaPreviewGroup fileList={service.fileList as MediaItem[]} />
-            </div>
-          ))}
-        </div>
-      )}
+      <AdditionalServicesGroup
+        services={pack?.serviceList}
+        prefix={pack?.packingPackageCode}
+      />
       {/* 购买保险提示 */}
       {!!pack?.insurance && (
         <div className="flex items-center gap-1 rounded bg-orange-50 px-2 py-1 text-xs text-orange-500">
