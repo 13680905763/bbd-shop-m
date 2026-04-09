@@ -27,4 +27,7 @@ export const configApi = {
   /** 获取城市列表 */
   getCities: (stateId: string): Promise<any> =>
     request.get(`/cities/state?stateId=${stateId}`),
+  /** 获取公共密钥 */
+  getPublicKey: (): Promise<any> =>
+    request.get("/customer/public-key"),
 };

@@ -31,7 +31,7 @@ export default function AuthLayout({
 
   return (
     <div className="bg h-[100dvh] p-2">
-      <button onClick={() => router.back()}>
+      <button onClick={() => router.push('/')}>
         <IoChevronBack className="h-[30px] w-[30px] text-[#f0700c]" />
       </button>
       <div className="pt-16">

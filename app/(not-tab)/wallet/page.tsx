@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, NumberInput } from "@heroui/react";
+import { Button, Input } from "@heroui/react";
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -12,38 +12,52 @@ import { useGlobalStore } from "@/store";
 import { useWalletInfo } from "@/hook/api";
 import { createOrderByRecharge } from "@/services";
 
+/** 将逗号视为小数点，解析为数字 */
+function parsePrice(value: string): number {
+  // 将逗号替换为点后解析
+  const normalized = value.replace(/,/g, ".");
+  const num = parseFloat(normalized);
+  return isNaN(num) ? 0 : num;
+}
+
 export default function WalletRechargePage() {
   const t = useTranslations("wallet.page"); // ✅ 命名空间
   const { currency } = useGlobalStore();
 
   const { data: wallet, isLoading, error } = useWalletInfo();
   const [rechargeLoading, setRechargeLoading] = useState(false);
-  const [currentPrice, setCurrentPrice] = useState<number>(1);
+  const [currentPrice, setCurrentPrice] = useState<string>("1");
 
   const priceList = [50, 100, 200, 500, 1000, 5000];
   const router = useRouter();
 
+  /** 处理输入：只允许数字、小数点和逗号，且最多一个小数分隔符 */
+  const handlePriceChange = (value: string) => {
+    // 允许清空
+    if (value === "") {
+      setCurrentPrice("");
+      return;
+    }
+    // 只保留数字、点、逗号
+    const cleaned = value.replace(/[^0-9.,]/g, "");
+    // 将逗号统一视为小数点，检查最多只有一个小数分隔符
+    const normalized = cleaned.replace(/,/g, ".");
+    const parts = normalized.split(".");
+    if (parts.length > 2) return; // 超过一个小数分隔符，不更新
+    setCurrentPrice(cleaned);
+  };
+
   const handleRecharge = async () => {
+    const amount = parsePrice(currentPrice);
+    if (amount < 1) return;
     try {
       setRechargeLoading(true);
-      // const res = await createOrderByRecharge({
-      //   amount: currentPrice,
-      //   payType: "PAYPAL",
-      //   returnUrl: window.location.origin + "/payment/result?paymentMethod=PAYPAL",
-      // });
       const bizCode: any = await createOrderByRecharge({
-        currencyAmount: Number(currentPrice),
+        currencyAmount: amount,
         currencyCode: currency.label,
       });
 
       router.push(`/payment/${bizCode}`);
-      // const res: any = await walletApi.payPaypel(
-      //   `amount=${currentPrice}&returnUrl=${window.location.origin + "/payment/result?paymentMethod=PAYPAL"}`,
-      // );
-
-      // console.log("res", res);
-
-      // window.location.href = res.payUrl;
     } catch (error) {
       setRechargeLoading(false);
     }
@@ -91,11 +105,11 @@ export default function WalletRechargePage() {
               <button
                 key={item}
                 className={`flex items-center justify-center rounded-lg bg-white py-3 ${
-                  Number(currentPrice) === item
+                  parsePrice(currentPrice) === item
                     ? "border border-orange-500 font-semibold text-orange-600"
                     : ""
                 }`}
-                onClick={() => setCurrentPrice(item)}
+                onClick={() => setCurrentPrice(String(item))}
               >
                 {currency.symbol} {item}
               </button>
@@ -106,21 +120,20 @@ export default function WalletRechargePage() {
         {/* 自定义金额输入区域 */}
         <div>
           <div className="text-sm font-bold">{t("otherAmount")}</div>
-          <NumberInput
+          <Input
             className="my-2"
             classNames={{ inputWrapper: "bg-white" }}
-            minValue={1}
+            inputMode="decimal"
             placeholder={t("enterOtherAmount")}
             size="lg"
             startContent={<IoWallet className="h-6 w-6" />}
-            type="number"
             value={currentPrice}
-            onValueChange={(value) => setCurrentPrice(value)}
+            onValueChange={handlePriceChange}
           />
           <Button
             className="w-full"
             color="primary"
-            isDisabled={!currentPrice}
+            isDisabled={!currentPrice || parsePrice(currentPrice) < 1}
             isLoading={rechargeLoading}
             onPress={handleRecharge}
           >
@@ -131,3 +144,4 @@ export default function WalletRechargePage() {
     </>
   );
 }
+

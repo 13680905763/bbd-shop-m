@@ -809,6 +809,10 @@
     "balance": "余额",
     "recharge": "充值",
     "pleaseAddBillingAddress": "请添加账单地址",
+    "paypalWarning": {
+      "title": "PayPal 政策提醒",
+      "content": "由于 PayPal 政策出现了不可控的情况，我们根据政策调整了 PayPal 相对较高的交易费用。我们建议使用我们的 Visa 卡和银行卡进行支付。此外，通过 PayPal 充值的任何余额必须立即使用；禁止保留任何未使用的余额。如果余额无法立即使用，则不允许通过 PayPal 进行充值。"
+    },
     "result": {
       "loading": "正在确认支付结果",
       "successTitle": "支付成功",

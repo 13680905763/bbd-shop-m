@@ -809,6 +809,10 @@
     "coupon": "Coupon",
     "selectCoupon": "Please select coupon",
     "pleaseAddBillingAddress": "Please add billing address",
+    "paypalWarning": {
+      "title": "PayPal Policy Notice",
+      "content": "Due to uncontrollable circumstances arising from PayPal's policies, we have adjusted the relatively higher transaction fees for PayPal accordingly. We recommend using our Visa card and bank card for payments. Additionally, any balance recharged via PayPal must be used immediately; retaining any unused balance is prohibited. If the balance cannot be used immediately, recharging via PayPal is not permitted."
+    },
     "result": {
       "loading": "Confirming payment result",
       "successTitle": "Payment Successful",

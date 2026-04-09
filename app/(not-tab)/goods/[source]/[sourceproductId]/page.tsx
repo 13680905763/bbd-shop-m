@@ -371,7 +371,7 @@ export default function GoodsDetails() {
 
   return (
     <>
-      <NavBar className="bg-white" onBack={() => router.back()}>
+      <NavBar className="bg-white" onBack={() => router.push('/')}>
         <span className="navbar-title">{t("title")}</span>
       </NavBar>
 
@@ -523,13 +523,12 @@ export default function GoodsDetails() {
                 <CopyText
                   text={
                     typeof window !== "undefined"
-                      ? `${window.location.href}${
-                          user?.inviteCode
-                            ? (window.location.href.includes("?") ? "&" : "?") +
-                              "inviteCode=" +
-                              user.inviteCode
-                            : ""
-                        }`
+                      ? `${window.location.href}${user?.inviteCode
+                        ? (window.location.href.includes("?") ? "&" : "?") +
+                        "inviteCode=" +
+                        user.inviteCode
+                        : ""
+                      }`
                       : ""
                   }
                 >

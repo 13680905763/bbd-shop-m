@@ -17,6 +17,7 @@ import { useTranslations } from "next-intl";
 import { IoWallet } from "react-icons/io5";
 
 import SelectionCouponDrawer from "./selection-coupon-drawer";
+import { CommonDrawer } from "@/components/drawer";
 
 import { useBillingAddressActions } from "@/hook/business";
 import { useBillingAddress, usePay } from "@/hook/api";
@@ -134,9 +135,28 @@ export default function PayOrder() {
 
   const [paymentId, setPaymentId] = useState("");
   const [showCouponDrawer, setShowCouponDrawer] = useState(false);
+  const [showPaypalWarning, setShowPaypalWarning] = useState(false);
 
   const { modalState, handleOpenChange, handleAddClick, handleEditClick } =
     useBillingAddressActions();
+
+  /** 判断当前选中的支付方式是否为 PAYPAL */
+  const isPaypalSelected = useMemo(() => {
+    return paymentList?.some(
+      (item: any) =>
+        item.methodName === "PAYPAL" &&
+        item.paymentList?.some((p: any) => p.id === paymentId),
+    );
+  }, [paymentId, paymentList]);
+
+  const doSubmitPay = () => {
+    pay({
+      bizCode: params.bizCode,
+      paymentId,
+      addressId: billingAddress?.id as string,
+      customerCouponId: selectedCoupon?.id,
+    });
+  };
 
   const hanldeCreatePayOrder = async () => {
     if (paymentId !== "1" && !billingAddress?.id) {
@@ -148,12 +168,12 @@ export default function PayOrder() {
 
       return;
     }
-    pay({
-      bizCode: params.bizCode,
-      paymentId,
-      addressId: billingAddress?.id as string,
-      customerCouponId: selectedCoupon?.id,
-    });
+    // 如果选的是 PayPal，先弹出警告抽屉
+    if (isPaypalSelected) {
+      setShowPaypalWarning(true);
+      return;
+    }
+    doSubmitPay();
   };
   const currentPayMethod = useMemo(() => {
     return (
@@ -285,6 +305,20 @@ export default function PayOrder() {
         onOpenChange={setShowCouponDrawer}
         onSelect={(coupon) => setConfirmedCouponId(coupon.id)}
       />
+      <CommonDrawer
+        isOpen={showPaypalWarning}
+        title={t("paypalWarning.title")}
+        confirmText={t("submit")}
+        onOpenChange={setShowPaypalWarning}
+        onConfirm={() => {
+          setShowPaypalWarning(false);
+          doSubmitPay();
+        }}
+      >
+        <p className="text-sm leading-relaxed text-gray-700">
+          {t("paypalWarning.content")}
+        </p>
+      </CommonDrawer>
     </>
   );
 }

@@ -422,7 +422,7 @@
       "uploading": "Téléchargement de l'avatar..."
     },
     "order": {
-      "title": "Mes Commandes",
+      "title": "Commande",
       "tabs": {
         "all": "Toutes",
         "waitPay": "À payer",
@@ -809,6 +809,10 @@
     "coupon": "Coupon",
     "selectCoupon": "Veuillez sélectionner un coupon",
     "pleaseAddBillingAddress": "Veuillez ajouter une adresse de facturation",
+    "paypalWarning": {
+      "title": "Avis sur la politique PayPal",
+      "content": "En raison de circonstances incontrôlables liées aux politiques de PayPal, nous avons ajusté les frais de transaction relativement élevés pour PayPal en conséquence. Nous vous recommandons d'utiliser notre carte Visa et notre carte bancaire pour les paiements. De plus, tout solde rechargé via PayPal doit être utilisé immédiatement ; il est interdit de conserver un solde inutilisé. Si le solde ne peut pas être utilisé immédiatement, le rechargement via PayPal n'est pas autorisé."
+    },
     "result": {
       "loading": "Confirmation du résultat du paiement",
       "successTitle": "Paiement réussi",

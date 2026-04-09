@@ -1,4 +1,5 @@
 import { request } from "./request";
+import { encryptField } from "@/lib/encrypt";
 
 /** 登录请求参数 */
 export interface LoginParams {
@@ -30,17 +31,28 @@ export interface GoogleLoginParams {
 
 export const authApi = {
   /** 注册 */
-  register: (data: RegisterParams): Promise<string> =>
-    request.post("/customer/sign-up", data),
+  register: async (data: RegisterParams): Promise<string> => {
+    const encryptedData = await encryptField(data);
+
+    return request.post("/customer/sign-up", encryptedData);
+  },
   /** 激活邮箱 */
-  activateEmail: (data: ActivateEmailParams): Promise<string> =>
-    request.post("/customer/active", data),
+  activateEmail: async (data: ActivateEmailParams): Promise<string> => {
+    const encryptedData = await encryptField(data);
+    return request.post("/customer/active", encryptedData);
+  },
   /** 登录 */
-  login: (data: LoginParams): Promise<string> =>
-    request.post("/customer/login", data),
+  login: async (data: LoginParams): Promise<string> => {
+    const encryptedData = await encryptField(data);
+
+    return request.post("/customer/login", encryptedData);
+  },
   /** 谷歌登录 */
-  googleLogin: (data: GoogleLoginParams): Promise<string> =>
-    request.post("/customer/google/code", data),
+  googleLogin: async (data: GoogleLoginParams): Promise<string> => {
+    const encryptedData = await encryptField(data);
+
+    return request.post("/customer/google/code", encryptedData);
+  },
   /** 退出登录 */
   logout: (): Promise<void> => request.get("/customer/logout"),
   /** 忘记密码 */

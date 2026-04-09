@@ -1,8 +1,8 @@
 #!/bin/bash
 # === 配置区 ===
 REMOTE_USER="root"
-# REMOTE_HOST="47.91.72.123" # 线上
-REMOTE_HOST="8.211.61.244"  # 测试
+REMOTE_HOST="47.91.72.123" # 线上
+# REMOTE_HOST="8.211.61.244"  # 测试
 
 # 部署配置
 PORT=${1:-3001}  # 从命令行参数获取端口，默认为3000
@@ -19,19 +19,19 @@ echo "==> 部署到端口: $PORT"
 echo "==> 项目目录: $REMOTE_DIR"
 
 
-# echo "==> Step 1: Building project locally..."
-# rm -rf .next 
-# pnpm install
-# pnpm build
+echo "==> Step 1: Building project locally..."
+rm -rf .next 
+pnpm install
+pnpm build
 
-# if [ $? -ne 0 ]; then
-#   echo "❌ Build failed"
-#   exit 1
-# fi
+if [ $? -ne 0 ]; then
+  echo "❌ Build failed"
+  exit 1
+fi
 
-# echo "==> Step 2: Packaging build artifacts..."
-# rm -f $ARCHIVE_NAME
-# "/c/Program Files/7-Zip/7z.exe" a -tzip $ARCHIVE_NAME .next public package.json pnpm-lock.yaml next.config.js ecosystem.config.cjs
+echo "==> Step 2: Packaging build artifacts..."
+rm -f $ARCHIVE_NAME
+"/c/Program Files/7-Zip/7z.exe" a -tzip $ARCHIVE_NAME .next public package.json pnpm-lock.yaml next.config.js ecosystem.config.cjs
 
 echo "==> Step 3: Uploading archive to server..."
 scp $ARCHIVE_NAME "${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_ARCHIVE_PATH}"

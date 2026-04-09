@@ -174,39 +174,39 @@ export default function Searchpage() {
   };
   const tabs = keyword
     ? [
-        {
-          key: "TAOBAO",
-          title: t("taobao"),
-          content: renderSearchContent(),
-        },
-        {
-          key: "1688",
-          title: t("1688"),
-          content: renderSearchContent(),
-        },
-        {
-          key: "WEIDIAN",
-          title: "Weidian",
-          content: renderSearchContent(),
-        },
-      ]
+      {
+        key: "TAOBAO",
+        title: t("taobao"),
+        content: renderSearchContent(),
+      },
+      {
+        key: "1688",
+        title: t("1688"),
+        content: renderSearchContent(),
+      },
+      {
+        key: "WEIDIAN",
+        title: "Weidian",
+        content: renderSearchContent(),
+      },
+    ]
     : [
-        {
-          key: "TAOBAO",
-          title: t("taobao"),
-          content: renderSearchContent(),
-        },
-        {
-          key: "1688",
-          title: t("1688"),
-          content: renderSearchContent(),
-        },
-      ];
+      {
+        key: "TAOBAO",
+        title: t("taobao"),
+        content: renderSearchContent(),
+      },
+      {
+        key: "1688",
+        title: t("1688"),
+        content: renderSearchContent(),
+      },
+    ];
 
   return (
     <>
       <div className="bg flex items-center justify-between gap-4 p-2 py-4">
-        <button onClick={() => router.back()}>
+        <button onClick={() => router.push("/")}>
           <IoChevronBack className="h-[25px] w-[25px]" />
         </button>
         <Form className="w-full max-w-xs" onSubmit={onSubmit}>

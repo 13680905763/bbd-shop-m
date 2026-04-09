@@ -37,7 +37,7 @@ export default memo(function WarehouseProductItem({ warehouse, product }: any) {
           </div>
         </div>
         <div className="shrink-0 text-right">
-          <p className="text-base font-semibold">x{product.quantity}</p>
+          <p className="text-base font-semibold">x{warehouse.quantity}</p>
         </div>
       </div>
     </div>
