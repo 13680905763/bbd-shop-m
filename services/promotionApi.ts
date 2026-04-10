@@ -1,4 +1,3 @@
-// services/promotionApi.ts
 import { request } from "./request";
 
 export const PromotionApi = {

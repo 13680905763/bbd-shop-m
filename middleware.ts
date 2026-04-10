@@ -10,6 +10,7 @@ const PUBLIC_PATHS = [
   "/goods",
   "/setting/language",
   "/setting/currency",
+  "/api"
 ];
 
 // // 判断是否公开路径

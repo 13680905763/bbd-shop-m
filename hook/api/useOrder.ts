@@ -7,7 +7,7 @@ import {
 import { useRouter } from "next/navigation";
 import { addToast } from "@heroui/react";
 
-import { OrderApi } from "@/services/orderApi";
+import { orderApi } from "@/services/orderApi";
 import { queryClient } from "@/lib/react-query";
 
 export function useOrderList(params: any) {
@@ -16,7 +16,7 @@ export function useOrderList(params: any) {
     queryFn: ({ pageParam = 1 }) => {
       const { enabled, ...restParams } = params;
 
-      return OrderApi.listOrder({
+      return orderApi.listOrder({
         ...restParams,
         current: pageParam,
       });
@@ -37,7 +37,7 @@ export function useRefundOrderList(params: any) {
     queryFn: ({ pageParam = 1 }) => {
       const { enabled, ...restParams } = params;
 
-      return OrderApi.listRefundOrder({
+      return orderApi.listRefundOrder({
         ...restParams,
         current: pageParam,
       });
@@ -54,7 +54,7 @@ export function useRefundOrderList(params: any) {
 }
 export function useCancelOrder() {
   return useMutation({
-    mutationFn: (orderId: string) => OrderApi.cancelOrder(orderId),
+    mutationFn: (orderId: string) => orderApi.cancelOrder(orderId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orderList"] });
     },
@@ -62,12 +62,12 @@ export function useCancelOrder() {
 }
 export function useBatchPayOrder() {
   return useMutation({
-    mutationFn: (data: any) => OrderApi.batchPayOrder(data),
+    mutationFn: (data: any) => orderApi.batchPayOrder(data),
   });
 }
 export function useRefundOrder() {
   return useMutation({
-    mutationFn: (data: any) => OrderApi.refundOrder(data),
+    mutationFn: (data: any) => orderApi.refundOrder(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orderList"] });
     },
@@ -75,7 +75,7 @@ export function useRefundOrder() {
 }
 export function useRevokeOrder() {
   return useMutation({
-    mutationFn: (id: string) => OrderApi.revokeOrder(id),
+    mutationFn: (id: string) => orderApi.revokeOrder(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orderList"] });
     },
@@ -85,7 +85,7 @@ export function useRevokeOrder() {
 export function useForwardingOrder() {
   const router = useRouter();
   const forwardingOrderMutation = useMutation({
-    mutationFn: (data: any): any => OrderApi.forwardingOrder(data),
+    mutationFn: (data: any): any => orderApi.forwardingOrder(data),
     onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["orderList"] });
       if (res) {
@@ -110,7 +110,7 @@ export function useForwardingOrder() {
 export function usePreviewOrderByCart(key: string) {
   return useQuery<any>({
     queryKey: ["orderPreviewByCart", key],
-    queryFn: () => OrderApi.previewOrderByCart(key),
+    queryFn: () => orderApi.previewByCart(key),
     gcTime: 0,
     staleTime: 0,
     refetchOnMount: true,
@@ -121,7 +121,7 @@ export function usePreviewOrderByCart(key: string) {
 export function usePreviewOrderByProduct(key: string) {
   return useQuery<any>({
     queryKey: ["orderPreviewByProduct", key],
-    queryFn: () => OrderApi.previewOrderByProduct(key),
+    queryFn: () => orderApi.previewByProduct(key),
     gcTime: 0,
     staleTime: 0,
     refetchOnMount: true,
@@ -131,28 +131,13 @@ export function usePreviewOrderByProduct(key: string) {
 }
 export function useCreateDiyOrder() {
   return useMutation({
-    mutationFn: (data: any) => OrderApi.createDiyOrder(data),
+    mutationFn: (data: any) => orderApi.createDiyOrder(data),
   });
 }
 
 export function useUploadDiyImage() {
   return useMutation({
-    mutationFn: (file: File) => OrderApi.uploadDiyImage(file),
+    mutationFn: (file: File) => orderApi.uploadDiyImage(file),
   });
 }
-export function useChatOrderList(params: any) {
-  return useQuery({
-    queryKey: ["chatOrderList", params],
-    queryFn: () => OrderApi.listChatOrder(params),
-    placeholderData: keepPreviousData,
-    refetchOnWindowFocus: false, // ⚠️ 禁止切回 Tab 时自动请求
-  });
-}
-export function useWaybillOrderList(params: any) {
-  return useQuery({
-    queryKey: ["chatWaybillOrderList", params],
-    queryFn: () => OrderApi.listWaybillOrder(params),
-    placeholderData: keepPreviousData,
-    refetchOnWindowFocus: false, // ⚠️ 禁止切回 Tab 时自动请求
-  });
-}
+

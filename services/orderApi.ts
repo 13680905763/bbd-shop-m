@@ -20,13 +20,37 @@ export interface DiyOrderParams {
   }[];
 }
 
-export const OrderApi = {
-  /** 购物车结算订单预览 */
-  previewOrderByCart: (key: string): Promise<any> =>
-    request.get(`/customer/cart/order/preview/key?key=${key}`),
-  /** 商品结算订单预览 */
-  previewOrderByProduct: (key: string): Promise<any> =>
-    request.get(`/orders/preview/key?key=${key}`),
+export const orderApi = {
+  // --- 订单预览 ---
+  /** 创建立即购买订单预览key */
+  initPreviewByProduct: (data: any): Promise<string> =>
+    request.post("/orders/preview/init", data),
+  /** 创建购物车结算订单预览key */
+  initPreviewByCart: (data: any): Promise<string> =>
+    request.post("/customer/cart/order/init", data),
+  /** 购物车结算订单预览详情 */
+  previewByCart: (key: string): Promise<any> =>
+    request.get(`/customer/cart/order/preview/key`, { params: { key } }),
+  /** 商品结算订单预览详情 */
+  previewByProduct: (key: string): Promise<any> =>
+    request.get(`/orders/preview/key`, { params: { key } }),
+  /** 更新购物车结算订单预览 */
+  updatePreviewByCart: (data: any): Promise<any> =>
+    request.post("/customer/cart/order/preview", data),
+  /** 更新商品立即购买订单预览 */
+  updatePreviewByProduct: (data: any): Promise<any> =>
+    request.post("/orders/preview", data),
+
+  // --- 创建订单 ---
+  /** 创建立即购买订单 */
+  createByProduct: (data: any): Promise<string> =>
+    request.post("/orders/create", data),
+  /** 创建购物车结算订单 */
+  createByCart: (data: any): Promise<string> =>
+    request.post("/customer/cart/order/submit", data),
+  /** 创建充值订单 */
+  createRecharge: (data: any): Promise<string> =>
+    request.post("/customer/wallet/recharge", data),
 
   /** 创建转运订单 */
   forwardingOrder: (data: any): Promise<any> => {
@@ -36,10 +60,7 @@ export const OrderApi = {
   /** 获取订单列表 */
   listOrder: (data: OrderListParams): Promise<any> =>
     request.post("/orders/page", data),
-  listChatOrder: (data: OrderListParams): Promise<any> =>
-    request.post("/orders/myOrders", data),
-  listWaybillOrder: (data: OrderListParams): Promise<any> =>
-    request.post("/waybill/myWaybills", data),
+
   listRefundOrder: (data: any): Promise<any> => {
     return request.post("/order-refund/list", data);
   },

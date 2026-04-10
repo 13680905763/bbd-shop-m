@@ -13,7 +13,7 @@ import { queryClient } from "@/lib/react-query";
 export function useCartList() {
   const query = useQuery({
     queryKey: ["cartList"],
-    queryFn: () => cartApi.getCart(),
+    queryFn: () => cartApi.getDetail(),
     staleTime: 5 * 60 * 1000, // 缓存 5 分钟
     placeholderData: keepPreviousData,
     refetchOnWindowFocus: false,
@@ -54,7 +54,7 @@ export function useAddCartItem() {
 // 更新购物车商品（数量/备注）
 export function useUpdateCartItem() {
   const mutation = useMutation({
-    mutationFn: (data: UpdateCartParams) => cartApi.updateItem([data]),
+    mutationFn: (data: UpdateCartParams) => cartApi.updateItems([data]),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cartList"] });
     },
@@ -74,7 +74,7 @@ export function useUpdateCartItem() {
 // 删除购物车商品
 export function useDeleteCart() {
   const mutation = useMutation({
-    mutationFn: (data: DeleteCartParams) => cartApi.deleteItem(data),
+    mutationFn: (data: DeleteCartParams) => cartApi.removeItems(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cartList"] });
     },
@@ -88,7 +88,7 @@ export function useDeleteCart() {
 export function useSubmitCart() {
   const router = useRouter();
   const mutation = useMutation({
-    mutationFn: (data: CheckoutParams) => cartApi.checkout(data),
+    mutationFn: (data: CheckoutParams) => cartApi.prepareOrder(data),
     onSuccess: (key) => {
       router.push(`/submit/order?type=cart&key=${key}`);
     },

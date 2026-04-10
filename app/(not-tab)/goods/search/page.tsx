@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { FaRegImage } from "react-icons/fa";
 import { useTranslations } from "next-intl";
 
-import { getGoodsId, getGoodsImageId } from "@/services";
+import { productApi } from "@/services/productApi";
 
 export default function Searchpage() {
   const t = useTranslations("goods.search");
@@ -24,7 +24,7 @@ export default function Searchpage() {
 
     try {
       setUploading(true); // 开始上传
-      const res: any = await getGoodsImageId(file);
+      const res: any = await productApi.searchByUpload(file);
 
       if (res && res.length > 0) {
         const taobaoImageId = res.find(
@@ -62,7 +62,7 @@ export default function Searchpage() {
     e.preventDefault();
     const data: any = Object.fromEntries(new FormData(e.currentTarget));
 
-    const res: any = await getGoodsId({ url: data.url });
+    const res: any = await productApi.smartSearch({ url: data.url });
 
     if (res.keyword) {
       router.push(`/goods/list?keyword=${encodeURIComponent(data.url)}`);

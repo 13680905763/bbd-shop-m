@@ -21,7 +21,7 @@ export const useSignUpFlow = () => {
     },
   });
   const activateEmail = useMutation({
-    mutationFn: (data: any) => authApi.activateEmail(data),
+    mutationFn: (data: any) => authApi.verifyEmail(data),
     onSuccess: () => {
       router.push("/dashboard");
     },
@@ -77,7 +77,7 @@ export const useGoogleLoginFlow = () => {
   const searchParams = useSearchParams(); // 注意：这需要在客户端组件中使用
   const googleLogin = useMutation({
     mutationFn: (data: { authorizationCode: string; inviteCode?: string }) =>
-      authApi.googleLogin(data),
+      authApi.loginByGoogle(data),
     onSuccess: () => {
       const redirect = searchParams?.get("redirect") || "/dashboard";
 

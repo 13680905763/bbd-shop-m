@@ -6,7 +6,7 @@ import { BlockSpinner, EmptyState } from "../ui";
 
 import PaginationBar from "./pagination-bar";
 
-import { useChatOrderList } from "@/hook/api";
+import { useChatOrderList } from "@/hook/business/useChat";
 import { CommonDrawer } from "@/components/drawer";
 import { useGlobalStore } from "@/store";
 

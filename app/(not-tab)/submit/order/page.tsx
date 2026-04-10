@@ -14,12 +14,7 @@ import { useTranslations } from "next-intl";
 
 import OrderItem from "./order-item";
 
-import {
-  createOrderByCart,
-  createOrderByProduct,
-  updateOrderPreviewCart,
-  updateOrderPreviewProduct,
-} from "@/services";
+import { orderApi } from "@/services";
 import { createOrderPreviewKeyByProductParams } from "@/types";
 import { useGlobalStore } from "@/store";
 import CommonModal from "@/components/modal/common-modal";
@@ -101,11 +96,11 @@ export default function SubmitOrder() {
     setSubmitting(true);
 
     if (type === "cart") {
-      const bizCode = await createOrderByCart(orderData?.param);
+      const bizCode = await orderApi.createByCart(orderData?.param);
 
       router.push("/payment/" + bizCode);
     } else if (type === "product") {
-      const bizCode = await createOrderByProduct(
+      const bizCode = await orderApi.createByProduct(
         orderData?.param as createOrderPreviewKeyByProductParams,
       );
 
@@ -230,7 +225,7 @@ export default function SubmitOrder() {
       let res;
 
       if (type === "cart") {
-        res = await updateOrderPreviewCart({
+        res = await orderApi.updatePreviewByCart({
           ...orderData.param,
           previewList: orderData.param.previewList.map((item: any) =>
             item.cartId === currentCartId
@@ -239,7 +234,7 @@ export default function SubmitOrder() {
           ),
         });
       } else {
-        res = await updateOrderPreviewProduct({
+        res = await orderApi.updatePreviewByProduct({
           ...orderData.param,
           serviceList: checkedServices,
         });

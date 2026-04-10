@@ -10,7 +10,7 @@ import { useTranslations } from "next-intl";
 import FullscreenLoader from "@/components/common/fullscreen-loader";
 import { useGlobalStore } from "@/store";
 import { useWalletInfo } from "@/hook/api";
-import { createOrderByRecharge } from "@/services";
+import { orderApi } from "@/services";
 
 /** 将逗号视为小数点，解析为数字 */
 function parsePrice(value: string): number {
@@ -52,7 +52,7 @@ export default function WalletRechargePage() {
     if (amount < 1) return;
     try {
       setRechargeLoading(true);
-      const bizCode: any = await createOrderByRecharge({
+      const bizCode: any = await orderApi.createRecharge({
         currencyAmount: amount,
         currencyCode: currency.label,
       });

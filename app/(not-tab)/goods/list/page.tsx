@@ -17,7 +17,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { FaRegImage } from "react-icons/fa";
 import { InfiniteScroll } from "antd-mobile";
 
-import { getGoodsId, getGoodsImageId } from "@/services";
+import { productApi } from "@/services";
 import { useGlobalStore } from "@/store";
 import { BlockSpinner, EmptyState } from "@/components/ui";
 import { useSearchList } from "@/hook/api";
@@ -76,7 +76,7 @@ export default function Searchpage() {
 
     try {
       setUploading(true); // 开始上传
-      const res: any = await getGoodsImageId(file);
+      const res: any = await productApi.searchByUpload(file);
 
       if (res && res.length > 0) {
         const taobaoImageId = res.find(
@@ -111,7 +111,7 @@ export default function Searchpage() {
   const onSubmit = async (e: any) => {
     e.preventDefault();
     const data: any = Object.fromEntries(new FormData(e.currentTarget));
-    const res: any = await getGoodsId({ url: data.url });
+    const res: any = await productApi.smartSearch({ url: data.url });
 
     if (res.keyword) {
       router.push(`/goods/list?keyword=${encodeURIComponent(data.url)}`);

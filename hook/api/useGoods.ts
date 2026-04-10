@@ -1,7 +1,8 @@
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 
 import { queryClient } from "@/lib/react-query";
-import { goodsApi, ToggleFavoriteParams } from "@/services";
+import { goodsApi } from "@/services";
+import { productApi } from "@/services/productApi";
 
 export const useHistory = () => {
   return useQuery({
@@ -35,25 +36,16 @@ export const useDelFavorite = () => {
 };
 export const useFavoriteProduct = () => {
   return useMutation({
-    mutationFn: (data: ToggleFavoriteParams) => goodsApi.toggleFavorite(data),
+    mutationFn: (data: any) => goodsApi.toggleFavorite(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["favorite"] });
     },
   });
 };
-export const getGoodsInfoById = (data: any) => {
-  return goodsApi.getGoodsInfoById(data);
-};
 
-export const getGoodsId = (data: any) => {
-  return goodsApi.smartSearch(data);
-};
 
-export const useUploadSearchImage = () => {
-  return useMutation({
-    mutationFn: (file: File) => goodsApi.uploadSearchImage(file),
-  });
-};
+
+
 export const useSearchList = (params: any) => {
   return useInfiniteQuery({
     queryKey: ["searchList", params],
@@ -63,14 +55,14 @@ export const useSearchList = (params: any) => {
       const { enabled, keyword, ...restParams } = params;
 
       if (keyword) {
-        return goodsApi.searchByKeyword({
+        return productApi.searchByKeyword({
           ...restParams,
           keyword,
           current: pageParam,
         });
       }
 
-      return goodsApi.searchByImage({
+      return productApi.searchByImage({
         ...restParams,
         current: pageParam,
       });

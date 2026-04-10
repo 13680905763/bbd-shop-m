@@ -1,6 +1,6 @@
 export * from "./authApi";
-export * from "./goods";
-export * from "./order";
+export * from "./productApi";
+
 export * from "./chatApi";
 export * from "./walletApi";
 

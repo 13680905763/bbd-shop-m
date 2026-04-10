@@ -14,7 +14,7 @@ export function useMessageList(statusCode: string) {
         deleteFlag: 1,
       };
 
-      return messageApi.listMessage(params);
+      return messageApi.list(params);
     },
     getNextPageParam: (lastPage) => {
       const loaded = lastPage.current * lastPage.size;
@@ -26,7 +26,7 @@ export function useMessageList(statusCode: string) {
 }
 export function useReadMessage() {
   return useMutation({
-    mutationFn: (id: string) => messageApi.readMessage(id),
+    mutationFn: (id: string | number) => messageApi.markAsRead(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["messageList"] });
     },
@@ -34,7 +34,7 @@ export function useReadMessage() {
 }
 export function useDeleteMessage() {
   return useMutation({
-    mutationFn: (ids: number[]) => messageApi.deleteMessage(ids),
+    mutationFn: (ids: number[]) => messageApi.removeBatch(ids),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["messageList"] });
     },

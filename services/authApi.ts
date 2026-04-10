@@ -30,32 +30,26 @@ export interface GoogleLoginParams {
 }
 
 export const authApi = {
-  /** 注册 */
-  register: async (data: RegisterParams): Promise<string> => {
-    const encryptedData = await encryptField(data);
+  /** 注册新用户 */
+  register: async (data: RegisterParams): Promise<string> =>
+    request.post("/customer/sign-up", await encryptField(data)),
 
-    return request.post("/customer/sign-up", encryptedData);
-  },
-  /** 激活邮箱 */
-  activateEmail: async (data: ActivateEmailParams): Promise<string> => {
-    const encryptedData = await encryptField(data);
-    return request.post("/customer/active", encryptedData);
-  },
-  /** 登录 */
-  login: async (data: LoginParams): Promise<string> => {
-    const encryptedData = await encryptField(data);
+  /** 用户登录 */
+  login: async (data: LoginParams): Promise<string> =>
+    request.post("/customer/login", await encryptField(data)),
 
-    return request.post("/customer/login", encryptedData);
-  },
-  /** 谷歌登录 */
-  googleLogin: async (data: GoogleLoginParams): Promise<string> => {
-    const encryptedData = await encryptField(data);
+  /** 谷歌账号一键登录 */
+  loginByGoogle: async (data: GoogleLoginParams): Promise<string> =>
+    request.post("/customer/google/code", await encryptField(data)),
 
-    return request.post("/customer/google/code", encryptedData);
-  },
-  /** 退出登录 */
-  logout: (): Promise<void> => request.get("/customer/logout"),
-  /** 忘记密码 */
-  forgotPassword: (data: { email: string }): Promise<string> =>
+  /** 激活或验证邮箱 */
+  verifyEmail: async (data: ActivateEmailParams): Promise<string> =>
+    request.post("/customer/active", await encryptField(data)),
+
+  /** 发送忘记密码重置邮件 */
+  sendForgotPasswordEmail: (data: { email: string }): Promise<string> =>
     request.post("/customer/forget-password", data),
+
+  /** 退出当前登录状态 */
+  logout: (): Promise<void> => request.get("/customer/logout"),
 };

@@ -20,7 +20,9 @@ request.interceptors.request.use(
     config.headers["X-Language"] = language;
     config.headers["X-Currency"] = currency.value;
     config.headers["X-Timezone"] = "Asia/Shanghai";
-
+    if (config.data instanceof FormData) {
+      delete config.headers["Content-Type"];
+    }
     return config;
   },
   (error) => Promise.reject(error),
@@ -30,7 +32,6 @@ request.interceptors.response.use(
   (response: AxiosResponse<ApiResponse<any>>) => {
     const res = response.data;
 
-    console.log("res");
 
     // 业务逻辑失败
     if (!res.success) {

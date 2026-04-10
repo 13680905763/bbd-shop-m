@@ -23,9 +23,9 @@ import ProgressBar from "./progress-bar";
 import DisclaimerDrawer from "./disclaimer-drawer";
 
 import { Stepper } from "@/components/ui";
-import { getGoodsInfoById } from "@/hook/api";
+import { productApi } from "@/services/productApi";
 import { useUserInfo } from "@/hook/business";
-import { createOrderPreviewKeyByProduct } from "@/services";
+import { orderApi } from "@/services";
 import { source } from "@/types";
 import CommonModal from "@/components/modal/common-modal";
 import { useGlobalStore } from "@/store";
@@ -165,7 +165,7 @@ export default function GoodsDetails() {
     setissub(true);
 
     try {
-      const key = await createOrderPreviewKeyByProduct({
+      const key = await orderApi.initPreviewByProduct({
         source: params.source as source,
         sourceProductId: params.sourceProductId as string,
         sourceSkuId: currentSku.skuID,
@@ -339,7 +339,7 @@ export default function GoodsDetails() {
 
   useEffect(() => {
     setisLoading(true);
-    getGoodsInfoById({ ...params })
+    productApi.getDetail({ ...params })
       .then((data: any) => {
         // 数据初始化
         console.log("data", data);

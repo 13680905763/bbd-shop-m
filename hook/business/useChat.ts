@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { addToast } from "@heroui/react";
 import { useTranslations } from "next-intl";
-import { useMutation } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 
 import { useUserInfo } from "../business";
 
@@ -14,7 +14,7 @@ export function useUploadChatImage() {
 }
 export function useReadMessages() {
   return useMutation({
-    mutationFn: (data: any) => chatApi.readMessages(data),
+    mutationFn: (data: any) => chatApi.markAsRead(data),
   });
 }
 export interface Message {
@@ -155,7 +155,7 @@ export function useChat(isOpen: boolean) {
 
       try {
         const currentPage = initialLoad ? 1 : page;
-        const res: any = await chatApi.getHistory(user.id, currentPage);
+        const res: any = await chatApi.listMessages(user.id, currentPage);
         const records: any = res.records || [];
         const lastPage: number = res.pages ?? 1;
 
@@ -335,4 +335,21 @@ export function useChat(isOpen: boolean) {
     hasAgent,
     user,
   };
+}
+
+export function useChatOrderList(params: any) {
+  return useQuery({
+    queryKey: ["chatOrderList", params],
+    queryFn: () => chatApi.listCandidateOrders(params),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: false, // ⚠️ 禁止切回 Tab 时自动请求
+  });
+}
+export function useWaybillOrderList(params: any) {
+  return useQuery({
+    queryKey: ["chatWaybillOrderList", params],
+    queryFn: () => chatApi.listCandidateWaybills(params),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: false, // ⚠️ 禁止切回 Tab 时自动请求
+  });
 }

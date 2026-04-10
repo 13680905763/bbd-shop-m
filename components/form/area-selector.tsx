@@ -15,10 +15,11 @@ interface Option {
 interface Props {
   value: {
     countryId: string;
-    stateId: string;
+    stateId?: string;
+    state?: string;
     city: string;
   };
-  onChange: (val: Props["value"]) => void;
+  onChange: (val: any) => void;
 }
 
 export default function AreaSelector({ value, onChange }: Props) {
@@ -32,19 +33,19 @@ export default function AreaSelector({ value, onChange }: Props) {
 
   const renderItem =
     (key: keyof Option = "id") =>
-    // eslint-disable-next-line react/display-name
-    (opt: Option) => (
-      <AutocompleteItem
-        key={String(opt[key])}
-        startContent={
-          opt.nationalFlag ? (
-            <Avatar alt={opt.name} className="h-6 w-6" src={opt.nationalFlag} />
-          ) : null
-        }
-      >
-        {opt.name}
-      </AutocompleteItem>
-    );
+      // eslint-disable-next-line react/display-name
+      (opt: Option) => (
+        <AutocompleteItem
+          key={String(opt[key])}
+          startContent={
+            opt.nationalFlag ? (
+              <Avatar alt={opt.name} className="h-6 w-6" src={opt.nationalFlag} />
+            ) : null
+          }
+        >
+          {opt.name}
+        </AutocompleteItem>
+      );
 
   return (
     <div className="space-y-4">
@@ -67,20 +68,23 @@ export default function AreaSelector({ value, onChange }: Props) {
         isRequired={true}
         label={t("country.label")}
         placeholder={t("country.placeholder")}
-        selectedKey={String(value.countryId) || null}
+        selectedKey={value.countryId ? String(value.countryId) : null}
         variant="bordered"
-        onSelectionChange={(code) =>
-          onChange({
-            countryId: String(code),
+        onSelectionChange={(code) => {
+          const payload = {
+            countryId: String(code || ""),
             stateId: "",
+            state: "",
             city: "",
-          })
-        }
+          };
+          onChange(payload);
+        }}
       >
         {countries.map(renderItem())}
       </Autocomplete>
 
       <Autocomplete
+        allowsCustomValue
         errorMessage={t("state.errorMessage")}
         inputProps={{
           classNames: {
@@ -95,53 +99,82 @@ export default function AreaSelector({ value, onChange }: Props) {
           autoCorrect: "off",
           spellCheck: "false",
         }}
-        isRequired={true}
+        isRequired={false}
         label={t("state.label")}
         placeholder={t("state.placeholder")}
-        selectedKey={String(value.stateId) || null}
+        selectedKey={value.stateId ? String(value.stateId) : null}
+        inputValue={states?.find((s: any) => String(s.id) === String(value.stateId))?.name || value.state || value.stateId || ""}
         variant="bordered"
         onSelectionChange={(code) => {
-          return onChange({
-            ...value,
-            stateId: String(code),
-            city: states?.find((item: any) => item.id == code)?.name || "",
-          });
+          if (code !== null) {
+            return onChange({
+              ...value,
+              stateId: String(code),
+              state: "",
+            });
+          }
+        }}
+        onInputChange={(text) => {
+          const match = states?.find((item: any) => item.name === text);
+          if (match) {
+            return onChange({
+              ...value,
+              stateId: String(match.id),
+              state: "",
+            });
+          } else {
+            return onChange({
+              ...value,
+              stateId: "",
+              state: text,
+            });
+          }
         }}
       >
         {states.map(renderItem())}
       </Autocomplete>
 
-      {cities.length > 0 ? (
-        <Autocomplete
-          errorMessage={t("city.errorMessage")}
-          inputProps={{
-            classNames: {
-              input: "text-base",
-            },
-            // 这些属性在 iOS 上特别重要
-            enterKeyHint: "done",
-            inputMode: "search", // iOS 上使用搜索模式
-            // 防止 iOS 自动修正和自动大写
-            autoCapitalize: "none",
-            autoComplete: "off",
-            autoCorrect: "off",
-            spellCheck: "false",
-          }}
-          isRequired={true}
-          label={t("city.label")}
-          placeholder={t("city.placeholder")}
-          selectedKey={String(value.city) || null}
-          variant="bordered"
-          onSelectionChange={(code) =>
+
+      <Autocomplete
+        allowsCustomValue
+        errorMessage={t("city.errorMessage")}
+        inputProps={{
+          classNames: {
+            input: "text-base",
+          },
+          // 这些属性在 iOS 上特别重要
+          enterKeyHint: "done",
+          inputMode: "search", // iOS 上使用搜索模式
+          // 防止 iOS 自动修正和自动大写
+          autoCapitalize: "none",
+          autoComplete: "off",
+          autoCorrect: "off",
+          spellCheck: "false",
+        }}
+        isRequired={true}
+        label={t("city.label")}
+        placeholder={t("city.placeholder")}
+        selectedKey={value.city ? String(value.city) : null}
+        inputValue={value.city || ""}
+        variant="bordered"
+        onSelectionChange={(code) => {
+          if (code !== null) {
             onChange({
               ...value,
               city: String(code),
-            })
+            });
           }
-        >
-          {cities.map(renderItem("name"))}
-        </Autocomplete>
-      ) : null}
+        }}
+        onInputChange={(text) => {
+          onChange({
+            ...value,
+            city: text,
+          });
+        }}
+      >
+        {cities.map(renderItem("name"))}
+      </Autocomplete>
+
     </div>
   );
 }
