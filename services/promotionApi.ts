@@ -1,16 +1,15 @@
 import { request } from "./request";
 
-export const PromotionApi = {
-  /** 获取邀请用户列表 */
-  listInvitedUsers(params: any): Promise<any> {
-    return request.post("/customer/inviteList", params);
-  },
-  /** 获取经验明细 */
-  listExperience(params: any): Promise<any> {
-    return request.post(`/customer-experience-detail`, params);
-  },
-  /** 获取奖金明细 */
-  listBonus(params: any): Promise<any[]> {
-    return request.post("/customer-bonus-detail", params);
-  },
+export const promotionApi = {
+  /** 获取邀请用户列表（联盟营销/分销） */
+  listInvitedUsers: (params: any): Promise<any> =>
+    request.post("/customer/inviteList", params),
+
+  /** 获取经验值变动明细（用户等级/成长值） */
+  listExperienceDetails: (params: any): Promise<any> =>
+    request.post("/customer-experience-detail", params),
+
+  /** 获取奖金/佣金变动明细 */
+  listBonusDetails: (params: any): Promise<any> =>
+    request.post("/customer-bonus-detail", params),
 };

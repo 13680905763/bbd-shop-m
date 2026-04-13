@@ -26,14 +26,13 @@ export interface Message {
   createTime?: number | string;
 }
 
-export function useChat(isOpen: boolean) {
+export function useChat(isOpen: boolean, bizCode?: string | null) {
   const t = useTranslations("components.chatbox");
   const { data: user } = useUserInfo();
   const { mutateAsync: uploadImageAsync } = useUploadChatImage();
   const { mutateAsync: readMessagesAsync } = useReadMessages();
 
   const [messages, setMessages] = useState<Message[]>([]);
-  const [receiverId, setReceiverId] = useState<number | null>(null);
   const [hasAgent, setHasAgent] = useState(false);
 
   // History loading state
@@ -99,20 +98,26 @@ export function useChat(isOpen: boolean) {
 
           if (data.sender === "SERVER" && !receiverIdRef.current) {
             receiverIdRef.current = data.receiverId;
-            setReceiverId(data.receiverId);
             setHasAgent(true);
           }
 
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: `ws-${Date.now()}-${Math.random()}`,
-              sender: data.sender === "CUSTOMER" ? "user" : "bot",
-              text: data.content,
-              createTime: data.createTime || getCurrentFormattedTime(),
-              type: data.type || "TEXT",
-            },
-          ]);
+          setMessages((prev) => {
+            // Remove the temporary local echo message if it exists
+            const filtered = data.tempId
+              ? prev.filter((m) => m.id !== data.tempId)
+              : prev;
+
+            return [
+              ...filtered,
+              {
+                id: data.id || `ws-${Date.now()}-${Math.random()}`,
+                sender: data.sender === "CUSTOMER" ? "user" : "bot",
+                text: data.content,
+                type: data.type,
+                bizCode: data.bizCode,
+              },
+            ];
+          });
           shouldScrollRef.current = true;
         } catch (err) {
           console.error("❌ 解析消息失败:", err, event.data);
@@ -155,7 +160,7 @@ export function useChat(isOpen: boolean) {
 
       try {
         const currentPage = initialLoad ? 1 : page;
-        const res: any = await chatApi.listMessages(user.id, currentPage);
+        const res: any = await chatApi.listMessages(user.id, currentPage, bizCode);
         const records: any = res.records || [];
         const lastPage: number = res.pages ?? 1;
 
@@ -169,7 +174,6 @@ export function useChat(isOpen: boolean) {
 
         if (initialLoad) {
           setMessages(newMessages);
-          // await readMessagesAsync(newMessages.map((item: Message) => item.id));
           setPage(2);
           setHasMoreHistory(1 < lastPage);
           shouldScrollRef.current = true;
@@ -178,7 +182,6 @@ export function useChat(isOpen: boolean) {
 
           if (hisM) {
             receiverIdRef.current = hisM.userId;
-            setReceiverId(hisM.userId);
           }
         } else {
           setMessages((prev) => [...newMessages, ...prev]);
@@ -192,7 +195,7 @@ export function useChat(isOpen: boolean) {
         setIsLoadingHistory(false);
       }
     },
-    [user?.id, page, hasMoreHistory, isLoadingHistory],
+    [user?.id, page, hasMoreHistory, isLoadingHistory, bizCode],
   );
 
   // --- Initial Load Effect ---
@@ -204,62 +207,64 @@ export function useChat(isOpen: boolean) {
       setMessages([]);
       setPage(1);
       setHasMoreHistory(true);
-      setReceiverId(null);
       receiverIdRef.current = null;
     }
   }, [isOpen, user?.id]);
 
-  // --- Utility to format current date ---
-  const getCurrentFormattedTime = () => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
-    const hours = String(now.getHours()).padStart(2, "0");
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-    const seconds = String(now.getSeconds()).padStart(2, "0");
-
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  };
-
   // --- Send Message ---
   const sendMessage = useCallback(
-    (msgText: string, type: Message["type"] = "TEXT") => {
+    (msgText: string, type: Message["type"] = "TEXT", msgBizCode?: string) => {
       const socket = socketRef.current;
 
       if (!socket || socket.readyState !== WebSocket.OPEN) {
-        // Only show toast if it's a manual user action, not for auto-send pending items
-        // to avoid spamming the user when the connection is just initializing
         if (type !== "ORDER" && type !== "WAYBILL") {
           addToast({ title: t("connectionLost"), color: "danger" });
         }
+
         return false;
       }
-
-      const payload: any = {
-        sender: "CUSTOMER",
-        type,
-        content: msgText,
-        sendTime: new Date().toISOString(),
-      };
-
-      if (receiverIdRef.current) payload.receiverId = receiverIdRef.current;
-      socket.send(JSON.stringify(payload));
+      const tempId = `temp-${type}-${Date.now()}`;
 
       setMessages((prev) => [
         ...prev,
         {
-          id: `local-${Date.now()}`,
+          id: tempId,
           sender: "user",
           text: msgText,
           type,
-          createTime: getCurrentFormattedTime(),
+          sending: true,
         },
       ]);
+      const payload: any = {
+        sender: "CUSTOMER",
+        type,
+        content: msgText,
+        tempId, // Pass tempId for correlation
+      };
+
+      if (msgBizCode) payload.bizCode = msgBizCode;
+      if (receiverIdRef.current) payload.receiverId = receiverIdRef.current;
+
       shouldScrollRef.current = true;
+      socket.send(JSON.stringify(payload));
+
       return true;
     },
     [t],
+  );
+  // --- Send Order/Waybill ---
+  const sendOrder = useCallback(
+    (content: string, bizCode: string) => {
+      return sendMessage(content, "ORDER", bizCode);
+    },
+    [sendMessage],
+  );
+
+  const sendWaybill = useCallback(
+    (content: string, bizCode: string) => {
+      return sendMessage(content, "WAYBILL", bizCode);
+    },
+    [sendMessage],
   );
 
   // --- Upload & Send Image ---
@@ -278,7 +283,6 @@ export function useChat(isOpen: boolean) {
           type: "IMAGE",
           sending: true,
           text: tempUrl,
-          createTime: getCurrentFormattedTime(),
         },
       ]);
       shouldScrollRef.current = true;
@@ -327,6 +331,8 @@ export function useChat(isOpen: boolean) {
     messages,
     sendMessage,
     sendImage,
+    sendOrder,
+    sendWaybill,
     loadMoreHistory: () => loadHistory(false),
     isLoadingHistory,
     firstLoading,

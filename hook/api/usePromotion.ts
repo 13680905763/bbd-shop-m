@@ -1,66 +1,40 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useQuery,
+  keepPreviousData,
+} from "@tanstack/react-query";
 
-import { PromotionApi } from "@/services/promotionApi";
-import { walletApi } from "@/services";
+import { promotionApi } from "@/services/promotionApi";
+import { configApi, walletApi } from "@/services";
 
-export const useInvitedUsers = () => {
-  return useInfiniteQuery({
-    queryKey: ["invitedUsers"],
-    queryFn: ({ pageParam = 1 }) => {
-      const params = {
-        current: pageParam,
-        size: 10,
-      };
-
-      return PromotionApi.listInvitedUsers(params);
-    },
-    getNextPageParam: (lastPage) => {
-      const loaded = lastPage.current * lastPage.size;
-
-      return loaded < lastPage.total ? lastPage.current + 1 : undefined;
-    },
-    initialPageParam: 1,
-    refetchOnWindowFocus: false,
+export const useInvitedUsers = (params: any) => {
+  return useQuery({
+    queryKey: ["invitedUsers", params],
+    queryFn: () => promotionApi.listInvitedUsers(params),
+    staleTime: 5 * 60 * 1000, // 5 分钟内认为是新鲜的
+    refetchOnWindowFocus: true, // 用户回来自动更新
+    refetchOnReconnect: true, // 网络恢复自动更新
+    placeholderData: keepPreviousData,
   });
 };
-export const useExperience = () => {
-  return useInfiniteQuery({
+export const useExperience = (params: any) => {
+  return useQuery({
     queryKey: ["experience"],
-    queryFn: ({ pageParam = 1 }) => {
-      const params = {
-        current: pageParam,
-        size: 10,
-      };
-
-      return PromotionApi.listExperience(params);
-    },
-    getNextPageParam: (lastPage) => {
-      const loaded = lastPage.current * lastPage.size;
-
-      return loaded < lastPage.total ? lastPage.current + 1 : undefined;
-    },
-    initialPageParam: 1,
-    refetchOnWindowFocus: false,
+    queryFn: () => promotionApi.listExperienceDetails(params),
+    staleTime: 5 * 60 * 1000, // 5 分钟内认为是新鲜的
+    refetchOnWindowFocus: true, // 用户回来自动更新
+    refetchOnReconnect: true, // 网络恢复自动更新
+    placeholderData: keepPreviousData,
   });
 };
-export const useBonus = () => {
-  return useInfiniteQuery({
+export const useBonus = (params: any) => {
+  return useQuery({
     queryKey: ["bonus"],
-    queryFn: ({ pageParam = 1 }) => {
-      const params = {
-        current: pageParam,
-        size: 10,
-      };
-
-      return PromotionApi.listBonus(params);
-    },
-    getNextPageParam: (lastPage: any) => {
-      const loaded = lastPage.current * lastPage.size;
-
-      return loaded < lastPage.total ? lastPage.current + 1 : undefined;
-    },
-    initialPageParam: 1,
-    refetchOnWindowFocus: false,
+    queryFn: () => promotionApi.listBonusDetails(params),
+    staleTime: 5 * 60 * 1000, // 5 分钟内认为是新鲜的
+    refetchOnWindowFocus: true, // 用户回来自动更新
+    refetchOnReconnect: true, // 网络恢复自动更新
+    placeholderData: keepPreviousData,
   });
 };
 
@@ -77,3 +51,13 @@ export function usePointsList() {
     initialPageParam: 1,
   });
 }
+// 奖金等级列表
+export const useBonusConfig = () => {
+  return useQuery({
+    queryKey: ["bonusConfig"],
+    queryFn: () => configApi.getBonusConfig(),
+    staleTime: 10 * 60 * 100 * 1000, // 10 分钟内认为是新鲜的
+    refetchOnWindowFocus: true, // 用户回来自动更新
+    refetchOnReconnect: true, // 网络恢复自动更新
+  });
+};

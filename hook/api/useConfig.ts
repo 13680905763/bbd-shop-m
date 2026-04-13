@@ -20,16 +20,7 @@ export const useCurrencyOptions = () => {
     refetchOnWindowFocus: true,
   });
 };
-// 奖金等级列表
-export const useBonusConfig = () => {
-  return useQuery({
-    queryKey: ["bonusConfig"],
-    queryFn: () => configApi.getBonusConfig(),
-    staleTime: 10 * 60 * 100 * 1000, // 10 分钟内认为是新鲜的
-    refetchOnWindowFocus: true, // 用户回来自动更新
-    refetchOnReconnect: true, // 网络恢复自动更新
-  });
-};
+
 // 优惠券列表
 export const useCouponsConfig = () => {
   return useQuery({

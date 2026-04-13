@@ -1,87 +1,72 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { NavBar } from "antd-mobile";
 import { useRouter } from "next/navigation";
-import { Skeleton } from "@heroui/react";
 
 import { useBonus } from "@/hook/api";
+import PaginationBar from "@/components/common/pagination-bar";
+import { BlockSpinner } from "@/components/ui";
 
 export default function PromotionBonusPage() {
   const t: any = useTranslations("promotion.bonus");
   const router = useRouter();
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const { data, isFetching } = useBonus({
+    current: page,
+    size: pageSize,
+  });
 
-  const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } =
-    useBonus();
-
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
-
-    if (
-      scrollHeight - scrollTop - clientHeight < 50 &&
-      hasNextPage &&
-      !isFetchingNextPage
-    ) {
-      fetchNextPage();
-    }
-  };
-
-  const recordList =
-    data?.pages?.flatMap((page: any) => page.records || []) || [];
+  const recordList = data?.records || [];
 
   return (
     <>
       <NavBar className="bg-white" onBack={() => router.back()}>
         <span className="navbar-title">{t("title")}</span>
       </NavBar>
-      <div
-        className="flex-1 overflow-y-auto p-3 scrollbar-hide"
-        onScroll={handleScroll}
-      >
-        {isLoading ? (
-          <div className="space-y-3">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <Skeleton key={i} className="h-20 w-full rounded-lg" />
-            ))}
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {recordList.map((item: any) => (
-              <div
-                key={item.id}
-                className="home-card flex flex-col gap-2 px-4 py-3 shadow-sm"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-base font-bold text-gray-900">
-                    {item.bizType}
-                  </span>
-                  <span className="text-lg font-bold text-[#f0700c]">
-                    {item.amount > 0 ? "+" : ""}
-                    {item.amount}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between text-sm text-gray-500">
-                  <span>
-                    {t("tableColumns.currentBalance")}: {item.currentBalance}
-                  </span>
-                  <span>{item.createTime}</span>
-                </div>
+      <div className="flex-1 overflow-y-auto p-3 scrollbar-hide">
+        <div className="space-y-3">
+          {isFetching && <BlockSpinner />}
+          {recordList.map((item: any) => (
+            <div
+              key={item.id}
+              className="home-card flex flex-col gap-2 px-4 py-3 shadow-sm"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-base font-bold text-gray-900">
+                  {item.bizType}
+                </span>
+                <span className="text-lg font-bold text-[#f0700c]">
+                  {item.amount > 0 ? "+" : ""}
+                  {item.amount}
+                </span>
               </div>
-            ))}
-            {!recordList.length && (
-              <div className="mt-20 text-center text-gray-500">
-                {t("noData")}
+              <div className="flex items-center justify-between text-sm text-gray-500">
+                <span>
+                  {t("tableColumns.currentBalance")}: {item.currentBalance}
+                </span>
+                <span>{item.createTime}</span>
               </div>
-            )}
-            {isFetchingNextPage && (
-              <div className="py-4 text-center text-sm text-gray-500">
-                <Skeleton className="h-20 w-full rounded-lg" />
-              </div>
-            )}
-          </div>
-        )}
+            </div>
+          ))}
+          {!recordList.length && (
+            <div className="mt-20 text-center text-gray-500">{t("noData")}</div>
+          )}
+        </div>
       </div>
+      {recordList.length > 0 && (
+        <div className="flex w-full justify-end bg-white p-2">
+          <PaginationBar
+            page={page}
+            pageSize={pageSize}
+            total={(data?.total as number) || 0}
+            onPageChange={setPage}
+            onPageSizeChange={setPageSize}
+          />
+        </div>
+      )}
     </>
   );
 }

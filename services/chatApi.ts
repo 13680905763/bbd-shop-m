@@ -9,9 +9,9 @@ export const chatApi = {
   },
 
   /** 分页获取聊天历史消息 */
-  listMessages: (customerId: number | string, current: number) =>
+  listMessages: (customerId: number | string, current: number, bizCode?: string | null) =>
     request.get("/service-chat/chatRecord", {
-      params: { customerId, current },
+      params: { customerId, current, bizCode },
     }),
 
   /** 将消息标记为已读 */

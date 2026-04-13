@@ -5,7 +5,7 @@ import { useGlobalStore } from "@/store";
 
 export const request = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "/api",
-  timeout: 500000,
+  timeout: 300000,
   headers: {
     "Content-Type": "application/json",
   },

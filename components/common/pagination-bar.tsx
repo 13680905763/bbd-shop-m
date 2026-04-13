@@ -1,4 +1,3 @@
-// components/common/PaginationWithSize.tsx
 "use client";
 
 import React from "react";
@@ -19,13 +18,6 @@ export default function PaginationBar({
   onPageChange,
   onPageSizeChange,
 }: Props) {
-  // console.log("total", total, Math.ceil(Number(total) / Number(pageSize)));
-  // console.log(
-  //   "total",
-  //   typeof total,
-  //   typeof Math.ceil(Number(total) / Number(pageSize)),
-  // );
-
   return (
     <div className="flex w-full flex-wrap items-center justify-center gap-4">
       <Pagination
@@ -41,7 +33,6 @@ export default function PaginationBar({
         onChange={(e) => {
           const size = Number(e.target.value) || Number(pageSize);
 
-          console.log("size", size, typeof size);
           if (onPageChange) {
             onPageChange(1); // 改变页大小后重置为第一页
           }

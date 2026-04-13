@@ -42,7 +42,7 @@
         "select": "Sélectionner"
       },
       "bottomAction": {
-        "selectAll": "Tout sélectionner",
+        "selectAll": "Select All",
         "submit": "Soumettre"
       },
       "confirmModal": {

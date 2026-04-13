@@ -1,7 +1,7 @@
 // app/api/[...slug]/route.ts
 import { NextRequest } from "next/server";
 // 构造统一的代理处理函数
-async function handleProxy(req: NextRequest, { params }: { params: { slug: string[] } }) {
+async function handleProxy(req: NextRequest, { params }: { params: Promise<{ slug: string[] }> }) {
     const { slug } = await params; // 2. 必须先 await
     const targetUrl = new URL(req.url);
     // 拼接出你最终要请求的真实后端地址
