@@ -22,7 +22,8 @@ export default function OrderItem({
   const t = useTranslations("profile.order.buttons"); // ✅ 命名空间
 
   const [isPaying, setIsPaying] = React.useState(false);
-  const { setIsOpen, setPendingOrder } = useChatStore();
+  const { setIsOpen, setPendingOrder, setChatMode, setActiveBizCode } =
+    useChatStore();
   const { currency } = useGlobalStore();
 
   return (
@@ -98,6 +99,8 @@ export default function OrderItem({
           size="sm"
           variant="light"
           onPress={() => {
+            setChatMode("ORDER");
+            setActiveBizCode(order.orderCode);
             setPendingOrder(order);
             setIsOpen(true);
           }}
@@ -106,7 +109,7 @@ export default function OrderItem({
           {t("consult")}
         </Button>
         <div>
-          <p className="text-base font-bold text-right">
+          <p className="text-right text-base font-bold">
             {currency.symbol}
             {order?.totalFee}
           </p>

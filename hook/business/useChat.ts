@@ -6,6 +6,7 @@ import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 import { useUserInfo } from "../business";
 
 import { chatApi } from "@/services";
+import { queryClient } from "@/lib/react-query";
 
 export function useUploadChatImage() {
   return useMutation({
@@ -23,6 +24,8 @@ export interface Message {
   text?: string;
   type?: "TEXT" | "IMAGE" | "ORDER" | "WAYBILL";
   sending?: boolean;
+  failed?: boolean;
+  sendTime?: number | string;
   createTime?: number | string;
 }
 
@@ -114,6 +117,7 @@ export function useChat(isOpen: boolean, bizCode?: string | null) {
                 sender: data.sender === "CUSTOMER" ? "user" : "bot",
                 text: data.content,
                 type: data.type,
+                sendTime: data.sendTime || data.createTime,
                 bizCode: data.bizCode,
               },
             ];
@@ -160,13 +164,18 @@ export function useChat(isOpen: boolean, bizCode?: string | null) {
 
       try {
         const currentPage = initialLoad ? 1 : page;
-        const res: any = await chatApi.listMessages(user.id, currentPage, bizCode);
+        const res: any = await chatApi.listMessages(
+          user.id,
+          currentPage,
+          bizCode,
+        );
         const records: any = res.records || [];
         const lastPage: number = res.pages ?? 1;
 
         const newMessages = records.reverse().map((msg: any) => ({
           id: msg?.id ?? `his-${Date.now()}-${Math.random()}`,
           sender: msg.sender === "CUSTOMER" ? "user" : "bot",
+          sendTime: msg.sendTime || msg.createTime,
           createTime: msg.createTime,
           type: msg.contentType || "TEXT",
           text: msg.content,
@@ -201,15 +210,63 @@ export function useChat(isOpen: boolean, bizCode?: string | null) {
   // --- Initial Load Effect ---
   useEffect(() => {
     if (isOpen && user?.id) {
+      let cancelled = false;
+
+      setMessages([]);
+      setPage(1);
+      setHasMoreHistory(true);
+      receiverIdRef.current = null;
       setFirstLoading(true);
-      loadHistory(true).finally(() => setFirstLoading(false));
+
+      chatApi
+        .listMessages(user.id, 1, bizCode)
+        .then((res: any) => {
+          if (cancelled) return;
+
+          const records: any[] = res.records || [];
+          const lastPage: number = res.pages ?? 1;
+          const newMessages: any = records.reverse().map((msg: any) => ({
+            id: msg?.id ?? `his-${Date.now()}-${Math.random()}`,
+            sender: msg.sender === "CUSTOMER" ? "user" : "bot",
+            sendTime: msg.sendTime || msg.createTime,
+            createTime: msg.createTime,
+            type: msg.contentType || "TEXT",
+            text: msg.content,
+          }));
+
+          setMessages(newMessages);
+          setPage(2);
+          setHasMoreHistory(1 < lastPage);
+          shouldScrollRef.current = true;
+
+          const hisM = records.find((item: any) => item.sender === "SERVER");
+
+          if (hisM) {
+            receiverIdRef.current = hisM.userId;
+          }
+        })
+        .catch((err) => {
+          if (!cancelled) {
+            console.error("鑾峰彇鍘嗗彶娑堟伅澶辫触", err);
+          }
+        })
+        .finally(() => {
+          if (!cancelled) {
+            setFirstLoading(false);
+            setIsLoadingHistory(false);
+          }
+        });
+
+      return () => {
+        cancelled = true;
+      };
     } else if (!isOpen) {
       setMessages([]);
       setPage(1);
       setHasMoreHistory(true);
       receiverIdRef.current = null;
     }
-  }, [isOpen, user?.id]);
+  }, [isOpen, user?.id, bizCode]);
 
   // --- Send Message ---
   const sendMessage = useCallback(
@@ -269,7 +326,7 @@ export function useChat(isOpen: boolean, bizCode?: string | null) {
 
   // --- Upload & Send Image ---
   const sendImage = useCallback(
-    async (file: File) => {
+    async (file: File, msgBizCode?: string) => {
       if (!user?.id) return;
 
       const tempId = `temp-${Date.now()}`;
@@ -282,6 +339,7 @@ export function useChat(isOpen: boolean, bizCode?: string | null) {
           sender: "user",
           type: "IMAGE",
           sending: true,
+          failed: false,
           text: tempUrl,
         },
       ]);
@@ -298,25 +356,36 @@ export function useChat(isOpen: boolean, bizCode?: string | null) {
               sender: "CUSTOMER",
               type: "IMAGE",
               content: url,
-              sendTime: new Date().toISOString(),
+              tempId,
             };
 
+            if (msgBizCode) payload.bizCode = msgBizCode;
             if (receiverIdRef.current)
               payload.receiverId = receiverIdRef.current;
             socket.send(JSON.stringify(payload));
+            setMessages((prev) =>
+              prev.map((msg) =>
+                msg.id === tempId
+                  ? { ...msg, sending: false, failed: false, text: url }
+                  : msg,
+              ),
+            );
+          } else {
+            addToast({ title: t("connectionLost"), color: "danger" });
+            setMessages((prev) =>
+              prev.map((msg) =>
+                msg.id === tempId
+                  ? { ...msg, sending: false, failed: true, text: url }
+                  : msg,
+              ),
+            );
           }
-
-          setMessages((prev) =>
-            prev.map((msg) =>
-              msg.id === tempId ? { ...msg, sending: false, text: url } : msg,
-            ),
-          );
         }
       } catch (err) {
         setMessages((prev) =>
           prev.map((msg) =>
             msg.id === tempId
-              ? { ...msg, sending: false, text: t("imageSendFail") }
+              ? { ...msg, sending: false, failed: true }
               : msg,
           ),
         );
@@ -357,5 +426,32 @@ export function useWaybillOrderList(params: any) {
     queryFn: () => chatApi.listCandidateWaybills(params),
     placeholderData: keepPreviousData,
     refetchOnWindowFocus: false, // ⚠️ 禁止切回 Tab 时自动请求
+  });
+}
+
+/**
+ * 获取聊天列表集 Hook
+ */
+export function useChatContextList(customerId: string | number) {
+  return useQuery({
+    queryKey: ["chatContextList", customerId],
+    queryFn: () => chatApi.listChatContexts(customerId),
+    // 如果 customerId 为空则不自动执行（可选）
+    enabled: !!customerId,
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: false,
+  });
+}
+/**
+ * 注意：通常删除操作使用 useMutation 而不是 useQuery
+ * 这里提供一个标准的删除 Hook 示例
+ */
+export function useDeleteChatContext() {
+  return useMutation({
+    mutationFn: (bizCode: string) => chatApi.deleteChatContext(bizCode),
+    onSuccess: () => {
+      // 删除成功后，自动刷新列表数据
+      queryClient.invalidateQueries({ queryKey: ["chatContextList"] });
+    },
   });
 }

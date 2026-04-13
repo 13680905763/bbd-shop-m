@@ -22,7 +22,8 @@ export default function PackageItem({
 }: any) {
   const t = useTranslations("profile.package");
   const { currency } = useGlobalStore();
-  const { setPendingWaybill, setIsOpen } = useChatStore();
+  const { setIsOpen, setPendingWaybill, setChatMode, setActiveBizCode } =
+    useChatStore();
   const [isCancelLoading, setIsCancelLoading] = useState(false);
   const [isTrackLoading, setIsTrackLoading] = useState(false);
   const [isPayLoading, setIsPayLoading] = useState(false);
@@ -178,7 +179,15 @@ export default function PackageItem({
             size="sm"
             variant="light"
             onPress={() => {
-              const pic = pack?.packageItemList?.map((item: any) => item.orderProduct?.skuPicUrl || item.orderProduct?.picUrl).filter(Boolean);
+              const pic = pack?.packageItemList
+                ?.map(
+                  (item: any) =>
+                    item.orderProduct?.skuPicUrl || item.orderProduct?.picUrl,
+                )
+                .filter(Boolean);
+
+              setChatMode("WAYBILL");
+              setActiveBizCode(pack.packingPackageCode);
               setPendingWaybill({ ...pack, pic });
               setIsOpen(true);
             }}
@@ -189,71 +198,71 @@ export default function PackageItem({
         </div>
         <div className="flex justify-end gap-1">
           {(pack?.changeFlag || pack?.addressFlag) && (
-          <Button
-            className="button-default"
-            radius="sm"
-            size="sm"
-            onPress={() => onEdit(pack)}
-          >
-            {t("buttons.edit")}
-          </Button>
-        )}
-        {pack?.cancelFlag && (
-          <Button
-            isLoading={isCancelLoading}
-            radius="sm"
-            size="sm"
-            variant="flat"
-            onPress={async () => {
-              setIsCancelLoading(true);
-              await onCancel(pack);
-              setIsCancelLoading(false);
-            }}
-          >
-            {t("buttons.cancel")}
-          </Button>
-        )}
-        {/* 状态：撤回申请 */}
-        {pack?.withdrawFlag && (
-          <Button
-            color="danger"
-            radius="sm"
-            size="sm"
-            variant="flat"
-            onPress={() => onRevoke(pack?.id)}
-          >
-            {t("buttons.withdraw")}
-          </Button>
-        )}
-        {/* 状态：待付款 */}
-        {(pack?.statusCode == 203 || pack?.statusCode == 209) && (
-          <Button
-            color="primary"
-            isLoading={isPayLoading}
-            radius="sm"
-            size="sm"
-            onPress={async () => {
-              setIsPayLoading(true);
-              await onPay([pack?.packingPackageCode]);
-              setIsPayLoading(false);
-            }}
-          >
-            {pack?.statusCode == 203
-              ? t("buttons.pay")
-              : t("buttons.payCancel")}
-          </Button>
-        )}
-        {/* 状态：确认签收 */}
-        {pack?.signFlag && (
-          <Button
-            color="primary"
-            radius="sm"
-            size="sm"
-            onPress={() => onReceipt(pack?.id)}
-          >
-            {t("buttons.receipt")}
-          </Button>
-        )}
+            <Button
+              className="button-default"
+              radius="sm"
+              size="sm"
+              onPress={() => onEdit(pack)}
+            >
+              {t("buttons.edit")}
+            </Button>
+          )}
+          {pack?.cancelFlag && (
+            <Button
+              isLoading={isCancelLoading}
+              radius="sm"
+              size="sm"
+              variant="flat"
+              onPress={async () => {
+                setIsCancelLoading(true);
+                await onCancel(pack);
+                setIsCancelLoading(false);
+              }}
+            >
+              {t("buttons.cancel")}
+            </Button>
+          )}
+          {/* 状态：撤回申请 */}
+          {pack?.withdrawFlag && (
+            <Button
+              color="danger"
+              radius="sm"
+              size="sm"
+              variant="flat"
+              onPress={() => onRevoke(pack?.id)}
+            >
+              {t("buttons.withdraw")}
+            </Button>
+          )}
+          {/* 状态：待付款 */}
+          {(pack?.statusCode == 203 || pack?.statusCode == 209) && (
+            <Button
+              color="primary"
+              isLoading={isPayLoading}
+              radius="sm"
+              size="sm"
+              onPress={async () => {
+                setIsPayLoading(true);
+                await onPay([pack?.packingPackageCode]);
+                setIsPayLoading(false);
+              }}
+            >
+              {pack?.statusCode == 203
+                ? t("buttons.pay")
+                : t("buttons.payCancel")}
+            </Button>
+          )}
+          {/* 状态：确认签收 */}
+          {pack?.signFlag && (
+            <Button
+              color="primary"
+              radius="sm"
+              size="sm"
+              onPress={() => onReceipt(pack?.id)}
+            >
+              {t("buttons.receipt")}
+            </Button>
+          )}
         </div>
       </div>
     </div>

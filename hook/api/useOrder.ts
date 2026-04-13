@@ -1,9 +1,4 @@
-import {
-  keepPreviousData,
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { addToast } from "@heroui/react";
 
@@ -70,6 +65,12 @@ export function useRefundOrder() {
     mutationFn: (data: any) => orderApi.refundOrder(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orderList"] });
+    },
+    onError: (error) => {
+      addToast({
+        title: error?.message,
+        color: "danger",
+      });
     },
   });
 }
@@ -140,4 +141,3 @@ export function useUploadDiyImage() {
     mutationFn: (file: File) => orderApi.uploadDiyImage(file),
   });
 }
-

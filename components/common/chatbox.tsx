@@ -1,11 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import {
   Button,
-  Card,
-  Modal,
-  ModalContent,
   Textarea,
   Image,
   addToast,
@@ -13,30 +10,62 @@ import {
   Badge,
   Drawer,
   DrawerContent,
+  DrawerHeader,
+  DrawerBody,
 } from "@heroui/react";
-import { FaComments, FaImage, FaTimes, FaShoppingBag, FaBoxOpen } from "react-icons/fa";
+import {
+  FaComments,
+  FaImage,
+  FaShoppingBag,
+  FaBoxOpen,
+  FaBars,
+  FaHistory,
+  FaRegListAlt,
+  FaBox,
+  FaTruck,
+  FaTrash,
+} from "react-icons/fa";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 
 import OrderListModal from "./order-list-modal";
-
-import { useChat } from "@/hook/business/useChat";
-import { useChatStore, useGlobalStore } from "@/store";
 import WaybillListModal from "./chat-waybill";
+
+import { ConfirmContext } from "@/components/common";
+import {
+  useChat,
+  useChatContextList,
+  useDeleteChatContext,
+} from "@/hook/business/useChat";
+import { useChatStore, useGlobalStore } from "@/store";
 
 export default function ChatBox() {
   const t = useTranslations("components.chatbox");
   const { currency } = useGlobalStore();
+  const confirmContext = useContext(ConfirmContext);
 
-  const { isOpen, setIsOpen, pendingOrder, setPendingOrder, pendingWaybill, setPendingWaybill } = useChatStore();
-
+  const {
+    isOpen,
+    setIsOpen,
+    pendingOrder,
+    setPendingOrder,
+    pendingWaybill,
+    setPendingWaybill,
+    chatMode,
+    activeBizCode,
+    resetToCommon,
+    setChatMode,
+    setActiveBizCode,
+  } = useChatStore();
 
   const [input, setInput] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showOrderModal, setShowOrderModal] = useState(false);
   const [showWaybillModal, setShowWaybillModal] = useState(false);
+  const [showContextDrawer, setShowContextDrawer] = useState(false);
+  const [deletingBizCode, setDeletingBizCode] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -48,6 +77,8 @@ export default function ChatBox() {
   // Use the custom hook
   const {
     messages,
+    sendOrder,
+    sendWaybill,
     sendMessage,
     sendImage,
     loadMoreHistory,
@@ -55,11 +86,13 @@ export default function ChatBox() {
     firstLoading,
     hasMoreHistory,
     shouldScrollRef,
-    hasAgent,
     user,
-  } = useChat(isOpen);
+  } = useChat(isOpen, activeBizCode);
+  const { data: contextList = [], isLoading: loadingContexts } =
+    useChatContextList(user?.id || "");
+  const { mutate: removeChatContext, isPending: deletingContext } =
+    useDeleteChatContext();
 
-  // Handle pending order from store
   useEffect(() => {
     if (isOpen && pendingOrder && user?.id && !firstLoading) {
       // Delay to ensure websocket is ready and messages are loaded
@@ -68,34 +101,62 @@ export default function ChatBox() {
           ...pendingOrder,
           products: pendingOrder.products?.map((p: any) => ({
             ...p,
-            price: `${currency.symbol}${p.price}`
-          }))
+            price: `${currency.symbol}${p.price}`,
+          })),
         };
 
-        // Try to send, if it returns true (success), clear the pending order
-        const success = sendMessage(JSON.stringify(orderWithCurrency), "ORDER");
+        const success = sendOrder(
+          JSON.stringify(orderWithCurrency),
+          pendingOrder.orderCode,
+        );
+
         if (success) {
           setPendingOrder(null);
         }
       }, 1000); // Increased delay to ensure connection is stable
+
       return () => clearTimeout(timer);
     }
-  }, [isOpen, pendingOrder, user?.id, sendMessage, setPendingOrder, currency.symbol, firstLoading]);
+  }, [
+    isOpen,
+    pendingOrder,
+    user?.id,
+    sendOrder,
+    setPendingOrder,
+    currency.symbol,
+    firstLoading,
+  ]);
 
-  // Handle pending waybill from store
   useEffect(() => {
     if (isOpen && pendingWaybill && user?.id && !firstLoading) {
       // Delay to ensure websocket is ready and messages are loaded
       const timer = setTimeout(() => {
-        // Try to send, if it returns true (success), clear the pending waybill
-        const success = sendMessage(JSON.stringify(pendingWaybill), "WAYBILL");
+        const success = sendWaybill(
+          JSON.stringify(pendingWaybill),
+          pendingWaybill.packingPackageCode,
+        );
+
         if (success) {
           setPendingWaybill(null);
         }
       }, 1000);
+
       return () => clearTimeout(timer);
     }
-  }, [isOpen, pendingWaybill, user?.id, sendMessage, setPendingWaybill, firstLoading]);
+  }, [
+    isOpen,
+    pendingWaybill,
+    user?.id,
+    sendWaybill,
+    setPendingWaybill,
+    firstLoading,
+  ]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setShowContextDrawer(false);
+    }
+  }, [isOpen]);
 
   // Handle scroll for history loading
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
@@ -140,7 +201,10 @@ export default function ChatBox() {
 
   const scrollToBottom = () => {
     // block: "end" 会强制将该元素对齐到滚动容器的底部
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+    });
   };
 
   useEffect(() => {
@@ -149,17 +213,18 @@ export default function ChatBox() {
       const handleResize = () => {
         setTimeout(scrollToBottom, 250); // 等键盘弹完
       };
+
       viewport?.addEventListener("resize", handleResize);
+
       return () => viewport?.removeEventListener("resize", handleResize);
     }
   }, [isOpen]);
-
 
   const handleSend = () => {
     const msgText = input.trim();
 
     if (!msgText) return;
-    sendMessage(msgText, "TEXT");
+    sendMessage(msgText, "TEXT", activeBizCode || undefined);
     setInput("");
   };
 
@@ -202,8 +267,57 @@ export default function ChatBox() {
       return;
     }
 
-    sendImage(file);
+    sendImage(file, activeBizCode || undefined);
     if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const deleteContext = (bizCode: string) => {
+    setDeletingBizCode(bizCode);
+    removeChatContext(bizCode, {
+      onSuccess: () => {
+        if (activeBizCode === bizCode) {
+          resetToCommon();
+        }
+        setDeletingBizCode(null);
+      },
+      onError: () => {
+        setDeletingBizCode(null);
+        addToast({
+          title: t("deleteFailed", {
+            defaultMessage: "Failed to delete record",
+          }),
+          color: "danger",
+        });
+      },
+    });
+  };
+
+  const confirmDeleteContext = async (ctx: any) => {
+    if (!confirmContext) {
+      deleteContext(ctx.bizCode);
+      return;
+    }
+
+    const confirmed = await confirmContext.confirm({
+      title: t("deleteConfirmTitle", {
+        defaultMessage: "Delete consultation record",
+      }),
+      content: t("deleteConfirmContent", {
+        defaultMessage:
+          "Are you sure you want to delete this consultation record? This action cannot be undone.",
+      }),
+      confirmText: t("deleteConfirmButton", {
+        defaultMessage: "Delete",
+      }),
+      cancelText: t("cancelDelete", {
+        defaultMessage: "Cancel",
+      }),
+      onConfirm: () => deleteContext(ctx.bizCode),
+    });
+
+    if (!confirmed) {
+      setDeletingBizCode(null);
+    }
   };
 
   return (
@@ -216,9 +330,9 @@ export default function ChatBox() {
         onDragStart={() => (isDraggingRef.current = true)}
       >
         <Badge
+          color="primary"
           content={user?.msgCount > 99 ? "99+" : user?.msgCount}
           isInvisible={!user?.msgCount || user.msgCount === 0}
-          color="primary"
           shape="circle"
         >
           <Button
@@ -257,7 +371,9 @@ export default function ChatBox() {
           style={{
             // 强制让容器高度等于“露出来的视口高度”
             // 这样底部输入框才会被顶上去，而不是被盖住
-            height: window.visualViewport ? `${window.visualViewport.height}px` : "100dvh",
+            height: window.visualViewport
+              ? `${window.visualViewport.height}px`
+              : "100dvh",
             maxHeight: "100dvh",
             transition: "height 0.2s ease-out", // 增加平滑过渡
           }}
@@ -265,24 +381,161 @@ export default function ChatBox() {
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-4 text-white">
             <div className="flex items-center gap-2">
-              <img
+              <Button
+                isIconOnly
+                className="h-9 w-9 min-w-9 rounded-full bg-[#f0700c]/10 text-[#f0700c]"
+                variant="light"
+                onPress={() => setShowContextDrawer(true)}
+              >
+                <FaBars className="h-4 w-4" />
+              </Button>
+              <Image
                 alt="logo"
                 className="w-15 h-6 rounded"
                 src="/m/logo.png"
               />
               <span className="text-sm font-semibold text-[#f0700c]">
-                {t("onlineSupport")}
+                {chatMode === "ORDER"
+                  ? `${t("orderNo")} ${activeBizCode}`
+                  : chatMode === "WAYBILL"
+                    ? `${t("waybillNo")} ${activeBizCode}`
+                    : t("onlineSupport")}
               </span>
             </div>
-            {/* <div className="flex items-center gap-2 text-[#f0700c]">
-              <button
-                className="rounded p-1 transition-colors hover:bg-white/20"
-                onClick={() => setIsOpen(false)}
-              >
-                <FaTimes />
-              </button>
-            </div> */}
           </div>
+
+          <Drawer
+            backdrop="blur"
+            isOpen={showContextDrawer}
+            placement="left"
+            size="xs"
+            onOpenChange={setShowContextDrawer}
+          >
+            <DrawerContent>
+              <DrawerHeader className="flex items-center gap-2 border-b bg-white px-4 py-4 font-bold text-gray-800 shadow-sm">
+                <FaHistory className="text-[#f0700c]" />
+                {t("consultationList", {
+                  defaultMessage: "Business Consultations",
+                })}
+              </DrawerHeader>
+              <DrawerBody className="bg-gray-50/50 p-3">
+                {loadingContexts ? (
+                  <div className="flex flex-col items-center justify-center gap-3 py-12">
+                    <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#f0700c]/20 border-t-[#f0700c]" />
+                    <span className="text-xs font-medium italic text-gray-400">
+                      Loading records...
+                    </span>
+                  </div>
+                ) : contextList.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center gap-4 py-20 text-gray-300">
+                    <FaRegListAlt className="h-14 w-14" />
+                    <span className="text-sm font-medium">
+                      {t("noConsultations", { defaultMessage: "No records" })}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-3">
+                    {contextList?.map((ctx: any) => {
+                      const isActive = activeBizCode === ctx.bizCode;
+                      const isDeleting = deletingBizCode === ctx.bizCode;
+
+                      return (
+                        <div
+                          key={ctx.id}
+                          className={`group relative flex w-full flex-col overflow-hidden rounded-2xl border p-4 transition-all duration-300 ${
+                            isActive
+                              ? "scale-[1.01] border-[#f0700c]/30 bg-white shadow-lg ring-1 ring-[#f0700c]/10"
+                              : "border-transparent bg-white shadow-sm hover:-translate-y-1 hover:scale-[1.01] hover:border-gray-200 hover:shadow-md active:scale-[0.99]"
+                          }`}
+                        >
+                          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#f0700c]/0 via-[#f0700c]/[0.03] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                          <button
+                            aria-label={`Select ${ctx.title}`}
+                            className="absolute inset-0 h-full w-full rounded-2xl"
+                            onClick={() => {
+                              if (isActive) {
+                                resetToCommon();
+                              } else {
+                                setChatMode(
+                                  ctx.type === 1 ? "ORDER" : "WAYBILL",
+                                );
+                                setActiveBizCode(ctx.bizCode);
+                              }
+                              setShowContextDrawer(false);
+                            }}
+                          />
+
+                          <div className="pointer-events-none z-10 mb-2 block w-full">
+                            <span
+                              className={`block truncate text-sm font-bold transition-colors ${
+                                isActive ? "text-[#f0700c]" : "text-gray-800"
+                              }`}
+                              title={ctx.title}
+                            >
+                              {ctx.title}
+                            </span>
+                          </div>
+
+                          <div className="pointer-events-none z-10 flex items-center gap-3">
+                            <div
+                              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all duration-300 ${
+                                isActive
+                                  ? "bg-[#f0700c] text-white shadow-lg shadow-[#f0700c]/30"
+                                  : "bg-gray-50 text-gray-400 group-hover:bg-[#f0700c]/5 group-hover:text-[#f0700c]"
+                              }`}
+                            >
+                              {ctx.type === 1 ? (
+                                <FaBox className="h-4 w-4" />
+                              ) : (
+                                <FaTruck className="h-4 w-4" />
+                              )}
+                            </div>
+
+                            <div className="flex flex-col gap-1 truncate">
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className={`rounded-full px-1.5 py-0.5 text-[9px] font-black uppercase tracking-widest ${
+                                    isActive
+                                      ? "bg-[#f0700c]/10 text-[#f0700c]"
+                                      : "bg-gray-100 text-gray-500"
+                                  }`}
+                                >
+                                  {ctx.type === 1 ? t("order") : t("waybill")}
+                                </span>
+                              </div>
+                              <span className="truncate text-xs text-gray-400">
+                                {ctx.bizCode}
+                              </span>
+                            </div>
+
+                            <div className="flex-1" />
+                            <button
+                              className="pointer-events-auto relative z-20 flex h-8 w-8 items-center justify-center rounded-full border border-transparent text-gray-300 opacity-100 shadow-sm transition-all duration-200 hover:scale-110 hover:border-red-100 hover:bg-red-50 hover:text-red-500 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+                              disabled={deletingContext}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                confirmDeleteContext(ctx);
+                              }}
+                            >
+                              {isDeleting ? (
+                                <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                              ) : (
+                                <FaTrash className="h-4 w-4" />
+                              )}
+                            </button>
+                          </div>
+
+                          {isActive && (
+                            <div className="absolute left-0 top-1/2 h-8 w-1 -translate-y-1/2 rounded-r-full bg-[#f0700c]" />
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </DrawerBody>
+            </DrawerContent>
+          </Drawer>
 
           <div
             ref={scrollContainerRef}
@@ -302,8 +555,9 @@ export default function ChatBox() {
             {messages.map((msg) => (
               <div
                 key={msg.id}
-                className={`flex w-full gap-2 ${msg.sender === "user" ? "flex-row-reverse" : "flex-row"
-                  }`}
+                className={`flex w-full gap-2 ${
+                  msg.sender === "user" ? "flex-row-reverse" : "flex-row"
+                }`}
               >
                 {/* Avatar */}
                 <div className="flex-shrink-0">
@@ -324,10 +578,11 @@ export default function ChatBox() {
 
                 {/* Message Bubble */}
                 <div
-                  className={`w-fit max-w-[75%] break-words rounded-lg p-2 ${msg.sender === "user"
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200 text-black"
-                    }`}
+                  className={`w-fit max-w-[75%] break-words rounded-lg p-2 ${
+                    msg.sender === "user"
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-200 text-black"
+                  }`}
                 >
                   <div className="flex flex-col gap-1">
                     {msg.type === "IMAGE" && msg.text ? (
@@ -340,6 +595,11 @@ export default function ChatBox() {
                         {msg.sending && (
                           <div className="absolute inset-0 flex items-center justify-center rounded bg-black/20">
                             <div className="h-6 w-6 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                          </div>
+                        )}
+                        {msg.failed && !msg.sending && (
+                          <div className="absolute inset-x-2 bottom-2 rounded bg-red-500/85 px-2 py-1 text-center text-xs text-white">
+                            {t("imageSendFail")}
                           </div>
                         )}
                       </div>
@@ -367,8 +627,7 @@ export default function ChatBox() {
                                           className="h-10 w-10 flex-shrink-0 rounded object-cover"
                                           referrerPolicy="no-referrer"
                                           src={
-                                            product.skuPicUrl ||
-                                            product.picUrl
+                                            product.skuPicUrl || product.picUrl
                                           }
                                         />
                                         <div className="flex-1 text-xs">
@@ -377,8 +636,7 @@ export default function ChatBox() {
                                           </div>
                                           <div className="mt-1 text-gray-500">
                                             {t("price")}
-                                            {product.price} x{" "}
-                                            {product.quantity}
+                                            {product.price} x {product.quantity}
                                           </div>
                                         </div>
                                       </div>
@@ -393,43 +651,62 @@ export default function ChatBox() {
                         })()}
                       </div>
                     ) : msg.type === "WAYBILL" ? (
-                      <div className="rounded bg-blue-100 p-2 font-mono text-sm text-black w-full">
+                      <div className="w-full rounded bg-blue-100 p-2 font-mono text-sm text-black">
                         {(() => {
                           try {
                             const waybill = JSON.parse(msg.text || "{}");
+
                             return (
                               <div className="flex flex-col gap-2">
-                                <div className="font-semibold border-b border-blue-200 pb-1">
-                                  {t("waybillNo", { defaultMessage: "Waybill No: " })}{waybill.packingPackageCode}
+                                <div className="border-b border-blue-200 pb-1 font-semibold">
+                                  {t("waybillNo", {
+                                    defaultMessage: "Waybill No: ",
+                                  })}
+                                  {waybill.packingPackageCode}
                                 </div>
                                 <div className="flex flex-col gap-1 text-xs">
                                   {waybill.shippingCode && (
                                     <div>
-                                      <span className="text-gray-500">{t("trackingNo", { defaultMessage: "Tracking No: " })}</span>
+                                      <span className="text-gray-500">
+                                        {t("trackingNo", {
+                                          defaultMessage: "Tracking No: ",
+                                        })}
+                                      </span>
                                       {waybill.shippingCode}
                                     </div>
                                   )}
                                   {waybill.pic && waybill.pic.length > 0 && (
-                                    <div className="flex gap-2 mt-1 overflow-x-auto no-scrollbar flex-wrap">
-                                      {waybill.pic.map((url: string, index: number) => (
-                                        <Image
-                                          key={index}
-                                          src={url}
-                                          referrerPolicy="no-referrer"
-                                          alt="waybill pic"
-                                          className="w-12 h-12 object-cover rounded flex-shrink-0"
-                                        />
-                                      ))}
+                                    <div className="no-scrollbar mt-1 flex flex-wrap gap-2 overflow-x-auto">
+                                      {waybill.pic.map(
+                                        (url: string, index: number) => (
+                                          <Image
+                                            key={index}
+                                            alt="waybill pic"
+                                            className="h-12 w-12 flex-shrink-0 rounded object-cover"
+                                            referrerPolicy="no-referrer"
+                                            src={url}
+                                          />
+                                        ),
+                                      )}
                                     </div>
                                   )}
-                                  <div className="grid grid-cols-2 gap-1 mt-1">
+                                  <div className="mt-1 grid grid-cols-2 gap-1">
                                     <div>
-                                      <span className="text-gray-500">{t("weight", { defaultMessage: "Weight" })}: </span>
+                                      <span className="text-gray-500">
+                                        {t("weight", {
+                                          defaultMessage: "Weight",
+                                        })}
+                                        :{" "}
+                                      </span>
                                       {waybill.weight}g
                                     </div>
                                     <div>
-                                      <span className="text-gray-500">{t("size", { defaultMessage: "Size" })}: </span>
-                                      {waybill.length}*{waybill.width}*{waybill.height}cm
+                                      <span className="text-gray-500">
+                                        {t("size", { defaultMessage: "Size" })}
+                                        :{" "}
+                                      </span>
+                                      {waybill.length}*{waybill.width}*
+                                      {waybill.height}cm
                                     </div>
                                   </div>
                                 </div>
@@ -443,14 +720,29 @@ export default function ChatBox() {
                     ) : (
                       msg.text
                     )}
-                    <span
-                      className={`self-end text-[10px] ${msg.sender === "user"
-                        ? "text-blue-100"
-                        : "text-gray-500"
-                        }`}
-                    >
-                      {msg?.createTime}
-                    </span>
+                    <div className="flex items-center self-end text-[10px]">
+                      {msg.sending ? (
+                        <div
+                          className={`h-3 w-3 animate-spin rounded-full border border-t-transparent ${
+                            msg.sender === "user"
+                              ? "border-blue-100"
+                              : "border-gray-400"
+                          }`}
+                        />
+                      ) : (
+                        !!(msg?.sendTime || msg?.createTime) && (
+                          <span
+                            className={
+                              msg.sender === "user"
+                                ? "text-blue-100"
+                                : "text-gray-500"
+                            }
+                          >
+                            {msg?.sendTime || msg?.createTime}
+                          </span>
+                        )
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -469,16 +761,19 @@ export default function ChatBox() {
               rows={2}
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              onFocus={() => {
+                setTimeout(() => {
+                  messagesEndRef.current?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "end",
+                  });
+                }, 500);
+              }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
                   handleSend();
                 }
-              }}
-              onFocus={() => {
-                setTimeout(() => {
-                  messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-                }, 500);
               }}
             />
 
@@ -493,9 +788,9 @@ export default function ChatBox() {
             )}
 
             <div className="flex items-center justify-between">
-              <div className="flex items-center  flex-1">
+              <div className="flex flex-1 items-center">
                 <Button
-                  className="flex  items-center justify-center"
+                  className="flex items-center justify-center"
                   color="primary"
                   isIconOnly={true}
                   radius="full"
@@ -507,40 +802,41 @@ export default function ChatBox() {
                 <Button
                   className="flex items-center justify-center"
                   color="primary"
-                  radius="full"
                   isIconOnly={true}
-
+                  radius="full"
                   variant="light"
                   onPress={() => fileInputRef.current?.click()}
                 >
                   <FaImage />
                 </Button>
-                <Button
-                  className="flex  items-center justify-center"
-                  color="primary"
-                  radius="full"
-                  isIconOnly={true}
-
-                  variant="light"
-                  onPress={() => setShowOrderModal(true)}
-                >
-                  <FaShoppingBag />
-                </Button>
-                <Button
-                  className="flex  items-center justify-center"
-                  color="primary"
-                  isIconOnly={true}
-
-                  radius="full"
-                  variant="light"
-                  onPress={() => setShowWaybillModal(true)}
-                >
-                  <FaBoxOpen />
-                </Button>
+                {!activeBizCode && (
+                  <>
+                    <Button
+                      className="flex items-center justify-center"
+                      color="primary"
+                      isIconOnly={true}
+                      radius="full"
+                      variant="light"
+                      onPress={() => setShowOrderModal(true)}
+                    >
+                      <FaShoppingBag />
+                    </Button>
+                    <Button
+                      className="flex items-center justify-center"
+                      color="primary"
+                      isIconOnly={true}
+                      radius="full"
+                      variant="light"
+                      onPress={() => setShowWaybillModal(true)}
+                    >
+                      <FaBoxOpen />
+                    </Button>
+                  </>
+                )}
               </div>
 
               <Button
-                className="px-4 py-2 flex-1 "
+                className="flex-1 px-4 py-2"
                 color="primary"
                 onPress={handleSend}
               >
