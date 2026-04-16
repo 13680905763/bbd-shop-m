@@ -6,7 +6,13 @@ interface GlobalState {
   language: string;
   currency: any;
   languages: { label: string; value: string }[];
-  currencies: { label: string; value: string; symbol: string; rate: number }[];
+  currencies: {
+    label: string;
+    value: string;
+    symbol: string;
+    rate: number;
+    isLocal?: boolean;
+  }[];
   setLanguage: (language: string) => void;
   setCurrency: (currency: any) => void;
   setCurrencies: (res: any[]) => void;
@@ -15,7 +21,8 @@ interface GlobalState {
 export const useGlobalStore = create<GlobalState>((set) => ({
   // ⚠️ 不在顶层直接读 localStorage
   language: "en",
-  currency: { label: "CNY", value: "CNY", symbol: "¥", rate: 1 },
+  currency: { label: "USD", value: "USD", symbol: "$", rate: 1, isLocal: true },
+  // currency: null,
   languages: [],
   currencies: [],
 

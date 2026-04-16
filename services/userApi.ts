@@ -1,4 +1,5 @@
 import { request } from "./request";
+
 import { encryptField } from "@/lib/encrypt";
 
 export const userApi = {
@@ -40,9 +41,6 @@ export const userApi = {
     // 但根据用户要求，我们直接对整个对象应用加密包裹
     const encryptedData = await encryptField(data);
 
-    return request.post(
-      `/customer/resetPassword?email=${data?.email}&verificationCode=${data?.verificationCode}`,
-      encryptedData,
-    );
+    return request.post(`/customer/resetPassword`, encryptedData);
   },
 };

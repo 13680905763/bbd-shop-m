@@ -51,22 +51,22 @@ export default function SelectionCouponDrawer({
       onOpenChange={onOpenChange}
     >
       <div className="space-y-3 py-2">
-        {couponList?.map((coupon) => {
+        {couponList?.map((coupon, index) => {
           const isSelected = tempSelectedId === coupon.id;
 
           return (
             <div
-              key={coupon.id}
+              key={coupon.id || `coupon-${index}`}
               className="relative cursor-pointer"
               role="button"
-              onClick={() => handleToggle(coupon.id)}
+              onClick={() => coupon.id && handleToggle(coupon.id)}
             >
               <div className="flex items-center gap-2 p-2">
                 <Checkbox
                   isSelected={isSelected}
                   radius="full"
                   size="lg"
-                  onValueChange={() => handleToggle(coupon.id)}
+                  onValueChange={() => coupon.id && handleToggle(coupon.id)}
                 />
                 <CouponItem coupon={coupon} />
               </div>

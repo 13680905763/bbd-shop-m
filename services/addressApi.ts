@@ -9,15 +9,22 @@ const ADDRESS_TYPE = {
 export const addressApi = {
   /** 获取收货地址列表 */
   list: (): Promise<any> =>
-    request.get("/customer/address/list", { params: { addressType: ADDRESS_TYPE.SHIPPING } }),
+    request.get("/customer/address/list", {
+      params: { addressType: ADDRESS_TYPE.SHIPPING },
+    }),
 
   /** 获取发票地址列表 */
   listInvoice: (): Promise<any> =>
-    request.get("/customer/address/list", { params: { addressType: ADDRESS_TYPE.INVOICE } }),
+    request.get("/customer/address/list", {
+      params: { addressType: ADDRESS_TYPE.INVOICE },
+    }),
 
   /** 创建收货地址 */
   create: (data: any): Promise<any> =>
-    request.post("/customer/address/add", { ...data, addressType: ADDRESS_TYPE.SHIPPING }),
+    request.post("/customer/address/add", {
+      ...data,
+      addressType: ADDRESS_TYPE.SHIPPING,
+    }),
 
   /** 创建发票地址 */
   createInvoice: (data: any): Promise<any> =>

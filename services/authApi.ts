@@ -46,10 +46,6 @@ export const authApi = {
   verifyEmail: async (data: ActivateEmailParams): Promise<string> =>
     request.post("/customer/active", await encryptField(data)),
 
-  /** 发送忘记密码重置邮件 */
-  sendForgotPasswordEmail: (data: { email: string }): Promise<string> =>
-    request.post("/customer/forget-password", data),
-
   /** 退出当前登录状态 */
   logout: (): Promise<void> => request.get("/customer/logout"),
 };

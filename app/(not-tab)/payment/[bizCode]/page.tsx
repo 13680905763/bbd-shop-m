@@ -126,7 +126,7 @@ export default function PayOrder() {
     customerCouponId: confirmedCouponId,
   });
 
-  console.log("data", data);
+  // console.log("data", data);
 
   const { pay, isPayFetching } = usePay();
   const paymentList = useMemo(() => data?.paymentAndFeeList || [], [data]);
@@ -179,7 +179,7 @@ export default function PayOrder() {
     return (
       paymentList
         ?.flatMap((item: any) => item.paymentList)
-        .find((item: any) => item.id === paymentId) ?? {}
+        .find((item: any) => item.id === paymentId) ?? null
     );
   }, [paymentId, paymentList]);
 
@@ -211,13 +211,13 @@ export default function PayOrder() {
           </div>
           <div className="text-balance">
             {currency.symbol}
-            {currentPayMethod?.payAmount}
+            {currentPayMethod?.payAmount || "0.00"}
           </div>
           <p className="text-sm text-gray-600">
             {t("handlingFee")}
             <span className="font-medium">
               {currency.symbol}
-              {currentPayMethod?.handlingFee}
+               {currentPayMethod?.handlingFee || "0.00"}
             </span>
           </p>
         </div>
@@ -236,7 +236,7 @@ export default function PayOrder() {
             <div className="bg-white p-4">
               <p className="text-title mb-2">{t("billingAddress")}</p>
               <BillingAddress
-                key={billingAddress.id}
+                key={billingAddress?.id || "empty-address"}
                 addressDetail={billingAddress}
                 showDeleteButton={false}
                 onAdd={handleAddClick}
@@ -260,7 +260,7 @@ export default function PayOrder() {
                   }
                 >
                   <p className="text-title">{item.methodName}</p>
-                  {item.paymentList.map((payment: any) =>
+                  {item.paymentList?.map((payment: any) =>
                     item.methodName === "BALANCE" ? (
                       <BalancePayment
                         key={payment.id}
@@ -303,7 +303,7 @@ export default function PayOrder() {
         isOpen={showCouponDrawer}
         selectedCouponId={confirmedCouponId}
         onOpenChange={setShowCouponDrawer}
-        onSelect={(coupon) => setConfirmedCouponId(coupon.id)}
+        onSelect={(coupon) => setConfirmedCouponId(coupon?.id)}
       />
       <CommonDrawer
         isOpen={showPaypalWarning}
